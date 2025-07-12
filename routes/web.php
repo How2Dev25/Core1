@@ -58,11 +58,21 @@ Route::put('/cancelecm/{eventID}', [ecmController::class, 'cancel']);
 
 // Room Management
 Route::get('/roommanagement', function(){
+    $totalrooms = room::count();
+    $occupiedrooms = room::where('roomstatus', 'Occupied')->count();
+    $availablerooms = room::where('roomstatus', 'Available')->count();
+    $maintenancerooms = room::where('roomstatus', 'Maintenance')->count();
     $rooms = room::latest()->get();
-    return view('admin.roomanagement', ['rooms' => $rooms]);
+    return view('admin.roomanagement', ['rooms' => $rooms, 
+    'occupiedrooms' =>  $occupiedrooms,
+    'availablerooms' => $availablerooms,
+     'maintenancerooms' => $maintenancerooms,
+    'totalrooms' => $totalrooms ]);
 });
 Route::post('/createroom', [roomController::class, 'store']);
 Route::put('/modifyroom/{roomID}', [roomController::class, 'modify']);
 Route::delete('/deleteroom/{roomID}', [roomController::class, 'delete']);
 
 Route::get('/gotoroom/{roomID}', [roomController::class, 'redirect']);
+Route::post('/additonalroom', [roomController::class, 'addphoto']);
+Route::delete('/deleteroomphoto/{roomphotoID}', [roomController::class, 'deleteroomphoto']);

@@ -61,7 +61,7 @@
             <i data-lucide="chevron-right" class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90"></i>
           </div>
           <div class="collapse-content pl-10 pr-4 py-1 space-y-1"> 
-            <a href="#" class="block px-3 py-2 text-sm rounded-lg hover:bg-blue-600 hover:bg-opacity-30 text-blue-100 sidebar-item">Rooms</a>
+            <a href="/roommanagement" class="block px-3 py-2 text-sm rounded-lg hover:bg-blue-600 hover:bg-opacity-30 text-blue-100 sidebar-item">Rooms</a>
             <a href="#" class="block px-3 py-2 text-sm rounded-lg hover:bg-blue-600 hover:bg-opacity-30 text-blue-100 sidebar-item">Assign Room Door Lock</a>
             
           </div>
@@ -88,14 +88,14 @@
           </div>
         </a>
 
-        <a href="">
+        <a href="/ecm">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item hover:bg-blue-600 hover:bg-opacity-50 text-white">
             <i data-lucide="calendar" class="w-5 h-5 text-blue-200"></i>
             <span class="ml-3">Event And Conference</span>
           </div>
         </a>
 
-        <a href="">
+        <a href="/hmp">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item hover:bg-blue-600 hover:bg-opacity-50 text-white">
             <i data-lucide="megaphone" class="w-5 h-5 text-blue-200"></i>
             <span class="ml-3">Hotel Marketing And Promotion </span>

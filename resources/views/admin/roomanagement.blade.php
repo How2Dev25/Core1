@@ -36,7 +36,25 @@
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
     <div>
       <p class="text-gray-500 mt-1">Manage all hotel rooms, availability, and pricing</p>
+      {{-- aleerts --}}
+      @if(session('roomcreated'))
+    <div role="alert" class="alert alert-success mt-2 mb-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{session('roomcreated')}}</span>
     </div>
+    @elseif(session('roomdeleted'))
+     <div role="alert" class="alert alert-success mt-2 mb-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{session('roomdeleted')}}</span>
+    </div>
+    @endif
+    </div>
+    {{-- alerts --}}
+    
     <button onclick="room_modal.showModal()" class="btn btn-primary gap-2">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
@@ -61,7 +79,7 @@
             <p class="text-sm text-gray-500">All room types</p>
           </div>
         </div>
-        <p class="text-3xl font-bold mt-3 text-gray-800">42</p>
+        <p class="text-3xl font-bold mt-3 text-gray-800">{{$totalrooms}}</p>
       </div>
     </div>
 
@@ -79,7 +97,7 @@
             <p class="text-sm text-gray-500">Currently booked</p>
           </div>
         </div>
-        <p class="text-3xl font-bold mt-3 text-gray-800">28</p>
+        <p class="text-3xl font-bold mt-3 text-gray-800">{{$occupiedrooms}}</p>
       </div>
     </div>
 
@@ -97,7 +115,7 @@
             <p class="text-sm text-gray-500">Ready for booking</p>
           </div>
         </div>
-        <p class="text-3xl font-bold mt-3 text-gray-800">14</p>
+        <p class="text-3xl font-bold mt-3 text-gray-800">{{$availablerooms}}</p>
       </div>
     </div>
 
@@ -115,7 +133,7 @@
             <p class="text-sm text-gray-500">Under repair</p>
           </div>
         </div>
-        <p class="text-3xl font-bold mt-3 text-gray-800">3</p>
+        <p class="text-3xl font-bold mt-3 text-gray-800">{{$maintenancerooms}}</p>
       </div>
     </div>
   </div>
@@ -328,7 +346,7 @@
 @include('admin.components.roommanagement.createroom')
 
 @foreach($rooms as $room)
-  @include('admin.components.roommanagement.deleteroom');
+  @include('admin.components.roommanagement.deleteroom')
 
 @endforeach
           
