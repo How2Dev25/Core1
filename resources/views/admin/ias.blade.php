@@ -9,7 +9,7 @@
  
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <title>{{$title}} - Hotel Marketing And Promotion</title>
+    <title>{{$title}} - Inventory And Stock</title>
 </head>
 <body class="bg-base-100">
     <div class="flex h-screen overflow-hidden">
@@ -25,7 +25,7 @@
         <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 transition-slow ">
             {{-- Subsystem Name --}}
           <div class="pb-5 border-b border-base-300 animate-fadeIn">
-            <h1 class="text-2xl font-bold bg-white bg-clip-text text-[#191970]">Hotel Marketing And Promotion</h1>
+            <h1 class="text-2xl font-bold bg-white bg-clip-text text-[#191970]">Inventory And Stocks</h1>
           </div>
             {{-- Subsystem Name --}}
 
@@ -39,7 +39,11 @@
         Hotel Inventory
       </h1>
       <p class="text-sm text-gray-500">Manage your hotel stock levels</p>
+
+     
     </div>
+
+    
     
     <div class="flex gap-2">
       <button onclick="inventory_modal.showModal()" class="btn btn-primary btn-sm">
@@ -83,7 +87,33 @@
 
  
   <!-- Inventory Table -->
-  <div class="overflow-x-auto rounded-box border border-base-300">
+  <div class="overflow-x-auto rounded-box border border-base-300 p-5">
+     {{--alerts --}}
+            @if(session('inventorycreated'))
+          <div role="alert" class="alert alert-success mb-2 mt-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{{session('inventorycreated')}}</span>
+            </div>
+
+            @elseif(session('inventorymodified'))
+              <div role="alert" class="alert alert-success mb-2 mt-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{{session('inventorymodified')}}</span>
+            </div>
+            @elseif(session('inventorydeleted'))
+             <div role="alert" class="alert alert-success mb-2 mt-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{{session('inventorydeleted')}}</span>
+            </div>
+             @endif
+            
+            {{-- alerts --}}
     <table class="table table-sm">
       <thead class="bg-base-200">
         <tr>
@@ -136,11 +166,11 @@
           <td>{{$inv->core1_inventory_threshold}}</td>
           <td>{{$inv->core1_inventory_unit}}</td>
           <td>
-            <button class="btn btn-ghost btn-xs">
-              <i data-lucide="eye" class="w-4 h-4"></i>
-            </button>
-            <button class="btn btn-ghost btn-xs">
+            <button onclick="inventory_modal_{{$inv->core1_inventoryID}}.showModal()"  class="btn btn-ghost btn-xs">
               <i data-lucide="edit" class="w-4 h-4"></i>
+            </button>
+            <button onclick="delete_inventory_{{$inv->core1_inventoryID}}.showModal()" class="btn btn-ghost btn-xs">
+              <i data-lucide="trash" class="w-4 h-4"></i>
             </button>
           </td>
         </tr>
@@ -232,6 +262,11 @@
     {{-- modals --}}
  
     @include('admin.components.ias.create')
+    @foreach ($inventory as $inv)
+        @include('admin.components.ias.update')
+        @include('admin.components.ias.delete')
+        
+    @endforeach
   
  
   </body>

@@ -39,6 +39,8 @@ class inventoryController extends Controller
     ]);
     $inventory->save();
 
+    session()->flash('inventorycreated', $form['core1_inventory_name']. ' Has been Added To The Inventory');
+
     return redirect()->back();
     }
 
@@ -72,12 +74,16 @@ class inventoryController extends Controller
 
         $core1_inventoryID->update($form);
 
-        return $form;
+        session()->flash('inventorymodified',  $core1_inventoryID->core1_inventory_code. ' Has Been Modified');
+
+        return redirect()->back();
 
     }
 
     public function delete(Inventory $core1_inventoryID){
         $core1_inventoryID->delete();
+
+        session()->flash('inventorydeleted',  'Inventory Has Been Removed');
 
         return redirect()->back();
     }

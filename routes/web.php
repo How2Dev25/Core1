@@ -88,3 +88,5 @@ Route::get('/ias', function(){
     return view ('admin.ias', ['inventory' => $inventory]);
 });
 Route::post('/createinventory', [inventoryController::class, 'store']);
+Route::put('/updateinventory/{core1_inventoryID}', [inventoryController::class, 'modify']);
+Route::delete('/deleteinventory/{core1_inventoryID}', [inventoryController::class, 'delete']);
