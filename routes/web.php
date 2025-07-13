@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\ecmController;
 use App\Http\Controllers\hmpController;
+use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\roomController;
 use App\Models\Ecm;
 use App\Models\Hmp;
+use App\Models\Inventory;
 use App\Models\room;
 use Illuminate\Support\Facades\Route;
 
@@ -80,3 +82,9 @@ Route::get('/gotoroom/{roomID}', [roomController::class, 'redirect']);
 Route::post('/additonalroom', [roomController::class, 'addphoto']);
 Route::delete('/deleteroomphoto/{roomphotoID}', [roomController::class, 'deleteroomphoto']);
 
+// Inventory And Stocks
+Route::get('/ias', function(){
+    $inventory = Inventory::latest()->get();
+    return view ('admin.ias', ['inventory' => $inventory]);
+});
+Route::post('/createinventory', [inventoryController::class, 'store']);
