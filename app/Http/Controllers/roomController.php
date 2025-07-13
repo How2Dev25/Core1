@@ -7,8 +7,107 @@ use Illuminate\Http\Request;
 use App\Models\room;
 use Termwind\Components\Raw;
 
+
 class roomController extends Controller
 {
+
+     // Configuration arrays as public properties
+     public $roomTypes = ['Standard', 'Deluxe', 'Suite', 'Executive'];
+    public $roomSizes = ['Small' => 200, 'Medium' => 300, 'Large' => 400, 'XLarge' => 500];
+    public $featuresKeywords = [
+        'wifi' => 'Free WiFi',
+        'tv' => 'Flat-screen TV',
+        'ac' => 'Air Conditioning',
+        'minibar' => 'Mini Bar',
+        'balcony' => 'Balcony',
+        'view' => 'City View',
+        'safe' => 'In-room Safe',
+        'bathtub' => 'Bathtub'
+    ];
+
+    public function processRoomPrompt(Request $request)
+    {
+        $request->validate([
+            'ai_prompt' => 'required|string'
+        ]);
+
+        try {
+            $lowerPrompt = strtolower($request->ai_prompt);
+
+            // Room Type
+            $roomType = 'Standard';
+            foreach ($this->roomTypes as $type) {
+                if (strpos($lowerPrompt, strtolower($type)) !== false) {
+                    $roomType = $type;
+                    break;
+                }
+            }
+
+            // Room Size
+            $roomSize = 300;
+            foreach ($this->roomSizes as $size => $sqft) {
+                if (strpos($lowerPrompt, strtolower($size)) !== false) {
+                    $roomSize = $sqft;
+                    break;
+                }
+            }
+
+            // Max Guests
+            $maxGuests = 2;
+            if (preg_match('/(\d+)\s*(guest|person|people)/i', $request->ai_prompt, $matches)) {
+                $maxGuests = (int)$matches[1];
+            }
+
+            // Features
+            $features = [];
+            foreach ($this->featuresKeywords as $key => $feature) {
+                if (strpos($lowerPrompt, $key) !== false) {
+                    $features[] = $feature;
+                }
+            }
+            $features = empty($features) ? 'Free WiFi, Air Conditioning' : implode(', ', $features);
+
+            // Price
+            $price = 1500;
+            if (preg_match('/(\d+)\s*(peso|php|₱|price|rate)/i', $request->ai_prompt, $matches)) {
+                $price = (int)$matches[1];
+            } elseif (preg_match('/\b(\d{3,4})\b/', $request->ai_prompt, $matches)) {
+                $price = (int)$matches[1];
+            }
+
+            // Description
+            $description = "Our $roomType room features " . strtolower($features) . ". " .
+                           "This " . strtolower($roomType) . " accommodation is perfect for your stay.";
+
+            // Final data to pass to view
+            $roomData = [
+                'roomtype' => $roomType,
+                'roomsize' => $roomSize,
+                'roommaxguest' => $maxGuests,
+                'roomfeatures' => $features,
+                'roomdescription' => $description,
+                'roomprice' => $price,
+                'roomstatus' => 'Available',
+                'roomphoto' => 'images/defaults/default.jpg'
+            ];
+
+            room::create($roomData);
+
+             session()->flash('roomcreated', 'Room Has Been Added');
+
+             return redirect()->back();
+
+
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'The prompt could not be processed. Please try again.');
+        }
+        
+    }
+
+    
+     
+
     public function store(Request $request){
         $form = $request->validate([
             'roomtype' => 'required',
@@ -116,4 +215,7 @@ class roomController extends Controller
 
         return redirect()->back();
     }
+
+
+    
 }

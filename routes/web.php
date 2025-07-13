@@ -69,6 +69,9 @@ Route::get('/roommanagement', function(){
      'maintenancerooms' => $maintenancerooms,
     'totalrooms' => $totalrooms ]);
 });
+// FOR AI
+Route::post('/processRoomPrompt', [RoomController::class, 'processRoomPrompt']);
+// 
 Route::post('/createroom', [roomController::class, 'store']);
 Route::put('/modifyroom/{roomID}', [roomController::class, 'modify']);
 Route::delete('/deleteroom/{roomID}', [roomController::class, 'delete']);
@@ -76,3 +79,4 @@ Route::delete('/deleteroom/{roomID}', [roomController::class, 'delete']);
 Route::get('/gotoroom/{roomID}', [roomController::class, 'redirect']);
 Route::post('/additonalroom', [roomController::class, 'addphoto']);
 Route::delete('/deleteroomphoto/{roomphotoID}', [roomController::class, 'deleteroomphoto']);
+
