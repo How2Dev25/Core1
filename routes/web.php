@@ -4,10 +4,12 @@ use App\Http\Controllers\ecmController;
 use App\Http\Controllers\hmpController;
 use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\roomController;
+use App\Http\Controllers\stockController;
 use App\Models\Ecm;
 use App\Models\Hmp;
 use App\Models\Inventory;
 use App\Models\room;
+use App\Models\stockRequest;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -85,8 +87,14 @@ Route::delete('/deleteroomphoto/{roomphotoID}', [roomController::class, 'deleter
 // Inventory And Stocks
 Route::get('/ias', function(){
     $inventory = Inventory::latest()->get();
-    return view ('admin.ias', ['inventory' => $inventory]);
+    $stock = stockRequest::latest()->get();
+    return view ('admin.ias', ['inventory' => $inventory, 'stock' => $stock ]);
 });
 Route::post('/createinventory', [inventoryController::class, 'store']);
 Route::put('/updateinventory/{core1_inventoryID}', [inventoryController::class, 'modify']);
 Route::delete('/deleteinventory/{core1_inventoryID}', [inventoryController::class, 'delete']);
+
+// stocks
+Route::post('/createstockrequest', [stockController::class, 'store']);
+Route::put('/createstockrequest/{core1_stockID}', [stockController::class, 'modify']);
+Route::delete('/deletestockrequest/{core1_stockID}', [stockController::class, 'delete']);

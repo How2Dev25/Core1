@@ -190,54 +190,225 @@
       <i data-lucide="clipboard-list" class="w-5 h-5 text-secondary"></i>
       Recent Stock Requests
     </h2>
-    
-    <div class="overflow-x-auto rounded-box border border-base-300">
-      <table class="table table-sm">
-        <thead class="bg-base-200">
-          <tr>
-            <th>Request ID</th>
-            <th>Department</th>
-            <th>Items</th>
-            <th>Status</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Request 1 -->
-          <tr>
-            <td class="font-bold">REQ-045</td>
-            <td>Housekeeping</td>
-            <td>Towels, Pillows</td>
-            <td>
-              <span class="badge badge-sm badge-info">Processing</span>
-            </td>
-            <td>Today</td>
-          </tr>
-          
-          <!-- Request 2 -->
-          <tr>
-            <td class="font-bold">REQ-044</td>
-            <td>Restaurant</td>
-            <td>Coffee, Sugar</td>
-            <td>
-              <span class="badge badge-sm badge-warning">Pending</span>
-            </td>
-            <td>Yesterday</td>
-          </tr>
-          
-          <!-- Request 3 -->
-          <tr>
-            <td class="font-bold">REQ-043</td>
-            <td>Maintenance</td>
-            <td>Light Bulbs</td>
-            <td>
-              <span class="badge badge-sm badge-success">Approved</span>
-            </td>
-            <td>2 days ago</td>
-          </tr>
-        </tbody>
-      </table>
+
+    <div class="">
+       <button onclick="request_modal.showModal()" class="btn btn-primary btn-sm mt-2 mb-2">
+        <i data-lucide="plus" class="w-4 h-4"></i>
+        Request Stock
+      </button>
     </div>
+    
+  <div class="overflow-x-auto bg-white rounded-lg shadow">
+ <table class="table">
+  <thead>
+    <tr class="bg-gray-100">
+      <th>#</th>
+      <th>Request ID</th>
+      <th>Category</th>
+      <th>Item Name</th>
+      <th>Status</th>
+      <th>Priority</th>
+      <th>Stocks Needed</th>
+      <th>Created</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @forelse ($stock as $index => $stocks)
+      <tr>
+        <td>{{ $index + 1 }}</td>
+        <td>{{ $stocks->core1_requestID }}</td>
+        <td>
+          <span class="badge badge-outline flex items-center gap-1">
+            @switch($stocks->core1_request_category)
+              @case('Linen')
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bed">
+                  <path d="M2 4v16"/>
+                  <path d="M2 8h18a2 2 0 0 1 2 2v10"/>
+                  <path d="M2 17h20"/>
+                  <path d="M6 8v9"/>
+                </svg>
+                Linen & Bedding
+                @break
+              @case('Toiletries')
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-spray-can">
+                  <path d="M3 3h.01"/>
+                  <path d="M7 5h.01"/>
+                  <path d="M11 7h.01"/>
+                  <path d="M3 7h.01"/>
+                  <path d="M7 9h.01"/>
+                  <path d="M11 11h.01"/>
+                  <path d="M3 11h.01"/>
+                  <path d="M7 13h.01"/>
+                  <path d="M11 15h.01"/>
+                  <path d="M3 15h.01"/>
+                  <rect width="4" height="4" x="15" y="5"/>
+                  <path d="m19 9 2 2v10c0 .6-.4 1-1 1h-6c-.6 0-1-.4-1-1V11l2-2"/>
+                  <path d="m13 14 8-2"/>
+                  <path d="m13 19 8-2"/>
+                </svg>
+                Toiletries
+                @break
+              @case('Cleaning')
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-broom">
+                  <path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/>
+                  <path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/>
+                </svg>
+                Cleaning Supplies
+                @break
+              @case('Amenities')
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gift">
+                  <polyline points="20 12 20 22 4 22 4 12"/>
+                  <rect width="20" height="5" x="2" y="7"/>
+                  <line x1="12" x2="12" y1="22" y2="7"/>
+                  <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+                  <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                </svg>
+                Guest Amenities
+                @break
+              @case('Maintenance')
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tool">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+                Maintenance
+                @break
+              @default
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package">
+                  <path d="m7.5 4.27 9 5.15"/>
+                  <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+                  <path d="m3.3 7 8.7 5 8.7-5"/>
+                  <path d="M12 22V12"/>
+                </svg>
+                {{ $stocks->core1_request_category ?? 'Other' }}
+            @endswitch
+          </span>
+        </td>
+        <td>
+          {{$stocks->core1_request_items	}}
+        </td>
+        <td>
+          <span class="badge gap-1 {{ 
+            $stocks->core1_request_status === 'Pending' ? 'badge-warning' : 
+            ($stocks->core1_request_status === 'Approved' ? 'badge-info' : 
+            ($stocks->core1_request_status === 'Rejected' ? 'badge-error' : 'badge-success'))
+          }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-{{
+              $stocks->core1_request_status === 'Pending' ? 'clock' : 
+              ($stocks->core1_request_status === 'Approved' ? 'check-circle' : 
+              ($stocks->core1_request_status === 'Rejected' ? 'x-circle' : 'package-check'))
+            }}">
+              @if($stocks->core1_request_status === 'Pending')
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              @elseif($stocks->core1_request_status === 'Approved')
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <path d="m9 11 3 3L22 4"/>
+              @elseif($stocks->core1_request_status === 'Rejected')
+                <circle cx="12" cy="12" r="10"/>
+                <path d="m15 9-6 6"/>
+                <path d="m9 9 6 6"/>
+              @else
+                <path d="m16 16 2 2 4-4"/>
+                <path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/>
+                <path d="m7.5 4.27 9 5.15"/>
+              @endif
+            </svg>
+            {{ ucfirst($stocks->core1_request_status) }}
+          </span>
+        </td>
+        <td>
+          <span class="badge gap-1 {{
+            $stocks->core1_request_priority === 'Low' ? 'badge-neutral' :
+            ($stocks->core1_request_priority === 'Medium' ? 'badge-warning' :
+            ($stocks->core1_request_priority === 'High' ? 'badge-error' : 'badge-error'))
+          }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-{{
+              $stocks->core1_request_priority === 'Low' ? 'chevrons-down' :
+              ($stocks->core1_request_priority === 'Medium' ? 'chevron-down' :
+              ($stocks->core1_request_priority === 'High' ? 'chevron-up' : 'chevrons-up'))
+            }}">
+              @if($stocks->core1_request_priority === 'Low')
+                <path d="m7 6 5 5 5-5"/>
+                <path d="m7 13 5 5 5-5"/>
+              @elseif($stocks->core1_request_priority === 'Medium')
+                <path d="m6 9 6 6 6-6"/>
+              @elseif($stocks->core1_request_priority === 'High')
+                <path d="m18 15-6-6-6 6"/>
+              @else
+                <path d="m7 18 5-5 5 5"/>
+                <path d="m7 11 5-5 5 5"/>
+              @endif
+            </svg>
+            {{ ucfirst($stocks->core1_request_priority) }}
+          </span>
+        </td>
+        <td>
+          <span class="flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock">
+              <path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/>
+              <path d="M16 2v4"/>
+              <path d="M8 2v4"/>
+              <path d="M3 10h5"/>
+              <path d="M17.5 17.5 16 16.25V14"/>
+              <path d="M22 16a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z"/>
+            </svg>
+            {{ $stocks->core1_request_needed }} 
+          </span>
+        </td>
+        <td>{{ $stocks->created_at->diffForHumans() }}</td>
+        <td>
+          <div class="flex gap-2">
+            <button class="btn btn-xs btn-ghost" onclick="viewRequestModal.showModal()" data-id="{{ $stocks->id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+            <button class="btn btn-xs btn-ghost" onclick="editRequestModal.showModal()" data-id="{{ $stocks->id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">
+                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                <path d="m15 5 4 4"/>
+              </svg>
+            </button>
+            <button class="btn btn-xs btn-ghost text-error" onclick="confirmDeleteRequest('{{ $stocks->id }}')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2">
+                <path d="M3 6h18"/>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                <line x1="10" x2="10" y1="11" y2="17"/>
+                <line x1="14" x2="14" y1="11" y2="17"/>
+              </svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+    @empty
+      <tr>
+        <td colspan="9">
+          <div class="flex flex-col items-center justify-center py-12 gap-4 text-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-x">
+              <path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/>
+              <path d="m7.5 4.27 9 5.15"/>
+              <polyline points="3.29 7 12 12 20.71 7"/>
+              <line x1="12" x2="12" y1="22" y2="12"/>
+              <path d="m17 13 5 5m-5 0 5-5"/>
+            </svg>
+            <h3 class="text-lg font-medium">No stock requests found</h3>
+            <p class="text-sm">Create your first stock request to get started</p>
+            <button class="btn btn-primary mt-4" onclick="request_modal.showModal()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus">
+                <path d="M5 12h14"/>
+                <path d="M12 5v14"/>
+              </svg>
+              Create Request
+            </button>
+          </div>
+        </td>
+      </tr>
+    @endforelse
+  </tbody>
+</table>
+</div>
   </div>
 </section>
 
@@ -262,6 +433,7 @@
     {{-- modals --}}
  
     @include('admin.components.ias.create')
+    @include('admin.components.ias.createrequest')
     @foreach ($inventory as $inv)
         @include('admin.components.ias.update')
         @include('admin.components.ias.delete')
