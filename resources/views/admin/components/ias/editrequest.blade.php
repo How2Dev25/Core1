@@ -1,4 +1,4 @@
-<dialog id="request_modal" class="modal">
+<dialog id="edit_request_modal_{{$stocks->core1_stockID}}" class="modal">
   <div class="modal-box max-w-4xl p-0 overflow-hidden">
     <!-- Header with white background -->
     <div class="bg-white text-black p-5 border-b">
@@ -15,7 +15,7 @@
             </svg>
           </div>
           <div>
-            <h3 class="font-bold text-xl">Stock Request</h3>
+            <h3 class="font-bold text-xl">{{$stocks->core1_requestID}}</h3>
             <p class="text-sm text-gray-600">Manage hotel inventory requests</p>
           </div>
         </div>
@@ -31,8 +31,9 @@
     </div>
 
     <!-- Form Content -->
-    <form method="POST" action="/createstockrequest" class="flex flex-col h-full">
+    <form method="POST" action="/editstockrequest/{{$stocks->core1_stockID}}" class="flex flex-col h-full">
       @csrf
+      @method('PUT')
       <div class="p-6 space-y-6 flex-grow">
         <!-- Request Details -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -48,14 +49,14 @@
                 Category
               </span>
             </label>
-            <select name="core1_request_category" class="select select-bordered w-full" required>
-              <option disabled selected value="">Select category</option>
-              <option value="linen">Linen & Bedding</option>
-              <option value="toiletries">Toiletries</option>
-              <option value="cleaning">Cleaning Supplies</option>
-              <option value="amenities">Guest Amenities</option>
-              <option value="maintenance">Maintenance Items</option>
-            </select>
+           <select name="core1_request_category" class="select select-bordered w-full" required>
+  <option disabled value="">Select category</option>
+  <option value="Linen" {{ $stocks->core1_request_category == 'Linen' ? 'selected' : '' }}>Linen & Bedding</option>
+  <option value="Toiletries" {{ $stocks->core1_request_category == 'Toiletries' ? 'selected' : '' }}>Toiletries</option>
+  <option value="Cleaning" {{ $stocks->core1_request_category == 'Cleaning' ? 'selected' : '' }}>Cleaning Supplies</option>
+  <option value="Amenities" {{ $stocks->core1_request_category == 'Amenities' ? 'selected' : '' }}>Guest Amenities</option>
+  <option value="Maintenance" {{ $stocks->core1_request_category == 'Maintenance' ? 'selected' : '' }}>Maintenance Items</option>
+</select>
           </div>
         </div>
 
@@ -74,7 +75,8 @@
             </span>
             <span class="label-text-alt text-gray-500">(Separate items with commas)</span>
           </label>
-          <textarea name="core1_request_items" class="textarea textarea-bordered h-32 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" placeholder="Bath towels, King-size sheets, Pillow cases, Shampoo bottles" required></textarea>
+         <textarea name="core1_request_items" class="textarea textarea-bordered h-32" required>{{ $stocks->core1_request_items }}</textarea>
+
         </div>
 
         <!-- Status, Priority, and Needed -->
@@ -90,11 +92,11 @@
                 Status
               </span>
             </label>
-            <select name="core1_request_status" class="select select-bordered w-full" required>
-              <option value="Pending" selected>Pending</option>
-              <option value="Approved">Approved</option>
-              <option value="Rejected">Rejected</option>
-              <option value="Fulfilled">Fulfilled</option>
+                    <select name="core1_request_status" class="select select-bordered w-full" required>
+            <option value="Pending" {{ $stocks->core1_request_status == 'Pending' ? 'selected' : '' }}>Pending</option>
+            <option value="Approved" {{ $stocks->core1_request_status == 'Approved' ? 'selected' : '' }}>Approved</option>
+            <option value="Rejected" {{ $stocks->core1_request_status == 'Rejected' ? 'selected' : '' }}>Rejected</option>
+            <option value="Fulfilled" {{ $stocks->core1_request_status == 'Fulfilled' ? 'selected' : '' }}>Fulfilled</option>
             </select>
           </div>
           
@@ -108,12 +110,12 @@
                 Priority
               </span>
             </label>
-            <select name="core1_request_priority" class="select select-bordered w-full" required>
-              <option value="Low">Low</option>
-              <option value="Medium" selected>Medium</option>
-              <option value="High">High</option>
-              <option value="Urgent">Urgent</option>
-            </select>
+           <select name="core1_request_priority" class="select select-bordered w-full" required>
+  <option value="Low" {{ $stocks->core1_request_priority == 'Low' ? 'selected' : '' }}>Low</option>
+  <option value="Medium" {{ $stocks->core1_request_priority == 'Medium' ? 'selected' : '' }}>Medium</option>
+  <option value="High" {{ $stocks->core1_request_priority == 'High' ? 'selected' : '' }}>High</option>
+  <option value="Urgent" {{ $stocks->core1_request_priority == 'Urgent' ? 'selected' : '' }}>Urgent</option>
+</select>
           </div>
           
           <div class="form-control">
@@ -135,7 +137,8 @@
               </span>
             </label>
             <div class="relative">
-              <input type="number" name="core1_request_needed" class="input input-bordered w-full pl-10" placeholder="Enter quantity" min="1" required>
+            <input type="number" name="core1_request_needed" class="input input-bordered w-full pl-10"
+             placeholder="Enter quantity" min="1" required value="{{ $stocks->core1_request_needed }}">
               <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hash">
                   <line x1="4" x2="20" y1="9" y2="9"/>
@@ -166,7 +169,7 @@
               <polyline points="17 21 17 13 7 13 7 21"/>
               <polyline points="7 3 7 8 15 8"/>
             </svg>
-            Create Request
+            Save Request
           </button>
         </div>
       </div>

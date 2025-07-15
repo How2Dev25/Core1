@@ -199,6 +199,28 @@
     </div>
     
   <div class="overflow-x-auto bg-white rounded-lg shadow">
+    @if(session('stockcreated'))
+            <div role="alert" class="alert alert-success mt-2 mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{session('stockcreated')}}</span>
+        </div>
+        @elseif(session('stockupdated'))
+         <div role="alert" class="alert alert-success mt-2 mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{session('stockupdated')}}</span>
+        </div>
+        @elseif(session('stockdeleted'))
+         <div role="alert" class="alert alert-success mt-2 mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{session('stockdeleted')}}</span>
+        </div>
+        @endif
  <table class="table">
   <thead>
     <tr class="bg-gray-100">
@@ -214,9 +236,9 @@
     </tr>
   </thead>
   <tbody>
-    @forelse ($stock as $index => $stocks)
+    @forelse ($stock as $stocks)
       <tr>
-        <td>{{ $index + 1 }}</td>
+        <td>{{ $stocks->core1_stockID }}</td>
         <td>{{ $stocks->core1_requestID }}</td>
         <td>
           <span class="badge badge-outline flex items-center gap-1">
@@ -358,19 +380,14 @@
         <td>{{ $stocks->created_at->diffForHumans() }}</td>
         <td>
           <div class="flex gap-2">
-            <button class="btn btn-xs btn-ghost" onclick="viewRequestModal.showModal()" data-id="{{ $stocks->id }}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye">
-                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-            </button>
-            <button class="btn btn-xs btn-ghost" onclick="editRequestModal.showModal()" data-id="{{ $stocks->id }}">
+          
+            <button class="btn btn-xs btn-ghost" onclick="edit_request_modal_{{$stocks->core1_stockID}}.showModal()" data-id="{{ $stocks->id }}">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">
                 <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
                 <path d="m15 5 4 4"/>
               </svg>
             </button>
-            <button class="btn btn-xs btn-ghost text-error" onclick="confirmDeleteRequest('{{ $stocks->id }}')">
+            <button class="btn btn-xs btn-ghost text-error" onclick="delete_request_modal_{{$stocks->core1_stockID}}.showModal()">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2">
                 <path d="M3 6h18"/>
                 <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
@@ -437,7 +454,10 @@
     @foreach ($inventory as $inv)
         @include('admin.components.ias.update')
         @include('admin.components.ias.delete')
-        
+    @endforeach
+    @foreach ($stock as $stocks)
+        @include('admin.components.ias.editrequest')
+        @include('admin.components.ias.deleterequest')
     @endforeach
   
  

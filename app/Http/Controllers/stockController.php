@@ -25,6 +25,8 @@ class stockController extends Controller
 
         $stockcreated->save();
 
+        session()->flash('stockcreated', 'Stock Request Has Been Added');
+
         return redirect()->back();
     }
     
@@ -38,12 +40,18 @@ class stockController extends Controller
            
         ]);
 
-        return $form; 
+        $core1_stockID->update($form);
+
+         session()->flash('stockupdated', 'Stock Request Has Been Updated');
+
+         return redirect()->back();
     }
 
     public function delete(stockRequest $core1_stockID){
 
         $core1_stockID->delete();
+
+        session()->flash('stockdeleted', 'Stock Request Has Been Removed');
 
         return redirect()->back();
     }

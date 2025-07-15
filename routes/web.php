@@ -96,5 +96,5 @@ Route::delete('/deleteinventory/{core1_inventoryID}', [inventoryController::clas
 
 // stocks
 Route::post('/createstockrequest', [stockController::class, 'store']);
-Route::put('/createstockrequest/{core1_stockID}', [stockController::class, 'modify']);
+Route::put('/editstockrequest/{core1_stockID}', [stockController::class, 'modify']);
 Route::delete('/deletestockrequest/{core1_stockID}', [stockController::class, 'delete']);
