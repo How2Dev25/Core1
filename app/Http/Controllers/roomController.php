@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\additionalRoom;
+use App\Models\room_maintenance;
 use Illuminate\Http\Request;
 use App\Models\room;
 use Termwind\Components\Raw;
@@ -127,7 +128,20 @@ class roomController extends Controller
         $request->file('roomphoto')->move(public_path('images/rooms/'), $filename);
         $form['roomphoto'] = $filepath;
 
-        room::create($form);
+      
+
+         $createRoom =  room::create($form);
+
+
+if ($form['roomstatus'] === 'Maintenance') {
+    Room_Maintenance::create([
+        'maintenancestatus' => 'Pending',
+        'maintenancedescription' => 'This Room Needs Maintenance',
+        'maintenanceassigned_To' => 'Juan Dela Cruz',
+         'maintenance_priority' => 'Medium',
+        'roomID' => $createRoom->roomID,
+    ]);
+}
 
         session()->flash('roomcreated', 'Room Has Been Added');
 
@@ -168,12 +182,38 @@ class roomController extends Controller
 
         $roomID->update($form);
 
-        session()->flash('roommodify', 'Room Has been Modified');
+              if ($form['roomstatus'] === 'Maintenance') {
+    // Check if maintenance record already exists
+    $existingMaintenance = room_maintenance::where('roomID', $roomID->roomID)
+                                        ->where('maintenancestatus', '!=', 'Completed')
+                                        ->first();
+    
+                if (!$existingMaintenance) {
+                    // Only create new record if one doesn't already exist
+                room_maintenance::create([
+                        'maintenancestatus' => 'Pending',
+                        'maintenancedescription' => 'This Room Needs Maintenance',
+                        'maintenanceassigned_To' => 'Juan Dela Cruz',
+                        'maintenance_priority' => 'Medium',
+                        'roomID' => $roomID->roomID,
+                    ]);
+                }
+            } else {
+                // Only update active maintenance records (not already completed)
+                room_maintenance::where('roomID', $roomID->roomID)
+                            ->where('maintenancestatus', '!=', 'Completed')
+                            ->update([
+                                'maintenancestatus' => 'Completed',
+                                'updated_at' => now() // Consider adding this field
+                            ]);
+            }
 
-        return redirect()->back();
+                    session()->flash('roommodify', 'Room Has been Modified');
+
+                    return redirect()->back();
 
 
-    }
+                }
 
     public function redirect($roomID){
 

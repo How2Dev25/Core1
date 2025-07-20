@@ -4,11 +4,13 @@ use App\Http\Controllers\ecmController;
 use App\Http\Controllers\hmpController;
 use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\roomController;
+use App\Http\Controllers\roommantenanceController;
 use App\Http\Controllers\stockController;
 use App\Models\Ecm;
 use App\Models\Hmp;
 use App\Models\Inventory;
 use App\Models\room;
+use App\Models\room_maintenance;
 use App\Models\stockRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -98,3 +100,16 @@ Route::delete('/deleteinventory/{core1_inventoryID}', [inventoryController::clas
 Route::post('/createstockrequest', [stockController::class, 'store']);
 Route::put('/editstockrequest/{core1_stockID}', [stockController::class, 'modify']);
 Route::delete('/deletestockrequest/{core1_stockID}', [stockController::class, 'delete']);
+
+// Housekeeping And Maintenance 
+Route::get('/hmm', function(){
+      $roomID = room::where('roomstatus', '!=', 'Occupied')->where('roomstatus', '!=', 'Maintenance')->latest()->get();
+      $inventory = Inventory::latest()->get();
+      $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
+      ->latest('core1_roommaintenance.created_at')->get();
+        return view('admin.hmm', ['inventory' => $inventory, 'rooms' => $rooms, 'roomID' => $roomID ]);
+});
+Route::post('/createmaintenance', [roommantenanceController::class, 'store']);
+Route::put('/updatemaintenance/{roommaintenanceID}', [roommantenanceController::class, 'modify']);
+Route::put('/completemaintenance/{roommaintenanceID}', [roommantenanceController::class, 'complete']);
+Route::delete('/deletemaintenance/{roommaintenanceID}', [roommantenanceController::class, 'delete']);
