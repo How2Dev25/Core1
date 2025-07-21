@@ -130,3 +130,18 @@ Route::post('/createmaintenance', [roommantenanceController::class, 'store']);
 Route::put('/updatemaintenance/{roommaintenanceID}', [roommantenanceController::class, 'modify']);
 Route::put('/completemaintenance/{roommaintenanceID}', [roommantenanceController::class, 'complete']);
 Route::delete('/deletemaintenance/{roommaintenanceID}', [roommantenanceController::class, 'delete']);
+
+
+// room feedbacks
+Route::get('/roomfeedback', function(){
+    return view('admin.roomfeedback');
+});
+Route::get('/servicefeedback', function(){
+    return view('admin.servicefeedback');
+});
+
+
+// Channel Management
+Route::get('/channel', function(){
+    return view('admin.channel');
+});
