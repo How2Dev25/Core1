@@ -59,28 +59,28 @@
     <div class="stats shadow-sm bg-base-200">
       <div class="stat p-3">
         <div class="stat-title">Total Items</div>
-        <div class="stat-value text-primary text-lg">287</div>
+        <div class="stat-value text-primary text-lg">{{$totalItems}}</div>
       </div>
     </div>
     
     <div class="stats shadow-sm bg-base-200">
       <div class="stat p-3">
         <div class="stat-title">In Stock</div>
-        <div class="stat-value text-success text-lg">243</div>
+        <div class="stat-value text-success text-lg">{{$instock}}</div>
       </div>
     </div>
     
     <div class="stats shadow-sm bg-base-200">
       <div class="stat p-3">
         <div class="stat-title">Low Stock</div>
-        <div class="stat-value text-warning text-lg">19</div>
+        <div class="stat-value text-warning text-lg">{{$lowstock}}</div>
       </div>
     </div>
     
     <div class="stats shadow-sm bg-base-200">
       <div class="stat p-3">
         <div class="stat-title">Out of Stock</div>
-        <div class="stat-value text-error text-lg">5</div>
+        <div class="stat-value text-error text-lg">{{$nostock}}</div>
       </div>
     </div>
   </div>

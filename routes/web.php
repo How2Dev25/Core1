@@ -39,8 +39,10 @@ Route::get('/errorpage', function(){
 
 Route::get('/hmp', function(){
     $hmpdata = Hmp::latest()->get();
+     $events = Ecm::where('eventstatus', 'Approved')->latest()->get();
+      $rooms = room::where('roomstatus', 'Available')->latest()->get();
 
-    return view('admin.hmp', ['hmpdata' => $hmpdata]);
+    return view('admin.hmp', ['hmpdata' => $hmpdata, 'rooms' => $rooms, 'events' => $events]);
 });
 Route::post('/createhmp', [hmpController::class, 'createhmp']);
 Route::get('/searchhmp', [hmpController::class, 'index']);
@@ -88,10 +90,16 @@ Route::delete('/deleteroomphoto/{roomphotoID}', [roomController::class, 'deleter
 
 // Inventory And Stocks
 Route::get('/ias', function(){
+    $totalItems = Inventory::count();
+    $instock = Inventory::sum('core1_inventory_stocks');
+    $lowstock = Inventory::whereColumn('core1_inventory_stocks', '<', 'core1_inventory_threshold')->count();
+    $nostock = Inventory::where('core1_inventory_stocks', 0)->count();
+
     $inventory = Inventory::latest()->get();
     $stock = stockRequest::latest()->get();
-    return view ('admin.ias', ['inventory' => $inventory, 'stock' => $stock ]);
-});
+    return view ('admin.ias', ['inventory' => $inventory, 'stock' => $stock, 
+    'totalItems'=> $totalItems, 'instock' => $instock, 'lowstock' => $lowstock, 'nostock' => $nostock ]);
+    });
 Route::post('/createinventory', [inventoryController::class, 'store']);
 Route::put('/updateinventory/{core1_inventoryID}', [inventoryController::class, 'modify']);
 Route::delete('/deleteinventory/{core1_inventoryID}', [inventoryController::class, 'delete']);
@@ -107,7 +115,16 @@ Route::get('/hmm', function(){
       $inventory = Inventory::latest()->get();
       $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
       ->latest('core1_roommaintenance.created_at')->get();
-        return view('admin.hmm', ['inventory' => $inventory, 'rooms' => $rooms, 'roomID' => $roomID ]);
+       $totalrooms = room::count();
+         $maintenancerooms = room::where('roomstatus', 'Maintenance')->count();
+         $urgentmaintenance = room_maintenance::where('maintenance_priority', 'Urgent')->count();
+         $inventorystocks = Inventory::sum('core1_inventory_stocks'); 
+          $lowstock = Inventory::whereColumn('core1_inventory_stocks', '<', 'core1_inventory_threshold')->count();
+      
+        return view('admin.hmm', [
+            'inventory' => $inventory, 'rooms' => $rooms, 'roomID' => $roomID,
+        'totalrooms' => $totalrooms, 'maintenancerooms' => $maintenancerooms, 'urgentmaintenance' => $urgentmaintenance, 'inventorystocks' => $inventorystocks, 'lowstock' => $lowstock ]);
+
 });
 Route::post('/createmaintenance', [roommantenanceController::class, 'store']);
 Route::put('/updatemaintenance/{roommaintenanceID}', [roommantenanceController::class, 'modify']);

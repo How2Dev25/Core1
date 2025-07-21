@@ -204,11 +204,160 @@
                     </div>
                 </div>
                 {{-- table section --}}
+                
         
                 {{-- recent promotions sidebar --}}
                @include('admin.components.hmp.carousel')
                 {{-- end recent promotions sidebar --}}
             </div>
+
+               <div class="mt-2 mb-2">
+                   <h1 class="font-bold text-2xl">Available Rooms</h1>
+                </div>
+
+             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
+
+             
+      <!-- Room 1 -->
+      @forelse($rooms as $room)
+      <div class="card bg-white border border-gray-200 hover:shadow-md transition-all duration-300 overflow-hidden">
+        <figure class="relative h-48">
+          <img src="{{asset($room->roomphoto)}}" alt="Deluxe Room" class="w-full h-full object-cover">
+                  <div class="absolute top-4 right-4">
+            <span class="badge 
+              @if($room->roomtype == 'Standard') badge-info
+              @elseif($room->roomtype == 'Deluxe') badge-primary
+              @elseif($room->roomtype == 'Suite') badge-secondary
+              @elseif($room->roomtype == 'Executive') badge-accent
+              @endif
+            ">
+              {{ $room->roomtype }}
+            </span>
+          </div>
+        </figure>
+        <div class="card-body p-5">
+          <div class="flex justify-between items-start">
+            <div>
+             
+              <p class="text-black font-bold text-lg">Room #{{$room->roomID}}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-sm text-gray-500">From</p>
+              <p class="text-xl font-bold text-primary">₱{{$room->roomprice}}/night</p>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-2 mt-3">
+            <div class="flex items-center text-sm text-gray-500">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="r ound" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              {{$room->roomprice}} sqft
+            </div>
+            <div class="flex items-center text-sm text-gray-500">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+              {{$room->roommaxguest}} Guests
+            </div>
+          </div>
+          
+          <div class="mt-4 flex justify-between items-center">
+            <p class="text-sm text-blue-600">
+              {{$room->roomfeatures}}
+            </p>
+            <div class="flex gap-2">
+              <a href="/gotoroom/{{$room->roomID}}" class="btn btn-circle btn-sm btn-ghost text-info">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </a>
+             
+            </div>
+          </div>
+        </div>
+      </div>
+      @empty
+      <div class="w-full text-center py-10 px-4 bg-base-100 rounded-md shadow-sm border border-dashed border-gray-300">
+  <img src="{{ asset('images/defaults/default.jpg') }}" alt="No rooms" class="mx-auto mb-4 w-40 ">
+  
+  <h2 class="text-xl font-semibold text-gray-700 mb-2">No Rooms Yet!</h2>
+  
+
+  
+  
+</div>
+    
+      @endforelse
+    </div>
+
+    <div class="mt-2 mb-2">
+        <h1 class="font-bold text-2xl">Approved Events</h1>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
+        @forelse ($events as $event)
+    <div class="card bg-base-100 shadow-sm hover:shadow-md transition-shadow">
+        <div class="card-body p-4">
+            <div class="flex items-start gap-4">
+                <!-- Event Image -->
+                <div class="avatar">
+                    <div class="mask mask-squircle w-12 h-12">
+                        <img src="{{asset($event->eventphoto)}}" alt="{{$event->eventname}}">
+                    </div>
+                </div>
+                
+                <!-- Event Details -->
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold">{{$event->eventtype}}</h3>
+                            <p class="text-sm text-gray-500">#{{$event->eventID}} • {{$event->eventname}}</p>
+                        </div>
+                        
+                        <!-- Status Badge -->
+                        <div>
+                            @if ($event->eventstatus == "Approved")
+                                <span class="badge badge-success">Approved</span>
+                            @elseif ($event->eventstatus == "Pending")
+                                <span class="badge badge-warning">Pending</span>
+                            @elseif ($event->eventstatus == "Cancelled")
+                                <span class="badge badge-error">Cancelled</span>
+                            @else
+                                <span class="badge badge-neutral">Unknown</span>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <div class="mt-2 text-sm">
+                        <p><span class="font-medium">Organizer:</span> {{$event->eventorganizername}}</p>
+                        <div class="flex gap-4 mt-1">
+                            <p><span class="font-medium">Date:</span> {{$event->eventdate}}</p>
+                            <p><span class="font-medium">Duration:</span> {{$event->eventdays}} days</p>
+                        </div>
+                    </div>
+                    
+                 
+                
+                </div>
+            </div>
+        </div>
+    </div>
+@empty
+    <div class="col-span-full py-12 text-center">
+        <div class="flex flex-col items-center justify-center text-gray-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-inbox">
+                <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
+                <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
+            </svg>
+            <span class="mt-2 text-sm font-medium">No Data found</span>
+        </div>
+    </div>
+@endforelse
+    
+     </div>
+
+
         </section>
   
            

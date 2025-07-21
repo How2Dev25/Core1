@@ -46,7 +46,7 @@
           </div>
           <div class="ml-4">
             <h3 class="text-sm font-medium text-gray-500">Total Rooms</h3>
-            <p class="text-2xl font-semibold">142</p>
+            <p class="text-2xl font-semibold">{{$totalrooms}}</p>
           </div>
         </div>
         <div class="mt-2 text-sm text-green-600 flex items-center">
@@ -66,12 +66,12 @@
           </div>
           <div class="ml-4">
             <h3 class="text-sm font-medium text-gray-500">Maintenance Rooms</h3>
-            <p class="text-2xl font-semibold">8</p>
+            <p class="text-2xl font-semibold">{{$maintenancerooms}}</p>
           </div>
         </div>
         <div class="mt-2 text-sm text-red-600 flex items-center">
           <i data-lucide="alert-circle" class="w-4 h-4 mr-1"></i>
-          <span>3 urgent requests</span>
+          <span>{{$urgentmaintenance}} urgent requests</span>
         </div>
       </div>
     </div>
@@ -85,12 +85,12 @@
           </div>
           <div class="ml-4">
             <h3 class="text-sm font-medium text-gray-500">Total Inventory</h3>
-            <p class="text-2xl font-semibold">1,245</p>
+            <p class="text-2xl font-semibold">{{$inventorystocks}}</p>
           </div>
         </div>
         <div class="mt-2 text-sm text-gray-500 flex items-center">
           <i data-lucide="info" class="w-4 h-4 mr-1"></i>
-          <span>12 items low in stock</span>
+          <span>{{$lowstock}} items low in stock</span>
         </div>
       </div>
     </div>
