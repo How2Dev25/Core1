@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\channelController;
 use App\Http\Controllers\ecmController;
 use App\Http\Controllers\hmpController;
 use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\roomController;
 use App\Http\Controllers\roommantenanceController;
 use App\Http\Controllers\stockController;
+use App\Models\Channel;
 use App\Models\Ecm;
 use App\Models\Hmp;
 use App\Models\Inventory;
@@ -143,5 +145,14 @@ Route::get('/servicefeedback', function(){
 
 // Channel Management
 Route::get('/channel', function(){
-    return view('admin.channel');
+    $rooms = room::where('roomstatus', 'Available')->latest()->get();
+   $channels = Channel::join('core1_room', 'core1_room.roomID', '=', 'channel_table.roomID')
+    ->select('channel_table.*', 'core1_room.*', 'channel_table.created_at as createdchannel')
+    ->orderBy('channel_table.created_at', 'desc')
+    ->get();
+    return view('admin.channel', ['rooms' => $rooms, 'channels' => $channels]);
 });
+
+Route::post('/createlisting', [channelController::class, 'store']);
+Route::put('/updatelisting/{channelID}', [channelController::class, 'modify']);
+Route::delete('/deletelisting/{channelID}', [channelController::class, 'delete']);

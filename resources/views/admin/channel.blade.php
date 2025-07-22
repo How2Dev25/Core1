@@ -9,7 +9,7 @@
  
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <title>{{$title}} - Inventory And Stock</title>
+    <title>{{$title}} - Channel Management</title>
 </head>
 <body class="bg-base-100">
     <div class="flex h-screen overflow-hidden">
@@ -135,110 +135,119 @@
   </div>
 
   <!-- Add New Channel Section -->
- 
+ <div class="mt-2 mb-2">
+  
+  <button onclick="add_listing.showModal()" class="btn btn-primary">
+    <i data-lucide="circle-plus"></i>
+    Add Room Listing</button>
+ </div>
 
   <!-- Channel Sync Status Section -->
-  <div class="bg-base-200 rounded-box p-6">
-    <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-      <i class="w-5 h-5" data-lucide="activity"></i>
-      Sync Status
-    </h3>
-    
-    <div class="overflow-x-auto">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Channel</th>
-            <th>Status</th>
-            <th>Last Sync</th>
-            <th>Listings</th>
-            <th>Bookings</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <div class="flex items-center gap-2">
-                <div class="avatar placeholder">
-                  <div class="w-6 rounded bg-primary text-primary-content">
-                    <span class="text-xs">A</span>
-                  </div>
-                </div>
-                Channel A
-              </div>
-            </td>
-            <td>
-              <div class="badge badge-success gap-1">
-                <i class="w-3 h-3" data-lucide="check"></i>
-                Active
-              </div>
-            </td>
-            <td>15 min ago</td>
-            <td>24</td>
-            <td>12</td>
-            <td>
-              <button class="btn btn-ghost btn-xs">
-                <i class="w-4 h-4" data-lucide="sync"></i>
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="flex items-center gap-2">
-                <div class="avatar placeholder">
-                  <div class="w-6 rounded bg-secondary text-secondary-content">
-                    <span class="text-xs">B</span>
-                  </div>
-                </div>
-                Channel B
-              </div>
-            </td>
-            <td>
-              <div class="badge badge-success gap-1">
-                <i class="w-3 h-3" data-lucide="check"></i>
-                Active
-              </div>
-            </td>
-            <td>1 hour ago</td>
-            <td>24</td>
-            <td>8</td>
-            <td>
-              <button class="btn btn-ghost btn-xs">
-                <i class="w-4 h-4" data-lucide="sync"></i>
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="flex items-center gap-2">
-                <div class="avatar placeholder">
-                  <div class="w-6 rounded bg-accent text-accent-content">
-                    <span class="text-xs">C</span>
-                  </div>
-                </div>
-                Channel C
-              </div>
-            </td>
-            <td>
-              <div class="badge badge-error gap-1">
-                <i class="w-3 h-3" data-lucide="alert-circle"></i>
-                Disconnected
-              </div>
-            </td>
-            <td>3 days ago</td>
-            <td>18</td>
-            <td>0</td>
-            <td>
-              <button class="btn btn-ghost btn-xs">
-                <i class="w-4 h-4" data-lucide="refresh-cw"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="overflow-x-auto">
+    {{-- alerts --}}
+    @if(session('RoomAdded'))
+    <div role="alert" class="alert alert-success">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>{{session('RoomAdded')}}</span>
   </div>
+  @elseif(session('RoomModify'))
+   <div role="alert" class="alert alert-success">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>{{session('RoomModify')}}</span>
+  </div>
+  @elseif(session('RoomDelete'))
+
+    <div role="alert" class="alert alert-success">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <span>{{session('RoomDelete')}}</span>
+    </div>
+    @endif
+  
+  <table class="table">
+    <!-- head -->
+    <thead>
+      <tr>
+        
+        <th>Listing ID</th>
+        <th>Channel Name</th>
+        <th>Room Name</th>
+        <th>Listing Status</th>
+        <th>Date Added</th>
+         <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- row 1 -->
+      @forelse ($channels as $channel)
+
+      <tr>
+         <td>{{$channel->channelID}}</td>
+           <td>
+          <div class="flex items-center gap-3">
+            <div class="avatar">
+              <div class="mask mask-squircle w-10 h-10">
+                <img
+                  src="@if($channel->channelName == 'Tarastay') {{asset('images/rbnb/tarastay.png')}} 
+                  @elseif($channel->channelName == 'Habistay') {{asset('images/rbnb/habistay.png')}}
+                  @else {{asset('images/rbnb/nestscape.png')}} @endif"
+                  alt="Avatar Tailwind CSS Component" />
+              </div>
+            </div>
+            <div>
+              <div class="font-bold">{{$channel->channelName}}</div>
+              <div class="text-sm opacity-50">Philippines</div>
+            </div>
+          </div>
+        </td>
+       
+        <td class="font-bold">
+          Room {{$channel->roomID}}
+           <span class="badge badge-ghost badge-sm">{{$channel->roomtype}}</span>
+        </td>
+
+                <td>
+            @if($channel->channelStatus === 'Approved')
+              <span class="badge badge-success">Approved</span>
+            @elseif($channel->channelStatus === 'Pending')
+              <span class="badge badge-warning">Pending</span>
+            @else
+              <span class="badge badge-ghost">{{ $channel->channelStatus }}</span>
+            @endif
+          </td>
+        <td>{{ \Carbon\Carbon::parse($channel->createdchannel)->format('F j, Y') }} ({{ \Carbon\Carbon::parse($channel->createdchannel)->diffForHumans() }})
+</td>
+        <th>
+          <button onclick="update_listing_{{$channel->channelID}}.showModal()" class="btn btn-primary btn-sm ">
+            <i class="w-5 h-5" data-lucide="pencil"></i>
+            Modify
+          </button>
+            <button onclick="delete_listing_{{$channel->channelID}}.showModal()" class="btn btn-error btn-sm">
+              <i data-lucide="trash" class="w-5 h-5 "></i>
+              Delete
+            </button>
+        </th>
+      </tr>
+          
+      @empty
+          
+      @endforelse
+      
+     
+   
+     
+    
+   
+   
+    </tbody>
+  
+  </table>
+</div>
 </section>
 
 <!-- Initialize Lucide Icons -->
@@ -249,17 +258,6 @@
         
 
 
-<!-- Initialize Lucide Icons -->
-<script src="https://unpkg.com/lucide@latest"></script>
-<script>
-  lucide.createIcons();
-</script>
-<!-- Initialize Lucide Icons -->
-<script src="https://unpkg.com/lucide@latest"></script>
-<script>
-  lucide.createIcons();
-</script>
-  
            
       
  
@@ -268,12 +266,18 @@
     </div>
 
     {{-- modals --}}
- 
+    @include('admin.components.channel.create')
+    
+    @foreach ($channels as $channel)
+        @include('admin.components.channel.delete')
+        @include('admin.components.channel.update')
+    @endforeach
+
    
   
- 
-  </body>
   @include('javascriptfix.soliera_js')
+  </body>
+
 
   <script src="{{asset('javascript/photouploadglobal.js')}}"></script>
   

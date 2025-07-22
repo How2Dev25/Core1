@@ -9,7 +9,7 @@
  
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <title>{{$title}} - Events And Conference</title>
+    <title>{{$title}} - Housekeeping And Maintenance</title>
 </head>
 <body class="bg-base-100">
     <div class="flex h-screen overflow-hidden">
