@@ -46,8 +46,8 @@
             <i data-lucide="chevron-right" class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90"></i>
           </div>
           <div class="collapse-content pl-10 pr-4 py-1 space-y-1"> 
-            <a href="#" class="block px-3 py-2 text-sm rounded-lg hover:bg-blue-600 hover:bg-opacity-30 text-blue-100 sidebar-item">Room Feedbacks</a>
-            <a href="#" class="block px-3 py-2 text-sm rounded-lg hover:bg-blue-600 hover:bg-opacity-30 text-blue-100 sidebar-item">Service Feedbacks</a>
+            <a href="/roomfeedback" class="block px-3 py-2 text-sm rounded-lg hover:bg-blue-600 hover:bg-opacity-30 text-blue-100 sidebar-item">Room Feedbacks</a>
+            <a href="/servicefeedback" class="block px-3 py-2 text-sm rounded-lg hover:bg-blue-600 hover:bg-opacity-30 text-blue-100 sidebar-item">Service Feedbacks</a>
           </div>
         </div>
 
@@ -81,7 +81,7 @@
           </div>
         </a>
 
-        <a href="">
+        <a href="/ias">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item hover:bg-blue-600 hover:bg-opacity-50 text-white">
             <i data-lucide="warehouse" class="w-5 h-5 text-blue-200"></i>
             <span class="ml-3">Inventory And Stock</span>
@@ -102,14 +102,14 @@
           </div>
         </a>
 
-        <a href="">
+        <a href="/hmm">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item hover:bg-blue-600 hover:bg-opacity-50 text-white">
             <i data-lucide="brush-cleaning" class="w-5 h-5 text-blue-200"></i>
             <span class="ml-3">Housekeeping And Maintenance</span>
           </div>
         </a>
 
-        <a href="">
+        <a href="/channel">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item hover:bg-blue-600 hover:bg-opacity-50 text-white">
             <i data-lucide="square-arrow-out-up-right" class="w-5 h-5 text-blue-200"></i>
             <span class="ml-3">Channel Management</span>

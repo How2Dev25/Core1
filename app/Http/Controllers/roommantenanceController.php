@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\room;
 use App\Models\room_maintenance;
+use App\Models\Inventory;
 use Illuminate\Http\Request;
 
 class roommantenanceController extends Controller
@@ -73,5 +74,36 @@ class roommantenanceController extends Controller
           session()->flash('maintenancecomplete', 'Maintenance Has Been Completed');
 
         return redirect()->back();
+   }
+
+   public function use(Request $request ,Inventory $core1_inventoryID){
+        $form = $request->validate([
+            'useItem' => 'required',
+        ]);
+
+             $usestocks = $form['useItem'];
+             $currentstocks =  $core1_inventoryID->core1_inventory_stocks;
+             $currentthreshold = $core1_inventoryID->core1_inventory_threshold;
+             $updatedstock = $currentstocks - $usestocks;
+
+             if($currentstocks <= 0){
+                session()->flash('stockerror', 'This Item is Out Of Stocks!');
+                return redirect()->back();
+             }
+            elseif ($usestocks > $currentstocks) {
+                    session()->flash('stocklimit', 'You are trying to use more than available stocks!');
+                    return redirect()->back();
+                    }
+             else{
+                 $core1_inventoryID->update([
+                    'core1_inventory_stocks'=> $updatedstock,
+                 ]);
+
+                 session()->flash('stockUpdated','Stock Has been Updated');
+
+                 return redirect()->back();
+             }
+
+       
    }
 }

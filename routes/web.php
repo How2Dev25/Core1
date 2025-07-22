@@ -132,7 +132,7 @@ Route::post('/createmaintenance', [roommantenanceController::class, 'store']);
 Route::put('/updatemaintenance/{roommaintenanceID}', [roommantenanceController::class, 'modify']);
 Route::put('/completemaintenance/{roommaintenanceID}', [roommantenanceController::class, 'complete']);
 Route::delete('/deletemaintenance/{roommaintenanceID}', [roommantenanceController::class, 'delete']);
-
+Route::put('usestocks/{core1_inventoryID}', [roommantenanceController::class, 'use']);
 
 // room feedbacks
 Route::get('/roomfeedback', function(){

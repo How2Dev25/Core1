@@ -99,36 +99,36 @@
   <!-- Inventory Table -->
   <div class="overflow-x-auto rounded-box border border-base-300 p-5">
      {{--alerts --}}
-            @if(session('inventorycreated'))
-          <div role="alert" class="alert alert-success mb-2 mt-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span>{{session('inventorycreated')}}</span>
-            </div>
-
-            @elseif(session('inventorymodified'))
-              <div role="alert" class="alert alert-success mb-2 mt-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span>{{session('inventorymodified')}}</span>
-            </div>
-            @elseif(session('inventorydeleted'))
-             <div role="alert" class="alert alert-success mb-2 mt-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span>{{session('inventorydeleted')}}</span>
-            </div>
-             @endif
-            
+      
             {{-- alerts --}}
 
               <div class="flex justify-between items-center mb-6">
         <h2 class="text-xl font-semibold">Inventory And Stocks</h2>
       </div>
     <table class="table table-sm">
+      @if(session('stockerror'))
+              <div role="alert" class="alert alert-error mt-2 mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{session('stockerror')}}</span>
+        </div>
+        @elseif(session('stocklimit'))
+        <div role="alert" class="alert alert-error mt-2 mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{session('stocklimit')}}</span>
+        </div>
+        @elseif(session('stockUpdated'))
+        <div role="alert" class="alert alert-success mt-2 mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>{{session('stockUpdated')}}</span>
+      </div>
+      @endif
+
       <thead class="bg-base-200">
         <tr>
           <th>Item</th>
@@ -136,6 +136,7 @@
           <th>Stock</th>
           <th>Threshold</th>
           <th>Unit</th>
+          <th>Action</th>
         
         </tr>
       </thead>
@@ -175,13 +176,23 @@
                 </span>
                 </td>
           <td>
-            <span class="font-bold">{{$inv->core1_inventory_stocks}}</span>
+            <span class="font-bold @if($inv->core1_inventory_stocks == 0)
+                text-red-500
+              @elseif ($inv->core1_inventory_stocks <= $inv->core1_inventory_threshold)
+                text-orange-400
+              @endif">{{$inv->core1_inventory_stocks}}</span>
           </td>
           <td>{{$inv->core1_inventory_threshold}}</td>
           <td>{{$inv->core1_inventory_unit}}</td>
+          <td>
+            <button onclick="stock_modal_{{$inv->core1_inventoryID}}.showModal()" class="btn btn-sm btn-primary">
+              <i class="w-5 h-5" data-lucide="hand-helping"></i>
+              Use Item</button>
+          </td>
          
         </tr>
         @empty
+
         @endforelse
         
       
@@ -199,9 +210,7 @@
         <i data-lucide="plus" class="w-5 h-5 mr-1"></i>
         New Request
       </button>
-      <button class="btn btn-ghost">
-        <i data-lucide="settings" class="w-5 h-5"></i>
-      </button>
+     
     </div>
   </div>
 
@@ -396,6 +405,10 @@
     @endforeach
 
     @include('admin.components.hmm.create')
+
+    @foreach ($inventory as $inv)
+        @include('admin.components.ias.use')
+    @endforeach
  
   </body>
   @include('javascriptfix.soliera_js')

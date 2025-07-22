@@ -155,7 +155,7 @@
       <!-- Footer with action buttons -->
       <div class="flex justify-end p-6 bg-gray-50 border-t">
         <div class="flex gap-3">
-          <button type="button" class="btn btn-ghost" onclick="request_modal.close()">
+          <button type="button" class="btn btn-ghost" onclick="edit_request_modal_{{$stocks->core1_stockID}}.close()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-circle">
               <circle cx="12" cy="12" r="10"/>
               <path d="m15 9-6 6"/>

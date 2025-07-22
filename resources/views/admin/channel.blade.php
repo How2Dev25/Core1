@@ -38,7 +38,7 @@
   <!-- Channel Cards Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
     <!-- Channel A Card -->
-    <div class="card bg-base-200 shadow-sm">
+    <div class="card bg-white shadow-md">
       <div class="card-body">
         <div class="flex items-center gap-3 mb-3">
           <div class="avatar placeholder">
@@ -70,7 +70,7 @@
     </div>
 
     <!-- Channel B Card -->
-    <div class="card bg-base-200 shadow-sm">
+    <div class="card bg-white shadow-md">
       <div class="card-body">
         <div class="flex items-center gap-3 mb-3">
           <div class="avatar placeholder">
@@ -102,7 +102,7 @@
     </div>
 
     <!-- Channel C Card -->
-    <div class="card bg-base-200 shadow-sm">
+    <div class="card bg-white shadow-md">
       <div class="card-body">
         <div class="flex items-center gap-3 mb-3">
           <div class="avatar placeholder">

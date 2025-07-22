@@ -161,7 +161,11 @@
                 </span>
                 </td>
           <td>
-            <span class="font-bold">{{$inv->core1_inventory_stocks}}</span>
+            <span class="font-bold @if($inv->core1_inventory_stocks == 0)
+                text-red-500
+              @elseif ($inv->core1_inventory_stocks <= $inv->core1_inventory_threshold)
+                text-orange-400
+              @endif">{{$inv->core1_inventory_stocks}}</span>
           </td>
           <td>{{$inv->core1_inventory_threshold}}</td>
           <td>{{$inv->core1_inventory_unit}}</td>
