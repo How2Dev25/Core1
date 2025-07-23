@@ -150,9 +150,21 @@ Route::get('/channel', function(){
     ->select('channel_table.*', 'core1_room.*', 'channel_table.created_at as createdchannel')
     ->orderBy('channel_table.created_at', 'desc')
     ->get();
-    return view('admin.channel', ['rooms' => $rooms, 'channels' => $channels]);
-});
+
+    $tarastaylisting = Channel::where('channelName', 'Tarastay')->where('channelStatus', 'Approved')->count();
+    $habistaylisting = Channel::where('channelName', 'Habistay')->where('channelStatus', 'Approved')->count();
+    $nestscapelisting = Channel::where('channelName', 'Nestscape')->where('channelStatus', 'Approved')->count();
+    return view('admin.channel', ['rooms' => $rooms, 
+    'channels' => $channels, 'tarastaylisting' => $tarastaylisting,
+    'habistaylisting' => $habistaylisting,
+    'nestscapelisting' => $nestscapelisting ]);
+}); 
 
 Route::post('/createlisting', [channelController::class, 'store']);
 Route::put('/updatelisting/{channelID}', [channelController::class, 'modify']);
 Route::delete('/deletelisting/{channelID}', [channelController::class, 'delete']);
+
+// booking and reservation
+Route::get('/bas', function(){
+    return  view('admin.bas');
+});

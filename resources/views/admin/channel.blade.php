@@ -55,7 +55,7 @@
           <div class="stats stats-horizontal shadow bg-base-100">
             <div class="stat">
               <div class="stat-title">Listings</div>
-              <div class="stat-value text-sm">24</div>
+              <div class="stat-value text-sm">{{$tarastaylisting}}</div>
             </div>
             <div class="stat">
               <div class="stat-title">Bookings</div>
@@ -87,7 +87,7 @@
           <div class="stats stats-horizontal shadow bg-base-100">
             <div class="stat">
               <div class="stat-title">Listings</div>
-              <div class="stat-value text-sm">24</div>
+              <div class="stat-value text-sm">{{$habistaylisting}}</div>
             </div>
             <div class="stat">
               <div class="stat-title">Bookings</div>
@@ -119,7 +119,7 @@
           <div class="stats stats-horizontal shadow bg-base-100">
             <div class="stat">
               <div class="stat-title">Listings</div>
-              <div class="stat-value text-sm">18</div>
+              <div class="stat-value text-sm">{{$nestscapelisting}}</div>
             </div>
             <div class="stat">
               <div class="stat-title">Bookings</div>
@@ -217,7 +217,7 @@
             @elseif($channel->channelStatus === 'Pending')
               <span class="badge badge-warning">Pending</span>
             @else
-              <span class="badge badge-ghost">{{ $channel->channelStatus }}</span>
+              <span class="badge badge-error">{{ $channel->channelStatus }}</span>
             @endif
           </td>
         <td>{{ \Carbon\Carbon::parse($channel->createdchannel)->format('F j, Y') }} ({{ \Carbon\Carbon::parse($channel->createdchannel)->diffForHumans() }})
