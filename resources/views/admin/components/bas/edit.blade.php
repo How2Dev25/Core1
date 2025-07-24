@@ -14,7 +14,8 @@
     </div>
 
     <!-- Form Start -->
-    <form action="/createreservation" method="POST" id="reservationForm">
+    <form action="/modifyreservation/{{$reserveroom->reservationID}}" method="POST" id="reservationForm">
+      @method('PUT')
       @csrf
      
 
@@ -22,10 +23,33 @@
       <div class="bg-base-200 rounded-box p-5 mb-6">
         <h2 class="text-lg font-semibold flex items-center gap-2 mb-4">
           <i data-lucide="home" class="w-5 h-5"></i>
-          Select a Room
+         Room #{{$reserveroom->roomID}} {{$reserveroom->roomtype}}
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-         
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-5">
+          <div class="card bg-base-100 shadow-md hover:shadow-xl transition-all cursor-pointer group relative border-2 border-transparent hover:border-primary"
+               >
+              <figure class="relative h-70 overflow-hidden rounded-t-box">
+                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform" 
+                     src="{{ asset($reserveroom->roomphoto) }}" alt="Room image">
+              </figure>
+              <div class="card-body p-4">
+                <div class="flex justify-between items-center">
+                  <h2 class="card-title text-sm">Room #{{$reserveroom->roomID}} {{$reserveroom->roomtype}}</h2>
+                  <span class="badge badge-primary badge-sm">{{$reserveroom->roomstatus}}</span>
+                </div>
+                <div class="flex items-center gap-1 text-xs text-base-content/60">
+                  <i data-lucide="square" class="w-3 h-3"></i>
+                  <span>{{$reserveroom->roomsize}} sq.ft</span>
+                  <i data-lucide="users" class="w-3 h-3 ml-2"></i>
+                  <span>{{$reserveroom->roommaxguest}} Guests</span>
+                </div>
+              </div>
+
+              <!-- Selection Indicator -->
+              <div class="absolute top-2 right-2 hidden z-10 bg-primary text-white rounded-full p-1 shadow-md selection-indicator">
+                <i data-lucide="check" class="w-4 h-4"></i>
+              </div>
+            </div>
         </div>
       </div>
 
@@ -40,25 +64,40 @@
             <label class="label">
               <span class="label-text">Check-In Date</span>
             </label>
-            <input type="date" name="reservation_checkin" class="input input-bordered" required />
+            <input value="{{$reserveroom->reservation_checkin}}" type="date" name="reservation_checkin" class="input input-bordered" required />
           </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text">Check-Out Date</span>
             </label>
-            <input type="date" name="reservation_checkout" class="input input-bordered" required />
+            <input type="date" value="{{$reserveroom->reservation_checkout}}" name="reservation_checkout" class="input input-bordered" required />
           </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text">Number of Guests</span>
             </label>
-            <input type="number" name="reservation_numguest" min="1" class="input input-bordered" required />
+            <input value="{{$reserveroom->reservation_numguest}}" type="number" name="reservation_numguest" min="1" class="input input-bordered" required />
           </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text">Special Requests</span>
             </label>
-            <input type="text" name="reservation_specialrequest" placeholder="Early check-in, extra pillows..." class="input input-bordered" />
+            <input type="text" value="{{$reserveroom->reservation_specialrequest}}" name="reservation_specialrequest" placeholder="Early check-in, extra pillows..." class="input input-bordered" />
+          </div>
+
+           <div class="form-control">
+            <label class="label">
+              <span class="label-text">Booking Status</span>
+            </label>
+            <input readonly type="text" value="{{$reserveroom->reservation_bookingstatus}}" name="reservation_specialrequest" placeholder="Early check-in, extra pillows..." class="input input-bordered" />
+          </div>
+
+          
+           <div class="form-control">
+            <label class="label">
+              <span class="label-text">Booked Via</span>
+            </label>
+            <input  type="text" value="{{$reserveroom->bookedvia}}" name="reservation_specialrequest" placeholder="Soliera" class="input input-bordered" />
           </div>
         </div>
       </div>
@@ -82,7 +121,7 @@
           Full Name
         </span>
       </label>
-      <input type="text" name="guestname" class="input input-bordered" placeholder="Juan Dela Cruz" required />
+      <input value="{{$reserveroom->guestname}}" type="text" name="guestname" class="input input-bordered" placeholder="Juan Dela Cruz" required />
     </div>
 
     <!-- Birthday -->
@@ -93,7 +132,7 @@
           Birthday
         </span>
       </label>
-      <input id="guestbirthday" type="date" name="guestbirthday" class="input input-bordered" required />
+      <input value="{{$reserveroom->guestbirthday}}" id="guestbirthday" type="date" name="guestbirthday" class="input input-bordered" required />
       <br>
        <span id="ageError" class="text-red-500 text-sm mt-2 hidden">Age must be 18 or above.</span>
     </div>
@@ -106,7 +145,7 @@
           Mobile Number
         </span>
       </label>
-      <input type="tel" name="guestphonenumber" class="input input-bordered" placeholder="+63 900 000 0000" required />
+      <input value="{{$reserveroom->guestphonenumber}}" type="tel" name="guestphonenumber" class="input input-bordered" placeholder="+63 900 000 0000" required />
     </div>
 
     <!-- Email Address -->
@@ -117,7 +156,7 @@
           Email Address
         </span>
       </label>
-      <input type="email" name="guestemailaddress" class="input input-bordered" placeholder="juan@example.com" required />
+      <input value="{{$reserveroom->guestemailaddress}}" type="email" name="guestemailaddress" class="input input-bordered" placeholder="juan@example.com" required />
     </div>
 
     <!-- Address -->
@@ -128,7 +167,7 @@
           Address
         </span>
       </label>
-      <textarea name="guestaddress" class="textarea textarea-bordered" placeholder="123 Barangay St., City, Province" rows="2" required></textarea>
+      <textarea  name="guestaddress" class="textarea textarea-bordered" placeholder="123 Barangay St., City, Province" rows="2" required>{{$reserveroom->guestaddress}}</textarea>
     </div>
 
     <!-- Contact Person -->
@@ -139,7 +178,7 @@
           Contact Person
         </span>
       </label>
-      <input type="text" name="guestcontactperson" class="input input-bordered" placeholder="Maria Dela Cruz" required />
+      <input value="{{$reserveroom->guestcontactperson}}" type="text" name="guestcontactperson" class="input input-bordered" placeholder="Maria Dela Cruz" required />
     </div>
 
     <!-- Contact Person Number -->
@@ -150,14 +189,14 @@
           Contact Person Number
         </span>
       </label>
-      <input type="tel" name="guestcontactpersonnumber" class="input input-bordered" placeholder="+63 912 345 6789" required />
+      <input value="{{$reserveroom->guestcontactpersonnumber}}" type="tel" name="guestcontactpersonnumber" class="input input-bordered" placeholder="+63 912 345 6789" required />
     </div>
   </div>
 </div>
 
       <!-- Form Footer -->
       <div class="modal-action">
-        <button type="button" onclick="add_booking.close()" class="btn btn-ghost">
+        <button type="button" onclick="edit_reservation_{{$reserveroom->reservationID}}.close()" class="btn btn-ghost">
           Cancel
         </button>
         <button type="submit" class="btn btn-primary gap-2">
@@ -177,20 +216,6 @@
 <!-- Lucide Init -->
 <script>
   lucide.createIcons();
-
-  function selectRoom(cardElement, roomID) {
-    document.querySelectorAll('#add_booking .card').forEach(card => {
-      card.classList.remove('border-primary', 'bg-primary/10');
-      const indicator = card.querySelector('.selection-indicator');
-      if (indicator) indicator.classList.add('hidden');
-    });
-
-    cardElement.classList.add('border-primary', 'bg-primary/10');
-    const selectedIndicator = cardElement.querySelector('.selection-indicator');
-    if (selectedIndicator) selectedIndicator.classList.remove('hidden');
-
-    document.getElementById('selectedRoomID').value = roomID;
-  }
 
    document.addEventListener('DOMContentLoaded', () => {
     const birthdayInput = document.getElementById('guestbirthday');

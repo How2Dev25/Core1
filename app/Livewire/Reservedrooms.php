@@ -22,6 +22,6 @@ class Reservedrooms extends Component
     }
     public function render()
     {
-        return view('livewire.reservedrooms');
+        return view('livewire.reserved-rooms');
     }
 }

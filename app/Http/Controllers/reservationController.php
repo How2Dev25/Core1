@@ -27,7 +27,7 @@ class reservationController extends Controller
         'guestcontactpersonnumber' => 'required',
             ]);
         $form['reservation_bookingstatus'] = 'Pending';
-        $form['bookedvia'] = 'Soliera Web App';
+        $form['bookedvia'] = 'Soliera';
 
         
         
@@ -37,7 +37,7 @@ class reservationController extends Controller
         'roomstatus' => 'Reserved',
        ]);
 
-       session()->flash('success', 'Booking Success');
+       session()->flash('success', 'Reservation Success');
 
        return redirect()->back();
 
@@ -48,7 +48,6 @@ class reservationController extends Controller
     public function modify (Request $request, Reservation $reservationID){
 
             $form = $request->validate([
-            'roomID' => 'nullable',
             'reservation_checkin' => 'nullable',
             'reservation_checkout' => 'nullable',
             'reservation_specialrequest' => 'nullable',
@@ -61,9 +60,14 @@ class reservationController extends Controller
             'guestcontactperson' => 'nullable',
             'guestcontactpersonnumber' => 'nullable',
             'reservation_bookingstatus' => 'nullable',
+            'bookevia' => 'nullable',
         ]);
 
-        return $form;
+        $reservationID->update($form);
+
+        session()->flash('modified', 'Reservation Has Been Modified');
+
+        return redirect()->back();
     }
 
     public function delete( Reservation $reservationID){
@@ -72,6 +76,11 @@ class reservationController extends Controller
         room::where('roomID', $roomIDUpdate)->update([
             'roomstatus' => 'Available',
         ]);
-        return 'This  Has Been Removed';
+
+        $reservationID->delete();
+        
+        session()->flash('removed', 'Reservation Has been removed');
+
+        return redirect()->back();
     }
 }

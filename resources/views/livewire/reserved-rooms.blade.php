@@ -1,4 +1,5 @@
   <div wire:poll.5s = "fetchreservedrooms" class="card bg-white border border-gray-200 mt-5">
+    
     <div class="card-body p-0">
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center p-5 pb-0">
         <h3 class="text-xl font-bold text-gray-800">Reserved Rooms</h3>
@@ -51,7 +52,7 @@
                   
                     Edit
                 </button>
-                <button class="btn btn-error btn-sm">
+                <button  onclick="delete_reservation_{{$reserveroom->reservationID}}.showModal()" class="btn btn-error btn-sm">
                    
                     Remove</button>
               </td>
