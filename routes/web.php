@@ -4,6 +4,7 @@ use App\Http\Controllers\channelController;
 use App\Http\Controllers\ecmController;
 use App\Http\Controllers\hmpController;
 use App\Http\Controllers\inventoryController;
+use App\Http\Controllers\reservationController;
 use App\Http\Controllers\roomController;
 use App\Http\Controllers\roommantenanceController;
 use App\Http\Controllers\stockController;
@@ -14,6 +15,7 @@ use App\Models\Inventory;
 use App\Models\room;
 use App\Models\room_maintenance;
 use App\Models\stockRequest;
+use App\Models\Reservation;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -166,5 +168,13 @@ Route::delete('/deletelisting/{channelID}', [channelController::class, 'delete']
 
 // booking and reservation
 Route::get('/bas', function(){
-    return  view('admin.bas');
+    $rooms = room::where('roomstatus', 'Available')->latest()->get();
+    $reserverooms =  Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+        ->latest('core1_reservation.created_at')
+        ->get();
+    return  view('admin.bas', ['rooms' => $rooms, 'reserverooms' => $reserverooms]);
 });
+
+Route::post('/createreservation', [reservationController::class, 'store']);
+Route::put('/modifyreservation/{reservationID}', [reservationController::class, 'modify']);
+Route::delete('/deletereservation/{reservationID}', [reservationController::class, 'delete']);
