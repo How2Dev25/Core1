@@ -30,7 +30,7 @@
             <i data-lucide="chevron-right" class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90"></i>
           </div>
           <div class="collapse-content pl-10 pr-4 py-1 space-y-1"> 
-            <a href="#" class="block px-3 py-2 text-sm rounded-lg hover:bg-blue-600 hover:bg-opacity-30 text-blue-100 sidebar-item">Room Reservation</a>
+            <a href="/bas" class="block px-3 py-2 text-sm rounded-lg hover:bg-blue-600 hover:bg-opacity-30 text-blue-100 sidebar-item">Room Reservation</a>
             <a href="#" class="block px-3 py-2 text-sm rounded-lg hover:bg-blue-600 hover:bg-opacity-30 text-blue-100 sidebar-item">AI Room Reservation Assistance</a>
           </div>
         </div>

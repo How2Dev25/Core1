@@ -41,14 +41,13 @@
                     </div>
                     <div>
                       <h3 class="text-lg font-semibold">Total Reservation</h3>
-                      <p class="text-sm text-gray-500">Bookings</p>
                     </div>
                   </div>
-                  <p class="text-3xl font-bold mt-3 text-gray-800"></p>
+                    <livewire:total-reservation />
                 </div>
               </div>
           
-              <!-- Card 2 -->
+              <!-- Card 2 Available Room -->
               <div class="card bg-gradient-to-br from-green-50 to-white border border-green-100">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
@@ -57,10 +56,10 @@
                     </div>
                     <div>
                       <h3 class="text-lg font-semibold">Available Rooms</h3>
-                      <p class="text-sm text-gray-500">Available spaces</p>
+                     
                     </div>
                   </div>
-                  <p class="text-3xl font-bold mt-3 text-gray-800"></p>
+                 <livewire:available-rooms />
                 </div>
               </div>
           
@@ -75,7 +74,7 @@
                       <h3 class="text-lg font-semibold">Occupied Rooms</h3>
                     </div>
                   </div>
-                  <p class="text-3xl font-bold mt-3 text-gray-800">20</p>
+                  <livewire:occupied-rooms />
                 </div>
               </div>
           
@@ -88,10 +87,10 @@
                     </div>
                     <div>
                       <h3 class="text-lg font-semibold">Channels Booking</h3>
-                      <p class="text-sm text-gray-500">Booking Via Channels</p>
+                    
                     </div>
                   </div>
-                  <p class="text-3xl font-bold mt-3 text-gray-800"></p>
+                <livewire:channels-booking />
                 </div>
               </div>
             </div>
