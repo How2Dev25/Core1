@@ -174,7 +174,17 @@ Route::get('/bas', function(){
         ->get();
     return  view('admin.bas', ['rooms' => $rooms, 'reserverooms' => $reserverooms]);
 });
+Route::get('/aibas', function(){
+    return view('admin.aibas');
+});
+
+Route::post('/aireserve', [reservationController::class, 'searchRooms']);
 
 Route::post('/createreservation', [reservationController::class, 'store']);
 Route::put('/modifyreservation/{reservationID}', [reservationController::class, 'modify']);
 Route::delete('/deletereservation/{reservationID}', [reservationController::class, 'delete']);
+
+
+Route::get('/aiform', function(){
+    return view('admin.components.bas.aiform');
+});
