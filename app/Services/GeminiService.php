@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class GeminiService
@@ -16,10 +17,15 @@ class GeminiService
         $this->apiKey = config('services.gemini.key');
     }
 
- public function interpretPrompt($prompt)
-{
-    $query = <<<TEXT
-You are a hotel booking assistant. Extract and return ONLY this exact JSON from the following prompt:
+    public function interpretPrompt(string $prompt): string
+    {
+        if (app()->environment('local')) {
+            Log::debug('🤖 Mocked Gemini response (local env)');
+            return $this->mockResponse($prompt);
+        }
+
+        $query = <<<TEXT
+You are a hotel booking assistant. Return ONLY a clean JSON like below based on this booking prompt:
 
 "$prompt"
 
@@ -34,22 +40,67 @@ Format:
   "special_request": "..."
 }
 
-Do NOT explain or comment — return the JSON only. Do not wrap it in quotes or escape it.
+No extra text. No explanation. Return raw JSON only.
 TEXT;
 
-    $response = Http::post($this->endpoint . '?key=' . $this->apiKey, [
-        'contents' => [[
-            'parts' => [[ 'text' => $query ]]
-        ]]
-    ]);
+        try {
+            $response = Http::timeout(10)->post($this->endpoint . '?key=' . $this->apiKey, [
+                'contents' => [[
+                    'parts' => [[ 'text' => $query ]]
+                ]]
+            ]);
 
-    Log::debug('🧠 Gemini FULL RESPONSE:', $response->json());
+            $body = $response->json();
 
-    $parts = $response->json()['candidates'][0]['content']['parts'] ?? [];
+            if (isset($body['error'])) {
+                Log::error('⚠️ Gemini Error:', $body);
+                return $this->mockResponse($prompt);
+            }
 
-    // Join all parts (no escaping expected)
-    $text = collect($parts)->pluck('text')->implode("\n");
+            $parts = $body['candidates'][0]['content']['parts'] ?? [];
+            $text = collect($parts)->pluck('text')->implode("\n");
 
-    return $text;
-}  
+            Log::debug('🧠 Gemini Raw Response:', ['text' => $text]);
+            return $text;
+        } catch (\Exception $e) {
+            Log::error('❌ Gemini API failed:', ['error' => $e->getMessage()]);
+            return $this->mockResponse($prompt);
+        }
+    }
+
+    protected function mockResponse(string $prompt): string
+    {
+        Log::debug('🤖 Returning fallback response for prompt:', ['prompt' => $prompt]);
+
+        $guestCount = match (true) {
+            Str::contains($prompt, ['1', 'one']) => 1,
+            Str::contains($prompt, ['2', 'two']) => 2,
+            Str::contains($prompt, ['3', 'three']) => 3,
+            default => 2
+        };
+
+        $roomType = match (true) {
+            Str::contains($prompt, ['deluxe']) => 'Deluxe',
+            Str::contains($prompt, ['family']) => 'Family',
+            Str::contains($prompt, ['suite']) => 'Suite',
+            default => 'Standard'
+        };
+
+        $features = [];
+        if (Str::contains($prompt, ['wifi', 'internet'])) $features[] = 'wifi';
+        if (Str::contains($prompt, ['aircon', 'air conditioning'])) $features[] = 'aircon';
+        if (Str::contains($prompt, ['tv'])) $features[] = 'tv';
+
+        $specialRequest = Str::contains($prompt, ['pillow']) ? 'extra pillow' : '';
+
+        return json_encode([
+            "roomtype" => $roomType,
+            "roommaxguest" => $guestCount,
+            "roomfeatures" => $features,
+            "reservation_days" => 2,
+            "checkin_date" => Carbon::now()->addDays(1)->toDateString(),
+            "checkout_date" => Carbon::now()->addDays(3)->toDateString(),
+            "special_request" => $specialRequest
+        ]);
+    }
 }

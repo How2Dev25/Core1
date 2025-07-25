@@ -53,7 +53,7 @@
               <span class="label-text text-lg">Describe your perfect stay</span>
             </label>
             <textarea 
-            
+               name="prompt" 
               id="prompt" 
               class="textarea w-full textarea-bordered h-32 text-lg" 
               placeholder="e.g. 'I need a luxury suite for our honeymoon with ocean view and private pool for 5 nights starting next Friday'"

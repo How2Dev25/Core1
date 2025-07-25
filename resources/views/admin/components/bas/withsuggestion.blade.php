@@ -250,13 +250,8 @@ Special Request: {{ $prefilledRequest ?? 'none' }}
 <!-- Initialize Lucide Icons -->
 <!-- JavaScript to Fill Form on Card Click -->
 <script>
-  function selectSuggestedRoom(roomID, roomType, price, features, maxGuests, checkin, checkout) {
+  function selectSuggestedRoom(roomID) {
     document.getElementById('selectedRoomID').value = roomID;
-    document.querySelector('input[name="reservation_checkin"]').value = checkin;
-    document.querySelector('input[name="reservation_checkout"]').value = checkout;
-    document.querySelector('input[name="reservation_numguest"]').value = maxGuests;
-    document.querySelector('input[name="reservation_specialrequest"]').value = `Includes: ${features} — ₱${price}`;
-
     document.getElementById('reservationForm')?.scrollIntoView({ behavior: 'smooth' });
   }
 </script>

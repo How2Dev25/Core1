@@ -23,67 +23,61 @@ class reservationController extends Controller
         $this->gemini = $gemini;
     }
 
-   public function extractJsonFromText($text)
-{
-    $start = strpos($text, '{');
-    $end = strrpos($text, '}');
 
-    if ($start === false || $end === false || $end <= $start) {
-        return null;
-    }
-
-    $json = substr($text, $start, $end - $start + 1);
-
-    // If JSON is double-encoded (stringified), decode it first
-    if (is_string($json) && str_starts_with(trim($json), '"{')) {
-        $decoded = json_decode($json, true);
-        if (is_array($decoded)) {
-            return json_encode($decoded); // make it usable in decode()
-        }
-    }
-
-    return $json;
-}
 
 public function searchRooms(Request $request)
 {
-    $prompt = $request->input('prompt');
+     $prompt = $request->input('prompt', '');
 
-    // Step 1: Get AI response
-    $aiRaw = $this->gemini->interpretPrompt($prompt);
-    Log::debug('🧠 Gemini raw output:', ['raw' => $aiRaw]);
-
-    // Step 2: Extract JSON
-    $json = $this->extractJsonFromText($aiRaw);
-    Log::debug('🧠 Extracted JSON:', ['json' => $json]);
-
-    if (!$json) {
+       if (empty(trim($prompt))) {
         return response()->json([
-            'message' => 'AI failed to understand your request.',
-            'ai_response' => $aiRaw
+            'message' => 'No booking prompt was provided.'
         ], 400);
     }
 
-    // Step 3: Parse JSON
-    $parsed = json_decode($json, true);
-    Log::debug('✅ Parsed AI JSON:', ['parsed' => $parsed]);
 
-    if (!$parsed) {
+    // Step 1: Call Gemini and get raw JSON response
+      $aiRaw = $this->gemini->interpretPrompt($prompt);
+    Log::debug('🧠 Gemini Raw Text:', ['raw' => $aiRaw]);
+
+    // Step 2: Decode response
+    $parsed = json_decode($aiRaw, true);
+
+    if (!$parsed || !is_array($parsed)) {
         return response()->json([
-            'message' => 'Invalid AI response format.',
-            'ai_response' => $json
+            'message' => 'Invalid JSON response from Gemini.',
+            'raw' => $aiRaw
         ], 400);
     }
 
-    // Step 4: Extract fields
+
+    // Step 2: Decode raw JSON directly (skip extractJsonFromText)
+    $parsed = json_decode($aiRaw, true);
+
+    if (!$parsed || !is_array($parsed)) {
+        return response()->json([
+            'message' => 'Invalid JSON response from Gemini.',
+            'raw' => $aiRaw
+        ], 400);
+    }
+
+    Log::debug('✅ Parsed Gemini JSON:', ['parsed' => $parsed]);
+
+    // Step 3: Extract fields
     $roomtype = $parsed['roomtype'] ?? null;
     $roommaxguest = $parsed['roommaxguest'] ?? 1;
     $features = $parsed['roomfeatures'] ?? [];
-    $checkin = isset($parsed['checkin_date']) ? Carbon::parse($parsed['checkin_date']) : now();
-    $checkout = isset($parsed['checkout_date']) ? Carbon::parse($parsed['checkout_date']) : $checkin->copy()->addDays($parsed['reservation_days'] ?? 1);
+    $checkin = isset($parsed['checkin_date']) && $parsed['checkin_date']
+        ? Carbon::parse($parsed['checkin_date'])
+        : now();
+
+    $checkout = isset($parsed['checkout_date']) && $parsed['checkout_date']
+        ? Carbon::parse($parsed['checkout_date'])
+        : $checkin->copy()->addDays($parsed['reservation_days'] ?? 1);
+
     $specialRequest = $parsed['special_request'] ?? '';
 
-    // Step 5: Search rooms
+    // Step 4: Search for matching rooms
     $rooms = Room::query()
         ->when($roomtype, fn($q) => $q->where('roomtype', 'like', "%$roomtype%"))
         ->where('roommaxguest', '>=', $roommaxguest)
@@ -98,14 +92,14 @@ public function searchRooms(Request $request)
                 }
             }
 
-            $hasConflict = reservation::where('roomID', $room->roomID)
+            $hasConflict = Reservation::where('roomID', $room->roomID)
                 ->where(function ($query) use ($checkin, $checkout) {
                     $query->whereBetween('reservation_checkin', [$checkin, $checkout])
-                        ->orWhereBetween('reservation_checkout', [$checkin, $checkout])
-                        ->orWhere(function ($q) use ($checkin, $checkout) {
-                            $q->where('reservation_checkin', '<=', $checkin)
+                          ->orWhereBetween('reservation_checkout', [$checkin, $checkout])
+                          ->orWhere(function ($q) use ($checkin, $checkout) {
+                              $q->where('reservation_checkin', '<=', $checkin)
                                 ->where('reservation_checkout', '>=', $checkout);
-                        });
+                          });
                 })
                 ->whereIn('reservation_bookingstatus', ['booked', 'checkedin'])
                 ->exists();
@@ -114,7 +108,7 @@ public function searchRooms(Request $request)
         })
         ->values();
 
-    // Step 6: If one match found, redirect to booking form
+    // Step 5: If exactly one room found, go to booking form
     if ($rooms->count() === 1) {
         return view('admin.components.bas.aiform', [
             'room' => $rooms->first(),
@@ -125,8 +119,8 @@ public function searchRooms(Request $request)
         ]);
     }
 
-    // Step 7: Otherwise, show suggestions
-    $suggestions = room::where('roomstatus', 'like', '%avai%')
+    // Step 6: Otherwise, suggest top 5 available rooms
+    $suggestions = Room::where('roomstatus', 'like', '%avai%')
         ->limit(5)
         ->get();
 
@@ -139,6 +133,7 @@ public function searchRooms(Request $request)
         'aiRaw' => $aiRaw
     ]);
 }
+
 
 
     public function store(Request $request){
