@@ -31,17 +31,16 @@
                 </div>
               </td>
               <td>
-               @php
-                    $status = strtolower($reserveroom->reservation_bookingstatus);
-                    $badgeColor = match($status) {
-                        'Pending' => 'badge-warning',
-                        'Confirmed' => 'badge-info',
-                        'Checked in', 'checked-in' => 'badge-success',
-                        'Cancelled' => 'badge-error',
-                        default => 'badge-neutral',
-                    };
-                    @endphp
-                    <span class="badge {{ $badgeColor }}">{{ ucfirst($reserveroom->reservation_bookingstatus) }}</span>
+              <span class="badge 
+                        @if(strtolower($reserveroom->reservation_bookingstatus) == 'pending') badge-neutral
+                        @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'confirmed') badge-success
+                        @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'checked in') badge-primary
+                         @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'checked out') badge-warning
+                        @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'cancelled') badge-error
+                        @endif
+                    ">
+                        {{ $reserveroom->reservation_bookingstatus }}
+                    </span>
                 </td>
               <td>{{$reserveroom->guestname}}</td>
                <td>{{$reserveroom->bookedvia}}</td>

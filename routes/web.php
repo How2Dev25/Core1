@@ -210,6 +210,14 @@ Route::get('/aiform', function(){
 
 // front desk
 Route::get('/frontdesk', function(){
+       $reserverooms =  Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+        ->latest('core1_reservation.created_at')
+        ->get();
     
-    return view('admin.frontdesk');
+    return view('admin.frontdesk', ['reserverooms' => $reserverooms]);
 });
+
+Route::put('/reservationcheckin/{reservationID}', [reservationController::class, 'checkin']);
+Route::put('/reservationcheckout/{reservationID}', [reservationController::class, 'checkout']);
+Route::put('/reservationcancelled/{reservationID}', [reservationController::class, 'cancel']);
+Route::put('/reservationconfirm/{reservationID}', [reservationController::class, 'confirm']);

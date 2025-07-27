@@ -97,13 +97,50 @@
 
 
             <div class="">
-                <button onclick="add_booking.showModal()" class="btn btn-primary btn-sm">
+                <button onclick="view_room.showModal()" class="btn btn-primary btn-sm">
                   <i data-lucide="plus"></i>
                   View Available Rooms
                 </button>
             </div>
 
-            
+
+@if(session('removed'))
+   <div role="alert" class="alert alert-success mt-2">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>{{session('removed')}}</span>
+</div>
+@elseif(session('cancel'))
+ <div role="alert" class="alert alert-success mt-2">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>{{session('cancel')}}</span>
+</div>
+@elseif(session('checkin'))
+<div role="alert" class="alert alert-success mt-2">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>{{session('checkin')}}</span>
+</div>
+@elseif(session('checkout'))
+<div role="alert" class="alert alert-success mt-2">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>{{session('checkout')}}</span>
+</div>
+@elseif(session('confirm'))
+<div role="alert" class="alert alert-success mt-2">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>{{session('confirm')}}</span>
+</div>
+
+@endif
 
 
              <livewire:approve-reserve />
@@ -113,112 +150,21 @@
 
 
 
-  <div class="card bg-white border border-gray-200 mt-5">
-    <div class="card-body p-0">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center p-5 pb-0">
-        <h3 class="text-xl font-bold text-gray-800">Occupied Rooms</h3>
-        <div class="flex gap-2 mt-3 md:mt-0">
-          <select class="select select-bordered select-sm">
-            <option>All Status</option>
-            <option>Available</option>
-            <option>Occupied</option>
-            <option>Maintenance</option>
-          </select>
-          <input type="text" placeholder="Search room numbers..." class="input input-bordered input-sm">
-        </div>
-      </div>
-      
-      <div class="overflow-x-auto">
-        <table class="table">
-          <thead>
-            <tr>
-              <th class="bg-gray-50">Room No.</th>
-              <th class="bg-gray-50">Type</th>
-              <th class="bg-gray-50">Status</th>
-              <th class="bg-gray-50">Guest</th>
-              <th class="bg-gray-50">Check-In</th>
-              <th class="bg-gray-50">Check-Out</th>
-              <th class="bg-gray-50 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="hover:bg-gray-50">
-              <td>305</td>
-              <td>
-                <div class="flex items-center gap-2">
-                  <div class="badge badge-primary badge-xs"></div>
-                  Deluxe
-                </div>
-              </td>
-              <td><span class="badge badge-success">Occupied</span></td>
-              <td>John Smith</td>
-              <td>Jun 15, 2025</td>
-              <td>Jun 18, 2025</td>
-              <td class="text-right">
-                <button class="btn btn-ghost btn-xs text-info">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                </button>
-              </td>
-            </tr>
-            <tr class="hover:bg-gray-50">
-              <td>402</td>
-              <td>
-                <div class="flex items-center gap-2">
-                  <div class="badge badge-secondary badge-xs"></div>
-                  Suite
-                </div>
-              </td>
-              <td><span class="badge badge-success">Occupied</span></td>
-              <td>Sarah Johnson</td>
-              <td>Jun 12, 2025</td>
-              <td>Jun 20, 2025</td>
-              <td class="text-right">
-                <button class="btn btn-ghost btn-xs text-info">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                </button>
-              </td>
-            </tr>
-            <tr class="hover:bg-gray-50">
-              <td>112</td>
-              <td>
-                <div class="flex items-center gap-2">
-                  <div class="badge badge-accent badge-xs"></div>
-                  Standard
-                </div>
-              </td>
-              <td><span class="badge badge-warning">Maintenance</span></td>
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
-              <td class="text-right">
-                <button class="btn btn-ghost btn-xs text-info">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-   
-    
-    </div>
-  </div>
+  
 
           {{-- content --}}
 </section>
 
 
 {{-- modals --}}
-
+@foreach($reserverooms as $reserveroom)
+@include('admin.components.frontdesk.viewreserve')
+@include('admin.components.frontdesk.delete')
+@include('admin.components.frontdesk.confirm')
+@include('admin.components.frontdesk.checkin')
+@include('admin.components.frontdesk.checkout')
+@include('admin.components.frontdesk.cancel')
+@endforeach
  
 
 <!-- Initialize Lucide Icons -->
@@ -237,7 +183,9 @@
     </div>
 
    
-    
+    {{-- modals --}}
+
+    @include('admin.components.frontdesk.viewroom')
     
    
    @livewireScripts

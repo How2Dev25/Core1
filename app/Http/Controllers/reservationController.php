@@ -211,4 +211,65 @@ public function searchRooms(Request $request)
     }
 
 
+    public function confirm(Reservation $reservationID){
+        $reservationID->update([
+            'reservation_bookingstatus' => 'Confirmed'
+        ]);
+
+        session()->flash('confirm', 'Reservation Status Has Been Confirmed');
+
+        return redirect()->back();
+
+    }
+
+    public function checkin(Reservation $reservationID){
+          $reservationID->update([
+            'reservation_bookingstatus' => 'Checked in'
+        ]);
+
+        $roomID = $reservationID->roomID;
+
+        room::where('roomID', $roomID)->update([
+            'roomstatus' => 'Occupied',
+        ]);
+
+        session()->flash('checkin', 'Guest Has Checked In');
+
+        return redirect()->back();
+    }
+
+    public function checkout(Reservation $reservationID){
+          $reservationID->update([
+            'reservation_bookingstatus' => 'Checked out'
+        ]);
+
+        $roomID = $reservationID->roomID;
+
+         room::where('roomID', $roomID)->update([
+            'roomstatus' => 'Available',
+        ]);
+
+         session()->flash('checkout', 'Guest Has Been Checked Out');
+
+        return redirect()->back();
+    }
+
+     public function cancel(Reservation $reservationID){
+          $reservationID->update([
+            'reservation_bookingstatus' => 'Cancelled'
+        ]);
+
+        $roomID = $reservationID->roomID;
+
+         room::where('roomID', $roomID)->update([
+            'roomstatus' => 'Available',
+        ]);
+
+         session()->flash('cancel', 'Reservation Has Been Cancelled');
+
+        return redirect()->back();
+    }
+
+
+
 }
