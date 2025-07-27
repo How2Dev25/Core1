@@ -12,7 +12,7 @@
         </div>
         </a>
         
-        <a href="">
+        <a href="/frontdesk">
         <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item hover:bg-blue-600 hover:bg-opacity-50 text-white">
             <i data-lucide="monitor" class="w-5 h-5 text-blue-200"></i>
             <span class="ml-3">Front Desk And Reception</span>
@@ -31,7 +31,7 @@
           </div>
           <div class="collapse-content pl-10 pr-4 py-1 space-y-1"> 
             <a href="/bas" class="block px-3 py-2 text-sm rounded-lg hover:bg-blue-600 hover:bg-opacity-30 text-blue-100 sidebar-item">Room Reservation</a>
-            <a href="#" class="block px-3 py-2 text-sm rounded-lg hover:bg-blue-600 hover:bg-opacity-30 text-blue-100 sidebar-item">AI Room Reservation Assistance</a>
+            <a href="/aibas" class="block px-3 py-2 text-sm rounded-lg hover:bg-blue-600 hover:bg-opacity-30 text-blue-100 sidebar-item">AI Room Reservation Assistance</a>
           </div>
         </div>
 

@@ -139,19 +139,45 @@
   </div>
 
   <!-- Room Types Grid -->
-  <div class="mb-10">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-xl font-bold text-gray-800">Rooms</h3>
-      <div class="flex gap-2">
-        <select class="select select-bordered select-sm">
-          <option>All Categories</option>
-          <option>Standard</option>
-          <option>Deluxe</option>
-          <option>Suite</option>
-        </select>
-        <input type="text" placeholder="Search rooms..." class="input input-bordered input-sm">
+ <div class="mb-10">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-xl font-bold text-gray-800">Rooms</h3>
+    <form method="GET" action="/roommanagement" class="flex gap-2">
+      <!-- Status Filter -->
+      <select name="status" class="select select-bordered select-sm" onchange="this.form.submit()">
+        <option value="">All Statuses</option>
+        <option value="Available" {{ request('status') == 'Available' ? 'selected' : '' }}>Available</option>
+        <option value="Occupied" {{ request('status') == 'Occupied' ? 'selected' : '' }}>Occupied</option>
+        <option value="Reserved" {{ request('status') == 'Reserved' ? 'selected' : '' }}>Reserved</option>
+        <option value="Maintenance" {{ request('status') == 'Maintenance' ? 'selected' : '' }}>Maintenance</option>
+      </select>
+      
+      <!-- Category Filter -->
+      <select name="category" class="select select-bordered select-sm" onchange="this.form.submit()">
+        <option value="">All Categories</option>
+        <option value="Standard" {{ request('category') == 'Standard' ? 'selected' : '' }}>Standard</option>
+        <option value="Deluxe" {{ request('category') == 'Deluxe' ? 'selected' : '' }}>Deluxe</option>
+        <option value="Suite" {{ request('category') == 'Suite' ? 'selected' : '' }}>Suite</option>
+        <option value="Executive" {{ request('category') == 'Executive' ? 'selected' : '' }}>Executive</option>
+      </select>
+      
+      <!-- Search Input -->
+      <div class="relative">
+        <input 
+          type="text" 
+          name="search" 
+          placeholder="Search rooms..." 
+          class="input input-bordered input-sm" 
+          value="{{ request('search') }}"
+        >
+        <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </button>
       </div>
-    </div>
+    </form>
+  </div>
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <!-- Room 1 -->
@@ -169,6 +195,16 @@
             ">
               {{ $room->roomtype }}
             </span>
+                      <span class="badge
+              @if($room->roomstatus == 'Available') badge-success
+              @elseif($room->roomstatus == 'Maintenance') badge-warning
+              @elseif($room->roomstatus == 'Reserved') badge-info
+              @elseif($room->roomstatus == 'Occupied') badge-error
+              @else badge-neutral
+              @endif
+            ">
+              {{ $room->roomstatus }}
+                </span>
           </div>
         </figure>
         <div class="card-body p-5">
@@ -230,7 +266,37 @@
     
       @endforelse
     </div>
+
+     @if($rooms->hasPages())
+  <div class="mt-8 flex justify-center">
+    <div class="join">
+      {{-- Previous Page Link --}}
+      @if($rooms->onFirstPage())
+        <button class="join-item btn btn-disabled">&laquo;</button>
+      @else
+        <a href="{{ $rooms->previousPageUrl() }}" class="join-item btn">&laquo;</a>
+      @endif
+      
+      {{-- Pagination Elements --}}
+      @foreach(range(1, $rooms->lastPage()) as $page)
+        @if($page == $rooms->currentPage())
+          <button class="join-item btn btn-active">{{ $page }}</button>
+        @else
+          <a href="{{ $rooms->url($page) }}" class="join-item btn">{{ $page }}</a>
+        @endif
+      @endforeach
+      
+      {{-- Next Page Link --}}
+      @if($rooms->hasMorePages())
+        <a href="{{ $rooms->nextPageUrl() }}" class="join-item btn">&raquo;</a>
+      @else
+        <button class="join-item btn btn-disabled">&raquo;</button>
+      @endif
+    </div>
   </div>
+  @endif
+</div>
+  
 
   <!-- Room Status Table -->
   <div class="card bg-white border border-gray-200">

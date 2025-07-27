@@ -17,6 +17,7 @@ use App\Models\room_maintenance;
 use App\Models\stockRequest;
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('index');
@@ -68,18 +69,35 @@ Route::delete('/deleteecm/{eventID}', [ecmController::class, 'delete']);
 Route::put('/approveecm/{eventID}', [ecmController::class, 'approved']);
 Route::put('/cancelecm/{eventID}', [ecmController::class, 'cancel']);
 
-// Room Management
-Route::get('/roommanagement', function(){
-    $totalrooms = room::count();
-    $occupiedrooms = room::where('roomstatus', 'Occupied')->count();
-    $availablerooms = room::where('roomstatus', 'Available')->count();
-    $maintenancerooms = room::where('roomstatus', 'Maintenance')->count();
-    $rooms = room::latest()->get();
-    return view('admin.roomanagement', ['rooms' => $rooms, 
-    'occupiedrooms' =>  $occupiedrooms,
-    'availablerooms' => $availablerooms,
-     'maintenancerooms' => $maintenancerooms,
-    'totalrooms' => $totalrooms ]);
+Route::get('/roommanagement', function(Request $request) {
+    $totalrooms = Room::count();
+    $occupiedrooms = Room::where('roomstatus', 'Occupied')->count();
+    $availablerooms = Room::where('roomstatus', 'Available')->count();
+    $maintenancerooms = Room::where('roomstatus', 'Maintenance')->count();
+    $reservedrooms = Room::where('roomstatus', 'Reserved')->count();
+
+    $rooms = Room::when($request->status, function($query) use ($request) {
+                return $query->where('roomstatus', $request->status);
+            })
+            ->when($request->category, function($query) use ($request) {
+                return $query->where('roomtype', $request->category);
+            })
+            ->when($request->search, function($query) use ($request) {
+                return $query->where('roomID', 'like', '%'.$request->search.'%')
+                           ->orWhere('roomfeatures', 'like', '%'.$request->search.'%');
+            })
+            ->latest()
+            ->paginate(6)
+            ->appends($request->query()); // Preserve all query parameters
+
+    return view('admin.roomanagement', [
+        'rooms' => $rooms, 
+        'occupiedrooms' => $occupiedrooms,
+        'availablerooms' => $availablerooms,
+        'maintenancerooms' => $maintenancerooms,
+        'reservedrooms' => $reservedrooms,
+        'totalrooms' => $totalrooms
+    ]);
 });
 // FOR AI
 Route::post('/processRoomPrompt', [RoomController::class, 'processRoomPrompt']);
@@ -187,4 +205,11 @@ Route::delete('/deletereservation/{reservationID}', [reservationController::clas
 
 Route::get('/aiform', function(){
     return view('admin.components.bas.aiform');
+});
+
+
+// front desk
+Route::get('/frontdesk', function(){
+    
+    return view('admin.frontdesk');
 });

@@ -42,6 +42,9 @@
                   <span>{{$reserveroom->roomsize}} sq.ft</span>
                   <i data-lucide="users" class="w-3 h-3 ml-2"></i>
                   <span>{{$reserveroom->roommaxguest}} Guests</span>
+
+                   <i data-lucide="philippine-peso" class="w-3 h-3 ml-2"></i>
+                  <span>{{$reserveroom->roomprice}}.00 per night </span>
                 </div>
               </div>
 

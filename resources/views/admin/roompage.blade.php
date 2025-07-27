@@ -40,13 +40,18 @@
                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
             </svg>
             <h1 class="text-3xl font-bold text-gray-800">Room Profile</h1>
+           
         </div>
+        
         <span class="px-4 py-2 rounded-full bg-green-100 text-green-800 text-sm font-semibold flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
                 <circle cx="12" cy="12" r="10"></circle>
             </svg>
             {{ $room->roomstatus }}
         </span>
+    </div>
+    <div class="mb-1 p-2">
+      <h2 class="font-semibold text-2xl">Room #{{$room->roomID}}</h2>
     </div>
 
     <!-- Layout Grid -->
