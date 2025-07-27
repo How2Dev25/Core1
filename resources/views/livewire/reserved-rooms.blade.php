@@ -2,7 +2,7 @@
     
     <div class="card-body p-0">
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center p-5 pb-0">
-        <h3 class="text-xl font-bold text-gray-800">Reserved Rooms</h3>
+        <h3 class="text-xl font-bold text-gray-800">Reserved And Occupied Rooms</h3>
         
       </div>
       

@@ -64,7 +64,7 @@
             <!-- Room Details -->
             <div class="p-4">
                 <h4 class="font-bold text-lg mb-1">Room #{{ $reserveroom->roomID }}</h4>
-                <p class="text-gray-600 mb-2">{{ $reserveroom->guestname }}</p>
+                <p class="text-black font-bold mb-2">{{ $reserveroom->guestname }}</p>
                 
                 <div class="flex justify-between text-sm mb-3">
                     <span>Check-in: {{ $reserveroom->reservation_checkin }}</span>
@@ -72,7 +72,7 @@
                 </div>
                 
                 <div class="flex justify-between items-center">
-                    <span class="text-sm">Booked via: {{ $reserveroom->bookedvia }}</span>
+                    <span class="text-sm">Booked via: <span class="font-bold">{{ $reserveroom->bookedvia }}</span></span>
                   <!-- Inside your card component, replace the buttons div with this: -->
 <div class="flex justify-end mt-3">
 
