@@ -10,6 +10,8 @@
   // Toggle sidebar function
   function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
+    const sidebarLogo = document.getElementById('sidebar-logo');
+    const sonlyLogo = document.getElementById('sonly');
     
     if (isMobileView()) {
       // Mobile behavior - toggle visibility
@@ -25,13 +27,22 @@
     } else {
       // Desktop behavior - toggle between expanded/collapsed
       const isCollapsed = sidebar.classList.toggle('w-64');
-      sidebar.classList.toggle('w-20', !isCollapsed);
+      sidebar.classList.toggle('w-25', !isCollapsed);
       localStorage.setItem('sidebarCollapsed', !isCollapsed);
       
       // Update text visibility based on collapsed state
       document.querySelectorAll('.sidebar-text').forEach(text => {
         text.classList.toggle('hidden', !isCollapsed);
       });
+      
+      // Toggle logos based on collapsed state
+      if (sidebar.classList.contains('w-25')) {
+        sidebarLogo.classList.add('hidden');
+        sonlyLogo.classList.remove('hidden');
+      } else {
+        sidebarLogo.classList.remove('hidden');
+        sonlyLogo.classList.add('hidden');
+      }
     }
     
     // Update dropdown indicators
@@ -41,7 +52,7 @@
   // Update dropdown indicators
   function updateDropdownIndicators() {
     const sidebar = document.getElementById('sidebar');
-    const isCollapsed = sidebar.classList.contains('w-20') && !isMobileView();
+    const isCollapsed = sidebar.classList.contains('w-25') && !isMobileView();
     const dropdownIcons = document.querySelectorAll('.dropdown-icon');
     
     dropdownIcons.forEach(icon => {
@@ -59,22 +70,36 @@
   // Handle window resize
   function handleResize() {
     const sidebar = document.getElementById('sidebar');
+    const sidebarLogo = document.getElementById('sidebar-logo');
+    const sonlyLogo = document.getElementById('sonly');
     
     if (isMobileView()) {
-      // On mobile, ensure proper transform classes
+      // On mobile, ensure proper transform classes and show full logo
       if (!sidebar.classList.contains('translate-x-0')) {
         sidebar.classList.add('-translate-x-full');
         sidebar.classList.remove('translate-x-0');
       }
+      sidebarLogo.classList.remove('hidden');
+      sonlyLogo.classList.add('hidden');
     } else {
       // On desktop, apply the saved collapsed state
       const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
       sidebar.classList.remove('-translate-x-full', 'translate-x-0');
       sidebar.classList.toggle('w-64', !isCollapsed);
-      sidebar.classList.toggle('w-20', isCollapsed);
+      sidebar.classList.toggle('w-25', isCollapsed);
+      
       document.querySelectorAll('.sidebar-text').forEach(text => {
         text.classList.toggle('hidden', isCollapsed);
       });
+      
+      // Toggle logos based on collapsed state
+      if (isCollapsed) {
+        sidebarLogo.classList.add('hidden');
+        sonlyLogo.classList.remove('hidden');
+      } else {
+        sidebarLogo.classList.remove('hidden');
+        sonlyLogo.classList.add('hidden');
+      }
     }
     
     updateDropdownIndicators();
@@ -83,24 +108,36 @@
   // Initialize sidebar
   function initSidebar() {
     const sidebar = document.getElementById('sidebar');
+    const sidebarLogo = document.getElementById('sidebar-logo');
+    const sonlyLogo = document.getElementById('sonly');
     
     if (isMobileView()) {
-      // Start hidden on mobile
+      // Start hidden on mobile with full logo
       sidebar.classList.add('-translate-x-full');
-       setTimeout(() => {
-        sidebar.classList.add('loaded');
-    }, 50);
+      sidebarLogo.classList.remove('hidden');
+      sonlyLogo.classList.add('hidden');
     } else {
       // Start with saved state on desktop
       const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-      sidebar.classList.add(isCollapsed ? 'w-20' : 'w-64');
+      sidebar.classList.add(isCollapsed ? 'w-25' : 'w-64');
+      
       document.querySelectorAll('.sidebar-text').forEach(text => {
         text.classList.toggle('hidden', isCollapsed);
       });
-       setTimeout(() => {
-        sidebar.classList.add('loaded');
-    }, 50);
+      
+      // Toggle logos based on collapsed state
+      if (isCollapsed) {
+        sidebarLogo.classList.add('hidden');
+        sonlyLogo.classList.remove('hidden');
+      } else {
+        sidebarLogo.classList.remove('hidden');
+        sonlyLogo.classList.add('hidden');
+      }
     }
+    
+    setTimeout(() => {
+      sidebar.classList.add('loaded');
+    }, 50);
     
     // Set up event listeners
     document.querySelectorAll('.collapse input[type="checkbox"]').forEach(checkbox => {
@@ -111,8 +148,7 @@
     updateDropdownIndicators();
   }
 
-  
-function displayPhilippineTime() {
+ function displayPhilippineTime() {
   // Create a date object for Philippine time (UTC+8)
   const options = {
     timeZone: 'Asia/Manila',
@@ -147,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
   displayPhilippineTime();
 });
 
+  
   // Initialize when DOM loads
   document.addEventListener('DOMContentLoaded', initSidebar);
 </script>
-

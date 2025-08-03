@@ -3,9 +3,12 @@
     <div class="flex items-center justify-between flex-shrink-0 px-4 mb-6 text-center">
       <h1 class="text-xl font-bold text-white items-center gap-2">
          <img id="sidebar-logo" src="{{asset('images/logo/logofinal.png')}}" alt="" >
+         <img id="sonly" class="hidden w-full h-25" src="{{asset('images/logo/sonly.png')}}" alt="">
         <span class="sidebar-text text-sm ">Soliera Hotel And Restaurant Management System</span>
       </h1>
     </div>
+
+     
     
     <!-- Navigation Menu -->
     <div class="flex-1 flex flex-col overflow-y-auto">
