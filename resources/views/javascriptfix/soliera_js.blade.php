@@ -1,18 +1,153 @@
 <script>
-       // lucide icons this
-    lucide.createIcons();
-    
-    // toggle side bar this parttttttt
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      sidebar.classList.toggle('w-64');
-      sidebar.classList.toggle('w-0');
-      sidebar.classList.toggle('opacity-0');
-      sidebar.classList.toggle('overflow-hidden');
-    }
+  // Initialize lucide icons
+  lucide.createIcons();
+  
+  // Check if mobile view
+  function isMobileView() {
+    return window.innerWidth < 768; // Tailwind's md breakpoint
+  }
 
-    // Add ripple effect to buttons
+  // Toggle sidebar function
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
     
-        
-     
+    if (isMobileView()) {
+      // Mobile behavior - toggle visibility
+      if (sidebar.classList.contains('translate-x-0')) {
+        // Closing sidebar on mobile
+        sidebar.classList.remove('translate-x-0');
+        sidebar.classList.add('-translate-x-full');
+      } else {
+        // Opening sidebar on mobile
+        sidebar.classList.remove('-translate-x-full');
+        sidebar.classList.add('translate-x-0');
+      }
+    } else {
+      // Desktop behavior - toggle between expanded/collapsed
+      const isCollapsed = sidebar.classList.toggle('w-64');
+      sidebar.classList.toggle('w-20', !isCollapsed);
+      localStorage.setItem('sidebarCollapsed', !isCollapsed);
+      
+      // Update text visibility based on collapsed state
+      document.querySelectorAll('.sidebar-text').forEach(text => {
+        text.classList.toggle('hidden', !isCollapsed);
+      });
+    }
+    
+    // Update dropdown indicators
+    updateDropdownIndicators();
+  }
+
+  // Update dropdown indicators
+  function updateDropdownIndicators() {
+    const sidebar = document.getElementById('sidebar');
+    const isCollapsed = sidebar.classList.contains('w-20') && !isMobileView();
+    const dropdownIcons = document.querySelectorAll('.dropdown-icon');
+    
+    dropdownIcons.forEach(icon => {
+      if (isCollapsed) {
+        const isOpen = icon.closest('.collapse').querySelector('input[type="checkbox"]').checked;
+        icon.setAttribute('data-lucide', isOpen ? 'minus' : 'plus');
+      } else {
+        const isOpen = icon.closest('.collapse').querySelector('input[type="checkbox"]').checked;
+        icon.setAttribute('data-lucide', isOpen ? 'chevron-down' : 'chevron-right');
+      }
+      lucide.createIcon(icon);
+    });
+  }
+
+  // Handle window resize
+  function handleResize() {
+    const sidebar = document.getElementById('sidebar');
+    
+    if (isMobileView()) {
+      // On mobile, ensure proper transform classes
+      if (!sidebar.classList.contains('translate-x-0')) {
+        sidebar.classList.add('-translate-x-full');
+        sidebar.classList.remove('translate-x-0');
+      }
+    } else {
+      // On desktop, apply the saved collapsed state
+      const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+      sidebar.classList.remove('-translate-x-full', 'translate-x-0');
+      sidebar.classList.toggle('w-64', !isCollapsed);
+      sidebar.classList.toggle('w-20', isCollapsed);
+      document.querySelectorAll('.sidebar-text').forEach(text => {
+        text.classList.toggle('hidden', isCollapsed);
+      });
+    }
+    
+    updateDropdownIndicators();
+  }
+
+  // Initialize sidebar
+  function initSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    
+    if (isMobileView()) {
+      // Start hidden on mobile
+      sidebar.classList.add('-translate-x-full');
+       setTimeout(() => {
+        sidebar.classList.add('loaded');
+    }, 50);
+    } else {
+      // Start with saved state on desktop
+      const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+      sidebar.classList.add(isCollapsed ? 'w-20' : 'w-64');
+      document.querySelectorAll('.sidebar-text').forEach(text => {
+        text.classList.toggle('hidden', isCollapsed);
+      });
+       setTimeout(() => {
+        sidebar.classList.add('loaded');
+    }, 50);
+    }
+    
+    // Set up event listeners
+    document.querySelectorAll('.collapse input[type="checkbox"]').forEach(checkbox => {
+      checkbox.addEventListener('change', updateDropdownIndicators);
+    });
+    
+    window.addEventListener('resize', handleResize);
+    updateDropdownIndicators();
+  }
+
+  
+function displayPhilippineTime() {
+  // Create a date object for Philippine time (UTC+8)
+  const options = {
+    timeZone: 'Asia/Manila',
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true
+  };
+
+  // Get the formatted date and time string
+  const philippineDateTime = new Date().toLocaleString('en-PH', options);
+  
+  // Update the element with the current time
+  const timeElement = document.getElementById('philippineTime');
+  if (timeElement) {
+    timeElement.textContent = philippineDateTime;
+  }
+}
+
+// Initial call to display the time
+displayPhilippineTime();
+
+// Update the time every second
+setInterval(displayPhilippineTime, 1000);
+
+// Add event listener to ensure the function runs after DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  displayPhilippineTime();
+});
+
+  // Initialize when DOM loads
+  document.addEventListener('DOMContentLoaded', initSidebar);
 </script>
+
