@@ -221,3 +221,9 @@ Route::put('/reservationcheckin/{reservationID}', [reservationController::class,
 Route::put('/reservationcheckout/{reservationID}', [reservationController::class, 'checkout']);
 Route::put('/reservationcancelled/{reservationID}', [reservationController::class, 'cancel']);
 Route::put('/reservationconfirm/{reservationID}', [reservationController::class, 'confirm']);
+
+// loyalty and rewards
+
+Route::get('lar', function(){
+    return view('admin.lar');
+});

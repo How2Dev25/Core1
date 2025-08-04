@@ -74,7 +74,7 @@
           </div>
         </a>
           
-        <a href="">
+        <a href="/lar">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item hover:bg-blue-600 hover:bg-opacity-50 text-white">
             <i data-lucide="gift" class="w-5 h-5 text-blue-200"></i>
             <span class="ml-3">Loyalty And Rewards</span>
