@@ -8,6 +8,7 @@
     @vite('resources/css/app.css')
  
     <script src="https://unpkg.com/lucide@latest"></script>
+    @livewireStyles
     
     <title>{{$title}} - Loyalty And Rewards</title>
 </head>
@@ -83,13 +84,100 @@
            </div>
 
 
-           <div class="mt-2">
-              <button class="btn btn-primary btn-sm ">
+           <div class="mt-5">
+              <button onclick="create_lar.showModal()" class="btn btn-primary btn-sm ">
                   Add Rewards
               </button>
-
-                
            </div>
+
+
+         <div class="container grid grid-cols-3 max-md:grid-cols-1 gap-2 mx-auto p-4 max-w-6xl">
+  <!-- Single Compact Reward Card -->
+
+  @forelse ($roompoints as $points)
+       <div class="card bg-white shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100 w-full max-w-xs mx-auto sm:max-w-sm">
+    <!-- Room Image -->
+    <figure class="h-36 relative">
+      <img src="{{asset($points->roomphoto)}}" 
+           alt="Deluxe Room" 
+           class="w-full h-full object-cover rounded-t-lg">
+      <!-- Room Type Badge -->
+      <div class="absolute bottom-2 left-2 badge badge-primary badge-xs">
+       {{$points->roomtype}}
+      </div>
+    </figure>
+    
+    <!-- Card Content -->
+    <div class="p-3">
+      <!-- Status & Title -->
+      <div class="flex justify-between items-center mb-1">
+        <h3 class="font-semibold text-sm">LOYALTY REWARD For Room #{{$points->roomID}}  {{$points->roomtype}}</h3>
+        @if($points->loyalty_status === 'Active')
+        <span class="badge badge-success badge-xs">
+          Active
+        </span>
+        @elseif($points->loyalty_status === 'Expired')
+         <span class="badge badge-error badge-xs">
+          Expired
+        </span>
+        @endif
+      </div>
+      
+      <!-- Reward Details -->
+      <div class="space-y-1 mb-2">
+        <p class="text-xs text-gray-500">Description</p>
+        <p class="text-sm line-clamp-2">{{$points->loyalty_description}}</p>
+        
+        <p class="text-xs text-gray-500 mt-1">Value</p>
+        <p class="text-lg font-bold text-blue-600">{{$points->loyalty_value}} Points</p>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div class="flex justify-end space-x-2 mt-2">
+        <button onclick="expire_reward_{{$points->loyaltyID}}.showModal()" class="btn btn-xs btn-outline btn-warning">
+          Expire
+        </button>
+        <button onclick="delete_reward_{{$points->loyaltyID}}.showModal()" class="btn btn-xs btn-outline btn-error">
+          Delete
+        </button>
+
+         <button onclick="edit_lar_{{$points->loyaltyID}}.showModal()" class="btn btn-xs btn-outline btn-primary">
+          Edit
+        </button>
+
+         <button class="btn btn-xs btn-outline btn-success">
+          Add to Guest
+        </button>
+      </div>
+    </div>
+  </div>
+
+  @empty
+  <div class="w-full text-center py-12 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+    <div class="max-w-md mx-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h3 class="mt-2 text-lg font-medium text-gray-900">No loyalty rewards found</h3>
+        <p class="mt-1 text-sm text-gray-500">Create your first loyalty reward to get started.</p>
+        <div class="mt-6">
+            <button onclick="create_lar.showModal()"  class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Create Reward
+            </button>
+        </div>
+    </div>
+</div>
+      
+  @endforelse
+ 
+   
+
+ 
+  
+</div>
           </section>
 
         
@@ -108,9 +196,16 @@
     </div>
 
     {{-- modals --}}
+    @include('admin.components.lar.create')
 
-   
- 
+    @foreach ($roompoints as $points)
+        @include('admin.components.lar.delete')
+        @include('admin.components.lar.edit')
+        @include('admin.components.lar.expire')
+    @endforeach
+
+
+ @livewireScripts
   </body>
   @include('javascriptfix.soliera_js')
 

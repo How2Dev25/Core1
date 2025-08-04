@@ -13,7 +13,7 @@ class larController extends Controller
             'loyalty_description' => 'required',
             'loyalty_value' => 'required',
         ]);
-        $form['loyalty_status'] = 'Available';
+        $form['loyalty_status'] = 'Active';
 
         Lar::create($form);
 
@@ -27,7 +27,6 @@ class larController extends Controller
             'roomID' => 'required',
             'loyalty_description' => 'required',
             'loyalty_value' => 'required',
-            'loyalty_status' => 'required',
         ]);
 
         $loyaltyID->update($form);
@@ -56,5 +55,15 @@ class larController extends Controller
     public function removeloyaltyguest(Lar $loyaltyID){
 
        
+    }
+
+    public function expired(Lar $loyaltyID){
+        $loyaltyID->update([
+            'loyalty_status' => 'Expired',
+        ]);
+
+        session()->flash('Expired', 'Loyalty Status Has Been Expired');
+
+        return redirect()->back();
     }
 }

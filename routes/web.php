@@ -4,6 +4,7 @@ use App\Http\Controllers\channelController;
 use App\Http\Controllers\ecmController;
 use App\Http\Controllers\hmpController;
 use App\Http\Controllers\inventoryController;
+use App\Http\Controllers\larController;
 use App\Http\Controllers\reservationController;
 use App\Http\Controllers\roomController;
 use App\Http\Controllers\roommantenanceController;
@@ -13,6 +14,7 @@ use App\Models\Ecm;
 use App\Models\Hmp;
 use App\Models\Inventory;
 use App\Models\room;
+use App\Models\Lar;
 use App\Models\room_maintenance;
 use App\Models\stockRequest;
 use App\Models\Reservation;
@@ -225,5 +227,15 @@ Route::put('/reservationconfirm/{reservationID}', [reservationController::class,
 // loyalty and rewards
 
 Route::get('lar', function(){
-    return view('admin.lar');
+    $rooms = room::whereNotIn('roomID', function ($query) {
+    $query->select('roomID')->from('core1_loyaltyandrewards');
+})->get();
+    $roompoints = Lar::join('core1_room', 'core1_room.roomID', '=', 'core1_loyaltyandrewards.roomID')
+    ->latest('core1_loyaltyandrewards.created_at')
+    ->get();
+    return view('admin.lar', ['rooms' => $rooms, 'roompoints' => $roompoints]);
 });
+Route::post('/createlar', [larController::class, 'store']);
+Route::put('/editlar/{loyaltyID}', [larController::class, 'modify']);
+Route::put('/expirelar/{loyaltyID}', [larController::class, 'expired']);
+Route::delete('/deletelar/{loyaltyID}', [larController::class, 'delete']);
