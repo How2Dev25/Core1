@@ -17,8 +17,6 @@ class Lar extends Model
       protected $fillable = [
         'loyaltyID',
         'roomID',
-        'guestID',
-        'guestemail',
         'loyalty_description',
         'loyalty_value',
         'loyalty_status',

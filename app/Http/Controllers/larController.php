@@ -53,7 +53,7 @@ class larController extends Controller
     }
 
     public function removeloyaltyguest(Lar $loyaltyID){
-
+        
        
     }
 

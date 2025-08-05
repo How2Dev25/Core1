@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('core1_loyaltyandrewards', function (Blueprint $table) {
             $table->id('loyaltyID');
             $table->foreignId('roomID');
-            $table->foreignId('guestID')->nullable();
-            $table->text('guestemail')->nullable();
             $table->longText('loyalty_description');
             $table->integer('loyalty_value');
             $table->text('loyalty_status');
