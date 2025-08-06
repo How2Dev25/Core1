@@ -50,7 +50,7 @@
           <p class="text-sm text-gray-500">All customers</p>
         </div>
       </div>
-      <p class="text-3xl font-bold text-gray-800 mb-2">24,568</p>
+      <p class="text-3xl font-bold text-gray-800 mb-2">{{$totalpoints}}</p>
       <div class="radial-progress text-blue-500" style="--value:82; --size:2.5rem; --thickness:4px;">82%</div>
     </div>
   </div>
@@ -90,11 +90,11 @@
           </svg>
         </div>
         <div>
-          <h3 class="text-lg font-semibold text-gray-700">Redemptions</h3>
-          <p class="text-sm text-gray-500">This month</p>
+          <h3 class="text-lg font-semibold text-gray-700">Total Rewards</h3>
+          <p class="text-sm text-gray-500">Total of Loyalties And Rewards</p>
         </div>
       </div>
-      <p class="text-3xl font-bold text-gray-800 mb-2">327</p>
+      <p class="text-3xl font-bold text-gray-800 mb-2">{{$totalreward}}</p>
       <div class="radial-progress text-green-500" style="--value:75; --size:2.5rem; --thickness:4px;">75%</div>
     </div>
   </div>
@@ -107,8 +107,43 @@
               </button>
            </div>
 
+           {{-- alerts --}}
+
+           @if(session('Added'))
+<div role="alert" class="alert alert-success mt-2 mb-2">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>{{session('Added')}}</span>
+</div>
+@elseif(session('Updated'))
+<div role="alert" class="alert alert-success mt-2 mb-2">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>{{session('Updated')}}</span>
+</div>
+@elseif(session('Deleted'))
+<div role="alert" class="alert alert-success mt-2 mb-2">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>{{session('Deleted')}}</span>
+</div>
+@elseif(session('Expired'))
+<div role="alert" class="alert alert-success mt-2 mb-2">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>{{session('Expired')}}</span>
+</div>
+@endif
+
+{{-- alerts --}}
 
          <div class="container grid grid-cols-3 max-md:grid-cols-1 gap-2 mx-auto p-4 max-w-6xl">
+
+         
   <!-- Single Compact Reward Card -->
 
   @forelse ($roompoints as $points)
@@ -189,12 +224,193 @@
 </div>
       
   @endforelse
- 
-   
-
- 
-  
 </div>
+
+<div class="card bg-white border border-gray-200">
+  <div class="card-body p-0">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center p-5 pb-0">
+      <h3 class="text-xl font-bold text-gray-800">Upcoming Events</h3>
+      <div class="flex gap-2 mt-3 md:mt-0">
+        <div class="form-control">
+          <input type="text" placeholder="Search events..." class="input input-bordered input-sm">
+        </div>
+        <select class="select select-bordered select-sm">
+          <option>All Types</option>
+          <option>Wedding</option>
+          <option>Conference</option>
+          <option>Celebration</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="bg-gray-50">Event</th>
+            <th class="bg-gray-50">Organizer</th>
+            <th class="bg-gray-50">Date</th>
+            <th class="bg-gray-50">Days</th>
+            <th class="bg-gray-50">Status</th>
+            <th class="bg-gray-50 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Event 1 -->
+          <tr class="hover:bg-gray-50">
+            <td>
+              <div class="flex items-center gap-3">
+                <div class="avatar">
+                  <div class="mask mask-squircle w-10 h-10">
+                    <img src="https://example.com/event1.jpg" alt="Business Meeting">
+                  </div>
+                </div>
+                <div>
+                  <div class="font-medium">Conference</div>
+                  <div class="text-sm text-gray-500">#EV001Annual Conference</div>
+                </div>
+              </div>
+            </td>
+            <td>John Smith</td>
+            <td>2023-06-15</td>
+            <td>3</td>
+            <td>
+              <span class="badge badge-success">Approved</span>
+            </td>
+            <td class="text-right space-x-1">
+              <button class="btn btn-ghost btn-xs text-info" title="Edit">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </button>
+              <button class="btn btn-ghost btn-xs text-error" title="Delete">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+              <button class="btn btn-ghost btn-xs text-success" title="Approve">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </button>
+              <button class="btn btn-ghost btn-xs text-warning" title="Cancel">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </td>
+          </tr>
+          
+          <!-- Event 2 -->
+          <tr class="hover:bg-gray-50">
+            <td>
+              <div class="flex items-center gap-3">
+                <div class="avatar">
+                  <div class="mask mask-squircle w-10 h-10">
+                    <img src="https://example.com/event2.jpg" alt="Wedding">
+                  </div>
+                </div>
+                <div>
+                  <div class="font-medium">Wedding</div>
+                  <div class="text-sm text-gray-500">#EV002Smith Wedding</div>
+                </div>
+              </div>
+            </td>
+            <td>Sarah Johnson</td>
+            <td>2023-07-22</td>
+            <td>1</td>
+            <td>
+              <span class="badge badge-warning">Pending</span>
+            </td>
+            <td class="text-right space-x-1">
+              <!-- Same action buttons as above -->
+              <button class="btn btn-ghost btn-xs text-info" title="Edit">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </button>
+              <button class="btn btn-ghost btn-xs text-error" title="Delete">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+              <button class="btn btn-ghost btn-xs text-success" title="Approve">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </button>
+              <button class="btn btn-ghost btn-xs text-warning" title="Cancel">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </td>
+          </tr>
+          
+          <!-- Event 3 -->
+          <tr class="hover:bg-gray-50">
+            <td>
+              <div class="flex items-center gap-3">
+                <div class="avatar">
+                  <div class="mask mask-squircle w-10 h-10">
+                    <img src="https://example.com/event3.jpg" alt="Birthday">
+                  </div>
+                </div>
+                <div>
+                  <div class="font-medium">Celebration</div>
+                  <div class="text-sm text-gray-500">#EV003Birthday Party</div>
+                </div>
+              </div>
+            </td>
+            <td>Michael Brown</td>
+            <td>2023-08-05</td>
+            <td>1</td>
+            <td>
+              <span class="badge badge-error">Cancelled</span>
+            </td>
+            <td class="text-right space-x-1">
+              <!-- Same action buttons as above -->
+              <button class="btn btn-ghost btn-xs text-info" title="Edit">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </button>
+              <button class="btn btn-ghost btn-xs text-error" title="Delete">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+              <button class="btn btn-ghost btn-xs text-success" title="Approve">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </button>
+              <button class="btn btn-ghost btn-xs text-warning" title="Cancel">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Pagination -->
+    <div class="flex justify-center p-4">
+      <div class="join">
+        <button class="join-item btn btn-sm">«</button>
+        <button class="join-item btn btn-sm btn-active">1</button>
+        <button class="join-item btn btn-sm">2</button>
+        <button class="join-item btn btn-sm">3</button>
+        <button class="join-item btn btn-sm">»</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
           </section>
 
         

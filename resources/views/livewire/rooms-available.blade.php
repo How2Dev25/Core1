@@ -1,5 +1,4 @@
-
-     <div class="mb-6">
+<div class="mb-6" wire:poll.5s> <!-- Refresh every 500ms -->
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
     <h3 class="text-xl font-bold text-gray-800">View All Rooms</h3>
     <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
@@ -75,5 +74,3 @@
     @endforelse
   </div>
 </div>
-  
-

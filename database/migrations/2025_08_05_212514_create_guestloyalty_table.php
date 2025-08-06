@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('guestloyaltyandrewardsID');
             $table->foreignId('guestID')->nullable();
             $table->foreignId('loyaltyID');
-            $table->text('guestemail');
+            $table->text('guestemail')->nullable();
             $table->timestamps();
         });
     }

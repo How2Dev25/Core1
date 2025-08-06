@@ -48,30 +48,21 @@ class larController extends Controller
 
     }
 
-    public function addtoguest(Request $request, Lar $loyaltyID){
-         $request->validate([
+   public function addtoguest(Request $request, $loyaltyID)
+{
+    $request->validate([
         'guestID' => 'nullable|integer',
-        'guestemail' => 'nullable|email'
+        'guestemail' => 'nullable|email',
     ]);
-
-   
-  
-
-    $loyaltyIDreal= $loyaltyID->loyatyID;
 
     Glar::create([
-        'guestID' => $request->guestid,
+        'guestID' => $request->guestID, // use correct casing
         'guestemail' => $request->guestemail,
-        'loyaltyID' => $loyaltyIDreal,
+        'loyaltyID' => $loyaltyID,
     ]);
 
-
-
-            return redirect()->back();
-
-   
-        
-    }
+    return redirect()->back();
+}
 
     public function removeloyaltyguest(Lar $loyaltyID){
         
@@ -83,7 +74,7 @@ class larController extends Controller
             'loyalty_status' => 'Expired',
         ]);
 
-        session()->flash('Expired', 'Loyalty Status Has Been Expired');
+        session()->flash('Expired', 'Loyalty Status Has Been Set to Expired');
 
         return redirect()->back();
     }

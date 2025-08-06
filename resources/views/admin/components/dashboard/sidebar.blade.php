@@ -142,12 +142,15 @@
           </div>
         </a>
           
-        <a href="/lar">
-          <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item hover:bg-blue-600 hover:bg-opacity-50 text-white">
-            <i data-lucide="gift" class="w-5 h-5 text-blue-200"></i>
-            <span class="ml-3">Loyalty And Rewards</span>
+         <a href="/lar" class="block">
+          <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
+            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
+              <i data-lucide="award" class="w-5 h-5 text-blue-200 group-hover:text-white"></i>
+            </div>
+            <span class="ml-3 sidebar-text">Loyalty And Rewards</span>
           </div>
         </a>
+
 
         <a href="/ias" class="block">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">

@@ -233,7 +233,12 @@ Route::get('lar', function(){
     $roompoints = Lar::join('core1_room', 'core1_room.roomID', '=', 'core1_loyaltyandrewards.roomID')
     ->latest('core1_loyaltyandrewards.created_at')
     ->get();
-    return view('admin.lar', ['rooms' => $rooms, 'roompoints' => $roompoints]);
+
+
+    $totalpoints = Lar::sum('loyalty_value');
+    $totalreward = Lar::count();
+
+    return view('admin.lar', ['rooms' => $rooms, 'roompoints' => $roompoints, 'totalpoints' => $totalpoints, 'totalreward' => $totalreward]);
 });
 Route::post('/createlar', [larController::class, 'store']);
 Route::put('/editlar/{loyaltyID}', [larController::class, 'modify']);
