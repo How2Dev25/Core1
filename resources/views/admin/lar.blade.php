@@ -33,55 +33,72 @@
           {{-- content --}}
 
           <section class="mt-2"> 
-           <div class="w-full grid grid-cols-3 gap-5 max-md:grid-cols-1">
-               <div class="card bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-200 rounded-box">
-                    <div class="card-body p-6">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="p-3 rounded-box bg-green-100 text-green-600">
-                                <i class='bx bx-calendar-check text-2xl'></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-700">Total Bookings</h3>
-                                <p class="text-sm text-gray-500">This month</p>
-                            </div>
-                        </div>
-                        <p class="text-3xl font-bold text-gray-800 mb-2">342</p>
-                        <div class="radial-progress text-green-500" style="--value:75; --size:2.5rem; --thickness:4px;">75%</div>
-                    </div>
-                </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <!-- Total Points Card -->
+  <div class="card bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-200 rounded-box">
+    <div class="card-body p-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="p-3 rounded-box bg-blue-100 text-blue-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gem">
+            <path d="M6 3h12l4 6-10 13L2 9Z"/>
+            <path d="M11 3 8 9l4 13 4-13-3-6"/>
+            <path d="M2 9h20"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-700">Total Points</h3>
+          <p class="text-sm text-gray-500">All customers</p>
+        </div>
+      </div>
+      <p class="text-3xl font-bold text-gray-800 mb-2">24,568</p>
+      <div class="radial-progress text-blue-500" style="--value:82; --size:2.5rem; --thickness:4px;">82%</div>
+    </div>
+  </div>
 
-                 <div class="card bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-200 rounded-box">
-                    <div class="card-body p-6">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="p-3 rounded-box bg-green-100 text-green-600">
-                                <i class='bx bx-calendar-check text-2xl'></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-700">Total Bookings</h3>
-                                <p class="text-sm text-gray-500">This month</p>
-                            </div>
-                        </div>
-                        <p class="text-3xl font-bold text-gray-800 mb-2">342</p>
-                        <div class="radial-progress text-green-500" style="--value:75; --size:2.5rem; --thickness:4px;">75%</div>
-                    </div>
-                </div>
+  <!-- Active Members Card -->
+  <div class="card bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-200 rounded-box">
+    <div class="card-body p-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="p-3 rounded-box bg-purple-100 text-purple-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-700">Active Members</h3>
+          <p class="text-sm text-gray-500">This month</p>
+        </div>
+      </div>
+      <p class="text-3xl font-bold text-gray-800 mb-2">1,842</p>
+      <div class="radial-progress text-purple-500" style="--value:68; --size:2.5rem; --thickness:4px;">68%</div>
+    </div>
+  </div>
 
-                 <div class="card bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-200 rounded-box">
-                    <div class="card-body p-6">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="p-3 rounded-box bg-green-100 text-green-600">
-                                <i class='bx bx-calendar-check text-2xl'></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-700">Total Bookings</h3>
-                                <p class="text-sm text-gray-500">This month</p>
-                            </div>
-                        </div>
-                        <p class="text-3xl font-bold text-gray-800 mb-2">342</p>
-                        <div class="radial-progress text-green-500" style="--value:75; --size:2.5rem; --thickness:4px;">75%</div>
-                    </div>
-                </div>
-           </div>
+  <!-- Redemptions Card -->
+  <div class="card bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-200 rounded-box">
+    <div class="card-body p-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="p-3 rounded-box bg-green-100 text-green-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gift">
+            <rect x="3" y="8" width="18" height="4" rx="1"/>
+            <path d="M12 8v13"/>
+            <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/>
+            <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-700">Redemptions</h3>
+          <p class="text-sm text-gray-500">This month</p>
+        </div>
+      </div>
+      <p class="text-3xl font-bold text-gray-800 mb-2">327</p>
+      <div class="radial-progress text-green-500" style="--value:75; --size:2.5rem; --thickness:4px;">75%</div>
+    </div>
+  </div>
+</div>
 
 
            <div class="mt-5">
@@ -145,7 +162,7 @@
           Edit
         </button>
 
-         <button class="btn btn-xs btn-outline btn-success">
+         <button onclick="guest_lar_{{$points->loyaltyID}}.showModal()" class="btn btn-xs btn-outline btn-success">
           Add to Guest
         </button>
       </div>
@@ -202,6 +219,7 @@
         @include('admin.components.lar.delete')
         @include('admin.components.lar.edit')
         @include('admin.components.lar.expire')
+        @include('admin.components.lar.addtoguest')
     @endforeach
 
 

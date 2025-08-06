@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Lar;
+use App\Models\Glar;
 
 class larController extends Controller
 {
@@ -48,7 +49,27 @@ class larController extends Controller
     }
 
     public function addtoguest(Request $request, Lar $loyaltyID){
-       
+         $request->validate([
+        'guestID' => 'nullable|integer',
+        'guestemail' => 'nullable|email'
+    ]);
+
+   
+  
+
+    $loyaltyIDreal= $loyaltyID->loyatyID;
+
+    Glar::create([
+        'guestID' => $request->guestid,
+        'guestemail' => $request->guestemail,
+        'loyaltyID' => $loyaltyIDreal,
+    ]);
+
+
+
+            return redirect()->back();
+
+   
         
     }
 

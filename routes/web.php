@@ -239,3 +239,4 @@ Route::post('/createlar', [larController::class, 'store']);
 Route::put('/editlar/{loyaltyID}', [larController::class, 'modify']);
 Route::put('/expirelar/{loyaltyID}', [larController::class, 'expired']);
 Route::delete('/deletelar/{loyaltyID}', [larController::class, 'delete']);
+Route::post('/guestadd/{loyaltyID}', [larController::class, 'addtoguest']);
