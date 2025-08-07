@@ -1,10 +1,10 @@
-<div class="bg-gradient-to-b from-blue-900 via-blue-800 to-blue-700 border-r border-blue-600/50 pt-5 pb-4 flex flex-col fixed md:relative h-full transition-all duration-300 ease-in-out shadow-xl transform -translate-x-full md:transform-none md:translate-x-0" id="sidebar">
+<div class="bg-[#001f54] pt-5 pb-4 flex flex-col fixed md:relative h-full transition-all duration-300 ease-in-out shadow-xl transform -translate-x-full md:transform-none md:translate-x-0" id="sidebar">
     <!-- Sidebar Header -->
     <div class="flex items-center justify-between flex-shrink-0 px-4 mb-6 text-center">
       <h1 class="text-xl font-bold text-white items-center gap-2">
          <img id="sidebar-logo" src="{{asset('images/logo/logofinal.png')}}" alt="" >
          <img id="sonly" class="hidden w-full h-25" src="{{asset('images/logo/sonly.png')}}" alt="">
-        <span class="sidebar-text text-sm ">Soliera Hotel And Restaurant Management System</span>
+        
       </h1>
     </div>
 
@@ -20,9 +20,9 @@
         
         <!-- Dashboard -->
         <a href="" class="block">
-          <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
+          <div class=" flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
             <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="home" class="w-5 h-5 text-blue-200 group-hover:text-white"></i>
+              <i data-lucide="home" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Dashboard</span>
           </div>
@@ -32,7 +32,7 @@
         <a href="/frontdesk" class="block">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
             <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="monitor" class="w-5 h-5 text-blue-200 group-hover:text-white"></i>
+              <i data-lucide="monitor" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Front Desk</span>
           </div>
@@ -49,7 +49,7 @@
           <div class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
             <div class="flex items-center">
               <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-                <i data-lucide="calendar-check" class="w-5 h-5 text-blue-200 group-hover:text-white"></i>
+                <i data-lucide="calendar-check" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
               </div>
               <span class="ml-3 sidebar-text">Reservations</span>
             </div>
@@ -58,13 +58,13 @@
           <div class="collapse-content pl-14 pr-4 py-1 space-y-1"> 
             <a href="/bas" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="bed" class="w-4 h-4"></i>
+                <i data-lucide="bed" class="w-4 h-4 text-[#F7B32B]"></i>
                 Room Reservation
               </span>
             </a>
             <a href="/aibas" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="bot" class="w-4 h-4"></i>
+                <i data-lucide="bot" class="w-4 h-4 text-[#F7B32B]"></i>
                 AI Assistance
               </span>
             </a>
@@ -77,22 +77,22 @@
           <div class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
             <div class="flex items-center">
               <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-                <i data-lucide="users" class="w-5 h-5 text-blue-200 group-hover:text-white"></i>
+                <i data-lucide="users" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
               </div>
-              <span class="ml-3 sidebar-text">Guest Management</span>
+              <span class="ml-3 sidebar-text ">Guest Management</span>
             </div>
             <i class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon" data-lucide="chevron-down"></i>
           </div>
           <div class="collapse-content pl-14 pr-4 py-1 space-y-1"> 
             <a href="#" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="star" class="w-4 h-4"></i>
+                <i data-lucide="star" class="w-4 h-4 text-[#F7B32B]"></i>
                 Room Feedbacks
               </span>
             </a>
             <a href="#" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="heart" class="w-4 h-4"></i>
+                <i data-lucide="heart" class="w-4 h-4 text-[#F7B32B]"></i>
                 Service Feedbacks
               </span>
             </a>
@@ -105,7 +105,7 @@
           <div class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
             <div class="flex items-center">
               <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-                <i data-lucide="door-open" class="w-5 h-5 text-blue-200 group-hover:text-white"></i>
+                <i data-lucide="door-open" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
               </div>
               <span class="ml-3 sidebar-text">Room Management</span>
             </div>
@@ -114,13 +114,13 @@
           <div class="collapse-content pl-14 pr-4 py-1 space-y-1"> 
             <a href="/roommanagement" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="bed" class="w-4 h-4"></i>
+                <i data-lucide="bed" class="w-4 h-4 text-[#F7B32B]"></i>
                 Rooms
               </span>
             </a>
             <a href="/servicemanagement" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="key" class="w-4 h-4"></i>
+                <i data-lucide="key" class="w-4 h-4 text-[#F7B32B]"></i>
                 Door Locks
               </span>
             </a>
@@ -136,7 +136,7 @@
         <a href="" class="block">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
             <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="shopping-cart" class="w-5 h-5 text-blue-200 group-hover:text-white"></i>
+              <i data-lucide="shopping-cart" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Point of Sale</span>
           </div>
@@ -145,7 +145,7 @@
          <a href="/lar" class="block">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
             <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="award" class="w-5 h-5 text-blue-200 group-hover:text-white"></i>
+              <i data-lucide="award" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Loyalty And Rewards</span>
           </div>
@@ -155,7 +155,7 @@
         <a href="/ias" class="block">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
             <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="package" class="w-5 h-5 text-blue-200 group-hover:text-white"></i>
+              <i data-lucide="package" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Inventory</span>
           </div>
@@ -164,7 +164,7 @@
         <a href="/ecm" class="block">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
             <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="calendar-days" class="w-5 h-5 text-blue-200 group-hover:text-white"></i>
+              <i data-lucide="calendar-days" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Events</span>
           </div>
@@ -173,7 +173,7 @@
         <a href="/hmp" class="block">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
             <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="megaphone" class="w-5 h-5 text-blue-200 group-hover:text-white"></i>
+              <i data-lucide="megaphone" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Marketing</span>
           </div>
@@ -182,7 +182,7 @@
         <a href="/hmm" class="block">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
             <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="brush-cleaning" class="w-5 h-5 text-blue-200 group-hover:text-white"></i>
+              <i data-lucide="brush-cleaning" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Housekeeping</span>
           </div>
@@ -191,7 +191,7 @@
         <a href="/channel" class="block">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
             <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="share-2" class="w-5 h-5 text-blue-200 group-hover:text-white"></i>
+              <i data-lucide="share-2" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Channels</span>
           </div>

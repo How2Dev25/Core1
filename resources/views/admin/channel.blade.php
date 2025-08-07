@@ -36,103 +36,151 @@
  
 
   <!-- Channel Cards Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-    <!-- Channel A Card -->
-    <div class="card bg-white shadow-md">
-      <div class="card-body">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="avatar placeholder">
-                <img class="w-40 h-40 rounded-md shadow-md" src="{{asset('images/rbnb/tarastay.png')}}" alt="">
-          </div>
-          <h3 class="card-title">TaraStay </h3>
-          <div class="badge badge-success gap-1 ml-auto">
-            <i class="w-3 h-3" data-lucide="check"></i>
-            Connected
-          </div>
+ <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+  <!-- TaraStay Card -->
+  <div class="card bg-gradient-to-br from-blue-50 to-white border border-blue-100
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-blue-200
+              hover:bg-gradient-to-br hover:from-blue-500 hover:to-white
+              group">
+    <div class="card-body">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="avatar placeholder">
+          <img class="w-10 h-10 rounded-md shadow-md group-hover:shadow-lg transition-shadow" src="{{asset('images/rbnb/tarastay.png')}}" alt="TaraStay">
         </div>
-        <p class="text-sm opacity-75 mb-4">Last sync: 15 minutes ago</p>
-        <div class="card-actions justify-between">
-          <div class="stats stats-horizontal shadow bg-base-100">
-            <div class="stat">
-              <div class="stat-title">Listings</div>
-              <div class="stat-value text-sm">{{$tarastaylisting}}</div>
-            </div>
-            <div class="stat">
-              <div class="stat-title">Bookings</div>
-              <div class="stat-value text-sm">12</div>
-            </div>
-          </div>
-          <button class="btn btn-ghost btn-sm">
-            <i class="w-4 h-4" data-lucide="chevron-right"></i>
-          </button>
+        <h3 class="card-title group-hover:text-blue-700 transition-colors">
+          <i data-lucide="home" class="w-5 h-5 inline mr-1 text-blue-600"></i>
+          TaraStay
+        </h3>
+        <div class="badge badge-success gap-1 ml-auto group-hover:bg-blue-600 transition-colors">
+          <i class="w-3 h-3" data-lucide="check"></i>
+          Connected
         </div>
       </div>
-    </div>
-
-    <!-- Channel B Card -->
-    <div class="card bg-white shadow-md">
-      <div class="card-body">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="avatar placeholder">
-            <img class="w-40 h-40 rounded-md shadow-md" src="{{asset('images/rbnb/habistay.png')}}" alt="">
+      <p class="text-sm text-gray-500 mb-4 group-hover:text-blue-600 transition-colors">
+        <i data-lucide="clock" class="w-4 h-4 inline mr-1"></i>
+        Last sync: 15 minutes ago
+      </p>
+      <div class="card-actions justify-between">
+        <div class="stats stats-horizontal shadow bg-white group-hover:bg-blue-50 transition-colors">
+          <div class="stat">
+            <div class="stat-title flex items-center gap-1">
+              <i data-lucide="list" class="w-3 h-3"></i>
+              Listings
+            </div>
+            <div class="stat-value text-sm">{{$tarastaylisting}}</div>
           </div>
-          <h3 class="card-title">HabiStay</h3>
-          <div class="badge badge-success gap-1 ml-auto">
-            <i class="w-3 h-3" data-lucide="check"></i>
-            Connected
+          <div class="stat">
+            <div class="stat-title flex items-center gap-1">
+              <i data-lucide="calendar-check" class="w-3 h-3"></i>
+              Bookings
+            </div>
+            <div class="stat-value text-sm">12</div>
           </div>
         </div>
-        <p class="text-sm opacity-75 mb-4">Last sync: 1 hour ago</p>
-        <div class="card-actions justify-between">
-          <div class="stats stats-horizontal shadow bg-base-100">
-            <div class="stat">
-              <div class="stat-title">Listings</div>
-              <div class="stat-value text-sm">{{$habistaylisting}}</div>
-            </div>
-            <div class="stat">
-              <div class="stat-title">Bookings</div>
-              <div class="stat-value text-sm">8</div>
-            </div>
-          </div>
-          <button class="btn btn-ghost btn-sm">
-            <i class="w-4 h-4" data-lucide="chevron-right"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Channel C Card -->
-    <div class="card bg-white shadow-md">
-      <div class="card-body">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="avatar placeholder">
-           <img class="w-40 h-40 rounded-md shadow-md" src="{{asset('images/rbnb/nestscape.png')}}" alt="">
-          </div>
-          <h3 class="card-title">nestscape</h3>
-            <div class="badge badge-success gap-1 ml-auto">
-            <i class="w-3 h-3" data-lucide="check"></i>
-            Connected
-          </div>
-        </div>
-        <p class="text-sm opacity-75 mb-4">Last sync: 3 days ago</p>
-        <div class="card-actions justify-between">
-          <div class="stats stats-horizontal shadow bg-base-100">
-            <div class="stat">
-              <div class="stat-title">Listings</div>
-              <div class="stat-value text-sm">{{$nestscapelisting}}</div>
-            </div>
-            <div class="stat">
-              <div class="stat-title">Bookings</div>
-              <div class="stat-value text-sm">0</div>
-            </div>
-          </div>
-          <button class="btn btn-ghost btn-sm">
-            <i class="w-4 h-4" data-lucide="chevron-right"></i>
-          </button>
-        </div>
+        <button class="btn btn-ghost btn-sm group-hover:bg-blue-100 transition-colors">
+          <i class="w-4 h-4" data-lucide="chevron-right"></i>
+        </button>
       </div>
     </div>
   </div>
+
+  <!-- HabiStay Card -->
+  <div class="card bg-gradient-to-br from-green-50 to-white border border-green-100
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-green-200
+              hover:bg-gradient-to-br hover:from-green-500 hover:to-white
+              group">
+    <div class="card-body">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="avatar placeholder">
+          <img class="w-10 h-10 rounded-md shadow-md group-hover:shadow-lg transition-shadow" src="{{asset('images/rbnb/habistay.png')}}" alt="HabiStay">
+        </div>
+        <h3 class="card-title group-hover:text-green-700 transition-colors">
+          <i data-lucide="building-2" class="w-5 h-5 inline mr-1 text-green-600"></i>
+          HabiStay
+        </h3>
+        <div class="badge badge-success gap-1 ml-auto group-hover:bg-green-600 transition-colors">
+          <i class="w-3 h-3" data-lucide="check"></i>
+          Connected
+        </div>
+      </div>
+      <p class="text-sm text-gray-500 mb-4 group-hover:text-green-600 transition-colors">
+        <i data-lucide="clock" class="w-4 h-4 inline mr-1"></i>
+        Last sync: 1 hour ago
+      </p>
+      <div class="card-actions justify-between">
+        <div class="stats stats-horizontal shadow bg-white group-hover:bg-green-50 transition-colors">
+          <div class="stat">
+            <div class="stat-title flex items-center gap-1">
+              <i data-lucide="list" class="w-3 h-3"></i>
+              Listings
+            </div>
+            <div class="stat-value text-sm">{{$habistaylisting}}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-title flex items-center gap-1">
+              <i data-lucide="calendar-check" class="w-3 h-3"></i>
+              Bookings
+            </div>
+            <div class="stat-value text-sm">8</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm group-hover:bg-green-100 transition-colors">
+          <i class="w-4 h-4" data-lucide="chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- nestscape Card -->
+  <div class="card bg-gradient-to-br from-purple-50 to-white border border-purple-100
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-purple-200
+              hover:bg-gradient-to-br hover:from-purple-500 hover:to-white
+              group">
+    <div class="card-body">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="avatar placeholder">
+          <img class="w-10 h-10 rounded-md shadow-md group-hover:shadow-lg transition-shadow" src="{{asset('images/rbnb/nestscape.png')}}" alt="nestscape">
+        </div>
+        <h3 class="card-title group-hover:text-purple-700 transition-colors">
+          <i data-lucide="tree-pine" class="w-5 h-5 inline mr-1 text-purple-600"></i>
+          nestscape
+        </h3>
+        <div class="badge badge-success gap-1 ml-auto group-hover:bg-purple-600 transition-colors">
+          <i class="w-3 h-3" data-lucide="check"></i>
+          Connected
+        </div>
+      </div>
+      <p class="text-sm text-gray-500 mb-4 group-hover:text-purple-600 transition-colors">
+        <i data-lucide="clock" class="w-4 h-4 inline mr-1"></i>
+        Last sync: 3 days ago
+      </p>
+      <div class="card-actions justify-between">
+        <div class="stats stats-horizontal shadow bg-white group-hover:bg-purple-50 transition-colors">
+          <div class="stat">
+            <div class="stat-title flex items-center gap-1">
+              <i data-lucide="list" class="w-3 h-3"></i>
+              Listings
+            </div>
+            <div class="stat-value text-sm">{{$nestscapelisting}}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-title flex items-center gap-1">
+              <i data-lucide="calendar-check" class="w-3 h-3"></i>
+              Bookings
+            </div>
+            <div class="stat-value text-sm">0</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm group-hover:bg-purple-100 transition-colors">
+          <i class="w-4 h-4" data-lucide="chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- Add New Channel Section -->
  <div class="mt-2 mb-2">

@@ -36,65 +36,82 @@
  
 
   <!-- Stats Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-    <!-- Total Rooms Card -->
-    <div class="card bg-base-100 shadow">
-      <div class="card-body">
-        <div class="flex items-center">
-          <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-            <i data-lucide="home" class="w-6 h-6"></i>
-          </div>
-          <div class="ml-4">
-            <h3 class="text-sm font-medium text-gray-500">Total Rooms</h3>
-            <p class="text-2xl font-semibold">{{$totalrooms}}</p>
-          </div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+  <!-- Total Rooms Card (Blue) -->
+  <div class="card bg-gradient-to-br from-blue-50 to-white border border-blue-100
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-blue-200
+              hover:bg-gradient-to-br hover:from-blue-500 hover:to-white
+              group">
+    <div class="card-body">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-blue-100 text-blue-600
+                   group-hover:bg-blue-600 group-hover:text-white
+                   transition-colors duration-300">
+          <i data-lucide="home" class="w-6 h-6"></i>
         </div>
-        <div class="mt-2 text-sm text-green-600 flex items-center">
-          <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
-          <span>5% from last month</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Maintenance Rooms Card -->
-    
-    <div class="card bg-base-100 shadow">
-      <div class="card-body">
-        <div class="flex items-center">
-          <div class="p-3 rounded-full bg-orange-100 text-orange-600">
-            <i data-lucide="tool" class="w-6 h-6"></i>
-          </div>
-          <div class="ml-4">
-            <h3 class="text-sm font-medium text-gray-500">Maintenance Rooms</h3>
-            <p class="text-2xl font-semibold">{{$maintenancerooms}}</p>
-          </div>
-        </div>
-        <div class="mt-2 text-sm text-red-600 flex items-center">
-          <i data-lucide="alert-circle" class="w-4 h-4 mr-1"></i>
-          <span>{{$urgentmaintenance}} urgent requests</span>
+        <div class="ml-4">
+          <h3 class="text-sm font-medium text-gray-500 group-hover:text-blue-600">Total Rooms</h3>
+          <p class="text-2xl font-semibold group-hover:text-blue-800">{{$totalrooms}}</p>
         </div>
       </div>
-    </div>
-
-    <!-- Inventory Card -->
-    <div class="card bg-base-100 shadow">
-      <div class="card-body">
-        <div class="flex items-center">
-          <div class="p-3 rounded-full bg-green-100 text-green-600">
-            <i data-lucide="box" class="w-6 h-6"></i>
-          </div>
-          <div class="ml-4">
-            <h3 class="text-sm font-medium text-gray-500">Total Inventory</h3>
-            <p class="text-2xl font-semibold">{{$inventorystocks}}</p>
-          </div>
-        </div>
-        <div class="mt-2 text-sm text-gray-500 flex items-center">
-          <i data-lucide="info" class="w-4 h-4 mr-1"></i>
-          <span>{{$lowstock}} items low in stock</span>
-        </div>
+      <div class="mt-2 text-sm text-green-600 flex items-center group-hover:text-green-700">
+        <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
+        <span>5% from last month</span>
       </div>
     </div>
   </div>
+
+  <!-- Maintenance Rooms Card (Orange) -->
+  <div class="card bg-gradient-to-br from-orange-50 to-white border border-orange-100
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-orange-200
+              hover:bg-gradient-to-br hover:from-orange-500 hover:to-white
+              group">
+    <div class="card-body">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-orange-100 text-orange-600
+                   group-hover:bg-orange-600 group-hover:text-white
+                   transition-colors duration-300">
+          <i data-lucide="tool-case" class="w-6 h-6"></i>
+        </div>
+        <div class="ml-4">
+          <h3 class="text-sm font-medium text-gray-500 group-hover:text-orange-600">Maintenance Rooms</h3>
+          <p class="text-2xl font-semibold group-hover:text-orange-800">{{$maintenancerooms}}</p>
+        </div>
+      </div>
+      <div class="mt-2 text-sm text-red-600 flex items-center group-hover:text-red-700">
+        <i data-lucide="alert-circle" class="w-4 h-4 mr-1"></i>
+        <span>{{$urgentmaintenance}} urgent requests</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inventory Card (Green) -->
+  <div class="card bg-gradient-to-br from-green-50 to-white border border-green-100
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-green-200
+              hover:bg-gradient-to-br hover:from-green-500 hover:to-white
+              group">
+    <div class="card-body">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-green-100 text-green-600
+                   group-hover:bg-green-600 group-hover:text-white
+                   transition-colors duration-300">
+          <i data-lucide="box" class="w-6 h-6"></i>
+        </div>
+        <div class="ml-4">
+          <h3 class="text-sm font-medium text-gray-500 group-hover:text-green-600">Total Inventory</h3>
+          <p class="text-2xl font-semibold group-hover:text-green-800">{{$inventorystocks}}</p>
+        </div>
+      </div>
+      <div class="mt-2 text-sm text-gray-500 flex items-center group-hover:text-gray-600">
+        <i data-lucide="info" class="w-4 h-4 mr-1"></i>
+        <span>{{$lowstock}} items low in stock</span>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- Inventory Table -->
   <div class="overflow-x-auto rounded-box border border-base-300 p-5">
@@ -369,7 +386,7 @@
         </div>
         <h3 class="text-lg font-medium text-gray-700">No Rooms Need Maintenance</h3>
         <p class="text-gray-500 mt-2">All rooms are currently in good condition.</p>
-        <button class="btn btn-primary mt-4 gap-2">
+        <button onclick="create_maintenance_modal.showModal()" class="btn btn-primary mt-4 gap-2">
             <i data-lucide="plus" class="w-4 h-4"></i>
             Create New Maintenance Request
         </button>

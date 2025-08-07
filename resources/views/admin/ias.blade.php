@@ -55,36 +55,75 @@
   </div>
 
   <!-- Stats Cards -->
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-    <div class="stats shadow-sm bg-base-200">
-      <div class="stat p-3">
-        <div class="stat-title">Total Items</div>
-        <div class="stat-value text-primary text-lg">{{$totalItems}}</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+  <!-- Total Items - Blue Theme -->
+  <div class="stats bg-gradient-to-br from-blue-50 to-white hover:from-blue-500 hover:to-white border border-blue-100 hover:border-blue-200 shadow-sm hover:shadow-md transition-all duration-300 ease-in-out group hover:-translate-y-1">
+    <div class="stat p-3">
+      <div class="flex items-center gap-2">
+        <div class="p-2 rounded-lg bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package">
+            <path d="m7.5 4.27 9 5.15"/>
+            <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+            <path d="m3.3 7 8.7 5 8.7-5"/>
+            <path d="M12 22V12"/>
+          </svg>
+        </div>
+        <div class="stat-title text-gray-600 group-hover:text-blue-800">Total Items</div>
       </div>
-    </div>
-    
-    <div class="stats shadow-sm bg-base-200">
-      <div class="stat p-3">
-        <div class="stat-title">In Stock</div>
-        <div class="stat-value text-success text-lg">{{$instock}}</div>
-      </div>
-    </div>
-    
-    <div class="stats shadow-sm bg-base-200">
-      <div class="stat p-3">
-        <div class="stat-title">Low Stock</div>
-        <div class="stat-value text-warning text-lg">{{$lowstock}}</div>
-      </div>
-    </div>
-    
-    <div class="stats shadow-sm bg-base-200">
-      <div class="stat p-3">
-        <div class="stat-title">Out of Stock</div>
-        <div class="stat-value text-error text-lg">{{$nostock}}</div>
-      </div>
+      <div class="stat-value text-blue-600 text-lg group-hover:text-blue-800">{{$totalItems}}</div>
     </div>
   </div>
-
+  
+  <!-- In Stock - Green Theme -->
+  <div class="stats bg-gradient-to-br from-green-50 to-white hover:from-green-500 hover:to-white border border-green-100 hover:border-green-200 shadow-sm hover:shadow-md transition-all duration-300 ease-in-out group hover:-translate-y-1">
+    <div class="stat p-3">
+      <div class="flex items-center gap-2">
+        <div class="p-2 rounded-lg bg-green-100 text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <path d="m9 11 3 3L22 4"/>
+          </svg>
+        </div>
+        <div class="stat-title text-gray-600 group-hover:text-green-800">In Stock</div>
+      </div>
+      <div class="stat-value text-green-600 text-lg group-hover:text-green-800">{{$instock}}</div>
+    </div>
+  </div>
+  
+  <!-- Low Stock - Amber Theme -->
+  <div class="stats bg-gradient-to-br from-amber-50 to-white hover:from-amber-500 hover:to-white border border-amber-100 hover:border-amber-200 shadow-sm hover:shadow-md transition-all duration-300 ease-in-out group hover:-translate-y-1">
+    <div class="stat p-3">
+      <div class="flex items-center gap-2">
+        <div class="p-2 rounded-lg bg-amber-100 text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-colors duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+            <path d="M12 9v4"/>
+            <path d="M12 17h.01"/>
+          </svg>
+        </div>
+        <div class="stat-title text-gray-600 group-hover:text-amber-800">Low Stock</div>
+      </div>
+      <div class="stat-value text-amber-600 text-lg group-hover:text-amber-800">{{$lowstock}}</div>
+    </div>
+  </div>
+  
+  <!-- Out of Stock - Red Theme -->
+  <div class="stats bg-gradient-to-br from-red-50 to-white hover:from-red-500 hover:to-white border border-red-100 hover:border-red-200 shadow-sm hover:shadow-md transition-all duration-300 ease-in-out group hover:-translate-y-1">
+    <div class="stat p-3">
+      <div class="flex items-center gap-2">
+        <div class="p-2 rounded-lg bg-red-100 text-red-600 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-circle">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="m15 9-6 6"/>
+            <path d="m9 9 6 6"/>
+          </svg>
+        </div>
+        <div class="stat-title text-gray-600 group-hover:text-red-800">Out of Stock</div>
+      </div>
+      <div class="stat-value text-red-600 text-lg group-hover:text-red-800">{{$nostock}}</div>
+    </div>
+  </div>
+</div>
  
   <!-- Inventory Table -->
   <div class="overflow-x-auto rounded-box border border-base-300 p-5">

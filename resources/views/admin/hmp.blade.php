@@ -33,81 +33,105 @@
           <section class="w-full min-h-screen p-5">
             
             {{-- cards --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-                <!-- Card 1: Active Promotions -->
-                <div class="card bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-200 rounded-box">
-                    <div class="card-body p-6">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="p-3 rounded-box bg-blue-100 text-blue-600">
-                                <i class='bx bx-badge-check text-2xl'></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-700">Active Promotions</h3>
-                                <p class="text-sm text-gray-500">Ongoing campaigns</p>
-                            </div>
-                        </div>
-                        <p class="text-3xl font-bold text-gray-800 mb-2">12</p>
-                        <div class="mt-2">
-                            <span class="badge badge-sm badge-success gap-1">
-                                <i class='bx bx-up-arrow-alt'></i> 5 new this week
-                            </span>
-                        </div>
-                    </div>
-                </div>
-        
-                <!-- Card 2: Total Bookings -->
-                <div class="card bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-200 rounded-box">
-                    <div class="card-body p-6">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="p-3 rounded-box bg-green-100 text-green-600">
-                                <i class='bx bx-calendar-check text-2xl'></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-700">Total Bookings</h3>
-                                <p class="text-sm text-gray-500">This month</p>
-                            </div>
-                        </div>
-                        <p class="text-3xl font-bold text-gray-800 mb-2">342</p>
-                        <div class="radial-progress text-green-500" style="--value:75; --size:2.5rem; --thickness:4px;">75%</div>
-                    </div>
-                </div>
-        
-                <!-- Card 3: Promo Revenue -->
-                <div class="card bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-200 rounded-box">
-                    <div class="card-body p-6">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="p-3 rounded-box bg-purple-100 text-purple-600">
-                                <i class='bx bx-credit-card text-2xl'></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-700">Promo Revenue</h3>
-                                <p class="text-sm text-gray-500">From promotions</p>
-                            </div>
-                        </div>
-                        <p class="text-3xl font-bold text-gray-800 mb-2">₱24,589</p>
-                        <div class="text-sm text-purple-600 font-medium">
-                            <i class='bx bx-trending-up'></i> 12% from last month
-                        </div>
-                    </div>
-                </div>
-        
-                <!-- Card 4: Customer Engagement -->
-                <div class="card bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-200 rounded-box">
-                    <div class="card-body p-6">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="p-3 rounded-box bg-amber-100 text-amber-600">
-                                <i class='bx bx-chat text-2xl'></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-700">Engagement Rate</h3>
-                                <p class="text-sm text-gray-500">Promo interactions</p>
-                            </div>
-                        </div>
-                        <p class="text-3xl font-bold text-gray-800 mb-2">78%</p>
-                        <progress class="progress progress-warning w-full" value="78" max="100"></progress>
-                    </div>
-                </div>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+  <!-- Card 1: Active Promotions (Blue) -->
+  <div class="card border border-blue-100 bg-gradient-to-br from-blue-50 to-white
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-blue-500
+              hover:bg-gradient-to-br hover:from-blue-100 hover:to-white
+              group">
+    <div class="card-body p-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="p-3 rounded-box bg-blue-100 text-blue-600
+                   group-hover:bg-blue-600 group-hover:text-white
+                   transition-colors duration-300">
+          <i class='bx bx-badge-check text-2xl'></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-700 group-hover:text-blue-800 transition-colors">Active Promotions</h3>
+          <p class="text-sm text-gray-500 group-hover:text-blue-600 transition-colors">Ongoing campaigns</p>
+        </div>
+      </div>
+      <p class="text-3xl font-bold text-gray-800 mb-2 group-hover:text-blue-900 transition-colors">12</p>
+      <div class="mt-2">
+        <span class="badge badge-sm badge-success gap-1 group-hover:bg-blue-600 transition-colors">
+          <i class='bx bx-up-arrow-alt'></i> 5 new this week
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2: Total Bookings (Green) -->
+  <div class="card border border-green-100 bg-gradient-to-br from-green-50 to-white
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-green-200
+              hover:bg-gradient-to-br hover:from-green-500 hover:to-white
+              group">
+    <div class="card-body p-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="p-3 rounded-box bg-green-100 text-green-600
+                   group-hover:bg-green-600 group-hover:text-white
+                   transition-colors duration-300">
+          <i class='bx bx-calendar-check text-2xl'></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-700 group-hover:text-green-800 transition-colors">Total Bookings</h3>
+          <p class="text-sm text-gray-500 group-hover:text-green-600 transition-colors">This month</p>
+        </div>
+      </div>
+      <p class="text-3xl font-bold text-gray-800 mb-2 group-hover:text-green-900 transition-colors">342</p>
+      <div class="radial-progress text-green-500 group-hover:text-green-600 transition-colors" style="--value:75; --size:2.5rem; --thickness:4px;">75%</div>
+    </div>
+  </div>
+
+  <!-- Card 3: Promo Revenue (Purple) -->
+  <div class="card border border-purple-100 bg-gradient-to-br from-purple-50 to-white
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-purple-200
+              hover:bg-gradient-to-br hover:from-purple-500 hover:to-white
+              group">
+    <div class="card-body p-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="p-3 rounded-box bg-purple-100 text-purple-600
+                   group-hover:bg-purple-600 group-hover:text-white
+                   transition-colors duration-300">
+          <i class='bx bx-credit-card text-2xl'></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-700 group-hover:text-purple-800 transition-colors">Promo Revenue</h3>
+          <p class="text-sm text-gray-500 group-hover:text-purple-600 transition-colors">From promotions</p>
+        </div>
+      </div>
+      <p class="text-3xl font-bold text-gray-800 mb-2 group-hover:text-purple-900 transition-colors">₱24,589</p>
+      <div class="text-sm text-purple-600 font-medium group-hover:text-purple-700 transition-colors">
+        <i class='bx bx-trending-up'></i> 12% from last month
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 4: Customer Engagement (Amber) -->
+  <div class="card border border-amber-100 bg-gradient-to-br from-amber-50 to-white
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-amber-200
+              hover:bg-gradient-to-br hover:from-amber-500 hover:to-white
+              group">
+    <div class="card-body p-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="p-3 rounded-box bg-amber-100 text-amber-600
+                   group-hover:bg-amber-600 group-hover:text-white
+                   transition-colors duration-300">
+          <i class='bx bx-chat text-2xl'></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-700 group-hover:text-amber-800 transition-colors">Engagement Rate</h3>
+          <p class="text-sm text-gray-500 group-hover:text-amber-600 transition-colors">Promo interactions</p>
+        </div>
+      </div>
+      <p class="text-3xl font-bold text-gray-800 mb-2 group-hover:text-amber-900 transition-colors">78%</p>
+      <progress class="progress progress-warning w-full group-hover:bg-amber-200 transition-colors" value="78" max="100"></progress>
+    </div>
+  </div>
+</div>
             {{-- cards --}}
         
             <div class="mt-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">

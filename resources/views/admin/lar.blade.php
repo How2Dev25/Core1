@@ -35,10 +35,16 @@
           <section class="mt-2"> 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
   <!-- Total Points Card -->
-  <div class="card bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-200 rounded-box">
+  <div class="card bg-white shadow-sm border border-gray-200 rounded-box
+            transition-all duration-300 ease-in-out
+            hover:shadow-lg hover:-translate-y-1 hover:border-blue-200
+            hover:bg-gradient-to-br hover:from-white hover:to-blue-500
+            group ">
     <div class="card-body p-6">
       <div class="flex items-center gap-4 mb-4">
-        <div class="p-3 rounded-box bg-blue-100 text-blue-600">
+        <div class="p-3 rounded-box bg-blue-100 text-blue-600
+                   group-hover:bg-blue-600 group-hover:text-white
+                   transition-colors duration-300">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gem">
             <path d="M6 3h12l4 6-10 13L2 9Z"/>
             <path d="M11 3 8 9l4 13 4-13-3-6"/>
@@ -46,20 +52,27 @@
           </svg>
         </div>
         <div>
-          <h3 class="text-lg font-semibold text-gray-700">Total Points</h3>
-          <p class="text-sm text-gray-500">All customers</p>
+          <h3 class="text-lg font-semibold text-gray-700 group-hover:text-blue-800 transition-colors">Total Points</h3>
+          <p class="text-sm text-gray-500 group-hover:text-blue-600 transition-colors">All customers</p>
         </div>
       </div>
-      <p class="text-3xl font-bold text-gray-800 mb-2">{{$totalpoints}}</p>
-      <div class="radial-progress text-blue-500" style="--value:82; --size:2.5rem; --thickness:4px;">82%</div>
+      <p class="text-3xl font-bold text-gray-800 mb-2 group-hover:text-blue-900 transition-colors">{{$totalpoints}}</p>
+      <div class="radial-progress text-blue-500 group-hover:text-blue-600 transition-colors" 
+           style="--value:82; --size:2.5rem; --thickness:4px;">82%</div>
     </div>
-  </div>
+</div>
 
   <!-- Active Members Card -->
-  <div class="card bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-200 rounded-box">
+<div class="card border border-gray-200 rounded-box 
+            transition-all duration-300 ease-in-out
+            hover:shadow-lg hover:-translate-y-1 hover:border-purple-200
+            hover:bg-gradient-to-br hover:from-white hover:to-purple-500
+            group">
     <div class="card-body p-6">
       <div class="flex items-center gap-4 mb-4">
-        <div class="p-3 rounded-box bg-purple-100 text-purple-600">
+        <div class="p-3 rounded-box bg-purple-100 text-purple-600 
+                   group-hover:bg-purple-600 group-hover:text-white 
+                   transition-colors duration-300">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users">
             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
             <circle cx="9" cy="7" r="4"/>
@@ -68,20 +81,27 @@
           </svg>
         </div>
         <div>
-          <h3 class="text-lg font-semibold text-gray-700">Active Members</h3>
-          <p class="text-sm text-gray-500">This month</p>
+          <h3 class="text-lg font-semibold text-gray-700 group-hover:text-purple-800 transition-colors">Active Members</h3>
+          <p class="text-sm text-gray-500 group-hover:text-purple-600 transition-colors">This month</p>
         </div>
       </div>
-      <p class="text-3xl font-bold text-gray-800 mb-2">1,842</p>
-      <div class="radial-progress text-purple-500" style="--value:68; --size:2.5rem; --thickness:4px;">68%</div>
+      <p class="text-3xl font-bold text-gray-800 mb-2 group-hover:text-purple-900 transition-colors">1,842</p>
+      <div class="radial-progress text-purple-500 group-hover:text-purple-600 transition-colors" 
+           style="--value:68; --size:2.5rem; --thickness:4px;">68%</div>
     </div>
-  </div>
+</div>
 
   <!-- Redemptions Card -->
-  <div class="card bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-200 rounded-box">
+ <div class="card bg-white shadow-sm border border-gray-200 rounded-box
+            transition-all duration-300 ease-in-out
+            hover:shadow-lg hover:-translate-y-1 hover:border-green-200
+            hover:bg-gradient-to-br hover:from-white hover:to-green-500
+            group">
     <div class="card-body p-6">
       <div class="flex items-center gap-4 mb-4">
-        <div class="p-3 rounded-box bg-green-100 text-green-600">
+        <div class="p-3 rounded-box bg-green-100 text-green-600
+                   group-hover:bg-green-600 group-hover:text-white
+                   transition-colors duration-300">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gift">
             <rect x="3" y="8" width="18" height="4" rx="1"/>
             <path d="M12 8v13"/>
@@ -90,14 +110,15 @@
           </svg>
         </div>
         <div>
-          <h3 class="text-lg font-semibold text-gray-700">Total Rewards</h3>
-          <p class="text-sm text-gray-500">Total of Loyalties And Rewards</p>
+          <h3 class="text-lg font-semibold text-gray-700 group-hover:text-green-800 transition-colors">Total Rewards</h3>
+          <p class="text-sm text-gray-500 group-hover:text-green-600 transition-colors">Total of Loyalties And Rewards</p>
         </div>
       </div>
-      <p class="text-3xl font-bold text-gray-800 mb-2">{{$totalreward}}</p>
-      <div class="radial-progress text-green-500" style="--value:75; --size:2.5rem; --thickness:4px;">75%</div>
+      <p class="text-3xl font-bold text-gray-800 mb-2 group-hover:text-green-900 transition-colors">{{$totalreward}}</p>
+      <div class="radial-progress text-green-500 group-hover:text-green-600 transition-colors" 
+           style="--value:75; --size:2.5rem; --thickness:4px;">75%</div>
     </div>
-  </div>
+</div>
 </div>
 
 

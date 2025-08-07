@@ -65,78 +65,102 @@
 
   <!-- Stats Cards -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-    <!-- Total Rooms -->
-    <div class="card bg-gradient-to-br from-blue-50 to-white border border-blue-100">
-      <div class="card-body p-5">
-        <div class="flex items-center gap-4">
-          <div class="p-3 rounded-lg bg-blue-100 text-blue-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold">Total Rooms</h3>
-            <p class="text-sm text-gray-500">All room types</p>
-          </div>
+  <!-- Total Rooms -->
+  <div class="card border border-blue-100 bg-gradient-to-br from-blue-50 to-white
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-blue-500
+              hover:bg-gradient-to-br hover:from-blue-100 hover:to-white
+              group">
+    <div class="card-body p-5">
+      <div class="flex items-center gap-4">
+        <div class="p-3 rounded-lg bg-blue-100 text-blue-600
+                   group-hover:bg-blue-600 group-hover:text-white
+                   transition-colors duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
         </div>
-        <p class="text-3xl font-bold mt-3 text-gray-800">{{$totalrooms}}</p>
-      </div>
-    </div>
-
-    <!-- Occupied -->
-    <div class="card bg-gradient-to-br from-red-50 to-white border border-red-100">
-      <div class="card-body p-5">
-        <div class="flex items-center gap-4">
-          <div class="p-3 rounded-lg bg-red-100 text-red-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold">Occupied</h3>
-            <p class="text-sm text-gray-500">Currently booked</p>
-          </div>
+        <div>
+          <h3 class="text-lg font-semibold group-hover:text-blue-800 transition-colors">Total Rooms</h3>
+          <p class="text-sm text-gray-500 group-hover:text-blue-600 transition-colors">All room types</p>
         </div>
-        <p class="text-3xl font-bold mt-3 text-gray-800">{{$occupiedrooms}}</p>
       </div>
-    </div>
-
-    <!-- Available -->
-    <div class="card bg-gradient-to-br from-green-50 to-white border border-green-100">
-      <div class="card-body p-5">
-        <div class="flex items-center gap-4">
-          <div class="p-3 rounded-lg bg-green-100 text-green-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-            </svg>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold">Available</h3>
-            <p class="text-sm text-gray-500">Ready for booking</p>
-          </div>
-        </div>
-        <p class="text-3xl font-bold mt-3 text-gray-800">{{$availablerooms}}</p>
-      </div>
-    </div>
-
-    <!-- Maintenance -->
-    <div class="card bg-gradient-to-br from-amber-50 to-white border border-amber-100">
-      <div class="card-body p-5">
-        <div class="flex items-center gap-4">
-          <div class="p-3 rounded-lg bg-amber-100 text-amber-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold">Maintenance</h3>
-            <p class="text-sm text-gray-500">Under repair</p>
-          </div>
-        </div>
-        <p class="text-3xl font-bold mt-3 text-gray-800">{{$maintenancerooms}}</p>
-      </div>
+      <p class="text-3xl font-bold mt-3 text-gray-800 group-hover:text-blue-900 transition-colors">{{$totalrooms}}</p>
     </div>
   </div>
+
+  <!-- Occupied -->
+  <div class="card border border-red-100 bg-gradient-to-br from-red-50 to-white
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-red-500
+              hover:bg-gradient-to-br hover:from-red-100 hover:to-white
+              group">
+    <div class="card-body p-5">
+      <div class="flex items-center gap-4">
+        <div class="p-3 rounded-lg bg-red-100 text-red-600
+                   group-hover:bg-red-600 group-hover:text-white
+                   transition-colors duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold group-hover:text-red-800 transition-colors">Occupied</h3>
+          <p class="text-sm text-gray-500 group-hover:text-red-600 transition-colors">Currently booked</p>
+        </div>
+      </div>
+      <p class="text-3xl font-bold mt-3 text-gray-800 group-hover:text-red-900 transition-colors">{{$occupiedrooms}}</p>
+    </div>
+  </div>
+
+  <!-- Available -->
+  <div class="card border border-green-100 bg-gradient-to-br from-green-50 to-white
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-green-500
+              hover:bg-gradient-to-br hover:from-green-100 hover:to-white
+              group">
+    <div class="card-body p-5">
+      <div class="flex items-center gap-4">
+        <div class="p-3 rounded-lg bg-green-100 text-green-600
+                   group-hover:bg-green-600 group-hover:text-white
+                   transition-colors duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold group-hover:text-green-800 transition-colors">Available</h3>
+          <p class="text-sm text-gray-500 group-hover:text-green-600 transition-colors">Ready for booking</p>
+        </div>
+      </div>
+      <p class="text-3xl font-bold mt-3 text-gray-800 group-hover:text-green-900 transition-colors">{{$availablerooms}}</p>
+    </div>
+  </div>
+
+  <!-- Maintenance -->
+  <div class="card border border-amber-100 bg-gradient-to-br from-amber-50 to-white
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-amber-500
+              hover:bg-gradient-to-br hover:from-amber-100 hover:to-white
+              group">
+    <div class="card-body p-5">
+      <div class="flex items-center gap-4">
+        <div class="p-3 rounded-lg bg-amber-100 text-amber-600
+                   group-hover:bg-amber-600 group-hover:text-white
+                   transition-colors duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold group-hover:text-amber-800 transition-colors">Maintenance</h3>
+          <p class="text-sm text-gray-500 group-hover:text-amber-600 transition-colors">Under repair</p>
+        </div>
+      </div>
+      <p class="text-3xl font-bold mt-3 text-gray-800 group-hover:text-amber-900 transition-colors">{{$maintenancerooms}}</p>
+    </div>
+  </div>
+</div>
 
   <!-- Room Types Grid -->
  <div class="mb-10">

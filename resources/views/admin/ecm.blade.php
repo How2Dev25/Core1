@@ -48,79 +48,103 @@
             @include('admin.components.ecm.createecm')
           
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-              <!-- Card 1 -->
-              <div class="card bg-gradient-to-br from-blue-50 to-white border border-blue-100">
-                <div class="card-body p-5">
-                  <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-lg bg-blue-100 text-blue-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 class="text-lg font-semibold">Total Events</h3>
-                      <p class="text-sm text-gray-500">Total Events</p>
-                    </div>
-                  </div>
-                  <p class="text-3xl font-bold mt-3 text-gray-800">{{$totalevents}}</p>
-                </div>
-              </div>
-          
-              <!-- Card 2 -->
-              <div class="card bg-gradient-to-br from-green-50 to-white border border-green-100">
-                <div class="card-body p-5">
-                  <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-lg bg-green-100 text-green-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 class="text-lg font-semibold">Approved Events</h3>
-                      <p class="text-sm text-gray-500">Available spaces</p>
-                    </div>
-                  </div>
-                  <p class="text-3xl font-bold mt-3 text-gray-800">{{$approvedevents}}</p>
-                </div>
-              </div>
-          
-              <!-- Card 3 -->
-              <div class="card bg-gradient-to-br from-purple-50 to-white border border-purple-100">
-                <div class="card-body p-5">
-                  <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-lg bg-purple-100 text-purple-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 class="text-lg font-semibold">Monthly Revenue</h3>
-                      <p class="text-sm text-gray-500">From events</p>
-                    </div>
-                  </div>
-                  <p class="text-3xl font-bold mt-3 text-gray-800">₱42,580</p>
-                </div>
-              </div>
-          
-              <!-- Card 4 -->
-              <div class="card bg-gradient-to-br from-amber-50 to-white border border-amber-100">
-                <div class="card-body p-5">
-                  <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-lg bg-amber-100 text-amber-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 class="text-lg font-semibold">Cancelled Events</h3>
-                      <p class="text-sm text-gray-500">Event spaces</p>
-                    </div>
-                  </div>
-                  <p class="text-3xl font-bold mt-3 text-gray-800">{{$cancelledevents}}</p>
-                </div>
-              </div>
-            </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+  <!-- Card 1 - Total Events (Blue) -->
+  <div class="card border border-blue-100 bg-gradient-to-br from-blue-50 to-white
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-blue-200
+              hover:bg-gradient-to-br hover:from-blue-500 hover:to-white
+              group">
+    <div class="card-body p-5">
+      <div class="flex items-center gap-4">
+        <div class="p-3 rounded-lg bg-blue-100 text-blue-600
+                   group-hover:bg-blue-600 group-hover:text-white
+                   transition-colors duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold group-hover:text-blue-800 transition-colors">Total Events</h3>
+          <p class="text-sm text-gray-500 group-hover:text-blue-600 transition-colors">Total Events</p>
+        </div>
+      </div>
+      <p class="text-3xl font-bold mt-3 text-gray-800 group-hover:text-blue-900 transition-colors">{{$totalevents}}</p>
+    </div>
+  </div>
+
+  <!-- Card 2 - Approved Events (Green) -->
+  <div class="card border border-green-100 bg-gradient-to-br from-green-50 to-white
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-green-200
+              hover:bg-gradient-to-br hover:from-green-500 hover:to-white
+              group">
+    <div class="card-body p-5">
+      <div class="flex items-center gap-4">
+        <div class="p-3 rounded-lg bg-green-100 text-green-600
+                   group-hover:bg-green-600 group-hover:text-white
+                   transition-colors duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold group-hover:text-green-800 transition-colors">Approved Events</h3>
+          <p class="text-sm text-gray-500 group-hover:text-green-600 transition-colors">Available spaces</p>
+        </div>
+      </div>
+      <p class="text-3xl font-bold mt-3 text-gray-800 group-hover:text-green-900 transition-colors">{{$approvedevents}}</p>
+    </div>
+  </div>
+
+  <!-- Card 3 - Monthly Revenue (Purple) -->
+  <div class="card border border-purple-100 bg-gradient-to-br from-purple-50 to-white
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-purple-200
+              hover:bg-gradient-to-br hover:from-purple-500 hover:to-white
+              group">
+    <div class="card-body p-5">
+      <div class="flex items-center gap-4">
+        <div class="p-3 rounded-lg bg-purple-100 text-purple-600
+                   group-hover:bg-purple-600 group-hover:text-white
+                   transition-colors duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold group-hover:text-purple-800 transition-colors">Monthly Revenue</h3>
+          <p class="text-sm text-gray-500 group-hover:text-purple-600 transition-colors">From events</p>
+        </div>
+      </div>
+      <p class="text-3xl font-bold mt-3 text-gray-800 group-hover:text-purple-900 transition-colors">₱42,580</p>
+    </div>
+  </div>
+
+  <!-- Card 4 - Cancelled Events (Amber) -->
+  <div class="card border border-amber-100 bg-gradient-to-br from-amber-50 to-white
+              transition-all duration-300 ease-in-out
+              hover:shadow-lg hover:-translate-y-1 hover:border-amber-200
+              hover:bg-gradient-to-br hover:from-amber-500 hover:to-white
+              group">
+    <div class="card-body p-5">
+      <div class="flex items-center gap-4">
+        <div class="p-3 rounded-lg bg-amber-100 text-amber-600
+                   group-hover:bg-amber-600 group-hover:text-white
+                   transition-colors duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold group-hover:text-amber-800 transition-colors">Cancelled Events</h3>
+          <p class="text-sm text-gray-500 group-hover:text-amber-600 transition-colors">Event spaces</p>
+        </div>
+      </div>
+      <p class="text-3xl font-bold mt-3 text-gray-800 group-hover:text-amber-900 transition-colors">{{$cancelledevents}}</p>
+    </div>
+  </div>
+</div>
           
             <!-- Featured Events -->
             <div class="mb-10 bg-white p-5 rounded-md">
