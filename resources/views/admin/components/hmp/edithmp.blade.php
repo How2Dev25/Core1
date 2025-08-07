@@ -57,7 +57,7 @@
             </fieldset>
           </div>
 
-          <button class="bg-blue-700 cursor-pointer hover:bg-blue-800 p-2 font-bold text-white rounded-md shadow-md text-sm" type="submit" value="submit" onclick="console.log('Clicked Submit')">Submit</button>
+          <button class="btn btn-primary" type="submit" value="submit" onclick="console.log('Clicked Submit')">Save Changess</button>
 
       </form>
     </div>
