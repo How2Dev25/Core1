@@ -116,6 +116,13 @@
            <h3 class="text-xl md:text-2xl font-semibold text-white tracking-wide italic drop-shadow-sm">
   Savor The Stay, Dine With Elegance
 </h3>
+
+
+
+<p class="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto mt-6 animate-fade-in opacity-0" style="animation-delay: 2.6s;">
+    Welcome to Soliera Hotel & Restaurant — where luxury meets comfort. 
+    Experience world-class hospitality, exquisite dining, and unforgettable stays in the heart of the city.
+</p>
             <div class="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent animate-underline" style="animation-delay: 2.8s;"></div>
         </div>
         
