@@ -245,3 +245,11 @@ Route::put('/editlar/{loyaltyID}', [larController::class, 'modify']);
 Route::put('/expirelar/{loyaltyID}', [larController::class, 'expired']);
 Route::delete('/deletelar/{loyaltyID}', [larController::class, 'delete']);
 Route::post('/guestadd/{loyaltyID}', [larController::class, 'addtoguest']);
+
+
+Route::get('/pos', function(){
+      $reserverooms =  Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+        ->latest('core1_reservation.created_at')
+        ->get();
+    return view('admin.pos', ['reserverooms' => $reserverooms  ]);
+});

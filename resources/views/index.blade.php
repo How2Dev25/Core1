@@ -11,6 +11,9 @@
 </head>
 
    <style>
+          *{
+            scroll-behavior: smooth
+          }
        
         .text-outline {
             text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
@@ -64,7 +67,7 @@
             </ul>
         </div>
         <div class="navbar-end">
-            <a class="btn btn-primary">Book Now</a>
+            <a class="btn btn-primary">Sign In</a>
         </div>
     </nav>
     <!-- Hero Section -->
@@ -73,7 +76,7 @@
     <div class="absolute inset-0 bg-black/40 z-10"></div>
     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/70 z-10"></div>
  <div class="parallax-bg absolute inset-0 bg-cover bg-center" 
-     style="background-image: url('{{ asset('images/defaults/rooms/5 luxury/luxu.jpg') }}');">
+     style="background-image: url('{{ asset('images/defaults/hotel3.jpg') }}');">
 </div>
     
     <!-- Hero Content -->
@@ -231,9 +234,7 @@
           <p class="text-sm mb-4">Cozy and elegant with essential amenities for a comfortable stay.</p>
           <div class="flex justify-between items-center">
             <span class="text-lg font-semibold text-amber-400">₱1,500/night</span>
-            <button class="btn btn-primary hover:scale-105 transition-all">
-              Book Now
-            </button>
+           
           </div>
         </div>
       </div>
@@ -250,9 +251,7 @@
           <p class="text-sm mb-4">Spacious room with premium amenities and beautiful views.</p>
           <div class="flex justify-between items-center">
             <span class="text-lg font-semibold text-amber-400">₱1,800/night</span>
-            <button class="btn btn-primary hover:scale-105 transition-all">
-              Book Now
-            </button>
+           
           </div>
         </div>
       </div>
@@ -269,9 +268,7 @@
           <p class="text-sm mb-4">Luxury comfort with modern decor and high-end amenities.</p>
           <div class="flex justify-between items-center">
             <span class="text-lg font-semibold text-amber-400">₱2,500/night</span>
-            <button class="btn btn-primary hover:scale-105 transition-all">
-              Book Now
-            </button>
+           
           </div>
         </div>
       </div>
@@ -288,9 +285,7 @@
           <p class="text-sm mb-4">Spacious luxury suite with separate lounge and premium service.</p>
           <div class="flex justify-between items-center">
             <span class="text-lg font-semibold text-amber-400">₱3,500/night</span>
-            <button class="btn btn-primary hover:scale-105 transition-all">
-              Book Now
-            </button>
+           
           </div>
         </div>
       </div>
@@ -307,9 +302,25 @@
           <p class="text-sm mb-4">Top-tier elegance with breathtaking views and VIP amenities.</p>
           <div class="flex justify-between items-center">
             <span class="text-lg font-semibold text-amber-400">₱5,000/night</span>
-            <button class="btn btn-primary hover:scale-105 transition-all">
-              Book Now
-            </button>
+           
+          </div>
+        </div>
+      </div>
+
+
+        <!-- Room 6 -->
+      <div class="relative w-full h-[420px] overflow-hidden rounded-2xl shadow-lg bg-white"
+           data-aos="fade-up" data-aos-delay="600">
+        <img src="{{ asset('images/defaults/rooms/6 standard/3standard.png') }}" 
+             alt="Luxury Room"
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 w-full p-6 text-white">
+          <h3 class="text-2xl font-bold mb-2">Deluxe Room</h3>
+          <p class="text-sm mb-4">Spacious luxury suite with separate lounge and premium service.</p>
+          <div class="flex justify-between items-center">
+            <span class="text-lg font-semibold text-amber-400">₱3,500/night</span>
+           
           </div>
         </div>
       </div>
@@ -338,11 +349,11 @@
             <!-- Restaurant Image -->
             <div class="relative w-full h-[600px] rounded-xl overflow-hidden shadow-2xl" data-aos="fade-right" data-aos-delay="200">
                 <div class="absolute inset-0 bg-cover bg-center"
-                     style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=2070&q=80')">
+                     style="background-image: url('{{asset('images/defaults/rooms/resto/resto2.png')}}')">
                 </div>
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-8 text-white">
-                    <h3 class="text-3xl font-bold">La Costa</h3>
+                    <h3 class="text-3xl font-bold">Soliera Restaurant</h3>
                     <p class="text-amber-300">Signature Fine Dining</p>
                 </div>
             </div>
@@ -501,6 +512,94 @@
   </div>
 </section>
 
+
+    <!-- Testimonials -->
+   <section class="py-20 bg-base-200" data-aos="fade-up">
+    <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-down" data-aos-delay="100">
+            Guest <span class="text-[#F7B32B]">Reviews</span>
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Testimonial 1 -->
+            <div class="card bg-base-100 shadow-md" data-aos="fade-right" data-aos-delay="200">
+                <div class="card-body">
+                    <div class="rating mb-4">
+                        <input type="radio" name="rating-1" class="mask mask-star" checked />
+                        <input type="radio" name="rating-1" class="mask mask-star" checked />
+                        <input type="radio" name="rating-1" class="mask mask-star" checked />
+                        <input type="radio" name="rating-1" class="mask mask-star" checked />
+                        <input type="radio" name="rating-1" class="mask mask-star" checked />
+                    </div>
+                    <p>"Absolutely stunning hotel with impeccable service. The views from our suite were breathtaking and the staff went above and beyond to make our stay memorable."</p>
+                    <div class="flex items-center mt-4">
+                        <div class="avatar">
+                            <div class="w-12 rounded-full">
+                                <img src="https://randomuser.me/api/portraits/women/43.jpg" />
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-bold">Sarah Johnson</h4>
+                            <p class="text-sm">New York</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testimonial 2 -->
+            <div class="card bg-base-100 shadow-md" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-body">
+                    <div class="rating mb-4">
+                        <input type="radio" name="rating-2" class="mask mask-star" checked />
+                        <input type="radio" name="rating-2" class="mask mask-star" checked />
+                        <input type="radio" name="rating-2" class="mask mask-star" checked />
+                        <input type="radio" name="rating-2" class="mask mask-star" checked />
+                        <input type="radio" name="rating-2" class="mask mask-star" checked />
+                    </div>
+                    <p>"The infinity pool was the highlight of our stay. The entire property exudes luxury and attention to detail. We can't wait to return next year!"</p>
+                    <div class="flex items-center mt-4">
+                        <div class="avatar">
+                            <div class="w-12 rounded-full">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" />
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-bold">Michael Chen</h4>
+                            <p class="text-sm">Toronto</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testimonial 3 -->
+            <div class="card bg-base-100 shadow-md" data-aos="fade-up" data-aos-delay="400">
+                <div class="card-body">
+                    <div class="rating mb-4">
+                        <input type="radio" name="rating-3" class="mask mask-star" checked />
+                        <input type="radio" name="rating-3" class="mask mask-star" checked />
+                        <input type="radio" name="rating-3" class="mask mask-star" checked />
+                        <input type="radio" name="rating-3" class="mask mask-star" checked />
+                        <input type="radio" name="rating-3" class="mask mask-star" />
+                    </div>
+                    <p>"Exceptional dining experiences and the most comfortable bed I've ever slept in. The staff anticipated our every need. Truly a world-class hotel."</p>
+                    <div class="flex items-center mt-4">
+                        <div class="avatar">
+                            <div class="w-12 rounded-full">
+                                <img src="https://randomuser.me/api/portraits/women/65.jpg" />
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-bold">Emma Rodriguez</h4>
+                            <p class="text-sm">London</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
  
 
  <section id="contact" class="py-20 bg-gray-50 relative" data-aos="fade-up">
@@ -644,92 +743,6 @@
     });
 </script>
 
-    <!-- Testimonials -->
-   <section class="py-20 bg-base-200" data-aos="fade-up">
-    <div class="max-w-6xl mx-auto px-4">
-        <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-down" data-aos-delay="100">
-            Guest <span class="text-[#F7B32B]">Reviews</span>
-        </h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Testimonial 1 -->
-            <div class="card bg-base-100 shadow-md" data-aos="fade-right" data-aos-delay="200">
-                <div class="card-body">
-                    <div class="rating mb-4">
-                        <input type="radio" name="rating-1" class="mask mask-star" checked />
-                        <input type="radio" name="rating-1" class="mask mask-star" checked />
-                        <input type="radio" name="rating-1" class="mask mask-star" checked />
-                        <input type="radio" name="rating-1" class="mask mask-star" checked />
-                        <input type="radio" name="rating-1" class="mask mask-star" checked />
-                    </div>
-                    <p>"Absolutely stunning hotel with impeccable service. The views from our suite were breathtaking and the staff went above and beyond to make our stay memorable."</p>
-                    <div class="flex items-center mt-4">
-                        <div class="avatar">
-                            <div class="w-12 rounded-full">
-                                <img src="https://randomuser.me/api/portraits/women/43.jpg" />
-                            </div>
-                        </div>
-                        <div class="ml-4">
-                            <h4 class="font-bold">Sarah Johnson</h4>
-                            <p class="text-sm">New York</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Testimonial 2 -->
-            <div class="card bg-base-100 shadow-md" data-aos="fade-up" data-aos-delay="300">
-                <div class="card-body">
-                    <div class="rating mb-4">
-                        <input type="radio" name="rating-2" class="mask mask-star" checked />
-                        <input type="radio" name="rating-2" class="mask mask-star" checked />
-                        <input type="radio" name="rating-2" class="mask mask-star" checked />
-                        <input type="radio" name="rating-2" class="mask mask-star" checked />
-                        <input type="radio" name="rating-2" class="mask mask-star" checked />
-                    </div>
-                    <p>"The infinity pool was the highlight of our stay. The entire property exudes luxury and attention to detail. We can't wait to return next year!"</p>
-                    <div class="flex items-center mt-4">
-                        <div class="avatar">
-                            <div class="w-12 rounded-full">
-                                <img src="https://randomuser.me/api/portraits/men/32.jpg" />
-                            </div>
-                        </div>
-                        <div class="ml-4">
-                            <h4 class="font-bold">Michael Chen</h4>
-                            <p class="text-sm">Toronto</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Testimonial 3 -->
-            <div class="card bg-base-100 shadow-md" data-aos="fade-up" data-aos-delay="400">
-                <div class="card-body">
-                    <div class="rating mb-4">
-                        <input type="radio" name="rating-3" class="mask mask-star" checked />
-                        <input type="radio" name="rating-3" class="mask mask-star" checked />
-                        <input type="radio" name="rating-3" class="mask mask-star" checked />
-                        <input type="radio" name="rating-3" class="mask mask-star" checked />
-                        <input type="radio" name="rating-3" class="mask mask-star" />
-                    </div>
-                    <p>"Exceptional dining experiences and the most comfortable bed I've ever slept in. The staff anticipated our every need. Truly a world-class hotel."</p>
-                    <div class="flex items-center mt-4">
-                        <div class="avatar">
-                            <div class="w-12 rounded-full">
-                                <img src="https://randomuser.me/api/portraits/women/65.jpg" />
-                            </div>
-                        </div>
-                        <div class="ml-4">
-                            <h4 class="font-bold">Emma Rodriguez</h4>
-                            <p class="text-sm">London</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
     <!-- Footer -->
    <footer class="footer p-10 bg-[#001f54] text-neutral-content">
   <div class="flex flex-col md:flex-row md:justify-between max-w-6xl mx-auto w-full gap-8">
@@ -737,7 +750,7 @@
     <div class="flex items-center space-x-4 md:space-x-6 flex-1">
       <img src="{{asset('images/logo/logofinal.png')}}" alt="Hotelias Logo" class="w-full h-25" />
       <div>
-        <span class="footer-title text-xl font-bold">SOLIERA HOTEL</span>
+        <span class="footer-title text-xl font-bold">SOLIERA HOTEL & RESTAURANT</span>
         <p class="mt-2 max-w-xs text-neutral-300 leading-relaxed">
           The Best Luxury Hotel in Philippines<br />
           Bayan Novaliches<br />
