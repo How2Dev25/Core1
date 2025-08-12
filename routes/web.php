@@ -9,6 +9,7 @@ use App\Http\Controllers\reservationController;
 use App\Http\Controllers\roomController;
 use App\Http\Controllers\roommantenanceController;
 use App\Http\Controllers\stockController;
+use App\Http\Controllers\userController;
 use App\Models\Channel;
 use App\Models\Ecm;
 use App\Models\Hmp;
@@ -253,3 +254,16 @@ Route::get('/pos', function(){
         ->get();
     return view('admin.pos', ['reserverooms' => $reserverooms  ]);
 });
+
+// login site
+Route::post('/loginuser', [userController::class, 'login']);
+Route::get('/login', function(){
+    return view('login');
+});
+Route::get('/sampledash', function(){
+    return view('dashboard');
+});
+
+// logout
+
+Route::get('/logout', [userController::class, 'logout']);
