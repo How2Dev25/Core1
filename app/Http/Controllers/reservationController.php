@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
 use App\Services\GeminiService;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class reservationController extends Controller
@@ -269,6 +270,26 @@ public function searchRooms(Request $request)
 
         return redirect()->back();
     }
+
+
+public function generateInvoice($reservationID)
+{
+    $booking = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+        ->where('core1_reservation.reservationID', $reservationID)
+        ->firstOrFail();
+
+    // Local absolute path to the logo
+    $logoPath = public_path('images/logo/sonly.png');
+
+    Pdf::setOptions(['isRemoteEnabled' => true]);
+
+    $pdf = Pdf::loadView('admin.components.invoices.invoices-pdf', [
+        'booking'   => $booking,
+        'logoPath'  => $logoPath
+    ]);
+
+    return $pdf->stream("invoice_{$booking->reservationID}.pdf");
+}
 
 
 

@@ -248,12 +248,7 @@ Route::delete('/deletelar/{loyaltyID}', [larController::class, 'delete']);
 Route::post('/guestadd/{loyaltyID}', [larController::class, 'addtoguest']);
 
 
-Route::get('/pos', function(){
-      $reserverooms =  Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
-        ->latest('core1_reservation.created_at')
-        ->get();
-    return view('admin.pos', ['reserverooms' => $reserverooms  ]);
-});
+
 
 // login site
 Route::post('/loginuser', [userController::class, 'login']);
@@ -263,7 +258,13 @@ Route::get('/login', function(){
 Route::get('/sampledash', function(){
     return view('dashboard');
 });
+Route::get('/loginotp', function(){
+    return view('loginotp');
+});
 
 // logout
 
 Route::get('/logout', [userController::class, 'logout']);
+
+// Print receipt
+Route::get('/printreceipt/{reservationID}', [reservationController::class, 'generateInvoice']);

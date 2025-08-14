@@ -4,7 +4,7 @@
     <div class="flex justify-between items-center mb-6">
       <h3 class="text-2xl font-semibold flex items-center gap-2">
         <i data-lucide="plus-circle" class="w-6 h-6 text-primary"></i>
-        Create New Reservation
+        Hotel POS
       </h3>
       <form method="dialog">
         <button class="btn btn-circle btn-ghost btn-sm">

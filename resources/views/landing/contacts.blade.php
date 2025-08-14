@@ -64,7 +64,7 @@
         </div>
         <div>
           <h4 class="font-bold text-gray-800">Address</h4>
-          <p class="text-gray-600">123 Oceanview Boulevard, Manila, Philippines 1000</p>
+          <p class="text-gray-600">Bayan Novaliches</p>
         </div>
       </div>
       <div class="flex items-start" data-aos="fade-up" data-aos-delay="500">

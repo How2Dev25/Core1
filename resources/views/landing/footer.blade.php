@@ -26,13 +26,13 @@
     <div class="flex flex-col flex-1">
       <span class="footer-title text-xl  font-bold mb-4">Social</span>
       <div class="flex space-x-6">
-        <a href="https://facebook.com/hotelias" target="_blank" rel="noopener" aria-label="Facebook" class="text-amber-400 hover:scale-105 transition-all text-3xl">
+        <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook" class="text-amber-400 hover:scale-105 transition-all text-3xl">
           <i class="fab fa-facebook-f"></i>
         </a>
-        <a href="https://twitter.com/hotelias" target="_blank" rel="noopener" aria-label="Twitter" class="text-amber-400 hover:scale-105 transition-all text-3xl">
+        <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter" class="text-amber-400 hover:scale-105 transition-all text-3xl">
           <i class="fab fa-twitter"></i>
         </a>
-        <a href="https://instagram.com/hotelias" target="_blank" rel="noopener" aria-label="Instagram" class="text-amber-400 hover:scale-105 transition-all text-3xl">
+        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram" class="text-amber-400 hover:scale-105 transition-all text-3xl">
           <i class="fab fa-instagram"></i>
         </a>
       </div>
