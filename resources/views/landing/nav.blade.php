@@ -11,12 +11,12 @@
     
     <div class="navbar-center hidden lg:flex">
         <ul class="menu menu-horizontal px-1 gap-0.5 ">
-            <li><a class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">About</a></li>
-            <li><a class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">Rooms</a></li>
-            <li><a class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">Restaurant</a></li>
-            <li><a class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">Ameneties</a></li>
-            <li><a class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">Reviews</a></li>
-            <li><a class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">Contact</a></li>
+            <li><a href="#about" class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">About</a></li>
+            <li><a href="#rooms" class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">Rooms</a></li>
+            <li><a href="#restaurant" class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">Restaurant</a></li>
+            <li><a href="#ameneties" class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">Ameneties</a></li>
+            <li><a href="#reviews" class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">Reviews</a></li>
+            <li><a href="#contact" class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">Contact</a></li>
         </ul>
     </div>
     
@@ -50,22 +50,22 @@
           <ul class="mt-4 space-y-3 px-2">
     <!-- Navigation Links -->
     <li>
-        <a class="block py-2 px-4 text-lg font-medium text-white hover:bg-[#F7B32B] hover:text-white rounded-lg transition-colors duration-200">About</a>
+        <a href="#about" class="block py-2 px-4 text-lg font-medium text-white hover:bg-[#F7B32B] hover:text-white rounded-lg transition-colors duration-200">About</a>
     </li>
     <li>
-        <a class="block py-2 px-4 text-lg font-medium text-white hover:bg-[#F7B32B] hover:text-white rounded-lg transition-colors duration-200">Rooms</a>
+        <a href="#rooms" class="block py-2 px-4 text-lg font-medium text-white hover:bg-[#F7B32B] hover:text-white rounded-lg transition-colors duration-200">Rooms</a>
     </li>
     <li>
-        <a class="block py-2 px-4 text-lg font-medium text-white hover:bg-[#F7B32B] hover:text-white rounded-lg transition-colors duration-200">Restaurant</a>
+        <a href="#restaurant" class="block py-2 px-4 text-lg font-medium text-white hover:bg-[#F7B32B] hover:text-white rounded-lg transition-colors duration-200">Restaurant</a>
     </li>
     <li>
-        <a class="block py-2 px-4 text-lg font-medium text-white hover:bg-[#F7B32B] hover:text-white rounded-lg transition-colors duration-200">Amenities</a>
+        <a href="#ameneties" class="block py-2 px-4 text-lg font-medium text-white hover:bg-[#F7B32B] hover:text-white rounded-lg transition-colors duration-200">Amenities</a>
     </li>
     <li>
-        <a class="block py-2 px-4 text-lg font-medium text-white hover:bg-[#F7B32B] hover:text-white rounded-lg transition-colors duration-200">Reviews</a>
+        <a href="#reviews" class="block py-2 px-4 text-lg font-medium text-white hover:bg-[#F7B32B] hover:text-white rounded-lg transition-colors duration-200">Reviews</a>
     </li>
     <li>
-        <a class="block py-2 px-4 text-lg font-medium text-white hover:bg-[#F7B32B] hover:text-white rounded-lg transition-colors duration-200">Contact</a>
+        <a href="#contact" class="block py-2 px-4 text-lg font-medium text-white hover:bg-[#F7B32B] hover:text-white rounded-lg transition-colors duration-200">Contact</a>
     </li>
 
     <!-- Login Button (unchanged width) -->

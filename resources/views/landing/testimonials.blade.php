@@ -1,4 +1,4 @@
-  <section class="py-20 bg-base-200" data-aos="fade-up">
+  <section id="reviews" class="py-20 bg-base-200" data-aos="fade-up">
     <div class="max-w-6xl mx-auto px-4">
         <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-down" data-aos-delay="100">
             Guest <span class="text-[#F7B32B]">Reviews</span>

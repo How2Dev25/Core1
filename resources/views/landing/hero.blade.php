@@ -1,4 +1,4 @@
-   <section class="hero min-h-screen flex items-center justify-center text-white relative overflow-hidden">
+   <section id="about" class="hero min-h-screen flex items-center justify-center text-white relative overflow-hidden">
     <!-- Parallax Background Layers -->
     <div class="absolute inset-0 bg-black/40 z-10"></div>
     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/70 z-10"></div>
@@ -9,7 +9,7 @@
     <!-- Hero Content -->
     <div class="text-center px-4 z-20 relative max-w-6xl mx-auto">
         <!-- Typewriter Effect for First Line -->
-        <h1 class="text-4xl md:text-6xl font-bold mb-4 typewriter" data-text="THE BEST LUXURY HOTEL"></h1>
+       
         
        
         
@@ -36,17 +36,17 @@
         </svg>
     </div>
         <div class="relative inline-block">
-            <h2 class="text-3xl md:text-5xl font-bold animate-fade-in opacity-0" style="animation-delay: 2.4s;">
+            <h2 data-aos = "zoom-in" data-aos-delay = "100" class="text-3xl md:text-5xl font-bold animate-fade-in opacity-0" style="animation-delay: 2.4s;">
                 <span class="text-[#F7B32B]">SOLIERA</span> 
                 <span>HOTEL & RESTAURANT</span>
             </h2>
-           <h3 class="text-xl md:text-2xl font-semibold text-white tracking-wide italic drop-shadow-sm">
+           <h3  data-aos = "zoom-in-up" data-aos-delay = "200" class="text-xl md:text-2xl font-semibold text-white tracking-wide italic drop-shadow-sm">
   Savor The Stay, Dine With Elegance
 </h3>
 
 
 
-<p class="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto mt-6 animate-fade-in opacity-0" style="animation-delay: 2.6s;">
+<p data-aos = "zoom-in-up" data-aos-delay = "300" class="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto mt-6 animate-fade-in opacity-0" style="animation-delay: 2.6s;">
     Welcome to Soliera — where luxury meets comfort. 
     Experience world-class hospitality, exquisite dining, and unforgettable stays in the heart of the city.
 </p>
@@ -55,10 +55,10 @@
         
         <!-- CTA Buttons -->
         <div class="mt-12 animate-fade-in opacity-0" style="animation-delay: 3.2s;">
-            <a href="#rooms" class="btn btn-primary btn-lg mr-4 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+            <a data-aos="slide-right" href="#rooms" class="btn btn-primary btn-lg mr-4 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
                 Explore Rooms
             </a>
-            <a href="#booking" class="btn btn-outline btn-lg text-white border-white hover:bg-white hover:text-black transform hover:scale-105 transition-all duration-300">
+            <a data-aos="slide-left" href="#booking" class="btn btn-outline btn-lg text-white border-white hover:bg-white hover:text-black transform hover:scale-105 transition-all duration-300">
                 Book Now
             </a>
         </div>

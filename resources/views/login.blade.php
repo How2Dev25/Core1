@@ -20,12 +20,69 @@
     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/70 z-10"></div>
   
   <!-- Content container -->
-<div class="relative z-10 w-full h-full flex justify-center items-center flex-col p-4">
+<div class="relative z-10 w-full h-full flex justify-center items-center  p-4">
+  <div class="w-1/2 flex justify-center items-center max-md:hidden">
+  <div class="max-w-lg p-8">
+    <!-- Hotel & Restaurant Illustration -->
+    <div class="text-center mb-8">
+      <a href="/">
+      <img data-aos = "zoom-in" data-aos-delay = "100"  class="w-full max-h-52 hover:scale-105 transition-all" src="{{asset('images/logo/logofinal.png')}}" alt="">
+      </a>
+      <h1 data-aos = "zoom-in-up" data-aos-delay="200" class="text-3xl font-bold text-white mb-2">Welcome to <span class="text-[#F7B32B]">Soliera<span> Hotel & Restaurant</h1>
+      <p data-aos = "zoom-in-up" data-aos-delay="300" class="text-white/80">  Savor The Stay, Dine With Elegance</p>
+    </div>
+
+    <!-- Features List -->
+    <div data-aos="zoom-in-up" data-aos-delay="400" class="space-y-4">
+  <div  class="flex items-start">
+    <div class="flex-shrink-0 mt-1">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-concierge-bell text-amber-400">
+        <path d="M2 18a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2H2v-2Z"/>
+        <path d="M20 16a8 8 0 1 0-16 0"/>
+        <path d="M12 4v4"/>
+        <path d="M10 4h4"/>
+      </svg>
+    </div>
+    <div class="ml-3">
+      <p class="text-white font-medium">24/7 Concierge Service</p>
+      <p class="text-white/70 text-sm">Personalized assistance whenever you need</p>
+    </div>
+  </div>
+
+  <div  class="flex items-start">
+    <div class="flex-shrink-0 mt-1">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-check text-amber-400">
+        <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+        <line x1="16" x2="16" y1="2" y2="6"/>
+        <line x1="8" x2="8" y1="2" y2="6"/>
+        <line x1="3" x2="21" y1="10" y2="10"/>
+        <path d="m9 16 2 2 4-4"/>
+      </svg>
+    </div>
+    <div class="ml-3">
+      <p class="text-white font-medium">Easy Reservations</p>
+      <p class="text-white/70 text-sm">Book rooms, tables, and services seamlessly</p>
+    </div>
+  </div>
+
+  <div  class="flex items-start">
+    <div class="flex-shrink-0 mt-1">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star text-amber-400">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+    </div>
+    <div class="ml-3">
+      <p class="text-white font-medium">Exclusive Rewards</p>
+      <p class="text-white/70 text-sm">Earn points with every stay and dining experience</p>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
   
-  
-  
-  <!-- Login Card -->
-  <div class="max-w-md w-full bg-white/10 backdrop-blur-lg p-6 rounded-xl shadow-2xl border border-white/20">
+  <div class="w-1/2 flex justify-center items-center max-md:w-full">
+      <div   class="max-w-md w-full bg-white/10 backdrop-blur-lg p-6 rounded-xl shadow-2xl border border-white/20">
     <!-- Card Header -->
     <div class="mb-6 text-center flex justify-center items-center flex-col">
        
@@ -141,10 +198,23 @@
       </div>
     </div>
   </div>
+  </div>
+  
+ 
+
 </div>
 
 
 </section>
+
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true
+    });
+</script>
 
 <script>
 function togglePasswordVisibility() {
@@ -162,6 +232,10 @@ function togglePasswordVisibility() {
     eyeSlashIcon.classList.add('hidden');
   }
 }
+
+
 </script>
+
+
 </body>
 </html>

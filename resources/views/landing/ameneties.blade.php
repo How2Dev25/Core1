@@ -1,4 +1,4 @@
-<section class="py-20 bg-base-200">
+<section id="ameneties" class="py-20 bg-base-200">
   <div class="max-w-6xl mx-auto px-4">
     <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">
       <span class="text-[#F7B32B]">Hotel</span> Amenities
