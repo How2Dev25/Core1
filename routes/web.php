@@ -262,9 +262,22 @@ Route::get('/loginotp', function(){
     return view('loginotp');
 });
 
+// registration
+Route::get('/terms', function(){
+    return view('register.terms');
+});
+Route::get('/register', function(){
+    return view('register.register');
+});
+
+Route::get('/photoupload', function(){
+    return view('register.photoupload');
+});
 // logout
 
 Route::get('/logout', [userController::class, 'logout']);
 
 // Print receipt
 Route::get('/printreceipt/{reservationID}', [reservationController::class, 'generateInvoice']);
+
+
