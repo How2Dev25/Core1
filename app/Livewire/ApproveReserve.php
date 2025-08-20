@@ -3,50 +3,44 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\Reservation;
 
 class ApproveReserve extends Component
 {   
-       public $reserverooms = [];
+    use WithPagination;
+
     public $statusFilter = '';
     public $typeFilter = '';
     public $searchTerm = '';
 
-    public function mount()
+    // Reset pagination whenever filters/search change
+    public function updated($propertyName)
     {
-        $this->approvereserve();
-    }
-
-    public function approvereserve()
-    {
-        $this->reserverooms = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
-            ->when($this->statusFilter, function($query) {
-                return $query->where('reservation_bookingstatus', $this->statusFilter);
-            })
-            ->when($this->typeFilter, function($query) {
-                return $query->where('roomtype', $this->typeFilter);
-            })
-            ->when($this->searchTerm, function($query) {
-                return $query->where(function($q) {
-                    $q->where('roomID', 'like', '%'.$this->searchTerm.'%')
-                      ->orWhere('guestname', 'like', '%'.$this->searchTerm.'%');
-                });
-            })
-            ->latest('core1_reservation.created_at')
-            ->get();
-    }
-
-    public function confirmReservation($reservationId)
-    {
-        // Add your confirmation logic here
-        Reservation::where('reservationID', $reservationId)
-            ->update(['reservation_bookingstatus' => 'Confirmed']);
-        
-        $this->approvereserve(); // Refresh the data
+        if (in_array($propertyName, ['statusFilter', 'typeFilter', 'searchTerm'])) {
+            $this->resetPage();
+        }
     }
 
     public function render()
     {
-        return view('livewire.approve-reserve');
+        $reserverooms = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+            ->when($this->statusFilter, fn($query) =>
+                $query->where('reservation_bookingstatus', $this->statusFilter)
+            )
+            ->when($this->typeFilter, fn($query) =>
+                $query->where('roomtype', $this->typeFilter)
+            )
+            ->when($this->searchTerm, fn($query) =>
+                $query->where(function($q) {
+                    $q->where('core1_reservation.reservation_receipt', 'like', '%'.$this->searchTerm.'%')
+                      ->orWhere('core1_reservation.guestname', 'like', '%'.$this->searchTerm.'%');
+                })
+            )
+            ->select('core1_reservation.*', 'core1_room.roomtype', 'core1_room.roomID') // make sure we fetch columns
+            ->latest('core1_reservation.created_at')
+            ->paginate(5);
+
+        return view('livewire.approve-reserve', compact('reserverooms'));
     }
 }

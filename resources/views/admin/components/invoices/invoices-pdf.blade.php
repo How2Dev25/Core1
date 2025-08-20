@@ -33,7 +33,7 @@
             </div>
             <div class="invoice-title">
                 <div style="font-size: 18px;">INVOICE</div>
-                <div>#{{ $booking->reservationID }}</div>
+                <div>{{ $booking->reservation_receipt }}</div>
             </div>
         </div>
 

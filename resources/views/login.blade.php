@@ -191,7 +191,7 @@
         </div>
         
         <div class="mt-4 text-center">
-          <a href="#" class="font-medium text-blue-400 hover:text-blue-300">
+          <a href="/terms" class="font-medium text-blue-400 hover:text-blue-300">
             Create new account
           </a>
         </div>

@@ -137,9 +137,9 @@ public function searchRooms(Request $request)
 
 
 
-    public function store(Request $request){
-
-        $form = $request->validate([
+    public function store(Request $request)
+{
+    $form = $request->validate([
         'roomID' => 'required',
         'reservation_checkin' => 'required',
         'reservation_checkout' => 'required',
@@ -152,25 +152,32 @@ public function searchRooms(Request $request)
         'guestaddress' => 'required',
         'guestcontactperson' => 'required',
         'guestcontactpersonnumber' => 'required',
-            ]);
-        $form['reservation_bookingstatus'] = 'Pending';
-        $form['bookedvia'] = 'Soliera';
+    ]);
 
-        
-        
-       Reservation::create($form);
+    $form['reservation_bookingstatus'] = 'Pending';
+    $form['bookedvia'] = 'Soliera';
 
-       room::where('roomID', $form['roomID'])->update([
+    // Create reservation first to get the ID
+    $reservation = Reservation::create($form);
+
+    // Generate receipt number algorithm
+    $receiptNo = 'SOL-' . date('Ymd') . '-' . str_pad($reservation->reservationID, 6, '0', STR_PAD_LEFT);
+
+    // Update reservation with receipt number
+    $reservation->update([
+        'reservation_receipt' => $receiptNo,
+    ]);
+
+    // Update room status
+    Room::where('roomID', $form['roomID'])->update([
         'roomstatus' => 'Reserved',
-       ]);
+    ]);
 
-       session()->flash('success', 'Reservation Success');
+    session()->flash('success', 'Reservation Success. Receipt #: ' . $receiptNo);
 
-       return redirect()->back();
+    return redirect()->back();
+}
 
-
-
-    }
 
     public function modify (Request $request, Reservation $reservationID){
 

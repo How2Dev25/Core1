@@ -217,7 +217,7 @@
         
         <!-- Back link -->
         <div class="mt-4 text-center">
-            <a href="#" class="font-medium text-blue-400 hover:text-blue-300 flex items-center justify-center">
+            <a href="/terms" class="font-medium text-blue-400 hover:text-blue-300 flex items-center justify-center">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Back to previous step
             </a>

@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('guestcontactperson');
             $table->string('guestcontactpersonnumber');
             $table->string('reservation_bookingstatus');
+            $table->string('reservation_receipt')->nullable();
             $table->timestamps();
         });
     }

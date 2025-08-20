@@ -206,6 +206,11 @@ Route::put('/modifyreservation/{reservationID}', [reservationController::class, 
 Route::delete('/deletereservation/{reservationID}', [reservationController::class, 'delete']);
 
 
+Route::get('/reservationpage', function(){
+    $rooms = room::where('roomstatus', 'Available')->latest()->get();
+    return view('admin.components.bas.reservationpage', ['rooms' => $rooms]);
+});
+
 Route::get('/aiform', function(){
     return view('admin.components.bas.aiform');
 });
