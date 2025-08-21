@@ -92,12 +92,12 @@
     
     <!-- Card Body -->
     <div>
-      <form action="/loginuser" method="POST">
+      <form action="/guestloginform" method="POST">
         <!-- Email Input -->
         @csrf
         <div class="mb-4">
           <label class="block text-white/90 text-sm font-medium mb-2" for="email">
-            Employee ID
+            Email
           </label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -110,9 +110,9 @@
               id="email" 
               type="text" 
               class="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50" 
-              placeholder="Your ID"
+              placeholder="user@gmail.com"
               required
-              name="employee_id"
+              name="guest_email"
             >
           </div>
         </div>
@@ -134,7 +134,7 @@
               class="w-full pl-10 pr-10 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50" 
               placeholder="••••••••"
               required
-              name="password"
+              name="guest_password"
             >
             <button 
               type="button" 

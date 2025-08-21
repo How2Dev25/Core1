@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('reservation_bookingstatus');
             $table->string('reservation_receipt')->nullable();
             $table->timestamps();
+            $table->foreignId('guestID')->nullable();
         });
     }
 

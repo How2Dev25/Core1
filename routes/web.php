@@ -31,6 +31,8 @@ Route::get('/', function () {
 Route::get('/login', function(){
     return view('login.login');
 });
+// guest
+Route::post('/guestloginform', [userController::class, 'guestlogin']);
 
 // Register
 Route::get('/guestregister', function(){
@@ -204,7 +206,9 @@ Route::post('/aireserve', [reservationController::class, 'searchRooms']);
 Route::post('/createreservation', [reservationController::class, 'store']);
 Route::put('/modifyreservation/{reservationID}', [reservationController::class, 'modify']);
 Route::delete('/deletereservation/{reservationID}', [reservationController::class, 'delete']);
-
+// guest
+Route::post('/guestcreatereservation', [reservationController::class, 'gueststore']);
+ 
 
 Route::get('/reservationpage', function(){
     $rooms = room::where('roomstatus', 'Available')->latest()->get();
@@ -278,11 +282,36 @@ Route::get('/register', function(){
 Route::get('/photoupload', function(){
     return view('register.photoupload');
 });
-// logout
 
+Route::post('/registerguest', [userController::class, 'create']);
+
+Route::put('/upload-photo/{guestID}', [userController::class, 'profilesetup']);
+// logout
+// employee
 Route::get('/logout', [userController::class, 'logout']);
+
+// guest
+Route::get('/guestlogout', [userController::class, 'guestlogout']);
 
 // Print receipt
 Route::get('/printreceipt/{reservationID}', [reservationController::class, 'generateInvoice']);
 
+Route::get('/loginguest', function(){
+    return view('guestlogin.login');
+});
 
+
+Route::get('guestdashboard', function(){
+    return view('guest.dashboard');
+});
+
+// Guest
+Route::get('/showrooms', function(){
+    return view('guest.rooms');
+});
+
+Route::get('/roomdetails/{roomID}', [roomController::class, 'roomdetails']);
+Route::get('/reservethisroom/{roomID}', [roomController::class, 'reservethisroom']);
+Route::get('/myreservation', function(){
+  return view('guest.myreservation');
+});

@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\Services\GeminiService;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 
 class reservationController extends Controller
@@ -296,6 +297,49 @@ public function generateInvoice($reservationID)
     ]);
 
     return $pdf->stream("invoice_{$booking->reservationID}.pdf");
+}
+// guest
+
+public function gueststore(Request $request)
+{
+    $form = $request->validate([
+        'roomID' => 'required',
+        'reservation_checkin' => 'required',
+        'reservation_checkout' => 'required',
+        'reservation_specialrequest' => 'required',
+        'reservation_numguest' => 'required',
+        'guestname' => 'required',
+        'guestphonenumber' => 'required',
+        'guestemailaddress' => 'required',
+        'guestbirthday' => 'required',
+        'guestaddress' => 'required',
+        'guestcontactperson' => 'required',
+        'guestcontactpersonnumber' => 'required',
+    ]);
+
+    $form['guestID'] = Auth::guard('guest')->user()->guestID;
+    $form['reservation_bookingstatus'] = 'Pending';
+    $form['bookedvia'] = 'Soliera';
+
+    // Create reservation first to get the ID
+    $reservation = Reservation::create($form);
+
+    // Generate receipt number algorithm
+    $receiptNo = 'SOL-' . date('Ymd') . '-' . str_pad($reservation->reservationID, 6, '0', STR_PAD_LEFT);
+
+    // Update reservation with receipt number
+    $reservation->update([
+        'reservation_receipt' => $receiptNo,
+    ]);
+
+    // Update room status
+    Room::where('roomID', $form['roomID'])->update([
+        'roomstatus' => 'Reserved',
+    ]);
+
+    session()->flash('success', 'Reservation Success. Receipt #: ' . $receiptNo);
+
+    return redirect()->back();
 }
 
 

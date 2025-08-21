@@ -32,5 +32,6 @@ class Reservation extends Model
             'guestcontactpersonnumber',
             'reservation_bookingstatus',
             'reservation_receipt',
+            'guestID',
         ];
 }

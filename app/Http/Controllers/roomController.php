@@ -257,5 +257,23 @@ if ($form['roomstatus'] === 'Maintenance') {
     }
 
 
+    public function roomdetails($roomID){
+        $room = room::where('roomID', $roomID)->first();
+        $roomphotos = additionalRoom::
+        join('core1_room', 'core1_room.roomID', '=', 'core1_roomphotos.roomID')
+        ->where('core1_roomphotos.roomID', $roomID)
+        ->latest('core1_roomphotos.created_at')
+        ->get();
+
+        return view('guest.components.dashboard.rooms.roomdetails', ['room' => $room, 'roomphotos' => $roomphotos]);
+    }
+
+    public function reservethisroom($roomID){
+          $room = room::where('roomID', $roomID)->first();
+
+          return view('guest.components.dashboard.rooms.reserveroom', ['room' => $room]);
+    }
+
+
     
 }

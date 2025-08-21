@@ -13,6 +13,10 @@
     @vite('resources/css/app.css')
 </head>
 <body>
+
+  @auth
+      
+
     
    <section class="relative w-full min-h-screen">
 
@@ -20,7 +24,7 @@
   <div class="absolute inset-0 bg-cover bg-center z-0" style="background-image: url('{{ asset('images/defaults/hotel3.jpg') }}');"></div>
     <div class="absolute inset-0 bg-black/40 z-10"></div>
     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/70 z-10"></div>
-  
+     
   <!-- Content container -->
 <div class="relative z-10 w-full min-h-screen flex justify-center items-center  p-4">
 <div class="w-1/2 flex justify-center items-center max-md:hidden p-8">
@@ -63,6 +67,7 @@
           <div>
             <h4 class="font-medium text-white">Reward Points</h4>
             <p class="text-sm text-white/70">Earn points for every stay that you can redeem</p>
+         
           </div>
         </div>
 
@@ -96,7 +101,9 @@
     
     <!-- Card Body -->
     <div>
-        <form action="/upload-photo" method="POST" enctype="multipart/form-data">
+        <form action="/upload-photo/{{Auth::guard('guest')->user()->guestID}}" method="POST" enctype="multipart/form-data">
+
+          @method('PUT')
             <ul class="steps steps-horizontal lg:steps-horizontal w-full mb-5">
                 <li class="step step-primary text-white">Terms</li>
                 <li class="step step-primary text-white">Registration</li>
@@ -126,7 +133,7 @@
                             type="file" 
                             class="hidden" 
                             accept="image/*"
-                            name="profile_photo"
+                            name="guest_photo"
                             required
                         >
                     </label>
@@ -290,8 +297,12 @@
     });
 </script>
 
+@else
+
+<div class="">You Are not In Logged In</div>
 
 
+  @endauth
 
 </body>
 </html>

@@ -96,124 +96,163 @@
     
     <!-- Card Body -->
     <div>
-        <form action="/register" method="POST">
-            <ul class="steps steps-horizontal lg:steps-horizontal w-full mb-5">
-                <li class="step step-primary text-white">Terms</li>
-                <li class="step step-primary text-white">Registration</li>
-                <li class="step text-white">Photo Setup</li>
-            </ul>
-            
-            @csrf
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <!-- Name -->
-                <div class="col-span-2">
-                    <label class="block text-white/90 text-sm font-medium mb-2" for="name">
-                        Full Name
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-user text-white/50"></i>
-                        </div>
-                        <input 
-                            id="name" 
-                            type="text" 
-                            class="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50" 
-                            placeholder="John Doe"
-                            required
-                            name="name"
-                        >
-                    </div>
+    <form action="/registerguest" method="POST" class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <ul class="steps steps-horizontal w-full mb-6 flex flex-wrap justify-between">
+        <li class="step step-primary text-white flex-1 text-center">Terms</li>
+        <li class="step step-primary text-white flex-1 text-center">Registration</li>
+        <li class="step text-white flex-1 text-center">Photo Setup</li>
+    </ul>
+
+    @csrf
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <!-- Full Name -->
+        <div class="col-span-1 sm:col-span-2">
+            <label class="block text-white/90 text-sm font-medium mb-2" for="guest_name">Full Name</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-user text-white/50"></i>
                 </div>
-                
-                <!-- Birthday -->
-                <div>
-                    <label class="block text-white/90 text-sm font-medium mb-2" for="birthday">
-                        Birthday
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-birthday-cake text-white/50"></i>
-                        </div>
-                        <input 
-                            id="birthday" 
-                            type="date" 
-                            class="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50" 
-                            required
-                            name="birthday"
-                        >
-                    </div>
-                </div>
-                
-                <!-- Mobile Number -->
-                <div>
-                    <label class="block text-white/90 text-sm font-medium mb-2" for="mobile">
-                        Mobile Number
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-phone-alt text-white/50"></i>
-                        </div>
-                        <input 
-                            id="mobile" 
-                            type="tel" 
-                            class="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50" 
-                            placeholder="+1 (555) 123-4567"
-                            required
-                            name="mobile"
-                        >
-                    </div>
-                </div>
-                
-                <!-- Email -->
-                <div class="col-span-2">
-                    <label class="block text-white/90 text-sm font-medium mb-2" for="email">
-                        Email Address
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-envelope text-white/50"></i>
-                        </div>
-                        <input 
-                            id="email" 
-                            type="email" 
-                            class="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50" 
-                            placeholder="your@email.com"
-                            required
-                            name="email"
-                        >
-                    </div>
-                </div>
-                
-                <!-- Address -->
-                <div class="col-span-2">
-                    <label class="block text-white/90 text-sm font-medium mb-2" for="address">
-                        Address
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-home text-white/50"></i>
-                        </div>
-                        <input 
-                            id="address" 
-                            type="text" 
-                            class="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50" 
-                            placeholder="123 Main St, City, Country"
-                            required
-                            name="address"
-                        >
-                    </div>
-                </div>
+                <input 
+                    id="guest_name" 
+                    type="text" 
+                    placeholder="John Doe"
+                    required
+                    name="guest_name"
+                    class="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50"
+                >
             </div>
-            
-            <!-- Submit Button -->
-            <button 
-                type="submit" 
-                class="w-full btn-primary btn mt-4"
-            >
-                Continue 
-                <i class="fas fa-arrow-right ml-2"></i>
-            </button>
-        </form>
+        </div>
+
+        <!-- Birthday -->
+        <div>
+            <label class="block text-white/90 text-sm font-medium mb-2" for="guest_birthday">Birthday</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-birthday-cake text-white/50"></i>
+                </div>
+                <input 
+                    id="guest_birthday" 
+                    type="date" 
+                    required
+                    name="guest_birthday"
+                    class="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50"
+                >
+            </div>
+        </div>
+
+        <!-- Mobile Number -->
+        <div>
+            <label class="block text-white/90 text-sm font-medium mb-2" for="guest_mobile">Mobile Number</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-phone-alt text-white/50"></i>
+                </div>
+                <input 
+                    id="guest_mobile" 
+                    type="tel" 
+                    placeholder="+1 (555) 123-4567"
+                    required
+                    name="guest_mobile"
+                    class="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50"
+                >
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="col-span-1 sm:col-span-2">
+            <label class="block text-white/90 text-sm font-medium mb-2" for="guest_email">Email Address</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-envelope text-white/50"></i>
+                </div>
+                <input 
+                    id="guest_email" 
+                    type="email" 
+                    placeholder="your@email.com"
+                    required
+                    name="guest_email"
+                    class="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50"
+                >
+            </div>
+        </div>
+
+         <!-- Password -->
+        <div>
+            <label class="block text-white/90 text-sm font-medium mb-2" for="guest_password">Password</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-lock text-white/50"></i>
+                </div>
+                <input 
+                    id="guest_password" 
+                    type="password" 
+                    required
+                    name="guest_password"
+                    class="w-full pl-10 pr-10 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50"
+                >
+                <!-- Eye toggle -->
+                <span class="absolute inset-y-0 right-3 flex items-center cursor-pointer" onclick="togglePassword('guest_password','eye1')">
+                    <i id="eye1" class="fas fa-eye text-white/50"></i>
+                </span>
+            </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+            <label class="block text-white/90 text-sm font-medium mb-2" for="confirm_password">Confirm Password</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-lock text-white/50"></i>
+                </div>
+                <input 
+                    id="confirm_password" 
+                    type="password" 
+                    required
+                    class="w-full pl-10 pr-10 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50"
+                    name="guest_password_confirmation"
+                >
+                <!-- Eye toggle -->
+                <span class="absolute inset-y-0 right-3 flex items-center cursor-pointer" onclick="togglePassword('confirm_password','eye2')">
+                    <i id="eye2" class="fas fa-eye text-white/50"></i>
+                </span>
+                <span id="password_error" class="text-red-500 text-sm mt-1 hidden">Passwords do not match</span>
+            </div>
+        </div>
+
+        <!-- Address -->
+        <div class="col-span-1 sm:col-span-2">
+            <label class="block text-white/90 text-sm font-medium mb-2" for="guest_address">Address</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-home text-white/50"></i>
+                </div>
+                <input 
+                    id="guest_address" 
+                    type="text" 
+                    placeholder="123 Main St, City, Country"
+                    required
+                    name="guest_address"
+                    class="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50"
+                >
+            </div>
+        </div>
+
+       
+    </div>
+
+    <!-- Submit Button -->
+    <button 
+        type="submit" 
+        class="w-full sm:w-auto btn-primary btn mt-4"
+        id="submitBtn"
+        disabled
+    >
+        Continue <i class="fas fa-arrow-right ml-2"></i>
+    </button>
+</form>
+
+
+
         
         <!-- Back link -->
         <div class="mt-4 text-center">
@@ -244,24 +283,48 @@
 </script>
 
 <script>
-function togglePasswordVisibility() {
-  const passwordInput = document.getElementById('password');
-  const eyeIcon = document.getElementById('eye-icon');
-  const eyeSlashIcon = document.getElementById('eye-slash-icon');
+const password = document.getElementById('guest_password');
+const confirmPassword = document.getElementById('confirm_password');
+const error = document.getElementById('password_error');
+const submitBtn = document.getElementById('submitBtn');
 
-  if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-    eyeIcon.classList.add('hidden');
-    eyeSlashIcon.classList.remove('hidden');
-  } else {
-    passwordInput.type = 'password';
-    eyeIcon.classList.remove('hidden');
-    eyeSlashIcon.classList.add('hidden');
-  }
+// Check password match
+function checkPassword() {
+    if(password.value && confirmPassword.value) {
+        if(password.value === confirmPassword.value) {
+            error.classList.add('hidden');
+            submitBtn.disabled = false;
+        } else {
+            error.classList.remove('hidden');
+            submitBtn.disabled = true;
+        }
+    } else {
+        submitBtn.disabled = true;
+        error.classList.add('hidden');
+    }
 }
 
+// Toggle password visibility
+function togglePassword(fieldId, eyeId) {
+    const field = document.getElementById(fieldId);
+    const eye = document.getElementById(eyeId);
 
+    if (field.type === "password") {
+        field.type = "text";
+        eye.classList.remove("fa-eye");
+        eye.classList.add("fa-eye-slash");
+    } else {
+        field.type = "password";
+        eye.classList.remove("fa-eye-slash");
+        eye.classList.add("fa-eye");
+    }
+}
+
+password.addEventListener('input', checkPassword);
+confirmPassword.addEventListener('input', checkPassword);
 </script>
+
+
 
 
 
