@@ -21,6 +21,7 @@ use App\Models\stockRequest;
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('index');
@@ -313,5 +314,9 @@ Route::get('/showrooms', function(){
 Route::get('/roomdetails/{roomID}', [roomController::class, 'roomdetails']);
 Route::get('/reservethisroom/{roomID}', [roomController::class, 'reservethisroom']);
 Route::get('/myreservation', function(){
-  return view('guest.myreservation');
+   $reserverooms = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+    ->where('core1_reservation.guestID', Auth::guard('guest')->user()->guestID)
+    ->latest('core1_reservation.created_at')
+    ->get();
+  return view('guest.myreservation', ['reserverooms' => $reserverooms]);
 });

@@ -31,141 +31,104 @@
             {{-- Subsystem Name --}}
 
             <section class="p-5">
- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 mt-5">
 
-            
-  <!-- Card 1 - Total Reservation -->
-  <div class="card border border-blue-100 bg-gradient-to-br from-blue-50 to-white
-              transition-all duration-300 ease-in-out
-              hover:shadow-lg hover:-translate-y-1 hover:border-blue-500
-              hover:bg-gradient-to-br hover:from-blue-100 hover:to-white
-              group">
-    <div class="card-body p-5">
-      <div class="flex items-center gap-4">
-        <div class="p-3 rounded-lg bg-blue-100 text-blue-600
-                   group-hover:bg-blue-600 group-hover:text-white
-                   transition-colors duration-300">
-          <i data-lucide="book-check"></i>
-        </div>
-        <div>
-          <h3 class="text-lg font-semibold group-hover:text-blue-800 transition-colors">Total Reservation</h3>
-        </div>
-      </div>
-      <livewire:total-reservation />
+
+
+     <div class="container mx-auto px-4 py-8">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    
+    <!-- Card 1 -->
+    @forelse ($reserverooms as $reserveroom)
+<div class="card bg-white border border-gray-200 rounded-2xl hover:shadow-lg transition duration-300 overflow-hidden">
+  <!-- Room Image -->
+  <figure class="relative h-48">
+    <img src="{{$reserveroom->roomphoto}}" alt="Room Photo" class="w-full h-full object-cover">
+    <div class="absolute top-4 right-4">
+      <span class="badge badge-primary">  {{$reserveroom->roomtype}}</span>
+    </div>
+  </figure>
+
+  <!-- Card Body -->
+  <div class="card-body p-5">
+    <!-- Title -->
+    <h4 class="card-title text-xl font-semibold mb-2">Room {{$reserveroom->roomID}}</h4>
+
+    <!-- Receipt Number -->
+    <div class="flex items-center text-sm text-gray-700 mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M9 12h6m2 0a2 2 0 01-2 2H9a2 2 0 
+                 01-2-2V6a2 2 0 
+                 012-2h6a2 2 0 012 2v6zM9 16h6" />
+      </svg>
+      Receipt No: <span class="ml-1 font-medium">{{$reserveroom->reservation_receipt}}</span>
+    </div>
+
+    <!-- Booking Status -->
+    <div class="flex items-center text-sm text-gray-700 mb-3">
+     
+    Booking Status:  <span class="font-bold"> {{$reserveroom->reservation_bookingstatus}} </span>
+      <span class="ml-1 font-semibold 
+        @if($reserveroom->reservation_status == 'Confirmed') text-green-600 
+        @elseif($reserveroom->reservation_status == 'Pending') text-yellow-600 
+        @elseif($reserveroom->reservation_status == 'Cancelled') text-red-600 
+        @else text-gray-600 @endif">
+        {{$reserveroom->reservation_status}}
+      </span>
+    </div>
+
+    <!-- Check-in Date -->
+    <div class="flex items-center text-sm text-gray-500 mb-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 
+                 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+      <span class="font-medium">Check-in:</span>
+      <span class="ml-1">
+        {{ \Carbon\Carbon::parse($reserveroom->reservation_checkin)->format('F j, Y') }}
+      </span>
+    </div>
+
+    <!-- Check-out Date -->
+    <div class="flex items-center text-sm text-gray-500 mb-4">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 
+                 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+      <span class="font-medium">Check-out:</span>
+      <span class="ml-1">
+        {{ \Carbon\Carbon::parse($reserveroom->reservation_checkout)->format('F j, Y') }}
+      </span>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex flex-wrap justify-end gap-3">
+      <button onclick="document.getElementById('edit_reservation_{{$reserveroom->reservationID}}').showModal()"  class="btn btn-sm bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition">
+        View Details
+      </button>
+      <button onclick="cancel_reservation_{{$reserveroom->reservationID}}.showModal()" class="btn btn-sm btn-error">
+        Cancel Reservation
+      </button>
+      <button onclick="confirm_reservation_{{$reserveroom->reservationID}}.showModal()" class="btn-primary btn btn-sm transition">
+        Confirm Reservation
+      </button>
     </div>
   </div>
+</div>
 
-  <!-- Card 2 - Available Rooms -->
-  <div class="card border border-green-100 bg-gradient-to-br from-green-50 to-white
-              transition-all duration-300 ease-in-out
-              hover:shadow-lg hover:-translate-y-1 hover:border-green-500
-              hover:bg-gradient-to-br hover:from-green-100 hover:to-white
-              group">
-    <div class="card-body p-5">
-      <div class="flex items-center gap-4">
-        <div class="p-3 rounded-lg bg-green-100 text-green-600
-                   group-hover:bg-green-600 group-hover:text-white
-                   transition-colors duration-300">
-          <i data-lucide="hotel"></i>
-        </div>
-        <div>
-          <h3 class="text-lg font-semibold group-hover:text-green-800 transition-colors">Available Rooms</h3>
-        </div>
-      </div>
-      <livewire:available-rooms />
-    </div>
-  </div>
+    @empty
+        
+    @endforelse
+  
 
-  <!-- Card 3 - Occupied Rooms -->
-  <div class="card border border-purple-100 bg-gradient-to-br from-purple-50 to-white
-              transition-all duration-300 ease-in-out
-              hover:shadow-lg hover:-translate-y-1 hover:border-purple-500
-              hover:bg-gradient-to-br hover:from-purple-100 hover:to-white
-              group">
-    <div class="card-body p-5">
-      <div class="flex items-center gap-4">
-        <div class="p-3 rounded-lg bg-purple-100 text-purple-600
-                   group-hover:bg-purple-600 group-hover:text-white
-                   transition-colors duration-300">
-          <i data-lucide="book-open-check"></i>
-        </div>
-        <div>
-          <h3 class="text-lg font-semibold group-hover:text-purple-800 transition-colors">Occupied Rooms</h3>
-        </div>
-      </div>
-      <livewire:occupied-rooms />
-    </div>
-  </div>
+    <!-- Duplicate cards -->
+  
 
-  <!-- Card 4 - Channels Booking -->
-  <div class="card border border-amber-100 bg-gradient-to-br from-amber-50 to-white
-              transition-all duration-300 ease-in-out
-              hover:shadow-lg hover:-translate-y-1 hover:border-amber-500
-              hover:bg-gradient-to-br hover:from-amber-100 hover:to-white
-              group">
-    <div class="card-body p-5">
-      <div class="flex items-center gap-4">
-        <div class="p-3 rounded-lg bg-amber-100 text-amber-600
-                   group-hover:bg-amber-600 group-hover:text-white
-                   transition-colors duration-300">
-          <i data-lucide="square-arrow-out-up-right"></i>
-        </div>
-        <div>
-          <h3 class="text-lg font-semibold group-hover:text-amber-800 transition-colors">Channels Booking</h3>
-        </div>
-      </div>
-      <livewire:channels-booking />
-    </div>
+    <!-- Add more cards if needed -->
   </div>
 </div>
-
-
-            <div class="">
-                <button onclick="view_room.showModal()" class="btn btn-primary btn-sm">
-                  <i data-lucide="plus"></i>
-                  View Available Rooms
-                </button>
-            </div>
-
-
-@if(session('removed'))
-   <div role="alert" class="alert alert-success mt-2">
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-  <span>{{session('removed')}}</span>
-</div>
-@elseif(session('cancel'))
- <div role="alert" class="alert alert-success mt-2">
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-  <span>{{session('cancel')}}</span>
-</div>
-@elseif(session('checkin'))
-<div role="alert" class="alert alert-success mt-2">
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-  <span>{{session('checkin')}}</span>
-</div>
-@elseif(session('checkout'))
-<div role="alert" class="alert alert-success mt-2">
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-  <span>{{session('checkout')}}</span>
-</div>
-@elseif(session('confirm'))
-<div role="alert" class="alert alert-success mt-2">
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-  <span>{{session('confirm')}}</span>
-</div>
-
-@endif
-
 
            
 
@@ -203,6 +166,14 @@
     {{-- modals --}}
 
  
+    @foreach($reserverooms as $reserveroom)
+@include('admin.components.frontdesk.viewreserve')
+@include('admin.components.frontdesk.delete')
+@include('admin.components.frontdesk.confirm')
+@include('admin.components.frontdesk.checkin')
+@include('admin.components.frontdesk.checkout')
+@include('admin.components.frontdesk.cancel')
+@endforeach
     
    
    @livewireScripts

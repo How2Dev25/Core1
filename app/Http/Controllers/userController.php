@@ -87,7 +87,7 @@ public function profilesetup(Request $request, Guest $guestID){
 
     $guestID->update($form);
 
-    return 'success';
+    return redirect('/guestdashboard');
 }
 
 public function guestlogout(){
