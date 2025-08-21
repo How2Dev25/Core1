@@ -11,7 +11,7 @@
       Cancel Reservation
     </h3>
 
-    <p class="mb-6 text-sm text-gray-700">Are you sure you want to Cancel reservation for <span class="font-bold">{{$reserveroom->reservationID}} of {{$reserveroom->guestname}}</span> This action cannot be undone.</p>
+    <p class="mb-6 text-sm text-gray-700">Are you sure you want to Cancel reservation for <span class="font-bold">{{$reserveroom->reservation_receipt}} for {{$reserveroom->guestname}}</span> This action cannot be undone.</p>
 
     <form  method="POST" action="/reservationcancelled/{{$reserveroom->reservationID}}">
       @csrf

@@ -3,25 +3,50 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\Reservation;
-
 
 class Reservedrooms extends Component
 {
+    use WithPagination;
 
-    public $reserverooms = [];
+    public $search = '';
+    public $statusFilter = '';
 
-    public function mount(){
-        $this->fetchreservedrooms();
+    protected $paginationTheme = 'tailwind';
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
     }
 
-    public function fetchreservedrooms(){
-        $this->reserverooms = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
-        ->latest('core1_reservation.created_at')
-        ->get();
+    public function updatingStatusFilter()
+    {
+        $this->resetPage();
     }
+
+    public function fetchreservedrooms()
+    {
+        return Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+            ->select('core1_reservation.*', 'core1_room.roomtype')
+            ->when($this->search, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('core1_reservation.guestname', 'like', '%' . $this->search . '%')
+                      ->orWhere('core1_room.roomID', 'like', '%' . $this->search . '%')
+                      ->orwhere('core1_reservation.reservation_receipt', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->when($this->statusFilter, function ($query) {
+                $query->where('core1_reservation.reservation_bookingstatus', $this->statusFilter);
+            })
+            ->latest('core1_reservation.created_at')
+            ->paginate(10);
+    }
+
     public function render()
     {
-        return view('livewire.reserved-rooms');
+        return view('livewire.reserved-rooms', [
+            'reserverooms' => $this->fetchreservedrooms()
+        ]);
     }
 }
