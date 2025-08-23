@@ -12,6 +12,7 @@
     <title>{{$title}} - My Reservation</title>
       @livewireStyles
 </head>
+@auth('guest')
 <body class="bg-base-100">
     <div class="flex h-screen overflow-hidden">
       <!-- Sidebar -->
@@ -227,6 +228,11 @@
    
    @livewireScripts
   @include('javascriptfix.soliera_js')
+
+
+
+
+  @endauth
   </body>
 
 

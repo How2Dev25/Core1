@@ -65,11 +65,7 @@
 
 
   @else
-  <div class="">
-    Not in Session
-  </div>
-
-
+ 
     
 @endauth
   

@@ -23,6 +23,18 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
+// security for guest
+function guestAuthCheck() {
+    if (!Auth::guard('guest')->check()) {
+        return redirect('/restrictedguest')->send(); // stop execution and redirect
+    }
+}
+
+// 
+
+
+
 Route::get('/', function () {
     return view('index');
 });
@@ -320,17 +332,24 @@ Route::get('/printreceipt/{reservationID}', [reservationController::class, 'gene
 
 
 Route::get('guestdashboard', function(){
+     guestAuthCheck();
     return view('guest.dashboard');
 });
 
 // Guest
 Route::get('/showrooms', function(){
+     guestAuthCheck();
     return view('guest.rooms');
 });
 
 Route::get('/roomdetails/{roomID}', [roomController::class, 'roomdetails']);
 Route::get('/reservethisroom/{roomID}', [roomController::class, 'reservethisroom']);
+
+
 Route::get('/myreservation', function(){
+
+       guestAuthCheck();
+
    $reserverooms = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
     ->where('core1_reservation.guestID', Auth::guard('guest')->user()->guestID)
     ->latest('core1_reservation.created_at')
