@@ -286,6 +286,9 @@ Route::get('/loginotp', function(){
     return view('loginotp');
 });
 
+Route::get('auth/google', [userController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [userController::class, 'handleGoogleCallback']);
+
 // registration
 Route::get('/terms', function(){
     return view('register.terms');

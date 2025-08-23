@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\DeptAccount;
 use App\Models\Guest;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
 
 class userController extends Controller
 {
@@ -115,4 +116,41 @@ public function guestlogin(Request $request){
     }
 }
 
+
+   public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        $googleUser = Socialite::driver('google')->user();
+
+        // Check if guest exists
+        $guest = Guest::where('guest_email', $googleUser->getEmail())->first();
+
+        if(!$guest){
+            $guest = Guest::create([
+                'guest_name' => $googleUser->getName(),
+                'guest_email' => $googleUser->getEmail(),
+                'guest_photo' => $googleUser->getAvatar(),
+                'guest_password' => Hash::make(str()->random(16)), // random password
+            ]);
+        } else {
+            // Optional: update avatar/name if changed
+            $guest->update([
+                'guest_name' => $googleUser->getName(),
+                'guest_photo' => $googleUser->getAvatar(),
+            ]);
+        }
+
+        Auth::guard('guest')->login($guest);
+
+        session()->flash('showwelcome');
+
+        return redirect('/guestdashboard');
+    }
+
 }
+
+

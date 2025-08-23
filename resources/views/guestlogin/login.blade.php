@@ -191,18 +191,25 @@
       </div>
     </div>
 
-    <!-- Google OAuth -->
-    {{--  
-    <div class="flex justify-center">
-      <a href="/auth/google" 
-         class="flex items-center justify-center w-full py-3 px-4 bg-white text-gray-800 rounded-lg shadow hover:bg-gray-100 transition">
-        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="h-5 w-5 mr-2" alt="Google logo">
-        Sign up with Google
-      </a>
-    </div>
-    --}}
+   
+   
+<div class="flex justify-center mt-4">
+  <a href="/auth/google" 
+     class="flex items-center justify-center w-full max-w-sm py-3 px-4 bg-white text-gray-800 border border-gray-300 rounded-lg shadow-md 
+            hover:bg-gray-100 transition duration-200 group">
+    
+    <!-- Google Icon with hover effect -->
+    <img src="https://www.svgrepo.com/show/475656/google-color.svg" 
+         class="h-5 w-5 mr-3 transition-transform duration-200 group-hover:scale-110" 
+         alt="Google logo">
+    
+    <span class="font-medium transition-colors duration-200 group-hover:text-blue-600">
+      Sign in with Google
+    </span>
+  </a>
+</div>
 
-    <!-- Sign in as Employee -->
+  
     
   <div class="flex justify-center">
   <a href="/employeelogin" 

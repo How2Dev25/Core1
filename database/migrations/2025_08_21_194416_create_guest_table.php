@@ -16,8 +16,8 @@ return new class extends Migration
             $table->text('guest_email');
             $table->text('guest_name');
             $table->text('guest_photo')->nullable();
-            $table->text('guest_address');
-            $table->text('guest_mobile');
+            $table->text('guest_address')->nullable();
+            $table->text('guest_mobile')->nullable();
             $table->text('guest_password');
             $table->date('guest_birthday');
             $table->timestamps();
