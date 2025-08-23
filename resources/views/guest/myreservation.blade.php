@@ -230,6 +230,6 @@
   </body>
 
 
-  <script src="{{asset('javascript/photouploadglobal.js')}}"></script>
+ 
   
 </html>

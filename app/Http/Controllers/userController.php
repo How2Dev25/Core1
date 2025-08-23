@@ -87,6 +87,8 @@ public function profilesetup(Request $request, Guest $guestID){
 
     $guestID->update($form);
 
+     session()->flash('showwelcome');
+
     return redirect('/guestdashboard');
 }
 
@@ -106,6 +108,8 @@ public function guestlogin(Request $request){
 
     if(Auth::guard('guest')->attempt(['guest_email' => $form['guest_email'], 'password' => $form['guest_password']])){
        $request->session()->regenerate();
+
+       session()->flash('showwelcome');
 
        return redirect('/guestdashboard');
     }
