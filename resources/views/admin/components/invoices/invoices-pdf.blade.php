@@ -18,24 +18,33 @@
         <p class="text-sm text-yellow-400 italic">Savor The Stay, Dine With Elegance</p>
     </div>
 </div>
-            <div class="text-right">
-                <p class="text-yellow-400 font-bold text-lg">INVOICE</p>
-                <p class="text-sm">#{{ $booking->reservation_receipt }}</p>
-            </div>
+           <div class="text-right flex flex-col gap-2">
+            <p class="text-yellow-400 font-bold text-lg">INVOICE</p>
+            
+        </div>
         </div>
 
         <!-- Invoice Info -->
-        <div class="bg-gray-50 px-6 py-3 flex justify-between text-sm">
-            <div>
-                <p class="text-gray-500">Invoice Date</p>
-                <p class="font-medium">{{ date('Y-m-d') }}</p>
-            </div>
-            <div class="text-right">
-                <p class="text-gray-500">Status</p>
-                <p class="font-semibold text-green-600">Paid</p>
-            </div>
-        </div>
+    <div class="bg-gray-50 px-6 py-3 flex justify-between text-sm">
+    <!-- Invoice Date -->
+    <div>
+        <p class="text-gray-500">Invoice Date</p>
+        <p class="font-medium">{{ date('Y-m-d') }}</p>
+    </div>
 
+    <!-- Receipt & Booking ID -->
+    <div class="text-center">
+        <p class="text-gray-500">Receipt & Booking</p>
+        <p class="font-medium text-gray-800">{{ $booking->reservation_receipt }}</p>
+        <p class="text-xs text-gray-600">Booking ID: {{ $booking->bookingID }}</p>
+    </div>
+
+    <!-- Status -->
+    <div class="text-right">
+        <p class="text-gray-500">Status</p>
+        <p class="font-semibold text-green-600">Paid</p>
+    </div>
+</div>
         <!-- Guest Info -->
         <div class="px-6 py-4">
             <h2 class="text-blue-900 font-bold mb-2">Guest Information</h2>
