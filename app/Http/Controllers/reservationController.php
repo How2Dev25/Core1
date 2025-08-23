@@ -290,36 +290,39 @@ public function searchRooms(Request $request)
 
 public function generateInvoice($reservationID)
 {
+    // Fetch reservation with room info
     $booking = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
         ->where('core1_reservation.reservationID', $reservationID)
         ->firstOrFail();
 
-    // Local absolute path to the logo
+    // Absolute path to logo
     $logoPath = public_path('images/logo/sonly.png');
 
-    // Render Blade template into HTML
-    $html = View::make('admin.components.invoices.invoices-pdf', [
+    // Render Blade template
+    $html = view('admin.components.invoices.invoices-pdf', [
         'booking'  => $booking,
         'logoPath' => $logoPath
     ])->render();
 
-    // Path where the PDF will be saved (storage/app/invoices/)
-   $pdfPath = public_path("images/invoices/invoice_{$booking->reservationID}.pdf");
+    // PDF save path
+    $pdfPath = public_path("images/invoices/invoice_{$booking->reservationID}.pdf");
 
     // Ensure directory exists
     if (!file_exists(dirname($pdfPath))) {
         mkdir(dirname($pdfPath), 0755, true);
     }
 
-    // Generate and save PDF only (no response to browser yet)
+    // Generate PDF
     Browsershot::html($html)
-        ->format('A4')
         ->showBackground()
+        ->format('A4')
         ->margins(10, 10, 10, 10)
+        ->waitUntilNetworkIdle()
+        ->timeout(120)
         ->save($pdfPath);
 
-     $pdfUrl = asset("images/invoices/invoice_{$booking->reservationID}.pdf");
-    // You can log, return a JSON response, or just silently generate
+    // Return PDF URL
+    $pdfUrl = asset("images/invoices/invoice_{$booking->reservationID}.pdf");
     return redirect($pdfUrl);
 }
 // guest

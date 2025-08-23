@@ -128,12 +128,13 @@
         <span class="font-medium">Payment Method:</span> {{ $reserveroom->payment_method }}
     </div>
 
-    @php
+   @php
     $nights = \Carbon\Carbon::parse($reserveroom->reservation_checkin)
                 ->diffInDays(\Carbon\Carbon::parse($reserveroom->reservation_checkout));
     $subtotal = $reserveroom->roomprice * $nights;
     $vat = $subtotal * 0.12;
-    $total = $subtotal + $vat;
+    $serviceFee = $subtotal * 0.02; // 2% service fee
+    $total = $subtotal + $vat + $serviceFee;
 @endphp
 
 <div class="flex items-center gap-2">
@@ -149,7 +150,23 @@
     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6M9 11h6m-7 4h8M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z" />
     </svg>
-    <span class="font-medium">Total:</span> ₱{{ number_format($total, 2) }}
+    <span class="font-medium">Subtotal:</span> ₱{{ number_format($subtotal, 2) }}
+</div>
+
+<div class="flex items-center gap-2">
+    <!-- percent icon for service fee -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 6L6 18M6 6h.01M18 18h.01" />
+    </svg>
+    <span class="font-medium">Service Fee (2%):</span> ₱{{ number_format($serviceFee, 2) }}
+</div>
+
+<div class="flex items-center gap-2 font-bold text-primary">
+    <!-- calculator icon for total -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6M9 11h6m-7 4h8M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z" />
+    </svg>
+    <span>Total:</span> ₱{{ number_format($total, 2) }}
 </div>
 </div>
 

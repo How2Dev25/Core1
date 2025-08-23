@@ -121,21 +121,30 @@
   </div>
 
   <!-- VAT (12%) -->
-  @php
+@php
     $subtotal = $reserveroom->roomprice * $nights;
     $vat = $subtotal * 0.12;
-    $total = $subtotal + $vat;
-  @endphp
-  <div class="flex items-center justify-between text-xs">
+    $serviceFee = $subtotal * 0.02; // 2% service fee
+    $total = $subtotal + $vat + $serviceFee;
+@endphp
+
+<!-- VAT -->
+<div class="flex items-center justify-between text-xs">
     <span class="text-gray-600">VAT (12%):</span>
     <span class="font-semibold text-gray-800">₱{{ number_format($vat, 2) }}</span>
-  </div>
+</div>
 
-  <!-- Total -->
-  <div class="flex items-center justify-between text-xs border-t pt-2">
+<!-- Service Fee -->
+<div class="flex items-center justify-between text-xs">
+    <span class="text-gray-600">Service Fee (2%):</span>
+    <span class="font-semibold text-gray-800">₱{{ number_format($serviceFee, 2) }}</span>
+</div>
+
+<!-- Total -->
+<div class="flex items-center justify-between text-xs border-t pt-2">
     <span class="text-gray-700 font-semibold">Total:</span>
     <span class="font-bold text-gray-900">₱{{ number_format($total, 2) }}</span>
-  </div>
+</div>
 </div>
 
     <!-- Action Buttons -->

@@ -176,13 +176,34 @@
                     <i data-lucide="file-text" class="w-5 h-5"></i>
                     Billing Summary
                 </h2>
-                <div class="space-y-3 text-sm">
-                    <p class="flex items-center justify-between"><span class="flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4 text-primary"></i> Room Price (per night)</span> ₱<span id="roomPrice">0.00</span></p>
-                    <p class="flex items-center justify-between"><span class="flex items-center gap-2"><i data-lucide="moon" class="w-4 h-4 text-primary"></i> Nights</span> <span id="numNights">0</span></p>
-                    <p class="flex items-center justify-between"><span class="flex items-center gap-2"><i data-lucide="list" class="w-4 h-4 text-primary"></i> Subtotal</span> ₱<span id="subtotal">0.00</span></p>
-                    <p class="flex items-center justify-between"><span class="flex items-center gap-2"><i data-lucide="percent" class="w-4 h-4 text-primary"></i> VAT (12%)</span> ₱<span id="vatAmount">0.00</span></p>
-                    <p class="flex items-center justify-between font-bold text-lg text-primary border-t pt-3"><span class="flex items-center gap-2"><i data-lucide="credit-card" class="w-5 h-5"></i> Total</span> ₱<span id="totalAmount">0.00</span></p>
-                </div>
+<div class="space-y-3 text-sm">
+    <p class="flex items-center justify-between">
+        <span class="flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4 text-primary"></i> Room Price (per night)</span>
+        <span id="roomPrice" class="text-right">₱0.00</span>
+    </p>
+    <p class="flex items-center justify-between">
+        <span class="flex items-center gap-2"><i data-lucide="moon" class="w-4 h-4 text-primary"></i> Nights</span>
+        <span id="numNights" class="text-right">0</span>
+    </p>
+    <p class="flex items-center justify-between">
+        <span class="flex items-center gap-2"><i data-lucide="list" class="w-4 h-4 text-primary"></i> Subtotal</span>
+        <span id="subtotal" class="text-right">₱0.00</span>
+    </p>
+    <p class="flex items-center justify-between">
+        <span class="flex items-center gap-2"><i data-lucide="percent" class="w-4 h-4 text-primary"></i> VAT (12%)</span>
+        <span id="vatAmount" class="text-right">₱0.00</span>
+    </p>
+    <!-- Service Fee Row -->
+    <p class="flex items-center justify-between">
+        <span class="flex items-center gap-2"><i data-lucide="dollar-sign" class="w-4 h-4 text-primary"></i> Service Fee (2%)</span>
+        <span id="serviceFee" class="text-right">₱0.00</span>
+    </p>
+    <p class="flex items-center justify-between font-bold text-lg text-primary border-t pt-3">
+        <span class="flex items-center gap-2"><i data-lucide="credit-card" class="w-5 h-5"></i> Total</span>
+        <span id="totalAmount" class="text-right">₱0.00</span>
+    </p>
+</div>
+
                 <div class="mt-6 flex justify-end gap-3">
                     <button type="reset" class="btn btn-ghost">Cancel</button>
                     <button type="button" onclick="confirm_modal_bas.showModal()" class="btn btn-primary gap-2">
@@ -228,26 +249,28 @@
     }
 
     function calculateSubtotal() {
-        const checkin = document.querySelector('[name="reservation_checkin"]').value;
-        const checkout = document.querySelector('[name="reservation_checkout"]').value;
+    const checkin = document.querySelector('[name="reservation_checkin"]').value;
+    const checkout = document.querySelector('[name="reservation_checkout"]').value;
 
-        if (!checkin || !checkout || selectedRoomPrice === 0) return;
+    if (!checkin || !checkout || selectedRoomPrice === 0) return;
 
-        const checkinDate = new Date(checkin);
-        const checkoutDate = new Date(checkout);
-        const diffTime = checkoutDate - checkinDate;
-        const numNights = Math.max(diffTime / (1000 * 60 * 60 * 24), 0);
+    const checkinDate = new Date(checkin);
+    const checkoutDate = new Date(checkout);
+    const diffTime = checkoutDate - checkinDate;
+    const numNights = Math.max(diffTime / (1000 * 60 * 60 * 24), 0);
 
-        document.getElementById('numNights').innerText = numNights;
+    document.getElementById('numNights').innerText = numNights;
 
-        const subtotal = numNights * selectedRoomPrice;
-        const vat = subtotal * 0.12;
-        const total = subtotal + vat;
+    const subtotal = numNights * selectedRoomPrice;
+    const vat = subtotal * 0.12;
+    const serviceFee = subtotal * 0.02; // 2% service fee
+    const total = subtotal + vat + serviceFee;
 
-        document.getElementById('subtotal').innerText = subtotal.toFixed(2);
-        document.getElementById('vatAmount').innerText = vat.toFixed(2);
-        document.getElementById('totalAmount').innerText = total.toFixed(2);
-    }
+    document.getElementById('subtotal').innerText = subtotal.toFixed(2);
+    document.getElementById('vatAmount').innerText = vat.toFixed(2);
+    document.getElementById('serviceFee').innerText = serviceFee.toFixed(2); // make sure you added this span in HTML
+    document.getElementById('totalAmount').innerText = total.toFixed(2);
+}
 
     document.addEventListener('DOMContentLoaded', () => {
         const checkinInput = document.querySelector('[name="reservation_checkin"]');
