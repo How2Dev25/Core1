@@ -56,6 +56,12 @@ Route::get('/restrictedemployee', function(){
 
 // Admins
 
+// dashboard
+
+Route::get('/employeedashboard', function(){
+    return view('admin.dashboard');
+});
+
 Route::get('/hmp', function(){
     $hmpdata = Hmp::latest()->get();
      $events = Ecm::where('eventstatus', 'Approved')->latest()->get();

@@ -88,36 +88,71 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V7l-6-6H7a2 2 0 00-2 2v16a2 2 0 002 2z" />
             </svg>
-            Receipt #: {{ $reserveroom->reservation_receipt }}
+            Booking ID: {{ $reserveroom->bookingID}}
         </p>
     </div>
 
     <!-- Reservation Details -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6 text-sm text-gray-600">
-        <div class="flex items-center gap-2">
-            <!-- calendar icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7H3v12a2 2 0 002 2z" />
-            </svg>
-            <span class="font-medium">Check-in:</span> 
-            {{ \Carbon\Carbon::parse($reserveroom->reservation_checkin)->format('M d, Y') }}
-        </div>
-        <div class="flex items-center gap-2">
-            <!-- calendar-days icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7H3v12a2 2 0 002 2z" />
-            </svg>
-            <span class="font-medium">Check-out:</span> 
-            {{ \Carbon\Carbon::parse($reserveroom->reservation_checkout)->format('M d, Y') }}
-        </div>
-        <div class="flex items-center gap-2">
-            <!-- globe icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9z" />
-            </svg>
-            <span class="font-medium">Booked via:</span> {{ $reserveroom->bookedvia }}
-        </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6 text-sm text-gray-600">
+    <div class="flex items-center gap-2">
+        <!-- calendar icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7H3v12a2 2 0 002 2z" />
+        </svg>
+        <span class="font-medium">Check-in:</span> 
+        {{ \Carbon\Carbon::parse($reserveroom->reservation_checkin)->format('M d, Y') }}
     </div>
+
+    <div class="flex items-center gap-2">
+        <!-- calendar-days icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7H3v12a2 2 0 002 2z" />
+        </svg>
+        <span class="font-medium">Check-out:</span> 
+        {{ \Carbon\Carbon::parse($reserveroom->reservation_checkout)->format('M d, Y') }}
+    </div>
+
+    <div class="flex items-center gap-2">
+        <!-- globe icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9z" />
+        </svg>
+        <span class="font-medium">Booked via:</span> {{ $reserveroom->bookedvia }}
+    </div>
+
+    <div class="flex items-center gap-2">
+        <!-- credit card icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 11h18m-2 6H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2z" />
+        </svg>
+        <span class="font-medium">Payment Method:</span> {{ $reserveroom->payment_method }}
+    </div>
+
+    @php
+    $nights = \Carbon\Carbon::parse($reserveroom->reservation_checkin)
+                ->diffInDays(\Carbon\Carbon::parse($reserveroom->reservation_checkout));
+    $subtotal = $reserveroom->roomprice * $nights;
+    $vat = $subtotal * 0.12;
+    $total = $subtotal + $vat;
+@endphp
+
+<div class="flex items-center gap-2">
+    <!-- moon icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+    </svg>
+    <span class="font-medium">Nights:</span> {{ $nights }}
+</div>
+
+<div class="flex items-center gap-2">
+    <!-- calculator icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6M9 11h6m-7 4h8M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z" />
+    </svg>
+    <span class="font-medium">Total:</span> ₱{{ number_format($total, 2) }}
+</div>
+</div>
+
             </div>
 
             <!-- Right side: Action buttons -->

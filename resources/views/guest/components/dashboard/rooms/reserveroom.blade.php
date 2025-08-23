@@ -116,52 +116,95 @@
         </div>
 
         <!-- RIGHT SIDE (POS Summary) -->
-        <div class="w-full lg:w-1/3">
+    <div class="w-full lg:w-1/3">
 
-                 @if(session('success'))
-      <div role="alert" class="alert alert-success mt-2 mb-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <span>{{session('success')}}</span>
-      </div>
-      @elseif(session('modified'))
-       <div role="alert" class="alert alert-success mt-2 mb-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <span>{{session('modified')}}</span>
-      </div>
-      @elseif(session('removed'))
-        <div role="alert" class="alert alert-success mt-2 mb-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <span>{{session('removed')}}</span>
-      </div>
-      @endif
+  @if(session('success'))
+    <div role="alert" class="alert alert-success mt-2 mb-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{session('success')}}</span>
+    </div>
+  @elseif(session('modified'))
+    <div role="alert" class="alert alert-success mt-2 mb-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{session('modified')}}</span>
+    </div>
+  @elseif(session('removed'))
+    <div role="alert" class="alert alert-success mt-2 mb-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{session('removed')}}</span>
+    </div>
+  @endif
 
-            <div class="rounded-box p-6 shadow bg-base-100 lg:sticky lg:top-6">
-                <h2 class="text-xl font-semibold flex items-center gap-2 mb-4 text-primary">
-                    <i data-lucide="file-text" class="w-5 h-5"></i>
-                    Billing Summary
-                </h2>
-                <div class="space-y-3 text-sm">
-                    <p class="flex items-center justify-between"><span class="flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4 text-primary"></i> Room Price (per night)</span> ₱<span id="roomPrice">0.00</span></p>
-                    <p class="flex items-center justify-between"><span class="flex items-center gap-2"><i data-lucide="moon" class="w-4 h-4 text-primary"></i> Nights</span> <span id="numNights">0</span></p>
-                    <p class="flex items-center justify-between"><span class="flex items-center gap-2"><i data-lucide="list" class="w-4 h-4 text-primary"></i> Subtotal</span> ₱<span id="subtotal">0.00</span></p>
-                    <p class="flex items-center justify-between"><span class="flex items-center gap-2"><i data-lucide="percent" class="w-4 h-4 text-primary"></i> VAT (12%)</span> ₱<span id="vatAmount">0.00</span></p>
-                    <p class="flex items-center justify-between font-bold text-lg text-primary border-t pt-3"><span class="flex items-center gap-2"><i data-lucide="credit-card" class="w-5 h-5"></i> Total</span> ₱<span id="totalAmount">0.00</span></p>
-                </div>
-                <div class="mt-6 flex justify-end gap-3">
-                    <button type="reset" class="btn btn-ghost">Cancel</button>
-                    <button type="button" onclick="confirm_modal_bas.showModal()" class="btn btn-primary gap-2">
-                        <i data-lucide="check-circle" class="w-5 h-5"></i>
-                        Confirm
-                    </button>
-                </div>
-            </div>
-        </div>
+  <div class="rounded-box p-6 shadow bg-base-100 lg:sticky lg:top-6">
+    <h2 class="text-xl font-semibold flex items-center gap-2 mb-4 text-primary">
+      <i data-lucide="file-text" class="w-5 h-5"></i>
+      Billing Summary
+    </h2>
+    <div class="space-y-3 text-sm">
+      <p class="flex items-center justify-between">
+        <span class="flex items-center gap-2">
+          <i data-lucide="tag" class="w-4 h-4 text-primary"></i> Room Price (per night)
+        </span> ₱<span id="roomPrice">0.00</span>
+      </p>
+      <p class="flex items-center justify-between">
+        <span class="flex items-center gap-2">
+          <i data-lucide="moon" class="w-4 h-4 text-primary"></i> Nights
+        </span> <span id="numNights">0</span>
+      </p>
+      <p class="flex items-center justify-between">
+        <span class="flex items-center gap-2">
+          <i data-lucide="list" class="w-4 h-4 text-primary"></i> Subtotal
+        </span> ₱<span id="subtotal">0.00</span>
+      </p>
+      <p class="flex items-center justify-between">
+        <span class="flex items-center gap-2">
+          <i data-lucide="percent" class="w-4 h-4 text-primary"></i> VAT (12%)
+        </span> ₱<span id="vatAmount">0.00</span>
+      </p>
+      <p class="flex items-center justify-between font-bold text-lg text-primary border-t pt-3">
+        <span class="flex items-center gap-2">
+          <i data-lucide="credit-card" class="w-5 h-5"></i> Total
+        </span> ₱<span id="totalAmount">0.00</span>
+      </p>
+    </div>
+
+    <!-- Payment Methods -->
+    <div class="mt-6">
+      <h3 class="text-md font-semibold mb-3 flex items-center gap-2">
+        <i data-lucide="wallet" class="w-5 h-5 text-primary"></i> Payment Method
+      </h3>
+      <div class="space-y-3">
+        <!-- Pay at Hotel -->
+        <label class="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-base-200 transition">
+          <input type="radio" name="payment_method" value="Pay at Hotel" class="radio radio-primary" checked>
+          <i class="fas fa-hotel text-primary text-lg"></i>
+          <span class="text-sm font-medium">Pay at Hotel</span>
+        </label>
+
+        <!-- Online Payment -->
+        <label class="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-base-200 transition">
+          <input type="radio" name="payment_method" value="online" class="radio radio-primary">
+          <i class="fas fa-credit-card text-primary text-lg"></i>
+          <span class="text-sm font-medium">Online Payment</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="mt-6 flex justify-end gap-3">
+      <button type="reset" class="btn btn-ghost">Cancel</button>
+      <button type="button" onclick="confirm_modal_bas.showModal()" class="btn btn-primary gap-2">
+        <i data-lucide="check-circle" class="w-5 h-5"></i>
+        Confirm
+      </button>
+    </div>
+  </div>
+</div>
     </form>
 </section>
 

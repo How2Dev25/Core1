@@ -30,6 +30,8 @@ return new class extends Migration
             $table->string('reservation_receipt')->nullable();
             $table->timestamps();
             $table->foreignId('guestID')->nullable();
+            $table->text('payment_method')->nullable();
+            $table->string('bookingID');
         });
     }
 

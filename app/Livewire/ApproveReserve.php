@@ -33,11 +33,11 @@ class ApproveReserve extends Component
             )
             ->when($this->searchTerm, fn($query) =>
                 $query->where(function($q) {
-                    $q->where('core1_reservation.reservation_receipt', 'like', '%'.$this->searchTerm.'%')
+                    $q->where('core1_reservation.bookingID', 'like', '%'.$this->searchTerm.'%')
                       ->orWhere('core1_reservation.guestname', 'like', '%'.$this->searchTerm.'%');
                 })
             )
-            ->select('core1_reservation.*', 'core1_room.roomtype', 'core1_room.roomID') // make sure we fetch columns
+            ->select('core1_reservation.*', 'core1_room.roomtype', 'core1_room.roomID', 'core1_room.roomprice') // make sure we fetch columns
             ->latest('core1_reservation.created_at')
             ->paginate(5);
 

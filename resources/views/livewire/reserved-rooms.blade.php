@@ -35,13 +35,14 @@
 
 
                    <div class="mt-1 text-gray-700">
-                    <p><span class="font-semibold">Receipt No#: </span> {{ $reserveroom->reservation_receipt }}</p>
+                    <p><span class="font-semibold">Booking ID </span> {{ $reserveroom->bookingID }}</p>
                 </div>
                 
 
                 <div class="mt-2 text-gray-700">
                     <p><span class="font-semibold">Guest:</span> {{ $reserveroom->guestname }}</p>
                     <p><span class="font-semibold">Booked Via:</span> {{ $reserveroom->bookedvia }}</p>
+                    <p><span class="font-semibold">Payment Method</span> {{ $reserveroom->payment_method }}</p>
                 </div>
 
                 <div class="mt-2 text-sm text-gray-500">

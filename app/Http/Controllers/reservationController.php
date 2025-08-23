@@ -12,6 +12,8 @@ use App\Services\GeminiService;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Browsershot\Browsershot;
+use Illuminate\Support\Facades\View;
 
 
 class reservationController extends Controller
@@ -138,7 +140,7 @@ public function searchRooms(Request $request)
 
 
 
-    public function store(Request $request)
+   public function store(Request $request)
 {
     $form = $request->validate([
         'roomID' => 'required',
@@ -155,18 +157,23 @@ public function searchRooms(Request $request)
         'guestcontactpersonnumber' => 'required',
     ]);
 
+    $form['payment_method'] = "Pay at Hotel";
     $form['reservation_bookingstatus'] = 'Pending';
     $form['bookedvia'] = 'Soliera';
 
     // Create reservation first to get the ID
     $reservation = Reservation::create($form);
 
-    // Generate receipt number algorithm
+    // Generate receipt number
     $receiptNo = 'SOL-' . date('Ymd') . '-' . str_pad($reservation->reservationID, 6, '0', STR_PAD_LEFT);
 
-    // Update reservation with receipt number
+    // Generate Booking ID
+    $bookingID = 'BKG-' . date('ymd') . '-' . str_pad($reservation->reservationID, 4, '0', STR_PAD_LEFT);
+
+    // Update reservation with receipt number & booking ID
     $reservation->update([
         'reservation_receipt' => $receiptNo,
+        'bookingID' => $bookingID,
     ]);
 
     // Update room status
@@ -174,7 +181,7 @@ public function searchRooms(Request $request)
         'roomstatus' => 'Reserved',
     ]);
 
-    session()->flash('success', 'Reservation Success. Receipt #: ' . $receiptNo);
+    session()->flash('success', 'Reservation Success. Receipt #: ' . $receiptNo . ' | Booking ID: ' . $bookingID);
 
     return redirect()->back();
 }
@@ -196,6 +203,7 @@ public function searchRooms(Request $request)
             'guestcontactpersonnumber' => 'nullable',
             'reservation_bookingstatus' => 'nullable',
             'bookevia' => 'nullable',
+            'payment_method' => 'nullable',
         ]);
 
         $reservationID->update($form);
@@ -289,14 +297,30 @@ public function generateInvoice($reservationID)
     // Local absolute path to the logo
     $logoPath = public_path('images/logo/sonly.png');
 
-    Pdf::setOptions(['isRemoteEnabled' => true]);
+    // Render Blade template into HTML
+    $html = View::make('admin.components.invoices.invoices-pdf', [
+        'booking'  => $booking,
+        'logoPath' => $logoPath
+    ])->render();
 
-    $pdf = Pdf::loadView('admin.components.invoices.invoices-pdf', [
-        'booking'   => $booking,
-        'logoPath'  => $logoPath
-    ]);
+    // Path where the PDF will be saved (storage/app/invoices/)
+   $pdfPath = public_path("images/invoices/invoice_{$booking->reservationID}.pdf");
 
-    return $pdf->stream("invoice_{$booking->reservationID}.pdf");
+    // Ensure directory exists
+    if (!file_exists(dirname($pdfPath))) {
+        mkdir(dirname($pdfPath), 0755, true);
+    }
+
+    // Generate and save PDF only (no response to browser yet)
+    Browsershot::html($html)
+        ->format('A4')
+        ->showBackground()
+        ->margins(10, 10, 10, 10)
+        ->save($pdfPath);
+
+     $pdfUrl = asset("images/invoices/invoice_{$booking->reservationID}.pdf");
+    // You can log, return a JSON response, or just silently generate
+    return redirect($pdfUrl);
 }
 // guest
 
@@ -315,6 +339,7 @@ public function gueststore(Request $request)
         'guestaddress' => 'required',
         'guestcontactperson' => 'required',
         'guestcontactpersonnumber' => 'required',
+        'payment_method' => 'required',
     ]);
 
     $form['guestID'] = Auth::guard('guest')->user()->guestID;
@@ -327,9 +352,12 @@ public function gueststore(Request $request)
     // Generate receipt number algorithm
     $receiptNo = 'SOL-' . date('Ymd') . '-' . str_pad($reservation->reservationID, 6, '0', STR_PAD_LEFT);
 
+     $bookingID = 'BKG-' . date('ymd') . '-' . str_pad($reservation->reservationID, 4, '0', STR_PAD_LEFT);
+
     // Update reservation with receipt number
     $reservation->update([
         'reservation_receipt' => $receiptNo,
+         'bookingID' => $bookingID,
     ]);
 
     // Update room status
@@ -337,7 +365,7 @@ public function gueststore(Request $request)
         'roomstatus' => 'Reserved',
     ]);
 
-    session()->flash('success', 'Reservation Success. Receipt #: ' . $receiptNo);
+     session()->flash('success', ' Booking ID: ' . $bookingID);
 
     return redirect()->back();
 }

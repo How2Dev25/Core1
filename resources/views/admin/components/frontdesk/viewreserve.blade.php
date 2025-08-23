@@ -4,7 +4,7 @@
     <div class="flex justify-between items-center mb-6">
       <h3 class="text-2xl font-semibold flex items-center gap-2">
         <i data-lucide="plus-circle" class="w-6 h-6 text-primary"></i>
-        Edit/View Reservation# <span class="font-bold text-2xl">{{$reserveroom->reservation_receipt}}<span>
+        Edit/View Reservation# <span class="font-bold text-2xl">{{$reserveroom->bookingID}}<span>
       </h3>
       <form method="dialog">
         <button class="btn btn-circle btn-ghost btn-sm">
@@ -194,6 +194,19 @@
       </label>
       <input value="{{$reserveroom->guestcontactpersonnumber}}" type="tel" name="guestcontactpersonnumber" class="input input-bordered" placeholder="+63 912 345 6789" required />
     </div>
+
+
+     <div class="form-control">
+  <label class="label">
+    <span class="label-text font-medium flex items-center gap-1">
+      <i data-lucide="credit-card" class="w-4 h-4 text-primary"></i>
+      Payment Method 
+    </span>
+  </label>
+  <select name="payment_method" class="select select-bordered" required>
+    <option value="{{$reserveroom->payment_method}}" disabled selected>{{$reserveroom->payment_method}}</option>
+  </select> 
+</div>
   </div>
 </div>
 

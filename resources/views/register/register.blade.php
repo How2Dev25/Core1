@@ -96,7 +96,7 @@
     
     <!-- Card Body -->
     <div>
-    <form action="/registerguest" method="POST" class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <form autocomplete="off" action="/registerguest" method="POST" class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
     <ul class="steps steps-horizontal w-full mb-6 flex flex-wrap justify-between">
         <li class="step step-primary text-white flex-1 text-center">Terms</li>
         <li class="step step-primary text-white flex-1 text-center">Registration</li>

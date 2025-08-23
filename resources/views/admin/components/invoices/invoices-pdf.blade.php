@@ -4,138 +4,147 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice #{{ $booking->reservationID }}</title>
-    <style>
-        body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; color: #333; }
-        .container { max-width: 800px; margin: 10px auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        .header { background: #001f54; color: white; padding: 15px 20px; display: flex; justify-content: space-between; }
-        .hotel-name { font-size: 20px; font-weight: bold; }
-        .invoice-title { color: #F7B32B; text-align: right; }
-        .divider { height: 2px; background: #F7B32B; margin: 5px 0; }
-        .section { padding: 15px 20px; }
-        .section-title { color: #001f54; font-weight: bold; margin-bottom: 10px; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .label { font-size: 12px; color: #666; margin-bottom: 3px; }
-        .value { font-weight: 500; }
-        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-        th { background: #001f54; color: white; text-align: left; padding: 8px 10px; }
-        td { padding: 8px 10px; border-bottom: 1px solid #eee; }
-        .total-row { background: #F7B32B; color: #001f54; font-weight: bold; }
-        .footer { background: #f5f5f5; padding: 10px 20px; text-align: center; font-size: 12px; }
-    </style>
+    @vite('resources/css/app.css') {{-- Tailwind --}}
 </head>
-<body>
-    <div class="container">
+<body class="bg-gray-100 text-gray-800 font-sans">
+    <div class="max-w-3xl mx-auto my-6 bg-white shadow-lg rounded-lg overflow-hidden">
+        
         <!-- Header -->
-        <div class="header">
-            <div>
-                <div class="hotel-name">SOLIERA HOTEL</div>
-              
-            </div>
-            <div class="invoice-title">
-                <div style="font-size: 18px;">INVOICE</div>
-                <div>{{ $booking->reservation_receipt }}</div>
+        <div class="flex justify-between items-center bg-blue-900 text-white px-6 py-4">
+           <div class="flex items-center space-x-4">
+    <img src="{{ $logoPath }}" alt="Hotel Logo" class="h-28 w-28 object-contain">
+    <div>
+        <h1 class="text-2xl font-bold tracking-wide text-white">Soliera Hotel And Restaurant</h1>
+        <p class="text-sm text-yellow-400 italic">Savor The Stay, Dine With Elegance</p>
+    </div>
+</div>
+            <div class="text-right">
+                <p class="text-yellow-400 font-bold text-lg">INVOICE</p>
+                <p class="text-sm">#{{ $booking->reservation_receipt }}</p>
             </div>
         </div>
 
         <!-- Invoice Info -->
-        <div class="section" style="background: #f9f9f9; padding: 10px 20px;">
-            <div class="grid-2">
-                <div>
-                    <div class="label">INVOICE DATE</div>
-                    <div class="value">{{ date('Y-m-d') }}</div>
-                </div>
-                <div style="text-align: right;">
-                    <div class="label">STATUS</div>
-                    <div class="value" style="color: #28a745;">Paid</div>
-                </div>
+        <div class="bg-gray-50 px-6 py-3 flex justify-between text-sm">
+            <div>
+                <p class="text-gray-500">Invoice Date</p>
+                <p class="font-medium">{{ date('Y-m-d') }}</p>
+            </div>
+            <div class="text-right">
+                <p class="text-gray-500">Status</p>
+                <p class="font-semibold text-green-600">Paid</p>
             </div>
         </div>
 
-        <!-- Guest Information -->
-        <div class="section">
-            <div class="section-title">GUEST INFORMATION</div>
-            <div class="divider"></div>
-            <div class="grid-2">
+        <!-- Guest Info -->
+        <div class="px-6 py-4">
+            <h2 class="text-blue-900 font-bold mb-2">Guest Information</h2>
+            <hr class="border-yellow-400 mb-4">
+            <div class="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                    <div class="label">FULL NAME</div>
-                    <div class="value">{{ $booking->guestname }}</div>
+                    <p class="text-gray-500">Full Name</p>
+                    <p class="font-medium">{{ $booking->guestname }}</p>
                 </div>
                 <div>
-                    <div class="label">EMAIL</div>
-                    <div class="value">{{ $booking->guestemailaddress }}</div>
+                    <p class="text-gray-500">Email</p>
+                    <p class="font-medium">{{ $booking->guestemailaddress }}</p>
                 </div>
                 <div>
-                    <div class="label">PHONE</div>
-                    <div class="value">{{ $booking->guestphonenumber }}</div>
+                    <p class="text-gray-500">Phone</p>
+                    <p class="font-medium">{{ $booking->guestphonenumber }}</p>
                 </div>
                 <div>
-                    <div class="label">ADDRESS</div>
-                    <div class="value">{{ $booking->guestaddress }}</div>
+                    <p class="text-gray-500">Address</p>
+                    <p class="font-medium">{{ $booking->guestaddress }}</p>
                 </div>
             </div>
         </div>
 
         <!-- Booking Details -->
-        <div class="section">
-            <div class="section-title">BOOKING DETAILS</div>
-            <div class="divider"></div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Room</th>
-                        <th>Check-in</th>
-                        <th>Check-out</th>
-                        <th>Nights</th>
-                        <th style="text-align: right;">Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php
-                        use Carbon\Carbon;
-                        $checkIn = Carbon::parse($booking->reservation_checkin);
-                        $checkOut = Carbon::parse($booking->reservation_checkout);
-                        $totalNights = $checkIn->diffInDays($checkOut);
-                        $subtotal = $booking->roomprice * $totalNights;
-                        $taxRate = 0.12;
-                        $taxAmount = $subtotal * $taxRate;
-                        $totalAmount = $subtotal + $taxAmount;
-                    @endphp
-                    <tr>
-                        <td>{{ $booking->roomID }} - {{ $booking->roomtype }}</td>
-                        <td>{{ $checkIn->format('M d, Y') }}</td>
-                        <td>{{ $checkOut->format('M d, Y') }}</td>
-                        <td>{{ $totalNights }}</td>
-                        <td style="text-align: right;">{{ number_format($booking->roomprice, 2) }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="text-align: right; font-weight: bold;">Subtotal</td>
-                        <td style="text-align: right;">{{ number_format($subtotal, 2) }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="text-align: right; font-weight: bold;">Tax (12%)</td>
-                        <td style="text-align: right;">{{ number_format($taxAmount, 2) }}</td>
-                    </tr>
-                    <tr class="total-row">
-                        <td colspan="4" style="text-align: right;">TOTAL AMOUNT</td>
-                        <td style="text-align: right;">{{ number_format($totalAmount, 2) }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <div class="px-6 py-4">
+            <h2 class="text-blue-900 font-bold mb-2">Booking Details</h2>
+            <hr class="border-yellow-400 mb-4">
+            @php
+                use Carbon\Carbon;
+                $checkIn = Carbon::parse($booking->reservation_checkin);
+                $checkOut = Carbon::parse($booking->reservation_checkout);
+                $totalNights = $checkIn->diffInDays($checkOut);
+                $subtotal = $booking->roomprice * $totalNights;
+                $taxRate = 0.12;
+                $taxAmount = $subtotal * $taxRate;
+                $totalAmount = $subtotal + $taxAmount;
+            @endphp
 
-        <!-- Payment Method -->
-        <div class="section">
-            <div class="section-title">PAYMENT METHOD</div>
-            <div class="divider"></div>
-            <div style="padding: 10px; background: #f9f9f9; border-radius: 4px;">
-                {{ $booking->bookedvia }}
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm border border-gray-200">
+                    <thead>
+                        <tr class="bg-blue-900 text-white">
+                            <th class="px-3 py-2 text-left">Room</th>
+                            <th class="px-3 py-2 text-left">Check-in</th>
+                            <th class="px-3 py-2 text-left">Check-out</th>
+                            <th class="px-3 py-2 text-left">Nights</th>
+                            <th class="px-3 py-2 text-right">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b">
+                            <td class="px-3 py-2">{{ $booking->roomID }} - {{ $booking->roomtype }}</td>
+                            <td class="px-3 py-2">{{ $checkIn->format('M d, Y') }}</td>
+                            <td class="px-3 py-2">{{ $checkOut->format('M d, Y') }}</td>
+                            <td class="px-3 py-2">{{ $totalNights }}</td>
+                            <td class="px-3 py-2 text-right">₱{{ number_format($booking->roomprice, 2) }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-right font-semibold px-3 py-2">Subtotal</td>
+                            <td class="px-3 py-2 text-right">₱{{ number_format($subtotal, 2) }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-right font-semibold px-3 py-2">Tax (12%)</td>
+                            <td class="px-3 py-2 text-right">₱{{ number_format($taxAmount, 2) }}</td>
+                        </tr>
+                        <tr class="bg-yellow-400 text-blue-900 font-bold">
+                            <td colspan="4" class="text-right px-3 py-2">Total Amount</td>
+                            <td class="px-3 py-2 text-right">₱{{ number_format($totalAmount, 2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
+        <!-- Payment Method -->
+       <div class="px-6 py-4">
+    <h2 class="text-blue-900 font-bold mb-2">Payment Information</h2>
+    <hr class="border-yellow-400 mb-4">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Booked Via -->
+        <div class="p-3 bg-gray-50 rounded-md flex items-center gap-2 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18" />
+            </svg>
+            <div>
+                <span class="block text-xs text-gray-500">Booked Via</span>
+                <span class="font-medium">{{ $booking->bookedvia }}</span>
+            </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="p-3 bg-gray-50 rounded-md flex items-center gap-2 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 00-10 0v2M5 9h14a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2v-7a2 2 0 012-2z" />
+            </svg>
+            <div>
+                <span class="block text-xs text-gray-500">Payment Method</span>
+                <span class="font-medium">{{ $booking->payment_method ?? 'N/A' }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
         <!-- Footer -->
-        <div class="footer">
-            <div style="margin-bottom: 5px;">Thank you for choosing Soliera Hotel</div>
-            <div>reservations@solierahotel.com | (123) 456-7890</div>
+        <div class="bg-gray-100 px-6 py-4 text-center text-xs text-gray-600">
+            <p class="mb-1">Thank you for choosing Soliera Hotel!</p>
+            <p>reservations@solierahotel.com | (123) 456-7890</p>
         </div>
     </div>
 </body>
