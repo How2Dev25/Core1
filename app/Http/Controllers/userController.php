@@ -44,7 +44,7 @@ public function logout(Request $request)
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 
-    return redirect('/login');
+    return redirect('/employeelogin');
 }
 
 

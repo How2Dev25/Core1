@@ -29,11 +29,14 @@ Route::get('/', function () {
 
 
 // Login 
-Route::get('/login', function(){
-    return view('login.login');
+Route::get('/employeelogin', function(){
+    return view('employeelogin.login');
 });
 // guest
 Route::post('/guestloginform', [userController::class, 'guestlogin']);
+Route::get('/loginguest', function(){
+    return view('guestlogin.login');
+});
 
 // Register
 Route::get('/guestregister', function(){
@@ -41,8 +44,13 @@ Route::get('/guestregister', function(){
 });
 
 // 401 page
-Route::get('/errorpage', function(){
-    return view('error.restricted');
+
+// guest 401
+Route::get('/restrictedguest', function(){
+    return view('401.guesterror');
+});
+Route::get('/restrictedemployee', function(){
+    return view('401.employeeerror');
 });
 
 
@@ -287,9 +295,12 @@ Route::get('/photoupload', function(){
 Route::post('/registerguest', [userController::class, 'create']);
 
 Route::put('/upload-photo/{guestID}', [userController::class, 'profilesetup']);
+
+
+
 // logout
 // employee
-Route::get('/logout', [userController::class, 'logout']);
+Route::get('/employeelogout', [userController::class, 'logout']);
 
 // guest
 Route::get('/guestlogout', [userController::class, 'guestlogout']);
@@ -297,9 +308,6 @@ Route::get('/guestlogout', [userController::class, 'guestlogout']);
 // Print receipt
 Route::get('/printreceipt/{reservationID}', [reservationController::class, 'generateInvoice']);
 
-Route::get('/loginguest', function(){
-    return view('guestlogin.login');
-});
 
 
 Route::get('guestdashboard', function(){
@@ -320,3 +328,9 @@ Route::get('/myreservation', function(){
     ->get();
   return view('guest.myreservation', ['reserverooms' => $reserverooms]);
 });
+
+
+
+
+
+

@@ -21,7 +21,7 @@
     </div>
     
     <div class="navbar-end mr-4">
-        <a href="/login" class="relative inline-flex items-center justify-center px-4 py-2 overflow-hidden font-medium text-[#F7B32B] transition duration-300 ease-out border-2 border-[#F7B32B] rounded-lg group hover:bg-[#F7B32B] hover:text-white">
+        <a href="/loginguest" class="relative inline-flex items-center justify-center px-4 py-2 overflow-hidden font-medium text-[#F7B32B] transition duration-300 ease-out border-2 border-[#F7B32B] rounded-lg group hover:bg-[#F7B32B] hover:text-white">
             <span class="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-[#F7B32B] group-hover:translate-x-0 ease">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
@@ -70,7 +70,7 @@
 
     <!-- Login Button (unchanged width) -->
     <li class="mt-8">
-        <a href="/login" class="relative inline-flex items-center justify-center w-full px-4 py-2 overflow-hidden font-medium text-[#F7B32B] transition duration-300 ease-out border-2 border-[#F7B32B] rounded-lg group hover:bg-[#F7B32B] hover:text-white">
+        <a href="/loginguest" class="relative inline-flex items-center justify-center w-full px-4 py-2 overflow-hidden font-medium text-[#F7B32B] transition duration-300 ease-out border-2 border-[#F7B32B] rounded-lg group hover:bg-[#F7B32B] hover:text-white">
             <span class="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-[#F7B32B] group-hover:translate-x-0 ease">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
