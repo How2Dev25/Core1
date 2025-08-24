@@ -93,31 +93,37 @@
                 <th class="px-3 py-2 text-right">Price</th>
             </tr>
         </thead>
-        <tbody>
-            <tr class="border-b">
-                <td class="px-3 py-2">{{ $booking->roomID }} - {{ $booking->roomtype }}</td>
-                <td class="px-3 py-2">{{ $checkIn->format('M d, Y') }}</td>
-                <td class="px-3 py-2">{{ $checkOut->format('M d, Y') }}</td>
-                <td class="px-3 py-2">{{ $totalNights }}</td>
-                <td class="px-3 py-2 text-right">₱{{ number_format($booking->roomprice, 2) }}</td>
-            </tr>
-            <tr>
-                <td colspan="4" class="text-right font-semibold px-3 py-2">Subtotal</td>
-                <td class="px-3 py-2 text-right">₱{{ number_format($subtotal, 2) }}</td>
-            </tr>
-            <tr>
-                <td colspan="4" class="text-right font-semibold px-3 py-2">Tax (12%)</td>
-                <td class="px-3 py-2 text-right">₱{{ number_format($taxAmount, 2) }}</td>
-            </tr>
-            <tr>
-                <td colspan="4" class="text-right font-semibold px-3 py-2">Service Fee (2%)</td>
-                <td class="px-3 py-2 text-right">₱{{ number_format($serviceFee, 2) }}</td>
-            </tr>
-            <tr class="bg-yellow-400 text-blue-900 font-bold">
-                <td colspan="4" class="text-right px-3 py-2">Total Amount</td>
-                <td class="px-3 py-2 text-right">₱{{ number_format($totalAmount, 2) }}</td>
-            </tr>
-        </tbody>
+    <tbody>
+    <tr class="border-b">
+        <td class="px-3 py-2">{{ $booking->roomID }} - {{ $booking->roomtype }}</td>
+        <td class="px-3 py-2">{{ $checkIn->format('M d, Y') }}</td>
+        <td class="px-3 py-2">{{ $checkOut->format('M d, Y') }}</td>
+        <td class="px-3 py-2">{{ $totalNights }}</td>
+        <td class="px-3 py-2 text-right">₱{{ number_format($booking->roomprice, 2) }}</td>
+    </tr>
+
+    <tr>
+        <td colspan="4" class="text-right font-semibold px-3 py-2">Booked Date</td>
+        <td class="px-3 py-2 text-right">{{ date('M d, Y', strtotime($booking->created_at)) }}</td>
+    </tr>
+
+    <tr>
+        <td colspan="4" class="text-right font-semibold px-3 py-2">Subtotal</td>
+        <td class="px-3 py-2 text-right">₱{{ number_format($subtotal, 2) }}</td>
+    </tr>
+    <tr>
+        <td colspan="4" class="text-right font-semibold px-3 py-2">Tax (12%)</td>
+        <td class="px-3 py-2 text-right">₱{{ number_format($taxAmount, 2) }}</td>
+    </tr>
+    <tr>
+        <td colspan="4" class="text-right font-semibold px-3 py-2">Service Fee (2%)</td>
+        <td class="px-3 py-2 text-right">₱{{ number_format($serviceFee, 2) }}</td>
+    </tr>
+    <tr class="bg-yellow-400 text-blue-900 font-bold">
+        <td colspan="4" class="text-right px-3 py-2">Total Amount</td>
+        <td class="px-3 py-2 text-right">₱{{ number_format($totalAmount, 2) }}</td>
+    </tr>
+</tbody>
     </table>
 </div>
         </div>

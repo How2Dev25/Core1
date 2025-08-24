@@ -124,6 +124,11 @@
                 {{$reservation->guestname}}
               </p>
             </div>
+               <div class="bg-white p-4 rounded-lg border shadow-sm sm:col-span-2">
+          <p class="text-sm text-gray-500">Booked Date</p>
+           <p class="font-bold text-[#001f54]">{{ \Carbon\Carbon::parse($reservation->created_at)->format('M d, Y') }}</p>
+
+        </div>
           </div>
         </div>
 

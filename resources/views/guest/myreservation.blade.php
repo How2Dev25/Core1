@@ -126,7 +126,15 @@
     $vat = $subtotal * 0.12;
     $serviceFee = $subtotal * 0.02; // 2% service fee
     $total = $subtotal + $vat + $serviceFee;
+    $bookedDate = date('M d, Y', strtotime($reserveroom->reservation_created_at));
 @endphp
+
+
+<!-- Subtotal -->
+<div class="flex items-center justify-between text-xs">
+    <span class="text-gray-600">Subtotal:</span>
+    <span class="font-semibold text-gray-800">₱{{ number_format($subtotal, 2) }}</span>
+</div>
 
 <!-- VAT -->
 <div class="flex items-center justify-between text-xs">
@@ -145,6 +153,11 @@
     <span class="text-gray-700 font-semibold">Total:</span>
     <span class="font-bold text-gray-900">₱{{ number_format($total, 2) }}</span>
 </div>
+
+ <div class="flex items-center justify-between text-xs mt-1">
+    <span class="text-gray-600">Date Booked:</span>
+    <span class="font-semibold text-gray-800">{{ $bookedDate }}</span>
+  </div>
 </div>
 
     <!-- Action Buttons -->

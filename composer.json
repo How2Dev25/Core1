@@ -16,6 +16,7 @@
         "laravel/socialite": "^5.23",
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.6",
+        "phpmailer/phpmailer": "^6.10",
         "spatie/browsershot": "^5.0"
     },
     "require-dev": {

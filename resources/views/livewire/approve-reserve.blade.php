@@ -121,6 +121,15 @@
     </div>
 
     <div class="flex items-center gap-2">
+    <!-- calendar-check icon for booked date -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7H3v12a2 2 0 002 2z" />
+    </svg>
+    <span class="font-medium">Booked Date:</span> 
+    {{ \Carbon\Carbon::parse($reserveroom->created_at)->format('M d, Y') }}
+</div>
+
+    <div class="flex items-center gap-2">
         <!-- credit card icon -->
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 11h18m-2 6H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2z" />
@@ -168,7 +177,7 @@
     </svg>
     <span>Total:</span> ₱{{ number_format($total, 2) }}
 </div>
-</div>
+    </div>
 
             </div>
 

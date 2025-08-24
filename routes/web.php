@@ -368,9 +368,10 @@ Route::get('/myreservation', function(){
 
        guestAuthCheck();
 
-   $reserverooms = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+$reserverooms = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
     ->where('core1_reservation.guestID', Auth::guard('guest')->user()->guestID)
-    ->latest('core1_reservation.created_at')
+    ->orderBy('core1_reservation.created_at', 'desc')
+    ->select('core1_reservation.*', 'core1_room.*', 'core1_reservation.created_at as reservation_created_at')
     ->get();
   return view('guest.myreservation', ['reserverooms' => $reserverooms]);
 });
