@@ -50,6 +50,14 @@ Route::get('/selectedroom/{roomID}', [landingController::class, 'selectedroom'])
 Route::get('/bookconfirmlanding/{roomID}', [landingController::class, 'bookconfirmlanding']);
 Route::post('/guestcreatereservationlanding', [landingController::class, 'storereservation']);
 
+Route::get('/booking/success/{id}', function($id) {
+    $reservation = Reservation::findOrFail($id);
+    $roomprice = Room::where('roomID', $reservation->roomID)->value('roomprice');
+    $roomtype  = Room::where('roomID', $reservation->roomID)->value('roomtype');
+
+    return view('booking.bookingsuccess', compact('reservation', 'roomprice', 'roomtype'));
+})->name('booking.success');
+
 // Login 
 Route::get('/employeelogin', function(){
     return view('employeelogin.login');

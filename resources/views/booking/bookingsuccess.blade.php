@@ -108,7 +108,7 @@
             </div>
             <div class="bg-white p-4 rounded-lg border shadow-sm">
               <p class="text-sm text-gray-500">Room </p>
-              <p class="font-bold text-[#001f54]">#{{ $reservation->roomID }} - {{$reservation->roomtype}}</p>
+              <p class="font-bold text-[#001f54]">#{{ $reservation->roomID }} </p>
             </div>
             <div class="bg-white p-4 rounded-lg border shadow-sm">
               <p class="text-sm text-gray-500">Check-in</p>

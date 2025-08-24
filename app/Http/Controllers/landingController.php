@@ -26,7 +26,7 @@ class landingController extends Controller
           return view('booking.bookingconfirmation', ['room' => $room]);
     }
 
- public function storereservation(Request $request)
+public function storereservation(Request $request)
 {
     $form = $request->validate([
         'roomID' => 'required',
@@ -47,16 +47,13 @@ class landingController extends Controller
     $form['reservation_bookingstatus'] = 'Pending';
     $form['bookedvia'] = 'Soliera';
 
-    // Create reservation first to get the ID
+    // Create reservation
     $reservation = Reservation::create($form);
 
     // Generate receipt number
     $receiptNo = 'SOL-' . date('Ymd') . '-' . str_pad($reservation->reservationID, 6, '0', STR_PAD_LEFT);
-
-    // Generate Booking ID
     $bookingID = 'BKG-' . date('ymd') . '-' . str_pad($reservation->reservationID, 4, '0', STR_PAD_LEFT);
 
-    // Update reservation with receipt number & booking ID
     $reservation->update([
         'reservation_receipt' => $receiptNo,
         'bookingID' => $bookingID,
@@ -67,17 +64,7 @@ class landingController extends Controller
         'roomstatus' => 'Reserved',
     ]);
 
-    $roomprice = room::where('roomID', $form['roomID'])->value('roomprice');
-    $roomtype = room::where('roomID', $form['roomID'])->value('roomtype');
-
-     $reservation->refresh();
-
-    
-        return view('booking.bookingsuccess', [
-            'reservation' => $reservation, 'roomprice' => $roomprice, 'roomtype' => $roomtype
-        ]);
-
-    
+    return redirect()->route('booking.success', $reservation->reservationID);
 }
 
 

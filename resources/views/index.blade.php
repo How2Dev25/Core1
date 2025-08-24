@@ -69,7 +69,7 @@
 
     {{-- modals --}}
 
-    @include('booking.bookingmodal');
+    @include('booking.bookingmodal')
 </body>
 
 
