@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        
+      
     @vite('resources/css/app.css')
  
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -76,145 +78,127 @@
         }
     </style>
 
-<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
-    <!-- Confetti animation elements -->
-   
     
-    <div class="max-w-2xl w-full bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-500  ">
-        <!-- Header with gradient background -->
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white text-center">
-            <div class="flex justify-center mb-4">
-                <svg class="checkmark w-16 h-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                    <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                </svg>
-            </div>
-            <h1 class="text-2xl font-bold">Booking Confirmed!</h1>
-            <p class="opacity-90 mt-2">Thank you for your reservation</p>
-        </div>
+    <body>
         
-        <!-- Content section -->
-        <div class="p-6 space-y-6">
-            <!-- Message -->
-            <div class="text-center p-4 bg-blue-50 rounded-lg border border-blue-100 animate-fade-in-up">
-                <i class="fas fa-envelope-open-text text-blue-500 text-3xl mb-3"></i>
-                <h2 class="text-lg font-semibold text-gray-800">Please check your email</h2>
-                <p class="text-gray-600">We've sent a confirmation email with all the details of your booking.</p>
-            </div>
-            
-            <!-- Booking details -->
-            <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 shadow-sm animate-fade-in-up">
-                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <i class="fas fa-receipt text-indigo-600 mr-2"></i>
-                    Booking Details
-                </h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <p class="text-sm text-gray-500">Booking ID</p>
-                        <p class="font-semibold text-gray-800">#{{ $reservation->bookingID }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Room Number</p>
-                        <p class="font-semibold text-gray-800">#{{ $reservation->roomID }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Check-in Date</p>
-                        <p class="font-semibold text-gray-800">{{ \Carbon\Carbon::parse($reservation->checkInDate)->format('M d, Y') }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Check-out Date</p>
-                        <p class="font-semibold text-gray-800">{{ \Carbon\Carbon::parse($reservation->checkOutDate)->format('M d, Y') }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Total Guests</p>
-                        <p class="font-semibold text-gray-800">{{ $reservation->totalGuests }}</p>
-                    </div>
-                </div>
-
-                <!-- Price breakdown -->
-                @php
-                    $subtotal = $roomprice;
-                    $vat = $subtotal * 0.12;
-                    $serviceFee = $subtotal * 0.02;
-                    $total = $subtotal + $vat + $serviceFee;
-                @endphp
-
-                <div class="bg-white shadow-md rounded-lg p-4 space-y-2">
-                    <div class="flex justify-between">
-                        <p class="text-sm text-gray-500">Subtotal</p>
-                        <p class="font-semibold text-gray-800">₱{{ number_format($subtotal, 2) }}</p>
-                    </div>
-                    <div class="flex justify-between">
-                        <p class="text-sm text-gray-500">VAT (12%)</p>
-                        <p class="font-semibold text-gray-800">₱{{ number_format($vat, 2) }}</p>
-                    </div>
-                    <div class="flex justify-between">
-                        <p class="text-sm text-gray-500">Service Fee (2%)</p>
-                        <p class="font-semibold text-gray-800">₱{{ number_format($serviceFee, 2) }}</p>
-                    </div>
-                    <hr>
-                    <div class="flex justify-between">
-                        <p class="text-sm font-bold text-gray-700">Total Amount</p>
-                        <p class="text-lg font-bold text-gray-900">₱{{ number_format($total, 2) }}</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Additional info -->
-            <div class="bg-amber-50 rounded-xl p-5 border border-amber-200 animate-fade-in-up">
-                <h2 class="text-lg font-semibold text-amber-800 flex items-center">
-                    <i class="fas fa-info-circle mr-2"></i>
-                    What's Next?
-                </h2>
-                <ul class="mt-3 space-y-2 text-amber-700">
-                    <li class="flex items-start">
-                        <i class="fas fa-check-circle text-amber-600 mt-1 mr-2"></i>
-                        <span>You will receive an email confirmation shortly</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-check-circle text-amber-600 mt-1 mr-2"></i>
-                        <span>Present your booking ID at the front desk upon arrival</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-check-circle text-amber-600 mt-1 mr-2"></i>
-                        <span>Contact us if you have any questions or special requests</span>
-                    </li>
-                </ul>
-            </div>
-            
-            <!-- Action buttons -->
-            <div class="flex flex-col sm:flex-row gap-3 pt-4 animate-fade-in-up">
-                <button class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-lg font-medium transition duration-300 flex items-center justify-center">
-                    <i class="fas fa-print mr-2"></i>
-                    Print Confirmation
-                </button>
-                <button class="flex-1 border border-gray-300 hover:bg-gray-50 text-gray-700 py-3 px-4 rounded-lg font-medium transition duration-300 flex items-center justify-center">
-                    <i class="fas fa-home mr-2"></i>
-                    Back to Home
-                </button>
-            </div>
-        </div>
-        
-        <!-- Footer -->
-        <div class="bg-gray-100 p-4 text-center text-gray-500 text-sm">
-            <p>
-                Need assistance? Contact us at 
-                <a href="mailto:support@hotel.com" class="text-indigo-600 hover:underline">support@hotel.com</a> 
-                or call 
-                <a href="tel:+1234567890" class="text-indigo-600 hover:underline">+1 (234) 567-890</a>
-            </p>
-        </div>
+  
+  @include('booking.component.nav')  
+  <div id="confirmation-section" class="">
+<section class="bg-gray-50 min-h-screen flex items-center justify-center p-4 mt-10">
+  <div class="max-w-6xl w-full mt-10 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden border border-white/20">
+    
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-[#001f54] to-[#1a3470] p-6 text-white text-center relative">
+      <h1 class="text-2xl md:text-3xl font-bold">Booking Confirmed!</h1>
+      <p class="text-white/80 text-sm md:text-lg">Thank you for choosing us for your stay</p>
     </div>
 
+    <!-- Grid Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+      
+      <!-- Left Column -->
+      <div class="space-y-6">
+        <!-- Booking Details -->
+        <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-6 border shadow">
+          <h2 class="text-xl font-bold text-[#001f54] mb-4">Booking Details</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="bg-white p-4 rounded-lg border shadow-sm">
+              <p class="text-sm text-gray-500">Booking ID</p>
+              <p class="font-bold text-[#001f54]">#{{ $reservation->bookingID }}</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg border shadow-sm">
+              <p class="text-sm text-gray-500">Room </p>
+              <p class="font-bold text-[#001f54]">#{{ $reservation->roomID }} - {{$reservation->roomtype}}</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg border shadow-sm">
+              <p class="text-sm text-gray-500">Check-in</p>
+              <p class="font-bold text-green-600">{{ \Carbon\Carbon::parse($reservation->checkInDate)->format('M d, Y') }}</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg border shadow-sm">
+              <p class="text-sm text-gray-500">Check-out</p>
+              <p class="font-bold text-orange-600">{{ \Carbon\Carbon::parse($reservation->checkOutDate)->format('M d, Y') }}</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg border shadow-sm sm:col-span-2">
+              <p class="text-sm text-gray-500">Guest Name</p>
+              <p class="font-bold text-blue-600">
+                {{$reservation->guestname}}
+              </p>
+            </div>
+          </div>
+        </div>
 
+        <!-- Next Steps -->
+        <div class="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-xl p-6 border shadow">
+          <h2 class="text-xl font-bold text-amber-800 mb-4">What's Next?</h2>
+          <ul class="space-y-3 text-sm text-gray-700">
+            <li>✅ Check your email for confirmation</li>
+            <li>✅ Present your Booking ID at check-in</li>
+            <li>✅ Contact us if you need help</li>
+          </ul>
+        </div>
+      </div>
 
+      <!-- Right Column -->
+      <div class="space-y-6">
+        <!-- Payment Summary -->
+        @php
+          $subtotal = $roomprice;
+          $vat = $subtotal * 0.12;
+          $serviceFee = $subtotal * 0.02;
+          $total = $subtotal + $vat + $serviceFee;
+        @endphp
+        <div class="bg-white rounded-xl p-6 shadow border">
+          <h2 class="text-xl font-bold text-[#001f54] mb-4">Payment Summary</h2>
+          <div class="space-y-3 text-sm">
+            <div class="flex justify-between">
+              <p>Subtotal</p>
+              <p class="font-bold">₱{{ number_format($subtotal, 2) }}</p>
+            </div>
+            <div class="flex justify-between text-orange-600">
+              <p>VAT (12%)</p>
+              <p class="font-bold">₱{{ number_format($vat, 2) }}</p>
+            </div>
+            <div class="flex justify-between text-blue-600">
+              <p>Service Fee (2%)</p>
+              <p class="font-bold">₱{{ number_format($serviceFee, 2) }}</p>
+            </div>
+            <hr>
+            <div class="flex justify-between text-lg font-bold text-[#001f54]">
+              <p>Total</p>
+              <p>₱{{ number_format($total, 2) }}</p>
+            </div>
+          </div>
+        </div>
 
-</body>
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row gap-4">
+
+         
+          <a href="/" class="btn btn-primary w-full">
+            Back to Home
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+</div>
+
+@include('landing.footer')
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@2.6.0/dist/dom-to-image-more.min.js"></script>
+
+<!-- Your script -->
 
 
   @include('javascriptfix.soliera_js')
 
   <script src="{{asset('javascript/photouploadglobal.js')}}"></script>
+
+
+
   
 </html>

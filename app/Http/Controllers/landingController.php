@@ -68,12 +68,13 @@ class landingController extends Controller
     ]);
 
     $roomprice = room::where('roomID', $form['roomID'])->value('roomprice');
+    $roomtype = room::where('roomID', $form['roomID'])->value('roomtype');
 
      $reservation->refresh();
 
     
         return view('booking.bookingsuccess', [
-            'reservation' => $reservation, 'roomprice' => $roomprice
+            'reservation' => $reservation, 'roomprice' => $roomprice, 'roomtype' => $roomtype
         ]);
 
     
