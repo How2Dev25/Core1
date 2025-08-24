@@ -96,9 +96,8 @@
     <!-- Grid Content -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
       
-      <!-- Left Column -->
+      <!-- Left Column: Booking Details -->
       <div class="space-y-6">
-        <!-- Booking Details -->
         <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-6 border shadow">
           <h2 class="text-xl font-bold text-[#001f54] mb-4">Booking Details</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -107,28 +106,25 @@
               <p class="font-bold text-[#001f54]">#{{ $reservation->bookingID }}</p>
             </div>
             <div class="bg-white p-4 rounded-lg border shadow-sm">
-              <p class="text-sm text-gray-500">Room </p>
-              <p class="font-bold text-[#001f54]">#{{ $reservation->roomID }} </p>
+              <p class="text-sm text-gray-500">Room</p>
+              <p class="font-bold text-[#001f54]">#{{ $reservation->roomID }}</p>
             </div>
             <div class="bg-white p-4 rounded-lg border shadow-sm">
               <p class="text-sm text-gray-500">Check-in</p>
-              <p class="font-bold text-green-600">{{ \Carbon\Carbon::parse($reservation->checkInDate)->format('M d, Y') }}</p>
+              <p class="font-bold text-green-600">{{ \Carbon\Carbon::parse($reservation->reservation_checkin)->format('M d, Y') }}</p>
             </div>
             <div class="bg-white p-4 rounded-lg border shadow-sm">
               <p class="text-sm text-gray-500">Check-out</p>
-              <p class="font-bold text-orange-600">{{ \Carbon\Carbon::parse($reservation->checkOutDate)->format('M d, Y') }}</p>
+              <p class="font-bold text-orange-600">{{ \Carbon\Carbon::parse($reservation->reservation_checkout)->format('M d, Y') }}</p>
             </div>
             <div class="bg-white p-4 rounded-lg border shadow-sm sm:col-span-2">
               <p class="text-sm text-gray-500">Guest Name</p>
-              <p class="font-bold text-blue-600">
-                {{$reservation->guestname}}
-              </p>
+              <p class="font-bold text-blue-600">{{ $reservation->guestname }}</p>
             </div>
-               <div class="bg-white p-4 rounded-lg border shadow-sm sm:col-span-2">
-          <p class="text-sm text-gray-500">Booked Date</p>
-           <p class="font-bold text-[#001f54]">{{ \Carbon\Carbon::parse($reservation->created_at)->format('M d, Y') }}</p>
-
-        </div>
+            <div class="bg-white p-4 rounded-lg border shadow-sm sm:col-span-2">
+              <p class="text-sm text-gray-500">Booked Date</p>
+              <p class="font-bold text-[#001f54]">{{ \Carbon\Carbon::parse($reservation->created_at)->format('M d, Y') }}</p>
+            </div>
           </div>
         </div>
 
@@ -143,20 +139,30 @@
         </div>
       </div>
 
-      <!-- Right Column -->
+      <!-- Right Column: Payment Summary -->
       <div class="space-y-6">
-        <!-- Payment Summary -->
         @php
-          $subtotal = $roomprice;
+          $checkin = \Carbon\Carbon::parse($reservation->reservation_checkin);
+          $checkout = \Carbon\Carbon::parse($reservation->reservation_checkout);
+
+          // Ensure checkout is after check-in
+          if ($checkout->lt($checkin)) {
+              $checkout = $checkin->copy()->addDay();
+          }
+
+          $nights = $checkin->diffInDays($checkout);
+
+          $subtotal = $roomprice * $nights;
           $vat = $subtotal * 0.12;
           $serviceFee = $subtotal * 0.02;
           $total = $subtotal + $vat + $serviceFee;
         @endphp
+
         <div class="bg-white rounded-xl p-6 shadow border">
           <h2 class="text-xl font-bold text-[#001f54] mb-4">Payment Summary</h2>
           <div class="space-y-3 text-sm">
             <div class="flex justify-between">
-              <p>Subtotal</p>
+              <p>Subtotal ({{ $nights }} night{{ $nights > 1 ? 's' : '' }})</p>
               <p class="font-bold">₱{{ number_format($subtotal, 2) }}</p>
             </div>
             <div class="flex justify-between text-orange-600">
@@ -177,18 +183,15 @@
 
         <!-- Actions -->
         <div class="flex flex-col sm:flex-row gap-4">
-
-         
-          <a href="/" class="btn btn-primary w-full">
-            Back to Home
-          </a>
+          <a href="/" class="btn btn-primary w-full">Back to Home</a>
         </div>
       </div>
 
     </div>
-
   </div>
 </section>
+
+
 </div>
 
 @include('landing.footer')
