@@ -58,9 +58,9 @@
             <a data-aos="slide-right" href="#rooms" class="btn btn-primary btn-lg mr-4 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
                 Explore Rooms
             </a>
-            <a data-aos="slide-left" href="#booking" class="btn btn-outline btn-lg text-white border-white hover:bg-white hover:text-black transform hover:scale-105 transition-all duration-300">
+            <button data-aos="slide-left" onclick="view_room.showModal()"  class="btn btn-outline btn-lg text-white border-white hover:bg-white hover:text-black transform hover:scale-105 transition-all duration-300">
                 Book Now
-            </a>
+            </button>
         </div>
     </div>
 

@@ -28,12 +28,12 @@ class Reservedrooms extends Component
     public function fetchreservedrooms()
     {
         return Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
-            ->select('core1_reservation.*', 'core1_room.roomtype')
+            ->select('core1_reservation.*', 'core1_room.roomtype', 'core1_room.roomprice')
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('core1_reservation.guestname', 'like', '%' . $this->search . '%')
                       ->orWhere('core1_room.roomID', 'like', '%' . $this->search . '%')
-                      ->orwhere('core1_reservation.reservation_receipt', 'like', '%' . $this->search . '%');
+                      ->orwhere('core1_reservation.bookingID', 'like', '%' . $this->search . '%');
                 });
             })
             ->when($this->statusFilter, function ($query) {

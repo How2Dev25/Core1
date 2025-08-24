@@ -4,6 +4,7 @@ use App\Http\Controllers\channelController;
 use App\Http\Controllers\ecmController;
 use App\Http\Controllers\hmpController;
 use App\Http\Controllers\inventoryController;
+use App\Http\Controllers\landingController;
 use App\Http\Controllers\larController;
 use App\Http\Controllers\reservationController;
 use App\Http\Controllers\roomController;
@@ -39,6 +40,15 @@ Route::get('/', function () {
     return view('index');
 });
 
+// booking via landing
+
+Route::get('/bookinglanding', function(){
+    return view('booking.booking');
+});
+
+Route::get('/selectedroom/{roomID}', [landingController::class, 'selectedroom']);
+Route::get('/bookconfirmlanding/{roomID}', [landingController::class, 'bookconfirmlanding']);
+Route::post('/guestcreatereservationlanding', [landingController::class, 'storereservation']);
 
 // Login 
 Route::get('/employeelogin', function(){
