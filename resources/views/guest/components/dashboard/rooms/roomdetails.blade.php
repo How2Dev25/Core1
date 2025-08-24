@@ -29,7 +29,7 @@
         <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 transition-slow ">
             {{-- Subsystem Name --}}
           <div class="pb-5 border-b border-base-300 animate-fadeIn">
-            <h1 class="text-2xl font-bold text-[#191970] bg-clip-text ">Room Management</h1>
+            <h1 class="text-2xl font-bold text-[#191970] bg-clip-text ">Booking And Reservation</h1>
           </div>
             {{-- Subsystem Name --}}
 

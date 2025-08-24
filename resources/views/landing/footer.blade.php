@@ -18,7 +18,7 @@
       <p class="text-neutral-300 leading-relaxed">
         Reservations: <a href="tel:8005551234" class="hover:text-amber-400 transition"> (800) 555-1234</a><br />
         Front Desk: <a href="tel:3105555678" class="hover:text-amber-400 transition">(310) 555-5678</a><br />
-        Email: <a href="mailto:reservations@hotelias.com" class="hover:text-amber-400 transition">reservations@soliera.com</a>
+        Email: <a href="mailto:reservations@hotelias.com" class="hover:text-amber-400 transition">solierahotel@gmail.com</a>
       </p>
     </div>
 

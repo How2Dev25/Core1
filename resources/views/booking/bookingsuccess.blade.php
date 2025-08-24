@@ -12,7 +12,7 @@
  
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <title>{{$title}} - Room Management</title>
+    <title>{{$title}} - Success</title>
 
     
 </head>

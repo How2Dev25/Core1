@@ -367,16 +367,122 @@ HTML;
     }
 
 
-    public function confirm(Reservation $reservationID){
-        $reservationID->update([
-            'reservation_bookingstatus' => 'Confirmed'
-        ]);
+  public function confirm(Reservation $reservationID)
+{
+    // Update booking status
+    $reservationID->update([
+        'reservation_bookingstatus' => 'Confirmed'
+    ]);
 
-        session()->flash('confirm', 'Reservation Status Has Been Confirmed');
+    // Prepare data
+    $bookingID = $reservationID->bookingID;
+    $guestname = $reservationID->guestname;
+    $guestemail = $reservationID->guestemailaddress;
+    $roomID = $reservationID->roomID;
+    $checkin = date('M d, Y', strtotime($reservationID->reservation_checkin));
+    $checkout = date('M d, Y', strtotime($reservationID->reservation_checkout));
+    $bookedDate = date('M d, Y', strtotime($reservationID->created_at));
 
-        return redirect()->back();
+    $roomprice = Room::where('roomID', $reservationID->roomID)->value('roomprice');
+    // Calculate nights
+    $nights = (strtotime($reservationID->reservation_checkout) - strtotime($reservationID->reservation_checkin)) / (60*60*24);
 
+    // Payment calculations
+    $subtotal = $roomprice * $nights;
+    $serviceFee = round($subtotal * 0.02, 2);
+    $vat = round($subtotal * 0.12, 2);
+    $total = $subtotal + $serviceFee + $vat;
+
+    // Format numbers
+    $subtotalFormatted = number_format($subtotal, 2);
+    $serviceFeeFormatted = number_format($serviceFee, 2);
+    $vatFormatted = number_format($vat, 2);
+    $totalFormatted = number_format($total, 2);
+
+    // Send email
+    $mail = new PHPMailer(true);
+
+    try {
+        $mail->isSMTP();
+        $mail->Host       = env('MAIL_HOST');
+        $mail->SMTPAuth   = true;
+        $mail->Username   = env('MAIL_USERNAME');
+        $mail->Password   = env('MAIL_PASSWORD');
+        $mail->SMTPSecure = env('MAIL_ENCRYPTION');
+        $mail->Port       = env('MAIL_PORT');
+
+        $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+        $mail->addAddress($guestemail, $guestname);
+        $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo');
+        $mail->isHTML(true);
+        $mail->Subject = "Reservation Confirmed - $bookingID";
+
+        $mailBody = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Reservation Confirmed - Soliera Hotel</title>
+</head>
+<body style="margin:0; font-family:Arial, sans-serif; background-color:#f4f4f4;">
+<div style="max-width:600px; margin:0 auto; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+
+<!-- Header -->
+<div style="background:#001f54; padding:30px 20px; text-align:center;">
+    <img src="cid:hotelLogo" alt="Soliera Hotel Logo" style="width:80px;height:80px;border-radius:50%;margin-bottom:15px;">
+    <h1 style="color:#F7B32B; font-size:28px; margin:0;">SOLIERA HOTEL</h1>
+</div>
+
+<!-- Confirmation -->
+<div style="padding:30px 20px; text-align:center;">
+    <h2 style="color:#001f54; font-size:24px; margin:0 0 15px 0;">Your Reservation is Confirmed!</h2>
+    <p style="color:#333; margin:0;">We are delighted to confirm your reservation. Have a wonderful stay at Soliera Hotel!</p>
+</div>
+
+<!-- Reservation Details -->
+<div style="padding:20px; background:#f8f9fa; border-radius:8px; margin:0 20px 20px; border-left:4px solid #F7B32B;">
+<table style="width:100%; border-collapse:collapse;">
+<tr><td style="padding:8px 0; color:#666; font-weight:bold;">Booking ID:</td><td style="padding:8px 0; color:#001f54;">$bookingID</td></tr>
+<tr><td style="padding:8px 0; color:#666; font-weight:bold;">Room:</td><td style="padding:8px 0; color:#001f54;">$roomID</td></tr>
+<tr><td style="padding:8px 0; color:#666; font-weight:bold;">Check-in:</td><td style="padding:8px 0; color:#001f54;">$checkin</td></tr>
+<tr><td style="padding:8px 0; color:#666; font-weight:bold;">Check-out:</td><td style="padding:8px 0; color:#001f54;">$checkout</td></tr>
+<tr><td style="padding:8px 0; color:#666; font-weight:bold;">Nights:</td><td style="padding:8px 0; color:#001f54;">$nights</td></tr>
+<tr><td style="padding:8px 0; color:#666; font-weight:bold;">Booked Date:</td><td style="padding:8px 0; color:#001f54;">$bookedDate</td></tr>
+</table>
+</div>
+
+<!-- Payment Summary -->
+<div style="padding:20px; background:#f8f9fa; border-radius:8px; margin:0 20px 20px; border-left:4px solid #F7B32B;">
+<h3 style="color:#001f54; font-size:18px; margin-bottom:10px;">Payment Summary</h3>
+<table style="width:100%; border-collapse:collapse;">
+<tr><td style="padding:8px 0; color:#666;">Subtotal:</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$subtotalFormatted</td></tr>
+<tr><td style="padding:8px 0; color:#666;">Service Fee (2%):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$serviceFeeFormatted</td></tr>
+<tr><td style="padding:8px 0; color:#666;">VAT (12%):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$vatFormatted</td></tr>
+<tr style="border-top:2px solid #F7B32B;"><td style="padding:8px 0; font-weight:bold;">Total:</td><td style="padding:8px 0; font-weight:bold; text-align:right;">₱$totalFormatted</td></tr>
+</table>
+</div>
+
+<!-- Footer -->
+<div style="text-align:center; padding:20px; background:#001f54; color:#F7B32B; border-radius:0 0 8px 8px;">
+<p style="margin:0; font-size:14px;">© 2025 Soliera Hotel. All rights reserved.</p>
+</div>
+
+</div>
+</body>
+</html>
+HTML;
+
+        $mail->Body = $mailBody;
+        $mail->send();
+
+    } catch (Exception $e) {
+        Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
     }
+
+    session()->flash('confirm', 'Reservation Status Has Been Confirmed');
+    return redirect()->back();
+}
+
 
     public function checkin(Reservation $reservationID){
           $reservationID->update([
