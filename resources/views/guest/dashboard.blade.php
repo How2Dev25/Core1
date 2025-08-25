@@ -172,244 +172,180 @@
   
 
         <!-- Enhanced Carousel Section -->
-    
-    <div class="container mx-auto max-w-7xl">
-        <div class="card bg-base-100 shadow-xl mb-8">
-            <div class="card-header">
-                <h2 class="text-2xl font-bold p-6 pb-2 flex items-center gap-3">
-                    <i data-lucide="calendar-heart" class="w-7 h-7 text-primary"></i>
-                    Upcoming Hotel Events
-                </h2>
-            </div>
-            <div class="carousel w-full rounded-box">
-                <!-- Summer Pool Party -->
-                <div id="slide1" class="carousel-item relative w-full">
-                    <div class="hero h-80 w-full" 
-                         style="background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&h=400&fit=crop&crop=center'); background-size: cover; background-position: center;">
-                       
-                        <div class="hero-content text-center text-neutral-content relative z-10">
-                            <div class="max-w-md">
-                                <div class="flex justify-center mb-4">
-                                    <div class="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                                        <i data-lucide="waves" class="w-8 h-8 text-white"></i>
-                                    </div>
-                                </div>
-                                <h1 class="mb-5 text-4xl font-bold floating-animation">Summer Pool Party</h1>
-                                <p class="mb-5 text-lg">Join us for our annual summer celebration with live music, special cocktails, and poolside dining</p>
-                                <div class="badge badge-accent badge-lg mb-4 shadow-lg">
-                                    <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
-                                    June 25, 2024
-                                </div>
-                                <div class="flex gap-3 justify-center">
-                                    <button class="btn btn-primary shadow-lg hover:shadow-xl transition-all duration-300">
-                                        <i data-lucide="info" class="w-4 h-4"></i>
-                                        Learn More
-                                    </button>
-                                    <button class="btn btn-outline btn-primary bg-white/10 backdrop-blur-sm hover:bg-primary hover:text-primary-content shadow-lg">
-                                        <i data-lucide="user-plus" class="w-4 h-4"></i>
-                                        RSVP
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2 z-20">
-                        <a href="#slide3" class="btn btn-circle btn-primary btn-nav shadow-lg hover:shadow-xl">
-                            <i data-lucide="chevron-left" class="w-5 h-5"></i>
-                        </a>
-                        <a href="#slide2" class="btn btn-circle btn-primary btn-nav shadow-lg hover:shadow-xl">
-                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
-                        </a>
-                    </div>
-                </div>
+<div class="container mx-auto max-w-7xl">
+    <div class="card bg-base-100 shadow-xl mb-8">
+        <div class="card-header">
+            <h2 class="text-2xl font-bold p-6 pb-2 flex items-center gap-3">
+                <i data-lucide="calendar-heart" class="w-7 h-7 text-primary"></i>
+                Upcoming Hotel Events
+            </h2>
+        </div>
 
-                <!-- Wine Tasting -->
-                <div id="slide2" class="carousel-item relative w-full">
-                    <div class="hero h-80 w-full" 
-                         style="background-image: url('https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1200&h=400&fit=crop&crop=center'); background-size: cover; background-position: center;">
-                      
-                        <div class="hero-content text-center text-neutral-content relative z-10">
-                            <div class="max-w-md">
-                                <div class="flex justify-center mb-4">
-                                    <div class="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                                        <i data-lucide="wine" class="w-8 h-8 text-white"></i>
+        <!-- Carousel Wrapper -->
+        <div class="relative w-full overflow-hidden">
+            <div class="flex transition-transform duration-700 ease-in-out" id="eventSlides">
+                @foreach ($events as $event)
+                    <div class="w-full flex-shrink-0">
+                        <div class="hero h-80 w-full"
+                             style="background-image: url('{{ asset($event->eventphoto) }}'); background-size: cover; background-position: center;">
+                            <div class="hero-content text-center text-neutral-content relative z-10">
+                                <div class="max-w-md">
+                                    <div class="flex justify-center mb-4">
+                                        <div class="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                                            <i data-lucide="waves" class="w-8 h-8 text-white"></i>
+                                        </div>
                                     </div>
-                                </div>
-                                <h1 class="mb-5 text-4xl font-bold floating-animation">Wine Tasting</h1>
-                                <p class="mb-5 text-lg">Sample exquisite wines from local vineyards with our expert sommelier and paired appetizers</p>
-                                <div class="badge badge-secondary badge-lg mb-4 shadow-lg">
-                                    <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
-                                    July 12, 2024
-                                </div>
-                                <div class="flex gap-3 justify-center">
-                                    <button class="btn btn-primary shadow-lg hover:shadow-xl transition-all duration-300">
-                                        <i data-lucide="info" class="w-4 h-4"></i>
-                                        Learn More
-                                    </button>
-                                    <button class="btn btn-outline btn-primary bg-white/10 backdrop-blur-sm hover:bg-primary hover:text-primary-content shadow-lg">
-                                        <i data-lucide="bookmark-plus" class="w-4 h-4"></i>
-                                        Reserve Spot
-                                    </button>
+                                    <h1 class="mb-5 text-4xl font-bold floating-animation">{{ $event->eventname }}</h1>
+                                    <div class="badge badge-accent badge-lg mb-4 shadow-lg">
+                                        <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
+                                        {{ $event->eventdate }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2 z-20">
-                        <a href="#slide1" class="btn btn-circle btn-primary btn-nav shadow-lg hover:shadow-xl">
-                            <i data-lucide="chevron-left" class="w-5 h-5"></i>
-                        </a>
-                        <a href="#slide3" class="btn btn-circle btn-primary btn-nav shadow-lg hover:shadow-xl">
-                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Yoga Retreat -->
-                <div id="slide3" class="carousel-item relative w-full">
-                    <div class="hero h-80 w-full" 
-                         style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=400&fit=crop&crop=center'); background-size: cover; background-position: center;">
-                      
-                        <div class="hero-content text-center text-neutral-content relative z-10">
-                            <div class="max-w-md">
-                                <div class="flex justify-center mb-4">
-                                    <div class="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                                        <i data-lucide="lotus" class="w-8 h-8 text-white"></i>
-                                    </div>
-                                </div>
-                                <h1 class="mb-5 text-4xl font-bold floating-animation">Yoga Retreat</h1>
-                                <p class="mb-5 text-lg">Rejuvenate your mind and body with our expert instructors in a serene beachfront setting</p>
-                                <div class="badge badge-info badge-lg mb-4 shadow-lg">
-                                    <i data-lucide="calendar-range" class="w-4 h-4 mr-1"></i>
-                                    August 5-7, 2024
-                                </div>
-                                <div class="flex gap-3 justify-center">
-                                    <button class="btn btn-primary shadow-lg hover:shadow-xl transition-all duration-300">
-                                        <i data-lucide="info" class="w-4 h-4"></i>
-                                        Learn More
-                                    </button>
-                                    <button class="btn btn-outline btn-primary bg-white/10 backdrop-blur-sm hover:bg-primary hover:text-primary-content shadow-lg">
-                                        <i data-lucide="package-plus" class="w-4 h-4"></i>
-                                        Book Package
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2 z-20">
-                        <a href="#slide2" class="btn btn-circle btn-primary btn-nav shadow-lg hover:shadow-xl">
-                            <i data-lucide="chevron-left" class="w-5 h-5"></i>
-                        </a>
-                        <a href="#slide1" class="btn btn-circle btn-primary btn-nav shadow-lg hover:shadow-xl">
-                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
-                        </a>
-                    </div>
-                </div>
+                @endforeach
             </div>
-            
-            <!-- Enhanced Navigation Indicators -->
-            <div class="flex justify-center w-full py-6 gap-3">
-                <a href="#slide1" class="btn btn-sm btn-circle hover:btn-primary transition-all duration-200">1</a>
-                <a href="#slide2" class="btn btn-sm btn-circle hover:btn-primary transition-all duration-200">2</a>
-                <a href="#slide3" class="btn btn-sm btn-circle hover:btn-primary transition-all duration-200">3</a>
+
+            <!-- Prev / Next -->
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2 z-20">
+                <button onclick="prevEvent()" class="btn btn-circle btn-primary shadow-lg hover:shadow-xl">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+                <button onclick="nextEvent()" class="btn btn-circle btn-primary shadow-lg hover:shadow-xl">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
             </div>
         </div>
 
-    
-     
+        <!-- Indicators -->
+        <div class="flex justify-center w-full py-6 gap-3">
+            @foreach ($events as $index => $event)
+                <button onclick="goToEvent({{ $index }})" 
+                        class="btn btn-sm btn-circle hover:btn-primary transition-all duration-200">
+                    {{ $index + 1 }}
+                </button>
+            @endforeach
+        </div>
     </div>
+</div>
 
-   
+<script>
+    let eventIndex = 0;
+    const eventSlides = document.getElementById('eventSlides');
+    const totalEventSlides = {{ count($events) }};
+
+    function updateEventCarousel() {
+        eventSlides.style.transform = `translateX(-${eventIndex * 100}%)`;
+    }
+
+    function nextEvent() {
+        eventIndex = (eventIndex + 1) % totalEventSlides;
+        updateEventCarousel();
+    }
+
+    function prevEvent() {
+        eventIndex = (eventIndex - 1 + totalEventSlides) % totalEventSlides;
+        updateEventCarousel();
+    }
+
+    function goToEvent(index) {
+        eventIndex = index;
+        updateEventCarousel();
+    }
+
+    // Auto-slide
+    setInterval(nextEvent, 5000);
+
+    // Init
+    updateEventCarousel();
+</script>
 
 
-        <!-- Enhanced Room Showcase -->
-        <div class="card bg-base-100 shadow-xl">
+<div class="card  shadow-xl">
+  <div class="card-body">
+    <!-- Carousel Showcase -->
+    <div class="relative w-full overflow-hidden" id="showcaseCarousel">
+      <div class="flex transition-transform duration-700 ease-in-out" id="showcaseSlides">
+        
+        <!-- Slide 1 -->
+        <div class="w-full flex-shrink-0 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 px-4">
+          <!-- Standard Room -->
+          <div class="card bg-base-100 shadow-lg border">
+            <figure class="px-4 pt-4">
+              <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=250&fit=crop"
+                alt="Standard Room" class="rounded-xl h-48 w-full object-cover" />
+            </figure>
             <div class="card-body">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold">Available Rooms</h2>
-                    <button class="btn btn-primary btn-outline">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
-                        </svg>
-                        View All
-                    </button>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                    <!-- Standard Room -->
-                    <div class="card bg-base-100 shadow-lg card-hover border">
-                        <figure class="px-4 pt-4">
-                            <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=250&fit=crop" alt="Standard Room" class="rounded-xl h-48 w-full object-cover" />
-                        </figure>
-                        <div class="card-body">
-                            <h2 class="card-title">
-                                Standard Room
-                                <div class="badge badge-primary">Popular</div>
-                            </h2>
-                            <p class="text-base-content/70">Comfortable accommodation with all essential amenities for a pleasant stay.</p>
-                            <div class="flex items-center gap-2 text-sm text-base-content/60 mb-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                                2 Guests • Queen Bed • 25 sqm
-                            </div>
-                            <div class="card-actions justify-between items-center">
-                                <div class="text-2xl font-bold text-primary">$129<sub class="text-sm font-normal text-base-content/60">/night</sub></div>
-                                <button class="btn btn-primary">Book Now</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Deluxe Room -->
-                    <div class="card bg-base-100 shadow-lg card-hover border">
-                        <figure class="px-4 pt-4">
-                            <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=400&h=250&fit=crop" alt="Deluxe Room" class="rounded-xl h-48 w-full object-cover" />
-                        </figure>
-                        <div class="card-body">
-                            <h2 class="card-title">
-                                Deluxe Room
-                                <div class="badge badge-secondary">Premium</div>
-                            </h2>
-                            <p class="text-base-content/70">Spacious room with premium amenities and stunning city or garden views.</p>
-                            <div class="flex items-center gap-2 text-sm text-base-content/60 mb-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                                3 Guests • King Bed • 35 sqm
-                            </div>
-                            <div class="card-actions justify-between items-center">
-                                <div class="text-2xl font-bold text-secondary">$199<sub class="text-sm font-normal text-base-content/60">/night</sub></div>
-                                <button class="btn btn-primary">Book Now</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Ocean View Suite -->
-                    <div class="card bg-base-100 shadow-lg card-hover border border-accent">
-                        <figure class="px-4 pt-4">
-                            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=250&fit=crop" alt="Ocean View Suite" class="rounded-xl h-48 w-full object-cover" />
-                        </figure>
-                        <div class="card-body">
-                            <h2 class="card-title">
-                                Ocean View Suite
-                                <div class="badge badge-accent">Luxury</div>
-                            </h2>
-                            <p class="text-base-content/70">Ultimate luxury with breathtaking ocean views and exclusive amenities.</p>
-                            <div class="flex items-center gap-2 text-sm text-base-content/60 mb-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                                4 Guests • King Bed • 55 sqm
-                            </div>
-                            <div class="card-actions justify-between items-center">
-                                <div class="text-2xl font-bold text-accent">$299<sub class="text-sm font-normal text-base-content/60">/night</sub></div>
-                                <button class="btn btn-primary">Book Now</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              <h2 class="card-title">Standard Room <div class="badge badge-primary">Popular</div></h2>
+              <p class="text-base-content/70">Cozy and affordable with all the essentials.</p>
             </div>
+          </div>
+
+          <!-- Deluxe Room -->
+          <div class="card bg-base-100 shadow-lg border">
+            <figure class="px-4 pt-4">
+              <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=400&h=250&fit=crop"
+                alt="Deluxe Room" class="rounded-xl h-48 w-full object-cover" />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">Deluxe Room <div class="badge badge-secondary">Premium</div></h2>
+              <p class="text-base-content/70">Spacious room with premium amenities and views.</p>
+            </div>
+          </div>
+
+          <!-- Ocean View Suite -->
+          <div class="card bg-base-100 shadow-lg border">
+            <figure class="px-4 pt-4">
+              <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=250&fit=crop"
+                alt="Ocean View Suite" class="rounded-xl h-48 w-full object-cover" />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">Ocean View Suite <div class="badge badge-accent">Luxury</div></h2>
+              <p class="text-base-content/70">Breathtaking ocean views with exclusive comfort.</p>
+            </div>
+          </div>
         </div>
+
+
+      </div>
     </div>
+
+    <!-- Controls -->
+    <div class="flex justify-center w-full py-4 gap-2">
+      <button class="btn btn-sm" onclick="prevShowcase()">❮</button>
+      <button class="btn btn-sm" onclick="nextShowcase()">❯</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let showcaseIndex = 0;
+  const showcaseSlides = document.getElementById('showcaseSlides');
+  const totalShowcaseSlides = showcaseSlides.children.length;
+
+  function updateShowcase() {
+    showcaseSlides.style.transform = `translateX(-${showcaseIndex * 100}%)`;
+  }
+
+  function nextShowcase() {
+    showcaseIndex = (showcaseIndex + 1) % totalShowcaseSlides;
+    updateShowcase();
+  }
+
+  function prevShowcase() {
+    showcaseIndex = (showcaseIndex - 1 + totalShowcaseSlides) % totalShowcaseSlides;
+    updateShowcase();
+  }
+
+  // Auto slide every 6s
+  setInterval(nextShowcase, 6000);
+
+  // Init
+  updateShowcase();
+</script>
+
+
 
    
 </section>
@@ -432,34 +368,6 @@
     </script>
     
 
-  <script>
-      
-
-        // Carousel functionality
-        let currentCarouselItem = 0;
-        const carouselItems = document.querySelectorAll('.carousel-item');
-        
-        function scrollCarousel(direction) {
-            currentCarouselItem += direction;
-            
-            if (currentCarouselItem < 0) {
-                currentCarouselItem = carouselItems.length - 1;
-            } else if (currentCarouselItem >= carouselItems.length) {
-                currentCarouselItem = 0;
-            }
-            
-            const container = document.querySelector('.carousel-container');
-            container.scrollTo({
-                left: currentCarouselItem * container.offsetWidth,
-                behavior: 'smooth'
-            });
-        }
-
-        // Auto-advance carousel every 5 seconds
-        setInterval(() => {
-            scrollCarousel(1);
-        }, 5000);
-    </script>
 
 
  

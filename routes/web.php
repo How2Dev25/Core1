@@ -371,7 +371,9 @@ Route::get('/printreceipt/{reservationID}', [reservationController::class, 'gene
 
 Route::get('guestdashboard', function(){
      guestAuthCheck();
-    return view('guest.dashboard');
+     $events = ecm::all();
+     $room = room::all();
+    return view('guest.dashboard', ['events' => $events, 'room' => $room]);
 });
 
 // Guest

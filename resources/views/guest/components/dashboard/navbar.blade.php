@@ -27,7 +27,7 @@
     <!-- Header -->
     <li class="px-4 py-3 border-b flex justify-between items-center sticky top-0 bg-[#001f54] z-10">
       <div class="flex items-center gap-2">
-        <i data-lucide="bell" class="w-5 h-5 text-[#001f54]"></i>
+        <i data-lucide="bell" class="w-5 h-5 text-white"></i>
         <span class="font-semibold text-white">Notifications</span>
       </div>
     <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-50 text-sm text-red-500 hover:bg-red-100 hover:text-red-700 transition">
