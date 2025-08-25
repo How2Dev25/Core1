@@ -6,7 +6,7 @@
       </button>
     </form>
 
-    <h3 class="text-lg font-bold text-green-600 mb-4 flex items-center gap-2">
+    <h3 class="text-lg font-bold text-[#F7B32B] mb-4 flex items-center gap-2">
       <i data-lucide="check" class="w-5 h-5"></i>
       Confirm Reservation
     </h3>
@@ -18,7 +18,7 @@
       @method('PUT')
       <div class="modal-action">
         <button  type="button" onclick="confirm_reservation_{{$reserveroom->reservationID}}.close()" class="btn btn-ghost">Cancel</button>
-        <button  type="submit" class="btn btn-success">
+        <button  type="submit" class="btn btn-primary">
           <i data-lucide="check" class="w-4 h-4 mr-1"></i>
           Confirm
         </button>

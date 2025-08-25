@@ -31,7 +31,7 @@ class userController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect('/sampledash');
+        return redirect('/employeedashboard');
     }
 
     return back()->withErrors([

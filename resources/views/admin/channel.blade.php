@@ -11,6 +11,9 @@
     
     <title>{{$title}} - Channel Management</title>
 </head>
+@auth
+    
+
 <body class="bg-base-100">
     <div class="flex h-screen overflow-hidden">
       <!-- Sidebar -->
@@ -325,7 +328,7 @@
   
   @include('javascriptfix.soliera_js')
   </body>
-
+@endauth
 
   <script src="{{asset('javascript/photouploadglobal.js')}}"></script>
   

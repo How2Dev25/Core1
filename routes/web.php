@@ -32,6 +32,12 @@ function guestAuthCheck() {
     }
 }
 
+function employeeAuthCheck() {
+    if (!Auth::check()) {
+        return redirect('/restrictedemployee')->send(); // stop execution and redirect
+    }
+}
+
 // 
 
 
@@ -89,10 +95,12 @@ Route::get('/restrictedemployee', function(){
 // dashboard
 
 Route::get('/employeedashboard', function(){
+    employeeAuthCheck();
     return view('admin.dashboard');
 });
 
 Route::get('/hmp', function(){
+    employeeAuthCheck();
     $hmpdata = Hmp::latest()->get();
      $events = Ecm::where('eventstatus', 'Approved')->latest()->get();
       $rooms = room::where('roomstatus', 'Available')->latest()->get();
@@ -106,6 +114,7 @@ Route::delete('/deletehmp/{promoID}', [hmpController::class, 'deletehmp']);
 
 // events and conference module
 Route::get('/ecm', function(){
+     employeeAuthCheck();
     $events = Ecm::latest()->get();
     $totalevents = Ecm::count();
     $approvedevents = Ecm::where('eventstatus', 'Approved')->count();
@@ -120,6 +129,7 @@ Route::put('/approveecm/{eventID}', [ecmController::class, 'approved']);
 Route::put('/cancelecm/{eventID}', [ecmController::class, 'cancel']);
 
 Route::get('/roommanagement', function(Request $request) {
+     employeeAuthCheck();
     $totalrooms = Room::count();
     $occupiedrooms = Room::where('roomstatus', 'Occupied')->count();
     $availablerooms = Room::where('roomstatus', 'Available')->count();
@@ -162,6 +172,7 @@ Route::delete('/deleteroomphoto/{roomphotoID}', [roomController::class, 'deleter
 
 // Inventory And Stocks
 Route::get('/ias', function(){
+     employeeAuthCheck();
     $totalItems = Inventory::count();
     $instock = Inventory::sum('core1_inventory_stocks');
     $lowstock = Inventory::whereColumn('core1_inventory_stocks', '<', 'core1_inventory_threshold')->count();
@@ -183,6 +194,7 @@ Route::delete('/deletestockrequest/{core1_stockID}', [stockController::class, 'd
 
 // Housekeeping And Maintenance 
 Route::get('/hmm', function(){
+     employeeAuthCheck();
       $roomID = room::where('roomstatus', '!=', 'Occupied')->where('roomstatus', '!=', 'Maintenance')->latest()->get();
       $inventory = Inventory::latest()->get();
       $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
@@ -206,15 +218,18 @@ Route::put('usestocks/{core1_inventoryID}', [roommantenanceController::class, 'u
 
 // room feedbacks
 Route::get('/roomfeedback', function(){
+     employeeAuthCheck();
     return view('admin.roomfeedback');
 });
 Route::get('/servicefeedback', function(){
+     employeeAuthCheck();
     return view('admin.servicefeedback');
 });
 
 
 // Channel Management
 Route::get('/channel', function(){
+     employeeAuthCheck();
     $rooms = room::where('roomstatus', 'Available')->latest()->get();
    $channels = Channel::join('core1_room', 'core1_room.roomID', '=', 'channel_table.roomID')
     ->select('channel_table.*', 'core1_room.*', 'channel_table.created_at as createdchannel')
@@ -236,6 +251,7 @@ Route::delete('/deletelisting/{channelID}', [channelController::class, 'delete']
 
 // booking and reservation
 Route::get('/bas', function(){
+     employeeAuthCheck();
     $rooms = room::where('roomstatus', 'Available')->latest()->get();
     $reserverooms =  Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
         ->latest('core1_reservation.created_at')
@@ -256,17 +272,20 @@ Route::post('/guestcreatereservation', [reservationController::class, 'gueststor
  
 
 Route::get('/reservationpage', function(){
+     employeeAuthCheck();
     $rooms = room::where('roomstatus', 'Available')->latest()->get();
     return view('admin.components.bas.reservationpage', ['rooms' => $rooms]);
 });
 
 Route::get('/aiform', function(){
+     employeeAuthCheck();
     return view('admin.components.bas.aiform');
 });
 
 
 // front desk
 Route::get('/frontdesk', function(){
+     employeeAuthCheck();
        $reserverooms =  Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
         ->latest('core1_reservation.created_at')
         ->get();
@@ -282,6 +301,7 @@ Route::put('/reservationconfirm/{reservationID}', [reservationController::class,
 // loyalty and rewards
 
 Route::get('lar', function(){
+     employeeAuthCheck();
     $rooms = room::whereNotIn('roomID', function ($query) {
     $query->select('roomID')->from('core1_loyaltyandrewards');
 })->get();

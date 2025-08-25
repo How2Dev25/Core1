@@ -12,6 +12,7 @@
     <title>{{$title}} - Booking And Reservation</title>
       @livewireStyles
 </head>
+@auth
 <body class="bg-base-100">
     <div class="flex h-screen overflow-hidden">
       <!-- Sidebar -->
@@ -83,6 +84,15 @@
   </div>
 </section>
 
+        </main>
+
+      </div>
+
+    </div>
+
+</body>
+
+@endauth
 
 
 

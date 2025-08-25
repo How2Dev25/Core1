@@ -12,6 +12,10 @@
     <title>{{$title}} - Booking And Reservation</title>
       @livewireStyles
 </head>
+
+@auth
+    
+
 <body class="bg-base-100">
     <div class="flex h-screen overflow-hidden">
       <!-- Sidebar -->
@@ -204,7 +208,7 @@
    @livewireScripts
   @include('javascriptfix.soliera_js')
   </body>
-
+@endauth
 
   <script src="{{asset('javascript/photouploadglobal.js')}}"></script>
   

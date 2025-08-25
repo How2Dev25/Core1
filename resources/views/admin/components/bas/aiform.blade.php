@@ -18,6 +18,9 @@ Special Request: {{ $prefilledRequest ?? 'none' }}
     <title>{{$title}} - Booking And Reservation</title>
       @livewireStyles
 </head>
+@auth
+    
+
 <body class="bg-base-100">
     <div class="flex h-screen overflow-hidden">
       <!-- Sidebar -->
@@ -165,7 +168,7 @@ Special Request: {{ $prefilledRequest ?? 'none' }}
   @include('javascriptfix.soliera_js')
   </body>
 
-
+@endauth
 
 
   

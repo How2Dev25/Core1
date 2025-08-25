@@ -207,48 +207,50 @@
         <!-- Actions Drawer (unchanged) -->
         <div id="actions-drawer-{{$reserveroom->reservationID}}" 
              class="fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50">
-            <div class="p-4 border-b">
-                <h4 class="font-bold">Actions for Room #{{$reserveroom->roomID}}</h4>
-                <button onclick="document.getElementById('actions-drawer-{{$reserveroom->reservationID}}').classList.add('translate-x-full')"
-                        class="absolute top-3 right-3 btn btn-xs btn-circle btn-ghost">
-                    ✕
-                </button>
-            </div>
+            <div class="p-4 border-b relative">
+    <h4 class="font-bold">Actions for Room #{{$reserveroom->roomID}}</h4>
+    <button onclick="document.getElementById('actions-drawer-{{$reserveroom->reservationID}}').classList.add('translate-x-full')"
+            class="absolute top-3 right-3 btn btn-xs btn-circle btn-ghost">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </button>
+</div>
             
             <div class="p-4 space-y-2 ">
                 <button onclick="confirm_reservation_{{$reserveroom->reservationID}}.showModal()"
-                    class="btn btn-sm btn-block btn-success justify-start gap-2 @if(in_array($reserveroom->reservation_bookingstatus, ['Confirmed', 'Checked in', 'Checked out'])) hidden @endif">
-                    ✅ Confirm Reservation
+                    class="btn btn-sm btn-block btn-primary justify-start gap-2 @if(in_array($reserveroom->reservation_bookingstatus, ['Confirmed', 'Checked in', 'Checked out'])) hidden @endif">
+                     Confirm Reservation
                 </button>
 
                 @if($reserveroom->reservation_bookingstatus === 'Confirmed')
                 <button onclick="checkin_reservation_{{$reserveroom->reservationID}}.showModal()"
                         class="btn btn-sm btn-block btn-primary justify-start gap-2">
-                    🛎 Check-In Guest
+                     Check-In Guest
                 </button>
                 @endif
                 
                 @if($reserveroom->reservation_bookingstatus === 'Checked in')
                 <button onclick="checkout_reservation_{{$reserveroom->reservationID}}.showModal()"
                         class="btn btn-sm btn-block btn-warning btn-info justify-start gap-2">
-                    🚪 Check-Out Guest
+                     Check-Out Guest
                 </button>
                 @endif
 
                 @if($reserveroom->reservation_bookingstatus != 'Confirmed')
                 <button onclick="cancel_reservation_{{$reserveroom->reservationID}}.showModal()"
                         class="btn btn-sm btn-block btn-info justify-start gap-2 @if(in_array($reserveroom->reservation_bookingstatus, ['Confirmed', 'Checked in', 'Checked out'])) hidden @endif">
-                    ❌ Cancel Reservation
+                     Cancel Reservation
                 </button>
                 @endif
                 
                 <button onclick="delete_reservation_{{$reserveroom->reservationID}}.showModal()"
                         class="btn btn-sm btn-block btn-error justify-start gap-2">
-                    🗑 Delete Reservation
+                     Delete Reservation
                 </button>
 
                 <a href="/printreceipt/{{$reserveroom->reservationID}}" class="btn btn-sm btn-block justify-start gap-2" style="background-color: #001f54; color: white;">
-                    🧾 Generate Receipt
+                     Generate Receipt
                 </a>
             </div>
         </div>

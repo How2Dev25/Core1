@@ -11,6 +11,9 @@
     
     <title>{{$title}} - Events And Conference</title>
 </head>
+@auth
+    
+
 <body class="bg-base-100">
     <div class="flex h-screen overflow-hidden">
       <!-- Sidebar -->
@@ -342,6 +345,10 @@
   
  
   </body>
+
+  @endauth
+
+  
   @include('javascriptfix.soliera_js')
 
   <script src="{{asset('javascript/photouploadglobal.js')}}"></script>

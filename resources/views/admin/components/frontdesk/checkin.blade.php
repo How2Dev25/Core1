@@ -6,7 +6,7 @@
       </button>
     </form>
 
-    <h3 class="text-lg font-bold text-blue-600 mb-4 flex items-center gap-2">
+    <h3 class="text-lg font-bold text-[#F7B32B] mb-4 flex items-center gap-2">
       <i data-lucide="check" class="w-5 h-5"></i>
       Check In Reservation
     </h3>
