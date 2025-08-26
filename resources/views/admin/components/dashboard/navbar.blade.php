@@ -16,7 +16,7 @@
 <div class="dropdown dropdown-end">
   <!-- Button -->
   <button id="notification-button" tabindex="0" class="btn btn-ghost btn-circle btn-sm relative">
-    <i data-lucide="bell" class="w-5 h-5 text-white"></i>
+    <i data-lucide="bell" class="w-5 h-5 "></i>
     <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
   </button>
 

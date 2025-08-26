@@ -152,6 +152,8 @@
         </button>
       </div>
     </div>
+
+    @include('logincomponents.captcha')
     
     <!-- Remember Me & Forgot Password -->
     <div class="flex items-center justify-between mb-6">
@@ -170,6 +172,7 @@
     
     <!-- Sign In Button -->
     <button 
+      id="login-btn"
       type="submit" 
       class="w-full btn-primary btn"
     >

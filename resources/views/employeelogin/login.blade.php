@@ -12,7 +12,7 @@
     @vite('resources/css/app.css')
 </head>
 <body>
-   <section class="relative w-full h-screen">
+   <section class="relative w-full min-h-screen ">
 
   <!-- Background image with overlay -->
   <div class="absolute inset-0 bg-cover bg-center z-0" style="background-image: url('{{ asset('images/defaults/hotel3.jpg') }}');"></div>
@@ -109,7 +109,9 @@
             </button>
           </div>
         </div>
-        
+
+
+                @include('logincomponents.captcha')
         <!-- Remember Me & Forgot Password -->
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center">
@@ -126,9 +128,11 @@
         </div>
         
         <!-- Sign In Button -->
-        <button 
+            <button 
           type="submit" 
-          class="w-full btn-primary btn"
+          id="login-btn"
+          class="w-full btn-primary btn opacity-50 cursor-not-allowed"
+          disabled
         >
           Sign in
         </button>
@@ -166,6 +170,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+
+
+
+
 <script>
     AOS.init({
         duration: 1000,
