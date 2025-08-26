@@ -23,6 +23,7 @@ use App\Models\Reservation;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 
 // security for guest
@@ -37,6 +38,12 @@ function employeeAuthCheck() {
         return redirect('/restrictedemployee')->send(); // stop execution and redirect
     }
 }
+function employeeOtpCheck() {
+    if (!Session::has('pending_employee_id')) {
+        return redirect('/restrictedemployee')->send();
+    }
+}
+
 
 // 
 
@@ -326,15 +333,17 @@ Route::post('/guestadd/{loyaltyID}', [larController::class, 'addtoguest']);
 
 // login site
 Route::post('/loginuser', [userController::class, 'login']);
-Route::get('/login', function(){
-    return view('login');
+
+
+// for employee
+Route::get('/employeeloginotp', function(){
+    
+    return view('employeelogin.loginotp');
 });
-Route::get('/sampledash', function(){
-    return view('dashboard');
-});
-Route::get('/loginotp', function(){
-    return view('loginotp');
-});
+
+Route::post('/verifyotpemployee', [UserController::class, 'verifyOTP']);
+Route::post('/resendotpemployee', [userController::class, 'resendOtp'])->name('resend.otp');
+// 
 
 Route::get('auth/google', [userController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('auth/google/callback', [userController::class, 'handleGoogleCallback']);

@@ -8,36 +8,187 @@ use App\Models\DeptAccount;
 use App\Models\Guest;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use Illuminate\Support\Facades\Log;
 
 class userController extends Controller
 {
-   public function login(Request $request)
+
+     const MAX_OTP_ATTEMPTS = 3;         
+    const MAX_LOGIN_ATTEMPTS = 5;        
+    const COOLDOWN_SECONDS = 300;        
+
+    
+ public function login(Request $request)
 {
     $form = $request->validate([
         'employee_id' => 'required',
         'password' => 'required',
     ]);
 
-    // Always clear any existing session before logging in new user
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-
-    // Find the user
     $user = DeptAccount::where('employee_id', $form['employee_id'])->first();
 
-    // Compare plain-text password (⚠️ not recommended for production)
-    if ($user && $user->password === $form['password']) {
-        Auth::login($user);
-        $request->session()->regenerate();
+    // --- Login attempt cooldown ---
+    $loginAttemptsKey = "login_attempts_{$form['employee_id']}";
+    $attemptData = Session::get($loginAttemptsKey);
 
-        return redirect('/employeedashboard');
+    if ($attemptData && $attemptData['count'] >= self::MAX_LOGIN_ATTEMPTS) {
+        $lastAttempt = $attemptData['last'];
+        $remaining = self::COOLDOWN_SECONDS - (time() - $lastAttempt);
+
+        if ($remaining > 0) {
+            $minutes = ceil($remaining / 60);
+            return back()->with('loginError', "Your account is temporarily banned. Try again in $minutes minute(s).");
+        } else {
+            Session::forget($loginAttemptsKey);
+        }
     }
+
+    // --- Validate password (securely) ---
+    if ($user && $user->password === $form['password']) {
+        // Generate OTP
+        $otp = rand(100000, 999999);
+
+        Session::put('otp', $otp);
+        Session::put('otp_expiry', Carbon::now()->addMinutes(5)->timestamp);
+        Session::put('pending_employee_id', $user->employee_id);
+        Session::put('pending_email', $user->email);
+
+        // Send OTP Email
+        $this->sendOtpMail($user->email, $user->name ?? $user->employee_id, $otp);
+
+        return redirect('/employeeloginotp')->with('status', 'We sent a 6-digit OTP to your email.');
+    }
+
+    // Wrong credentials → increment attempts
+    $attemptData = $attemptData ?? ['count' => 0, 'last' => time()];
+    $attemptData['count']++;
+    $attemptData['last'] = time();
+    Session::put($loginAttemptsKey, $attemptData);
 
     return back()->withErrors([
         'employee_id' => 'Invalid Employee ID or password.',
     ])->onlyInput('employee_id');
 }
+
+    public function verifyOTP(Request $request)
+    {
+        $otpInput = implode('', $request->only(['otp1','otp2','otp3','otp4','otp5','otp6']));
+
+        if (!Session::has('otp') || !Session::has('otp_expiry') || !Session::has('pending_employee_id')) {
+            return redirect('/employeelogin')->with('loginError', 'No pending OTP found. Please login again.');
+        }
+
+        // OTP expired
+        if (time() > Session::get('otp_expiry')) {
+            Session::forget(['otp','otp_expiry','pending_employee_id','pending_role','pending_Dept_id','pending_email','otp_attempts']);
+            return redirect('/employeelogin')->with('loginError', 'OTP expired. Please login again.');
+        }
+
+        $storedOtp = (string) Session::get('otp');
+        $employeeId = Session::get('pending_employee_id');
+
+        if ($otpInput === $storedOtp && $otpInput !== '') {
+            // ✅ Success
+            $user = DeptAccount::where('employee_id', $employeeId)->first();
+            Session::forget(['otp','otp_expiry','otp_attempts','pending_employee_id','pending_role','pending_Dept_id','pending_email']);
+
+            if ($user) {
+                Auth::login($user);
+                $request->session()->regenerate();
+                return redirect('/employeedashboard')->with('success', 'OTP Verified!');
+            }
+
+            return redirect('/employeelogin')->with('loginError', 'User not found.');
+        }
+
+        // ❌ Wrong OTP
+        $attempts = Session::get('otp_attempts', 0) + 1;
+        Session::put('otp_attempts', $attempts);
+
+        if ($attempts >= self::MAX_OTP_ATTEMPTS) {
+            Session::forget(['pending_employee_id','pending_role','pending_Dept_id','pending_email','otp','otp_expiry']);
+            return redirect('/employeelogin')->with('loginError', 'Too many incorrect OTP attempts. Please try again later.');
+        }
+
+       return back()->with('loginError', "Incorrect OTP. Attempt {$attempts} of " . self::MAX_OTP_ATTEMPTS . ".");
+    }
+
+
+public function sendOtpMail($toEmail, $toName, $otp)
+{
+    $mail = new PHPMailer(true);
+
+    try {
+        // SMTP config
+        $mail->isSMTP();
+        $mail->Host       = env('MAIL_HOST');
+        $mail->SMTPAuth   = true;
+        $mail->Username   = env('MAIL_USERNAME');
+        $mail->Password   = env('MAIL_PASSWORD');
+        $mail->SMTPSecure = env('MAIL_ENCRYPTION'); // tls or ssl
+        $mail->Port       = env('MAIL_PORT');
+
+        $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+        $mail->addAddress($toEmail, $toName);
+
+        // Embedded Logo
+        $logoPath = public_path('images/logo/sonly.png');
+        if (file_exists($logoPath)) {
+            $mail->addEmbeddedImage($logoPath, 'hotelLogo');
+        }
+
+        $mail->isHTML(true);
+        $mail->Subject = "Your One-Time Password (OTP)";
+
+        // Email Body
+        $mailBody = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>OTP Verification</title>
+</head>
+<body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
+    <div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+
+        <!-- Header -->
+        <div style="background-color:#001f54; padding:20px; text-align:center;">
+            <img src="cid:hotelLogo" alt="Hotel Logo" style="width:70px; height:70px; border-radius:50%; margin-bottom:10px;">
+            <h2 style="color:#F7B32B; margin:0;">SOLIERA HOTEL</h2>
+        </div>
+
+        <!-- OTP Content -->
+        <div style="padding:30px; text-align:center;">
+            <h3 style="color:#001f54; margin-bottom:15px;">Your OTP Code</h3>
+            <p style="font-size:18px; color:#333;">Please use the following code to verify your login:</p>
+            <div style="font-size:28px; font-weight:bold; color:#F7B32B; margin:20px 0;">$otp</div>
+            <p style="color:#555; font-size:14px;">This code will expire in 5 minutes. Do not share it with anyone.</p>
+        </div>
+
+        <!-- Footer -->
+        <div style="background-color:#001f54; padding:15px; text-align:center;">
+            <p style="color:#F7B32B; margin:0; font-size:13px;">© 2025 Soliera Hotel. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
+HTML;
+
+        $mail->Body = $mailBody;
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        Log::error("OTP Mailer Error: {$mail->ErrorInfo}");
+        return false;
+    }
+}
+
+
 
 public function logout(Request $request)
 {
@@ -46,6 +197,28 @@ public function logout(Request $request)
     $request->session()->regenerateToken();
 
     return redirect('/employeelogin');
+}
+
+
+public function resendOtp(Request $request)
+{
+    $email = Session::get('pending_email');
+
+    if (! $email) {
+        return response()->json(['success' => false, 'message' => 'No pending email found. Please login again.']);
+    }
+
+    $otp = rand(100000, 999999);
+    Session::put('otp', $otp);
+    Session::put('otp_expiry', Carbon::now()->addMinutes(5)->timestamp);
+
+    $user = DeptAccount::where('email', $email)->first();
+
+    if (! $user || ! $this->sendOtpMail($user->email, $user->name ?? $user->email, $otp)) {
+        return response()->json(['success' => false, 'message' => 'Failed to send OTP']);
+    }
+
+    return response()->json(['success' => true]);
 }
 
 

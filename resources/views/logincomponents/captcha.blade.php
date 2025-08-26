@@ -29,7 +29,7 @@
       </div>
       
       <div class="flex-1">
-        <span class="text-white/90 text-sm font-medium">Captcha</span>
+        <span class="text-white/90 text-sm font-medium">Please verify you are not a robot</span>
       </div>
     </div>
   </div>
@@ -93,13 +93,27 @@
 
     let isChecked = false;
     let expectedAnswer = null;
+    let cooldownTimer = null;
+    let dotsTimer = null;
 
-    function setSubmitState(enabled) {
+    const wittyMessages = [
+      "Oops, wrong! Recharging brain cells",
+      "Thinking hard... please wait",
+      "Bot alert! Cooling down",
+      "Patience is a virtue",
+      "Taking a coffee break",
+      "Rebooting human mode",
+      "Hmm... let’s try again soon"
+    ];
+
+    function setSubmitState(enabled, customText = null) {
       loginBtn.disabled = !enabled;
       if (enabled) {
         loginBtn.classList.remove("opacity-50", "cursor-not-allowed");
+        loginBtn.innerHTML = customText ?? "Sign in";
       } else {
         loginBtn.classList.add("opacity-50", "cursor-not-allowed");
+        if (customText) loginBtn.innerHTML = customText;
       }
     }
 
@@ -121,7 +135,6 @@
       question.textContent = `${a} ${op} ${b}`;
       optionsDiv.innerHTML = "";
 
-      // Generate multiple-choice answers
       let answers = new Set([expectedAnswer]);
       while (answers.size < 3) {
         answers.add(Math.floor(Math.random() * 20));
@@ -136,10 +149,11 @@
         btn.addEventListener("click", () => {
           if (ans === expectedAnswer) {
             successDiv.classList.remove("hidden");
+            clearCooldown();
             setSubmitState(true);
+            localStorage.removeItem("captchaCooldown");
           } else {
-            successDiv.classList.add("hidden");
-            setSubmitState(false);
+            triggerCooldown();
           }
         });
 
@@ -155,6 +169,47 @@
         container.classList.remove("hidden");
         container.classList.add("opacity-100", "translate-y-0");
       }, 1200);
+    }
+
+    function triggerCooldown() {
+      let message = wittyMessages[Math.floor(Math.random() * wittyMessages.length)];
+      let duration = 25; // seconds
+      let endTime = Date.now() + duration * 1000;
+
+      localStorage.setItem("captchaCooldown", JSON.stringify({
+        endTime: endTime,
+        message: message
+      }));
+
+      startCooldown(message, endTime);
+    }
+
+    function startCooldown(message, endTime) {
+      clearCooldown();
+
+      function updateText() {
+        let now = Date.now();
+        let remaining = Math.max(0, Math.floor((endTime - now) / 1000));
+
+        if (remaining <= 0) {
+          localStorage.removeItem("captchaCooldown");
+          generateCaptcha();
+          return;
+        }
+
+        // Animate dots like typing
+        let dotCount = (Math.floor(now / 500) % 4); // 0–3 dots cycling
+        let dots = ".".repeat(dotCount);
+
+        setSubmitState(false, `${message}${dots} (${remaining}s)`);
+        cooldownTimer = setTimeout(updateText, 500);
+      }
+      updateText();
+    }
+
+    function clearCooldown() {
+      clearTimeout(cooldownTimer);
+      clearTimeout(dotsTimer);
     }
 
     checkboxDiv.addEventListener("click", function() {
@@ -182,5 +237,16 @@
 
     // Initial state: submit disabled
     setSubmitState(false);
+
+    // Restore cooldown on reload
+    const savedCooldown = localStorage.getItem("captchaCooldown");
+    if (savedCooldown) {
+      let { endTime, message } = JSON.parse(savedCooldown);
+      if (Date.now() < endTime) {
+        startCooldown(message, endTime);
+      } else {
+        localStorage.removeItem("captchaCooldown");
+      }
+    }
   });
 </script>
