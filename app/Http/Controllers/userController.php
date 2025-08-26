@@ -274,20 +274,142 @@ public function guestlogout(){
 
 }
 
-public function guestlogin(Request $request){
+
+
+public function guestlogin(Request $request)
+{
     $form = $request->validate([
-        'guest_email' => 'required',
+        'guest_email' => 'required|email',
         'guest_password' => 'required',
     ]);
 
-    if(Auth::guard('guest')->attempt(['guest_email' => $form['guest_email'], 'password' => $form['guest_password']])){
-       $request->session()->regenerate();
+    // --- Login attempt cooldown ---
+    $loginAttemptsKey = "guest_login_attempts_{$form['guest_email']}";
+    $attemptData = Session::get($loginAttemptsKey);
 
-       session()->flash('showwelcome');
+    if ($attemptData && $attemptData['count'] >= self::MAX_LOGIN_ATTEMPTS) {
+        $lastAttempt = $attemptData['last'];
+        $remaining = self::COOLDOWN_SECONDS - (time() - $lastAttempt);
 
-       return redirect('/guestdashboard');
+        if ($remaining > 0) {
+            $minutes = ceil($remaining / 60);
+            return back()->with('loginError', "Your account is temporarily locked. Try again in $minutes minute(s).");
+        } else {
+            Session::forget($loginAttemptsKey);
+        }
     }
+
+    // --- Attempt login ---
+    if (Auth::guard('guest')->attempt([
+        'guest_email' => $form['guest_email'],
+        'password' => $form['guest_password']
+    ])) {
+        // Clear failed attempts
+        Session::forget($loginAttemptsKey);
+
+        $guest = Auth::guard('guest')->user();
+
+        // Generate OTP
+        $otp = rand(100000, 999999);
+        Session::put('guest_otp', $otp);
+        Session::put('guest_otp_expiry', now()->addMinutes(5)->timestamp);
+        Session::put('pending_guest_id', $guest->guestID);
+        Session::put('pending_guest_email', $guest->guest_email);
+
+        // Send OTP
+        $this->sendOtpMail($guest->guest_email, $guest->name ?? $guest->guest_email, $otp);
+
+        return redirect('/guestloginotp')->with('status', 'We sent a 6-digit OTP to your email.');
+    }
+
+    // --- Wrong credentials → increment attempts ---
+    $attemptData = $attemptData ?? ['count' => 0, 'last' => time()];
+    $attemptData['count']++;
+    $attemptData['last'] = time();
+    Session::put($loginAttemptsKey, $attemptData);
+
+    return back()->withErrors([
+        'guest_email' => 'Invalid email or password.',
+    ])->onlyInput('guest_email');
 }
+
+public function verifyGuestOTP(Request $request)
+{
+    $otpInput = implode('', $request->only(['otp1','otp2','otp3','otp4','otp5','otp6']));
+
+    // 🔹 Check correct session keys
+    if (!Session::has('guest_otp') || !Session::has('guest_otp_expiry') || !Session::has('pending_guest_id')) {
+        return redirect('/loginguest')->with('loginError', 'No pending OTP found. Please login again.');
+    }
+
+    // 🔹 Expiry check
+    if (time() > Session::get('guest_otp_expiry')) {
+        Session::forget(['guest_otp','guest_otp_expiry','pending_guest_id','pending_guest_email','guest_otp_attempts']);
+        return redirect('/loginguest')->with('loginError', 'OTP expired. Please login again.');
+    }
+
+    $storedOtp = (string) Session::get('guest_otp');
+    $guestId   = Session::get('pending_guest_id');
+
+    if ($otpInput === $storedOtp && $otpInput !== '') {
+        // ✅ Success
+        $guest = Guest::where('guestID', $guestId)->first();
+        Session::forget(['guest_otp','guest_otp_expiry','guest_otp_attempts']);
+
+        if ($guest) {
+            Auth::guard('guest')->login($guest);
+            $request->session()->regenerate();
+            Session::forget(['pending_guest_id','pending_guest_email']);
+            session()->flash('showwelcome');
+            return redirect('/guestdashboard')->with('success', 'OTP Verified!');
+        }
+
+        return redirect('/loginguest')->with('loginError', 'Guest not found.');
+    }
+
+    // ❌ Wrong OTP
+    $attempts = Session::get('guest_otp_attempts', 0) + 1;
+    Session::put('guest_otp_attempts', $attempts);
+
+    if ($attempts >= self::MAX_OTP_ATTEMPTS) {
+        Session::forget(['pending_guest_id','pending_guest_email','guest_otp','guest_otp_expiry','guest_otp_attempts']);
+        return redirect('/loginguest')->with('loginError', 'Too many incorrect OTP attempts. Please try again later.');
+    }
+
+    return back()->with('loginError', "Incorrect OTP. Attempt {$attempts} of " . self::MAX_OTP_ATTEMPTS . ".");
+}
+
+public function resendGuestOtp(Request $request)
+{
+    $email = Session::get('pending_guest_email');
+
+    if (!$email) {
+        return response()->json([
+            'success' => false,
+            'message' => 'No pending guest email found. Please login again.'
+        ]);
+    }
+
+    // Generate new OTP
+    $otp = rand(100000, 999999);
+    Session::put('guest_otp', $otp);
+    Session::put('guest_otp_expiry', now()->addMinutes(5)->timestamp);
+
+    $guest = Guest::where('guest_email', $email)->first();
+
+    if (!$guest || !$this->sendOtpMail($guest->guest_email, $guest->guest_name ?? $guest->guest_email, $otp)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to send OTP'
+        ]);
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'A new OTP has been sent to your email!'
+    ]);
+}
+
 
 
    public function redirectToGoogle()

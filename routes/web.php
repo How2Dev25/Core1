@@ -80,7 +80,11 @@ Route::post('/guestloginform', [userController::class, 'guestlogin']);
 Route::get('/loginguest', function(){
     return view('guestlogin.login');
 });
-
+Route::get('/guestloginotp', function(){
+    return view('guestlogin.guestotp');
+});
+Route::post('/verifyguestotp', [userController::class, 'verifyGuestOTP']);
+Route::post('/resendguestotp', [userController::class, 'resendGuestOtp'])->name('resendguest.otp');
 // Register
 Route::get('/guestregister', function(){
     return view('guestregister.register');
