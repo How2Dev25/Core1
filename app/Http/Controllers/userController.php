@@ -99,6 +99,7 @@ class userController extends Controller
             if ($user) {
                 Auth::login($user);
                 $request->session()->regenerate();
+                session()->flash('showwelcome');
                 return redirect('/employeedashboard')->with('success', 'OTP Verified!');
             }
 
@@ -135,7 +136,7 @@ public function sendOtpMail($toEmail, $toName, $otp)
         $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
         $mail->addAddress($toEmail, $toName);
 
-       
+        
 
         $mail->isHTML(true);
         $mail->Subject = 'Soliera 2FA Verification Code';

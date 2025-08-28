@@ -149,6 +149,117 @@ Route::get('/employeedashboard', function() {
     $loyaltyandrewards = Lar::count();
     $totalevents = Ecm::count();
 
+    // Revenu 
+
+      $today = now();
+    $currentMonth = $today->month;
+    $currentYear  = $today->year;
+
+    $lastMonthDate = $today->copy()->subMonth();
+    $lastMonth = $lastMonthDate->month;
+    $lastMonthYear = $lastMonthDate->year;
+
+    $calculateRevenue = function($month, $year) {
+        return Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+            ->where('core1_reservation.payment_status', 'Paid')
+            ->whereMonth('core1_reservation.reservation_checkin', $month)
+            ->whereYear('core1_reservation.reservation_checkin', $year)
+            ->get()
+            ->sum(function ($reservation) {
+                $nights = Carbon::parse($reservation->reservation_checkin)
+                    ->diffInDays(Carbon::parse($reservation->reservation_checkout));
+                $base = $reservation->roomprice * $nights;
+                return $base + ($base * 0.12) + ($base * 0.02);
+            });
+    };
+
+     
+
+    $revenueCurrent = $calculateRevenue($currentMonth, $currentYear);
+    $revenueLast    = $calculateRevenue($lastMonth, $lastMonthYear);
+    $revenueChange  = $revenueLast > 0 ? (($revenueCurrent - $revenueLast) / $revenueLast) * 100 : 0;
+
+
+     $calculateNights = function($month, $year) {
+        return Reservation::where('payment_status', 'Paid')
+            ->whereMonth('reservation_checkin', $month)
+            ->whereYear('reservation_checkin', $year)
+            ->get()
+            ->sum(function ($r) {
+                return Carbon::parse($r->reservation_checkin)
+                    ->diffInDays(Carbon::parse($r->reservation_checkout));
+            });
+    };
+
+    $nightsCurrent = $calculateNights($currentMonth, $currentYear);
+    $nightsLast    = $calculateNights($lastMonth, $lastMonthYear);
+
+    // Avg Daily Rate
+    $avgDailyRateCurrent = $nightsCurrent > 0 ? $revenueCurrent / $nightsCurrent : 0;
+    $avgDailyRateLast    = $nightsLast > 0 ? $calculateRevenue($lastMonth, $lastMonthYear) / $nightsLast : 0;
+    $avgDailyRateChange  = $avgDailyRateLast > 0 ? (($avgDailyRateCurrent - $avgDailyRateLast) / $avgDailyRateLast) * 100 : 0;
+
+    // RevPAR
+    $totalRooms = Room::count();
+    $daysCurrent = Carbon::now()->daysInMonth;
+    $daysLast = $lastMonthDate->daysInMonth;
+    $availableRoomNightsCurrent = $totalRooms * $daysCurrent;
+    $availableRoomNightsLast    = $totalRooms * $daysLast;
+
+    $revPARCurrent = $availableRoomNightsCurrent > 0 ? $revenueCurrent / $availableRoomNightsCurrent : 0;
+    $revPARLast    = $availableRoomNightsLast > 0 ? $revenueLast / $availableRoomNightsLast : 0;
+    $revPARChange  = $revPARLast > 0 ? (($revPARCurrent - $revPARLast) / $revPARLast) * 100 : 0;
+
+    // Occupancy Rate
+    $occupancyCurrent = $availableRoomNightsCurrent > 0 ? ($nightsCurrent / $availableRoomNightsCurrent) * 100 : 0;
+    $occupancyLast    = $availableRoomNightsLast > 0 ? ($nightsLast / $availableRoomNightsLast) * 100 : 0;
+    $occupancyChange  = $occupancyLast > 0 ? ($occupancyCurrent - $occupancyLast) / $occupancyLast * 100 : 0;
+
+       $last30DaysLabels = [];
+    $revenueLast30Days = [];
+    $avgDailyRateLast30Days = [];
+    $revPARLast30Days = [];
+    $occupancyLast30Days = [];
+
+    $totalRooms = Room::count();
+
+    for ($i = 29; $i >= 0; $i--) {
+        $date = Carbon::now()->subDays($i);
+        $last30DaysLabels[] = $date->format('M d'); // e.g. "Aug 28"
+
+        // Revenue for this day
+        $dailyRevenue = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+            ->where('core1_reservation.payment_status', 'Paid')
+            ->whereDate('core1_reservation.reservation_checkin', $date)
+            ->get()
+            ->sum(function ($reservation) {
+                $nights = Carbon::parse($reservation->reservation_checkin)
+                    ->diffInDays(Carbon::parse($reservation->reservation_checkout));
+                $base = $reservation->roomprice * $nights;
+                return $base + ($base * 0.12) + ($base * 0.02);
+            });
+
+        $revenueLast30Days[] = $dailyRevenue;
+
+        // Avg Daily Rate
+        $dailyNights = Reservation::where('payment_status', 'Paid')
+            ->whereDate('reservation_checkin', $date)
+            ->get()
+            ->sum(function ($r) {
+                return Carbon::parse($r->reservation_checkin)
+                    ->diffInDays(Carbon::parse($r->reservation_checkout));
+            });
+        $avgDailyRateLast30Days[] = $dailyNights > 0 ? $dailyRevenue / $dailyNights : 0;
+
+        // RevPAR
+        $revPARLast30Days[] = $totalRooms > 0 ? $dailyRevenue / $totalRooms : 0;
+
+        // Occupancy Rate
+        $occupancyLast30Days[] = $totalRooms > 0 ? ($dailyNights / $totalRooms) * 100 : 0;
+    }
+
+
+
     // === Calculations for comparisons ===
     $reservationGrowthMonth = $reservationLastMonth > 0
         ? (($reservationThisMonth - $reservationLastMonth) / $reservationLastMonth) * 100
@@ -204,7 +315,20 @@ Route::get('/employeedashboard', function() {
         'loyaltyandrewards',
         'totalevents',
         'reservationsLast7Days',
-        'eventsByMonth'
+        'eventsByMonth',
+          'revenueCurrent', 
+          'revenueChange',
+        'avgDailyRateCurrent', 
+        'avgDailyRateChange',
+        'revPARCurrent',
+         'revPARChange',
+        'occupancyCurrent', 
+        'occupancyChange',
+          'last30DaysLabels',
+        'revenueLast30Days',
+        'avgDailyRateLast30Days',
+        'revPARLast30Days',
+        'occupancyLast30Days'
     ));
 });
 
