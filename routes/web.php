@@ -12,7 +12,9 @@ use App\Http\Controllers\roommantenanceController;
 use App\Http\Controllers\stockController;
 use App\Http\Controllers\userController;
 use App\Models\Channel;
+use App\Models\DeptAccount;
 use App\Models\Ecm;
+use App\Models\Guest;
 use App\Models\Hmp;
 use App\Models\Inventory;
 use App\Models\room;
@@ -24,7 +26,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 // security for guest
 function guestAuthCheck() {
@@ -105,9 +108,104 @@ Route::get('/restrictedemployee', function(){
 
 // dashboard
 
-Route::get('/employeedashboard', function(){
+Route::get('/employeedashboard', function() {
     employeeAuthCheck();
-    return view('admin.dashboard');
+
+    // === Reservations ===
+    $totalreservation = Reservation::count();
+
+    $reservationThisWeek = Reservation::whereBetween('created_at', [
+        Carbon::now()->startOfWeek(),
+        Carbon::now()->endOfWeek()
+    ])->count();
+
+    $reservationLastWeek = Reservation::whereBetween('created_at', [
+        Carbon::now()->subWeek()->startOfWeek(),
+        Carbon::now()->subWeek()->endOfWeek()
+    ])->count();
+
+    $reservationLastMonth = Reservation::whereMonth('created_at', Carbon::now()->subMonth()->month)
+        ->whereYear('created_at', Carbon::now()->subMonth()->year)
+        ->count();
+
+    $reservationThisMonth = Reservation::whereMonth('created_at', Carbon::now()->month)
+        ->whereYear('created_at', Carbon::now()->year)
+        ->count();
+
+    // === Rooms ===
+    $totalrooms = Room::count();
+    $needmaintenance = Room_Maintenance::count();
+
+    // === Employees / Guests ===
+    $totalemployees = DeptAccount::where('status', 'Active')->count();
+    $guestacccount = Guest::count();
+
+    // === Markets / Channels ===
+    $roommarkets = Hmp::count();
+    $channellisting = Channel::where('channelStatus', 'Approved')->count();
+
+    // === Marketing / Loyalty / Events ===
+    $activecampaigns = Hmp::count();
+    $loyaltyandrewards = Lar::count();
+    $totalevents = Ecm::count();
+
+    // === Calculations for comparisons ===
+    $reservationGrowthMonth = $reservationLastMonth > 0
+        ? (($reservationThisMonth - $reservationLastMonth) / $reservationLastMonth) * 100
+        : 0;
+
+    $reservationGrowthWeek = $reservationLastWeek > 0
+        ? (($reservationThisWeek - $reservationLastWeek) / $reservationLastWeek) * 100
+        : 0;
+
+    $maintenanceRate = $totalrooms > 0
+        ? ($needmaintenance / $totalrooms) * 100
+        : 0;
+
+    $occupancyRate = $totalrooms > 0
+        ? ($totalreservation / $totalrooms) * 100
+        : 0;
+
+    // === Reservations last 7 days (graph) ===
+    $reservationsLast7Days = Reservation::select(
+        DB::raw('DATE(created_at) as date'),
+        DB::raw('COUNT(*) as count')
+    )
+    ->where('created_at', '>=', Carbon::now()->subDays(6))
+    ->groupBy('date')
+    ->orderBy('date', 'asc')
+    ->get();
+
+    // === Events per month (graph) ===
+    $eventsByMonth = Ecm::select(
+        DB::raw('MONTH(created_at) as month'),
+        DB::raw('COUNT(*) as count')
+    )
+    ->whereYear('created_at', Carbon::now()->year)
+    ->groupBy('month')
+    ->orderBy('month')
+    ->get();
+
+    return view('admin.dashboard', compact(
+        'totalreservation',
+        'reservationThisWeek',
+        'reservationLastWeek',
+        'reservationGrowthWeek',
+        'reservationGrowthMonth',
+        'totalrooms',
+        'needmaintenance',
+        'maintenanceRate',
+        'occupancyRate',
+        'totalemployees',
+        'guestacccount',
+        'roommarkets',
+        'channellisting',
+        'activecampaigns',
+        'loyaltyandrewards',
+        'totalevents',
+        'reservationsLast7Days',
+        'eventsByMonth'
+    ));
 });
 
 Route::get('/hmp', function(){

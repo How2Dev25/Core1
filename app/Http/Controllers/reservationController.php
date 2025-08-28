@@ -163,6 +163,7 @@ public function searchRooms(Request $request)
     $form['payment_method'] = "Pay at Hotel";
     $form['reservation_bookingstatus'] = 'Pending';
     $form['bookedvia'] = 'Soliera';
+    $form['payment_status'] = "Pending";
 
     // Create reservation first to get the ID
     $reservation = Reservation::create($form);
@@ -506,15 +507,105 @@ HTML;
         ]);
 
         $roomID = $reservationID->roomID;
+          $bookingID = $reservationID->bookingID;
 
          room::where('roomID', $roomID)->update([
             'roomstatus' => 'Available',
         ]);
 
-         session()->flash('checkout', 'Guest Has Been Checked Out');
+        $reservationID->update([
+            'payment_status' => 'Paid',
+        ]);
 
-        return redirect()->back();
-    }
+
+                    $mail = new PHPMailer(true);
+
+                try {
+                    $mail->isSMTP();
+                    $mail->Host       = env('MAIL_HOST');
+                    $mail->SMTPAuth   = true;
+                    $mail->Username   = env('MAIL_USERNAME');
+                    $mail->Password   = env('MAIL_PASSWORD');
+                    $mail->SMTPSecure = env('MAIL_ENCRYPTION'); // tls or ssl
+                    $mail->Port       = env('MAIL_PORT');
+
+                    $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+                    $mail->addAddress($reservationID->guestemailaddress, $reservationID->guestname);
+                    $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo'); // Make sure file exists
+                    $mail->isHTML(true);
+                    $mail->Subject = "Booking Checkout - $reservationID->bookingID";
+
+                    // Email HTML body
+                    $mailBody = <<<HTML
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Booking Checkout - Soliera Hotel</title>
+            </head>
+            <body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
+            <div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+
+            <!-- Header -->
+            <div style="background-color:#001f54; padding:30px 20px; text-align:center;">
+                <img src="cid:hotelLogo" alt="Soliera Hotel Logo" style="width:80px; height:80px; border-radius:50%; margin-bottom:15px;">
+                <h1 style="color:#F7B32B; margin:0; font-size:28px; font-weight:bold;">SOLIERA HOTEL</h1>
+                <p style="color:#ffffff; margin:10px 0 0 0; font-size:16px;">Savor The Stay, Dine With Elegance</p>
+            </div>
+
+            <!-- Booking Status -->
+            <div style="padding:20px; text-align:center; background-color:#f8f9fa;">
+                <div style="display:inline-block; background-color:#F7B32B; color:#001f54; padding:8px 20px; border-radius:20px; font-weight:bold; font-size:14px; margin-bottom:10px;">
+                    📋 BOOKING STATUS: CHECKED - OUT
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div style="padding:30px 20px;">
+                <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Booking Checked Out</h2>
+                
+                <!-- Booking Reference -->
+                <div style="text-align:center; margin-bottom:20px;">
+                    <p style="color:#666; font-size:16px; margin:0;">
+                        Booking ID: <span style="color:#001f54; font-weight:bold;">$bookingID</span>
+                    </p>
+                </div>
+
+                <!-- Thank You -->
+                <div style="text-align:center; padding:20px; background-color:#001f54; border-radius:8px; margin-bottom:20px;">
+                    <h3 style="color:#F7B32B; margin:0 0 10px 0; font-size:20px;">Thank You for Staying with Soliera Hotel!</h3>
+                    <p style="color:#ffffff; margin:0; line-height:1.6;">
+                        We sincerely appreciate you choosing Soliera Hotel for your recent stay.<br>
+                        We hope you enjoyed a comfortable and memorable experience with us.<br>
+                        Your feedback means a lot — and we look forward to welcoming you back soon!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="background-color:#001f54; padding:20px; text-align:center;">
+                <p style="color:#F7B32B; margin:0; font-size:14px;">© 2025 Soliera Hotel. All rights reserved.</p>
+            </div>
+            </div>
+            </body>
+            </html>
+            HTML;
+
+                    $mail->Body = $mailBody;
+                    $mail->send();
+
+                } catch (Exception $e) {
+                    Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
+                }
+
+
+
+
+                    session()->flash('checkout', 'Guest Has Been Checked Out');
+
+                    return redirect()->back();
+                }
 
      public function cancel(Reservation $reservationID){
           $reservationID->update([
@@ -527,7 +618,96 @@ HTML;
             'roomstatus' => 'Available',
         ]);
 
+        $bookingID = $reservationID->bookingID;
+
          session()->flash('cancel', 'Reservation Has Been Cancelled');
+
+              $mail = new PHPMailer(true);
+
+                try {
+                    $mail->isSMTP();
+                    $mail->Host       = env('MAIL_HOST');
+                    $mail->SMTPAuth   = true;
+                    $mail->Username   = env('MAIL_USERNAME');
+                    $mail->Password   = env('MAIL_PASSWORD');
+                    $mail->SMTPSecure = env('MAIL_ENCRYPTION'); // tls or ssl
+                    $mail->Port       = env('MAIL_PORT');
+
+                    $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+                    $mail->addAddress($reservationID->guestemailaddress, $reservationID->guestname);
+                    $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo'); // Make sure file exists
+                    $mail->isHTML(true);
+                    $mail->Subject = "Booking Cancelled - $reservationID->bookingID";
+
+                    // Email HTML body
+                    $mailBody = <<<HTML
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Booking Checkout - Soliera Hotel</title>
+            </head>
+            <body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
+            <div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+
+            <!-- Header -->
+            <div style="background-color:#001f54; padding:30px 20px; text-align:center;">
+                <img src="cid:hotelLogo" alt="Soliera Hotel Logo" style="width:80px; height:80px; border-radius:50%; margin-bottom:15px;">
+                <h1 style="color:#F7B32B; margin:0; font-size:28px; font-weight:bold;">SOLIERA HOTEL</h1>
+                <p style="color:#ffffff; margin:10px 0 0 0; font-size:16px;">Savor The Stay, Dine With Elegance</p>
+            </div>
+
+            <!-- Booking Status -->
+            <div style="padding:20px; text-align:center; background-color:#f8f9fa;">
+                <div style="display:inline-block; background-color:#F7B32B; color:#001f54; padding:8px 20px; border-radius:20px; font-weight:bold; font-size:14px; margin-bottom:10px;">
+                    📋 BOOKING STATUS: CANCELLED
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div style="padding:30px 20px;">
+                <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Booking Cancelled</h2>
+                
+                <!-- Booking Reference -->
+                <div style="text-align:center; margin-bottom:20px;">
+                    <p style="color:#666; font-size:16px; margin:0;">
+                        Booking ID: <span style="color:#001f54; font-weight:bold;">$bookingID</span>
+                    </p>
+                </div>
+
+                <!-- Thank You -->
+                     <div style="text-align:center; padding:20px; background-color:#7f1d1d; border-radius:8px; margin-bottom:20px;">
+                        <h3 style="color:#F7B32B; margin:0 0 10px 0; font-size:20px;">Your Booking Has Been Cancelled</h3>
+                        <p style="color:#ffffff; margin:0; line-height:1.6;">
+                            We’re sorry to see your booking cancelled.<br>
+                            Your reservation with Booking ID: <span style="font-weight:bold; color:#F7B32B;">$bookingID</span>  
+                            has been successfully cancelled in our system.<br><br>
+                            If you change your mind, we’d be delighted to welcome you back at Soliera Hotel.<br>
+                            Please don’t hesitate to book with us again anytime!
+                        </p>
+                    </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="background-color:#001f54; padding:20px; text-align:center;">
+                <p style="color:#F7B32B; margin:0; font-size:14px;">© 2025 Soliera Hotel. All rights reserved.</p>
+            </div>
+            </div>
+            </body>
+            </html>
+            HTML;
+
+                    $mail->Body = $mailBody;
+                    $mail->send();
+
+                } catch (Exception $e) {
+                    Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
+                }
+
+
+
+         
 
         return redirect()->back();
     }
@@ -543,12 +723,14 @@ public function generateInvoice($reservationID)
     // Absolute path to logo
     $logoPath = public_path('images/logo/sonly.png');
     $bookedDate = date('M d, Y', strtotime($booking->created_at));
+    $paymentstatus = $booking->payment_status; // safer than Reservation::value()
 
-    // Render Blade template
+    // Render Blade template for PDF
     $html = view('admin.components.invoices.invoices-pdf', [
-        'booking'  => $booking,
-        'logoPath' => $logoPath,
-        'bookedDate' => $bookedDate,
+        'booking'      => $booking,
+        'logoPath'     => $logoPath,
+        'bookedDate'   => $bookedDate,
+        'paymentstatus'=> $paymentstatus,
     ])->render();
 
     // PDF save path
@@ -559,7 +741,7 @@ public function generateInvoice($reservationID)
         mkdir(dirname($pdfPath), 0755, true);
     }
 
-    // Generate PDF
+    // Generate PDF using Browsershot
     Browsershot::html($html)
         ->showBackground()
         ->format('A4')
@@ -568,7 +750,91 @@ public function generateInvoice($reservationID)
         ->timeout(120)
         ->save($pdfPath);
 
-    // Return PDF URL
+    // -------------------------
+    // Send Email with PHPMailer
+    // -------------------------
+    $mail = new PHPMailer(true);
+
+    try {
+        $mail->isSMTP();
+        $mail->Host       = env('MAIL_HOST');
+        $mail->SMTPAuth   = true;
+        $mail->Username   = env('MAIL_USERNAME');
+        $mail->Password   = env('MAIL_PASSWORD');
+        $mail->SMTPSecure = env('MAIL_ENCRYPTION'); // tls or ssl
+        $mail->Port       = env('MAIL_PORT');
+
+        $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+        $mail->addAddress($booking->guestemailaddress, $booking->guestname);
+
+        // Embed logo
+        $mail->addEmbeddedImage($logoPath, 'hotelLogo');
+
+        // Attach invoice PDF
+        if (file_exists($pdfPath)) {
+            $mail->addAttachment($pdfPath, "Invoice_{$booking->bookingID}.pdf");
+        }
+
+        $mail->isHTML(true);
+        $mail->Subject = "Booking Invoice - {$booking->bookingID}";
+
+        // HTML email body
+        $mailBody = <<<HTML
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <meta charset="UTF-8">
+        <title>Booking Invoice</title>
+        </head>
+        <body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
+        <div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+
+            <!-- Header -->
+            <div style="background-color:#001f54; padding:30px 20px; text-align:center;">
+                <img src="cid:hotelLogo" alt="Soliera Hotel Logo" style="width:80px; height:80px; border-radius:50%; margin-bottom:15px;">
+                <h1 style="color:#F7B32B; margin:0; font-size:28px; font-weight:bold;">SOLIERA HOTEL</h1>
+                <p style="color:#ffffff; margin:10px 0 0 0; font-size:16px;">Savor The Stay, Dine With Elegance</p>
+            </div>
+
+            <!-- Booking Info -->
+            <div style="padding:20px; text-align:center; background-color:#f8f9fa;">
+                <p style="margin:0; font-size:16px; color:#333;">
+                    Thank you <strong>{$booking->guestname}</strong> for choosing Soliera Hotel.
+                </p>
+                <p style="margin:5px 0 0 0; font-size:14px; color:#555;">
+                    Booking ID: <strong>{$booking->bookingID}</strong><br>
+                    Booked Date: {$bookedDate}<br>
+                    Payment Status: <strong>{$paymentstatus}</strong>
+                </p>
+            </div>
+
+            <!-- Thank You -->
+            <div style="text-align:center; padding:20px; background-color:#001f54; border-radius:8px; margin:20px;">
+                <h3 style="color:#F7B32B; margin:0 0 10px 0; font-size:20px;">Your Invoice is Attached</h3>
+                <p style="color:#ffffff; margin:0; line-height:1.6;">
+                    Please find the invoice for your booking attached to this email.<br>
+                    We look forward to welcoming you again soon!
+                </p>
+            </div>
+
+            <!-- Footer -->
+            <div style="background-color:#001f54; padding:20px; text-align:center;">
+                <p style="color:#F7B32B; margin:0; font-size:14px;">© 2025 Soliera Hotel. All rights reserved.</p>
+            </div>
+
+        </div>
+        </body>
+        </html>
+        HTML;
+
+        $mail->Body = $mailBody;
+        $mail->send();
+
+    } catch (Exception $e) {
+        Log::error("Invoice email could not be sent: {$mail->ErrorInfo}");
+    }
+
+    // Return PDF URL (optional, if you still want to open/download it)
     $pdfUrl = asset("images/invoices/invoice_{$booking->reservationID}.pdf");
     return redirect($pdfUrl);
 }
@@ -595,6 +861,10 @@ public function gueststore(Request $request)
     $form['guestID'] = Auth::guard('guest')->user()->guestID;
     $form['reservation_bookingstatus'] = 'Pending';
     $form['bookedvia'] = 'Soliera';
+    
+            if ($form['payment_method'] === 'Pay at Hotel') {
+                $form['payment_status'] = "Pending";
+            }
 
     // Create reservation first to get the ID
     $reservation = Reservation::create($form);

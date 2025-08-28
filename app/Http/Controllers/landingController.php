@@ -51,6 +51,9 @@ public function storereservation(Request $request)
     $form['payment_method'] = "Pay at Hotel";
     $form['reservation_bookingstatus'] = 'Pending';
     $form['bookedvia'] = 'Soliera';
+    if ($form['payment_method'] === 'Pay at Hotel') {
+        $form['payment_status'] = "Pending";
+    }
 
     // Create reservation
     $reservation = Reservation::create($form);

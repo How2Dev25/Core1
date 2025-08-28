@@ -135,59 +135,49 @@ public function sendOtpMail($toEmail, $toName, $otp)
         $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
         $mail->addAddress($toEmail, $toName);
 
-        // Embedded Logo
-        $logoPath = public_path('images/logo/sonly.png');
-        if (file_exists($logoPath)) {
-            $mail->addEmbeddedImage($logoPath, 'hotelLogo');
-        }
+       
 
         $mail->isHTML(true);
-        $mail->Subject = "Your One-Time Password (OTP)";
+        $mail->Subject = 'Soliera 2FA Verification Code';
+
+                    $header = "
+                <h2 style='color:#4CAF50; font-family: Arial, sans-serif; text-align:center;'>
+                    Soliera Hotel & Restaurant
+                </h2>
+                <hr style='border:1px solid #ddd; margin:20px 0;'>
+            ";
 
         // Email Body
-        $mailBody = <<<HTML
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>OTP Verification</title>
-</head>
-<body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
-    <div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+      $message = "<p style='font-family: Arial, sans-serif; font-size:14px;'>
+                We received a request to verify your login to 
+                <strong>Soliera Hotel & Restaurant</strong>.<br><br>
+                Please use the one-time verification code below to complete your login:
+            </p>
+            <p style='font-size:22px; font-weight:bold; color:#333; letter-spacing:2px; text-align:center;'>
+                $otp
+            </p>
+            <p style='font-family: Arial, sans-serif; font-size:14px; color:#555;'>
+                This code will expire in <strong>5 minutes</strong> for your security.<br>
+                If you did not request this code, please ignore this email or contact our support team immediately.
+            </p>";
+        // Email Footer
+      $footer = "<hr style='border:1px solid #ddd; margin-top:30px;'>
+           <p style='font-size:12px; color:#777; font-family: Arial, sans-serif; text-align:center;'>
+                Thank you for choosing Soliera.<br>
+                📞 Hotline: +63-900-123-4567 | 📧 support@soliera.com<br>
+                <em>This is an automated message. Please do not reply directly to this email.</em>
+           </p>";
+        // Final HTML body
+       $mail->isHTML(true);
+        $mail->Body = $header . $message . $footer;
 
-        <!-- Header -->
-        <div style="background-color:#001f54; padding:20px; text-align:center;">
-            <img src="cid:hotelLogo" alt="Hotel Logo" style="width:70px; height:70px; border-radius:50%; margin-bottom:10px;">
-            <h2 style="color:#F7B32B; margin:0;">SOLIERA HOTEL</h2>
-        </div>
-
-        <!-- OTP Content -->
-        <div style="padding:30px; text-align:center;">
-            <h3 style="color:#001f54; margin-bottom:15px;">Your OTP Code</h3>
-            <p style="font-size:18px; color:#333;">Please use the following code to verify your login:</p>
-            <div style="font-size:28px; font-weight:bold; color:#F7B32B; margin:20px 0;">$otp</div>
-            <p style="color:#555; font-size:14px;">This code will expire in 5 minutes. Do not share it with anyone.</p>
-        </div>
-
-        <!-- Footer -->
-        <div style="background-color:#001f54; padding:15px; text-align:center;">
-            <p style="color:#F7B32B; margin:0; font-size:13px;">© 2025 Soliera Hotel. All rights reserved.</p>
-        </div>
-    </div>
-</body>
-</html>
-HTML;
-
-        $mail->Body = $mailBody;
-
-        $mail->send();
-        return true;
+        return $mail->send();
+        
     } catch (Exception $e) {
         Log::error("OTP Mailer Error: {$mail->ErrorInfo}");
         return false;
     }
 }
-
 
 
 public function logout(Request $request)

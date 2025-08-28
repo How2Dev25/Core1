@@ -32,6 +32,7 @@ return new class extends Migration
             $table->foreignId('guestID')->nullable();
             $table->text('payment_method')->nullable();
             $table->string('bookingID');
+            $table->string('payment_status')->nullable();
         });
     }
 

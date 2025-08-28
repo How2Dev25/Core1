@@ -129,13 +129,22 @@
     {{ \Carbon\Carbon::parse($reserveroom->created_at)->format('M d, Y') }}
 </div>
 
-    <div class="flex items-center gap-2">
-        <!-- credit card icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 11h18m-2 6H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2z" />
-        </svg>
-        <span class="font-medium">Payment Method:</span> {{ $reserveroom->payment_method }}
-    </div>
+ <div class="flex items-center gap-2">
+    <!-- wallet / money icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-2m4-4h-4m0 0l2-2m-2 2l2 2" />
+    </svg>
+    <span class="font-medium">Payment Status:</span> 
+    <span class="
+        @if(strtolower($reserveroom->payment_status) == 'pending') text-yellow-600 font-semibold
+        @elseif(strtolower($reserveroom->payment_status) == 'paid') text-green-600 font-semibold
+        @elseif(strtolower($reserveroom->payment_status) == 'failed') text-red-600 font-semibold
+        @else text-gray-600
+        @endif
+    ">
+        {{ ucfirst($reserveroom->payment_status) }}
+    </span>
+</div>
 
    @php
     $nights = \Carbon\Carbon::parse($reserveroom->reservation_checkin)
@@ -248,10 +257,11 @@
                         class="btn btn-sm btn-block btn-error justify-start gap-2">
                      Delete Reservation
                 </button>
-
+                @if($reserveroom->payment_status === 'Paid')
                 <a href="/printreceipt/{{$reserveroom->reservationID}}" class="btn btn-sm btn-block justify-start gap-2" style="background-color: #001f54; color: white;">
                      Generate Receipt
                 </a>
+                @endif
             </div>
         </div>
         @empty

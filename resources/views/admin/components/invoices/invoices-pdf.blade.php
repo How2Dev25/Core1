@@ -38,7 +38,7 @@
             </div>
             <div class="text-right">
                 <p class="text-gray-500">Status</p>
-                <p class="font-semibold text-green-600">Paid</p>
+                <p class="font-semibold text-green-600">{{$paymentstatus}}</p>
             </div>
         </div>
 

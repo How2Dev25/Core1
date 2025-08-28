@@ -47,387 +47,454 @@
           </div>
             {{-- Subsystem Name --}}
 
-<section class="p-6  min-h-screen">
-    <!-- Header -->
-
-
-    <!-- Main Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-       
-      <!-- Total Reservations -->
-    <div class="card bg-white shadow-lg rounded-xl border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-        <div class="p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Reservations</h3>
-                    <p class="text-3xl font-bold text-gray-800 mt-2">1,247</p>
-                    <div class="flex items-center mt-3">
-                        <span class="text-green-500 text-sm font-medium flex items-center">
-                            <i class="fa-solid fa-arrow-up mr-1"></i>
-                            12%
-                        </span>
-                        <span class="text-sm text-gray-500 ml-2">vs last month</span>
-                    </div>
+     <section class="flex-1 p-6">
+            <!-- Header -->
+            
+            <!-- Revenue Section -->
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800">Revenue Metrics</h2>
+                    
                 </div>
-                <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900 transition-transform duration-300 group-hover:scale-110">
-                    <i class="fa-solid fa-calendar-check text-yellow-400 text-2xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-         <!-- Reservations This Week -->
-    <div class="card bg-white shadow-lg rounded-xl border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-        <div class="p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Reservations This Week</h3>
-                    <p class="text-3xl font-bold text-gray-800 mt-2">142</p>
-                    <div class="flex items-center mt-3">
-                        <span class="text-green-500 text-sm font-medium flex items-center">
-                            <i class="fa-solid fa-arrow-up mr-1"></i>
-                            8%
-                        </span>
-                        <span class="text-sm text-gray-500 ml-2">vs last week</span>
-                    </div>
-                </div>
-                <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900 transition-transform duration-300 group-hover:scale-110">
-                    <i class="fa-solid fa-chart-line text-yellow-400 text-2xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-         <!-- Total Rooms -->
-    <div class="card bg-white shadow-lg rounded-xl border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-        <div class="p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Rooms</h3>
-                    <p class="text-3xl font-bold text-gray-800 mt-2">350</p>
-                    <div class="flex items-center mt-3">
-                        <span class="text-blue-500 text-sm font-medium">85%</span>
-                        <span class="text-sm text-gray-500 ml-2">occupancy rate</span>
-                    </div>
-                </div>
-                <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900 transition-transform duration-300 group-hover:scale-110">
-                    <i class="fa-solid fa-bed text-yellow-400 text-2xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-        <!-- Rooms Needing Maintenance -->
-    <div class="card bg-white shadow-lg rounded-xl border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-        <div class="p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Need Maintenance</h3>
-                    <p class="text-3xl font-bold text-gray-800 mt-2">12</p>
-                    <div class="flex items-center mt-3">
-                        <span class="text-amber-500 text-sm font-medium">3.4%</span>
-                        <span class="text-sm text-gray-500 ml-2">of total rooms</span>
-                    </div>
-                </div>
-                <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900 transition-transform duration-300 group-hover:scale-110">
-                    <i class="fa-solid fa-screwdriver-wrench text-yellow-400 text-2xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-   <!-- Secondary Stats Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-    <!-- Total Employees -->
-    <div class="card bg-white shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-        <div class="p-5">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Employees</h3>
-                    <p class="text-2xl font-bold text-gray-800 mt-2">156</p>
-                </div>
-                <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-blue-900 transition-transform duration-300 group-hover:scale-110">
-                    <i class="fa-solid fa-users text-yellow-400 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-          <!-- Total Guest Accounts -->
-    <div class="card bg-white shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-        <div class="p-5">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Guest Accounts</h3>
-                    <p class="text-2xl font-bold text-gray-800 mt-2">8,943</p>
-                </div>
-                <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-blue-900 transition-transform duration-300 group-hover:scale-110">
-                    <i class="fa-solid fa-user text-yellow-400 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-  <!-- Total Room Markets -->
-    <div class="card bg-white shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-        <div class="p-5">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Room Markets</h3>
-                    <p class="text-2xl font-bold text-gray-800 mt-2">24</p>
-                </div>
-                <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-blue-900 transition-transform duration-300 group-hover:scale-110">
-                    <i class="fa-solid fa-globe text-yellow-400 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-         <!-- Channel Listings -->
-    <div class="card bg-white shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-        <div class="p-5">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Channel Listings</h3>
-                    <p class="text-2xl font-bold text-gray-800 mt-2">320</p>
-                </div>
-                <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-blue-900 transition-transform duration-300 group-hover:scale-110">
-                    <i class="fa-solid fa-tv text-yellow-400 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-   <!-- Marketing & Loyalty Stats -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-    <!-- Total Marketing -->
-    <div class="card bg-white shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-        <div class="p-5">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Active Campaigns</h3>
-                    <p class="text-2xl font-bold text-gray-800 mt-2">18</p>
-                </div>
-                <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-blue-900 transition-transform duration-300 group-hover:scale-110">
-                    <i class="fa-solid fa-bullhorn text-yellow-400 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-         <!-- Loyalty Programs -->
-    <div class="card bg-white shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-        <div class="p-5">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Loyalty & Rewards</h3>
-                    <p class="text-2xl font-bold text-gray-800 mt-2">89</p>
-                    <p class="text-xs text-gray-500 mt-1">Room & Food packages</p>
-                </div>
-                <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-blue-900 transition-transform duration-300 group-hover:scale-110">
-                    <i class="fa-solid fa-star text-yellow-400 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-        <!-- Total Events -->
-    <div class="card bg-white shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-        <div class="p-5">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Events</h3>
-                    <p class="text-2xl font-bold text-gray-800 mt-2">32</p>
-                </div>
-                <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-blue-900 transition-transform duration-300 group-hover:scale-110">
-                    <i class="fa-solid fa-calendar-days text-yellow-400 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-
- <!-- Parent Container with Grid Layout -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
-    
-    <!-- Events Carousel -->
-    <div class="card bg-white shadow-lg rounded-xl border border-gray-100 overflow-hidden">
-        <div class="p-6">
-            <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 bg-blue-900">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400">
-                        <path d="M19 3H18V1H16V3H8V1H6V3H5C3.89 3 3 3.9 3 5V19C3 20.1 3.89 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM19 19H5V8H19V19Z"/>
-                    </svg>
-                </div>
-                Upcoming Events
-            </h2>
-            <div class="carousel w-full rounded-xl overflow-hidden">
-                <div id="slide1" class="carousel-item relative w-full h-80">
-                    <div class="w-full relative">
-                        <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800&h=320&fit=crop&crop=center" alt="Elegant Gala Event" class="w-full h-80 object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30"></div>
-                        <div class="absolute inset-0 p-8 flex items-center">
-                            <div class="text-white max-w-2xl">
-                                <h3 class="text-3xl font-bold mb-3">Summer Gala Night</h3>
-                                <p class="text-xl mb-2 opacity-90">August 30, 2025 • Grand Ballroom</p>
-                                <p class="text-lg opacity-80 mb-4">An elegant evening of dining and entertainment with live music and dancing</p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="badge px-3 py-1 rounded-full text-white border-white border bg-transparent text-sm">250 Guests</span>
-                                    <span class="badge px-3 py-1 rounded-full text-yellow-400 border border-yellow-400 bg-transparent text-sm">VIP Event</span>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <!-- Total Revenue -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Revenue</h3>
+                                <p class="text-3xl font-bold text-gray-800 mt-2">$245,837</p>
+                                <div class="flex items-center mt-3">
+                                    <span class="text-green-500 text-sm font-medium flex items-center">
+                                        <i class="fa-solid fa-arrow-up mr-1"></i>
+                                        18.2%
+                                    </span>
+                                    <span class="text-sm text-gray-500 ml-2">vs last month</span>
                                 </div>
+                            </div>
+                            <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-dollar-sign text-yellow-400 text-2xl"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                        <a href="#slide3" class="btn btn-circle bg-white/20 border-none text-white hover:bg-white/40 backdrop-blur-sm transition-all duration-300">❮</a>
-                        <a href="#slide2" class="btn btn-circle bg-white/20 border-none text-white hover:bg-white/40 backdrop-blur-sm transition-all duration-300">❯</a>
-                    </div>
-                </div>
-                <div id="slide2" class="carousel-item relative w-full h-80">
-                    <div class="w-full relative">
-                        <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&h=320&fit=crop&crop=center" alt="Corporate Conference" class="w-full h-80 object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30"></div>
-                        <div class="absolute inset-0 p-8 flex items-center">
-                            <div class="text-white max-w-2xl">
-                                <h3 class="text-3xl font-bold mb-3">Corporate Conference</h3>
-                                <p class="text-xl mb-2 opacity-90">September 5-7, 2025 • Conference Center</p>
-                                <p class="text-lg opacity-80 mb-4">International business summit with networking sessions and keynote speakers</p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="badge px-3 py-1 rounded-full text-white border-white border bg-transparent text-sm">500 Attendees</span>
-                                    <span class="badge px-3 py-1 rounded-full text-yellow-400 border border-yellow-400 bg-transparent text-sm">3 Days</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                        <a href="#slide1" class="btn btn-circle bg-white/20 border-none text-white hover:bg-white/40 backdrop-blur-sm transition-all duration-300">❮</a>
-                        <a href="#slide3" class="btn btn-circle bg-white/20 border-none text-white hover:bg-white/40 backdrop-blur-sm transition-all duration-300">❯</a>
-                    </div>
-                </div>
-                <div id="slide3" class="carousel-item relative w-full h-80">
-                    <div class="w-full relative">
-                        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=320&fit=crop&crop=center" alt="Wedding Celebration" class="w-full h-80 object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30"></div>
-                        <div class="absolute inset-0 p-8 flex items-center">
-                            <div class="text-white max-w-2xl">
-                                <h3 class="text-3xl font-bold mb-3">Wedding Celebration</h3>
-                                <p class="text-xl mb-2 opacity-90">September 12, 2025 • Garden Pavilion</p>
-                                <p class="text-lg opacity-80 mb-4">Beautiful outdoor wedding ceremony and reception with garden views</p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="badge px-3 py-1 rounded-full text-white border-white border bg-transparent text-sm">180 Guests</span>
-                                    <span class="badge px-3 py-1 rounded-full text-yellow-400 border border-yellow-400 bg-transparent text-sm">Premium</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                        <a href="#slide2" class="btn btn-circle bg-white/20 border-none text-white hover:bg-white/40 backdrop-blur-sm transition-all duration-300">❮</a>
-                        <a href="#slide1" class="btn btn-circle bg-white/20 border-none text-white hover:bg-white/40 backdrop-blur-sm transition-all duration-300">❯</a>
-                    </div>
-                </div>
-            </div>
-            <div class="flex justify-center w-full py-4 gap-3 mt-4">
-                <a href="#slide1" class="btn btn-sm rounded-full bg-yellow-400 border-yellow-400 text-white transition-all duration-300 hover:bg-yellow-500">●</a>
-                <a href="#slide2" class="btn btn-sm btn-outline rounded-full bg-gray-200 border-gray-300 hover:bg-gray-300 transition-all duration-300">●</a>
-                <a href="#slide3" class="btn btn-sm btn-outline rounded-full bg-gray-200 border-gray-300 hover:bg-gray-300 transition-all duration-300">●</a>
-            </div>
-        </div>
-    </div>
 
-    <!-- Room Carousel -->
-    <div class="card bg-white shadow-lg rounded-xl border border-gray-100 overflow-hidden">
-        <div class="p-6">
-            <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 bg-blue-900">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400">
-                        <path d="M21 10.78V8C21 6.9 20.1 6 19 6H5C3.9 6 3 6.9 3 8V10.78C3.39 10.47 3.86 10.25 4.4 10.17C5.28 10.05 6.2 10.36 6.85 11.01L10 14.16L13.15 11.01C14.45 9.71 16.55 9.71 17.85 11.01C18.39 11.55 18.71 12.27 18.74 13.03H21V10.78Z"/>
-                        <path d="M2 19V17H22V19C22 20.1 21.1 21 20 21H4C2.9 21 2 20.1 2 19Z"/>
-                    </svg>
-                </div>
-                Featured Rooms
-            </h2>
-            <div class="carousel w-full rounded-xl overflow-hidden">
-                <div id="roomSlide1" class="carousel-item relative w-full h-80">
-                    <div class="w-full relative">
-                        <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=320&fit=crop&crop=center" alt="Luxury Suite" class="w-full h-80 object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30"></div>
-                        <div class="absolute inset-0 p-8 flex items-center">
-                            <div class="text-white max-w-2xl">
-                                <h3 class="text-3xl font-bold mb-3">Presidential Suite</h3>
-                                <p class="text-xl mb-2 opacity-90">120 sqm • Ocean View</p>
-                                <p class="text-lg opacity-80 mb-4">Luxurious suite with private balcony, jacuzzi, and premium amenities</p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="badge px-3 py-1 rounded-full text-white border-white border bg-transparent text-sm">$899/night</span>
-                                    <span class="badge px-3 py-1 rounded-full text-yellow-400 border border-yellow-400 bg-transparent text-sm">Popular</span>
+                    <!-- Average Daily Rate -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Avg Daily Rate</h3>
+                                <p class="text-3xl font-bold text-gray-800 mt-2">$189</p>
+                                <div class="flex items-center mt-3">
+                                    <span class="text-green-500 text-sm font-medium flex items-center">
+                                        <i class="fa-solid fa-arrow-up mr-1"></i>
+                                        5.3%
+                                    </span>
+                                    <span class="text-sm text-gray-500 ml-2">vs last month</span>
                                 </div>
+                            </div>
+                            <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-chart-line text-yellow-400 text-2xl"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                        <a href="#roomSlide3" class="btn btn-circle bg-white/20 border-none text-white hover:bg-white/40 backdrop-blur-sm transition-all duration-300">❮</a>
-                        <a href="#roomSlide2" class="btn btn-circle bg-white/20 border-none text-white hover:bg-white/40 backdrop-blur-sm transition-all duration-300">❯</a>
-                    </div>
-                </div>
-                <div id="roomSlide2" class="carousel-item relative w-full h-80">
-                    <div class="w-full relative">
-                        <img src="https://images.unsplash.com/photo-1582582621959-48d27397dc69?w=800&h=320&fit=crop&crop=center" alt="Executive Room" class="w-full h-80 object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30"></div>
-                        <div class="absolute inset-0 p-8 flex items-center">
-                            <div class="text-white max-w-2xl">
-                                <h3 class="text-3xl font-bold mb-3">Executive King Room</h3>
-                                <p class="text-xl mb-2 opacity-90">45 sqm • City View</p>
-                                <p class="text-lg opacity-80 mb-4">Spacious room with work desk, premium bedding, and executive lounge access</p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="badge px-3 py-1 rounded-full text-white border-white border bg-transparent text-sm">$349/night</span>
-                                    <span class="badge px-3 py-1 rounded-full text-yellow-400 border border-yellow-400 bg-transparent text-sm">Business</span>
+
+                    <!-- Revenue Per Available Room -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">RevPAR</h3>
+                                <p class="text-3xl font-bold text-gray-800 mt-2">$142</p>
+                                <div class="flex items-center mt-3">
+                                    <span class="text-green-500 text-sm font-medium flex items-center">
+                                        <i class="fa-solid fa-arrow-up mr-1"></i>
+                                        7.6%
+                                    </span>
+                                    <span class="text-sm text-gray-500 ml-2">vs last month</span>
                                 </div>
+                            </div>
+                            <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-house-chimney text-yellow-400 text-2xl"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                        <a href="#roomSlide1" class="btn btn-circle bg-white/20 border-none text-white hover:bg-white/40 backdrop-blur-sm transition-all duration-300">❮</a>
-                        <a href="#roomSlide3" class="btn btn-circle bg-white/20 border-none text-white hover:bg-white/40 backdrop-blur-sm transition-all duration-300">❯</a>
-                    </div>
-                </div>
-                <div id="roomSlide3" class="carousel-item relative w-full h-80">
-                    <div class="w-full relative">
-                        <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&h=320&fit=crop&crop=center" alt="Family Room" class="w-full h-80 object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30"></div>
-                        <div class="absolute inset-0 p-8 flex items-center">
-                            <div class="text-white max-w-2xl">
-                                <h3 class="text-3xl font-bold mb-3">Family Deluxe Room</h3>
-                                <p class="text-xl mb-2 opacity-90">60 sqm • Garden View</p>
-                                <p class="text-lg opacity-80 mb-4">Perfect for families with connecting rooms, kid-friendly amenities, and play area</p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="badge px-3 py-1 rounded-full text-white border-white border bg-transparent text-sm">$459/night</span>
-                                    <span class="badge px-3 py-1 rounded-full text-yellow-400 border border-yellow-400 bg-transparent text-sm">Family</span>
+
+                    <!-- Occupancy Rate -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Occupancy Rate</h3>
+                                <p class="text-3xl font-bold text-gray-800 mt-2">78.5%</p>
+                                <div class="flex items-center mt-3">
+                                    <span class="text-green-500 text-sm font-medium flex items-center">
+                                        <i class="fa-solid fa-arrow-up mr-1"></i>
+                                        2.1%
+                                    </span>
+                                    <span class="text-sm text-gray-500 ml-2">vs last month</span>
                                 </div>
                             </div>
+                            <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-bed text-yellow-400 text-2xl"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                        <a href="#roomSlide2" class="btn btn-circle bg-white/20 border-none text-white hover:bg-white/40 backdrop-blur-sm transition-all duration-300">❮</a>
-                        <a href="#roomSlide1" class="btn btn-circle bg-white/20 border-none text-white hover:bg-white/40 backdrop-blur-sm transition-all duration-300">❯</a>
                     </div>
                 </div>
             </div>
-            <div class="flex justify-center w-full py-4 gap-3 mt-4">
-                <a href="#roomSlide1" class="btn btn-sm rounded-full bg-yellow-400 border-yellow-400 text-white transition-all duration-300 hover:bg-yellow-500">●</a>
-                <a href="#roomSlide2" class="btn btn-sm btn-outline rounded-full bg-gray-200 border-gray-300 hover:bg-gray-300 transition-all duration-300">●</a>
-                <a href="#roomSlide3" class="btn btn-sm btn-outline rounded-full bg-gray-200 border-gray-300 hover:bg-gray-300 transition-all duration-300">●</a>
+
+            <!-- Main Stats Grid -->
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800">Operational Metrics</h2>
+                    <button class="text-blue-600 text-sm font-medium flex items-center">
+                        <span>View Details</span>
+                        <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <!-- Total Reservations -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Reservations</h3>
+                                <p class="text-3xl font-bold text-gray-800 mt-2">   {{ number_format($totalreservation) }}</p>
+                                <div class="flex items-center mt-3">
+                                    <span class="text-green-500 text-sm font-medium flex items-center">
+                                        <i class="fa-solid fa-arrow-up mr-1"></i>
+                                       {{ number_format($reservationGrowthMonth, 1) }}%
+                                    </span>
+                                    <span class="text-sm text-gray-500 ml-2">vs last month</span>
+                                </div>
+                            </div>
+                            <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-calendar-check text-yellow-400 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reservations This Week -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">This Week</h3>
+                                <p class="text-3xl font-bold text-gray-800 mt-2"> {{ number_format($reservationThisWeek) }}</p>
+                                <div class="flex items-center mt-3">
+                                    <span class="text-green-500 text-sm font-medium flex items-center">
+                                        <i class="fa-solid fa-arrow-up mr-1"></i>
+                                        {{ number_format($reservationGrowthWeek, 1) }}%
+                                    </span>
+                                    <span class="text-sm text-gray-500 ml-2">vs last week</span>
+                                </div>
+                            </div>
+                            <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-chart-line text-yellow-400 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Rooms -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Rooms</h3>
+                                <p class="text-3xl font-bold text-gray-800 mt-2">  {{ number_format($totalrooms) }}</p>
+                                <div class="flex items-center mt-3">
+                                    <span class="text-blue-500 text-sm font-medium">   {{ number_format($occupancyRate, 1) }}%</span>
+                                    <span class="text-sm text-gray-500 ml-2">occupancy</span>
+                                </div>
+                            </div>
+                            <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-bed text-yellow-400 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rooms Needing Maintenance -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Need Maintenance</h3>
+                                <p class="text-3xl font-bold text-gray-800 mt-2">  {{ number_format($needmaintenance) }}</p>
+                                <div class="flex items-center mt-3">
+                                    <span class="text-amber-500 text-sm font-medium">{{ number_format($maintenanceRate, 1) }}%</span>
+                                    <span class="text-sm text-gray-500 ml-2">of total</span>
+                                </div>
+                            </div>
+                            <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-screwdriver-wrench text-yellow-400 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <!-- Secondary Stats Grid -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Additional Metrics</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <!-- Total Employees -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-md card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Employees</h3>
+                                <p class="text-2xl font-bold text-gray-800 mt-2">{{ number_format($totalemployees) }}</p>
+                            </div>
+                            <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-users text-yellow-400 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Guest Accounts -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-md card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Guest Accounts</h3>
+                                <p class="text-2xl font-bold text-gray-800 mt-2">{{ number_format($guestacccount) }}</p>
+                            </div>
+                            <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-user text-yellow-400 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Room Markets -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-md card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Room Markets</h3>
+                                <p class="text-2xl font-bold text-gray-800 mt-2">{{ number_format($roommarkets) }}</p>
+                            </div>
+                            <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-globe text-yellow-400 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Channel Listings -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-md card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Channel Listings</h3>
+                                <p class="text-2xl font-bold text-gray-800 mt-2">{{ number_format($channellisting) }}</p>
+                            </div>
+                            <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-tv text-yellow-400 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Marketing & Loyalty Stats -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Marketing & Events</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Active Campaigns -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-md card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Active Campaigns</h3>
+                                <p class="text-2xl font-bold text-gray-800 mt-2">{{ number_format($activecampaigns) }}</p>
+                            </div>
+                            <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-bullhorn text-yellow-400 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loyalty Programs -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-md card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Loyalty & Rewards</h3>
+                                <p class="text-2xl font-bold text-gray-800 mt-2">{{ number_format($loyaltyandrewards) }}</p>
+                                <p class="text-xs text-gray-500 mt-1">Room & Food packages</p>
+                            </div>
+                            <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-star text-yellow-400 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Events -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-md card-hover stat-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Events</h3>
+                                <p class="text-2xl font-bold text-gray-800 mt-2">{{ number_format($totalevents) }}</p>
+                            </div>
+                            <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-blue-900">
+                                <i class="fa-solid fa-calendar-days text-yellow-400 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graph Section -->
+            <div class="mt-10">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Reservations Trend (7 days) -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-600">Reservations (Last 7 Days)</h3>
+                            <i class="fa-solid fa-calendar-check text-blue-900"></i>
+                        </div>
+                        <div class="chart-container bg-gray-50 rounded-lg flex items-center justify-center">
+                          <canvas id="reservationsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Rooms -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-600">Rooms Overview</h3>
+                            <i class="fa-solid fa-bed text-blue-900"></i>
+                        </div>
+                        <div class="chart-container bg-gray-50 rounded-lg flex items-center justify-center">
+                             <canvas id="roomsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Employees vs Guests -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-600">Employees vs Guests</h3>
+                            <i class="fa-solid fa-users text-blue-900"></i>
+                        </div>
+                        <div class="chart-container bg-gray-50 rounded-lg flex items-center justify-center">
+                            <canvas id="employeesGuestsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Marketing -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-600">Marketing & Channels</h3>
+                            <i class="fa-solid fa-bullhorn text-blue-900"></i>
+                        </div>
+                        <div class="chart-container bg-gray-50 rounded-lg flex items-center justify-center">
+                              <canvas id="marketingChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Loyalty -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-600">Loyalty & Rewards</h3>
+                            <i class="fa-solid fa-star text-blue-900"></i>
+                        </div>
+                        <div class="chart-container bg-gray-50 rounded-lg flex items-center justify-center">
+                              <canvas id="loyaltyChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Events -->
+                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-600">Events (Monthly)</h3>
+                            <i class="fa-solid fa-calendar-days text-blue-900"></i>
+                        </div>
+                        <div class="chart-container bg-gray-50 rounded-lg flex items-center justify-center">
+                             <canvas id="eventsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    <!-- Graph Section -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Reservations (Last 7 Days)
+    new Chart(document.getElementById('reservationsChart'), {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($reservationsLast7Days->pluck('date')) !!},
+            datasets: [{
+                label: 'Reservations',
+                data: {!! json_encode($reservationsLast7Days->pluck('count')) !!},
+                borderColor: '#2563eb',
+                backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                fill: true,
+                tension: 0.3
+            }]
+        }
+    });
+
+    // Rooms
+    new Chart(document.getElementById('roomsChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Available', 'Maintenance'],
+            datasets: [{
+                data: [{{ $totalrooms - $needmaintenance }}, {{ $needmaintenance }}],
+                backgroundColor: ['#22c55e', '#f59e0b']
+            }]
+        }
+    });
+
+    // Employees vs Guests
+    new Chart(document.getElementById('employeesGuestsChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Employees', 'Guests'],
+            datasets: [{
+                label: 'Count',
+                data: [{{ $totalemployees }}, {{ $guestacccount }}],
+                backgroundColor: ['#3b82f6', '#f43f5e']
+            }]
+        }
+    });
+
+    // Marketing
+    new Chart(document.getElementById('marketingChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Markets', 'Channels', 'Campaigns'],
+            datasets: [{
+                label: 'Count',
+                data: [{{ $roommarkets }}, {{ $channellisting }}, {{ $activecampaigns }}],
+                backgroundColor: ['#8b5cf6', '#06b6d4', '#f97316']
+            }]
+        }
+    });
+
+    // Loyalty
+    new Chart(document.getElementById('loyaltyChart'), {
+        type: 'pie',
+        data: {
+            labels: ['Rewards'],
+            datasets: [{
+                data: [{{ $loyaltyandrewards }}],
+                backgroundColor: ['#eab308']
+            }]
+        }
+    });
+
+    // Events (Monthly)
+    new Chart(document.getElementById('eventsChart'), {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($eventsByMonth->pluck('month')) !!},
+            datasets: [{
+                label: 'Events',
+                data: {!! json_encode($eventsByMonth->pluck('count')) !!},
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16,185,129,0.2)',
+                fill: true,
+                tension: 0.3
+            }]
+        }
+    });
+});
+</script>
+
+
     </div>
-</div>
-   
-</section>
 
 
  

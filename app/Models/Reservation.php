@@ -35,5 +35,6 @@ class Reservation extends Model
             'guestID',
             'payment_method',
             'bookingID',
+            'payment_status',
         ];
 }
