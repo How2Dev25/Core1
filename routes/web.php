@@ -621,11 +621,49 @@ Route::get('/printreceipt/{reservationID}', [reservationController::class, 'gene
 
 
 
-Route::get('guestdashboard', function(){
-     guestAuthCheck();
-     $events = ecm::all();
-     $room = room::all();
-    return view('guest.dashboard', ['events' => $events, 'room' => $room]);
+Route::get('/guestdashboard', function() {
+    guestAuthCheck();
+
+    $guestID = Auth::guard('guest')->user()->guestID;
+
+    // Total reservations
+    $guesttotalreservation = Reservation::where('guestID', $guestID)->count();
+
+    // Total reservations last month (for comparison)
+    $previousReservations = Reservation::where('guestID', $guestID)
+        ->whereMonth('created_at', now()->subMonth()->month)
+        ->count();
+
+    // Recent stay
+    $recentstay = Reservation::where('guestID', $guestID)
+        ->orderBy('reservation_checkin', 'desc')
+        ->first();
+
+    // Favorite room (most booked by guest)
+     $favoriteroomID = Reservation::select('roomID')
+        ->where('guestID', $guestID)
+        ->groupBy('roomID')
+        ->orderByRaw('COUNT(roomID) DESC')
+        ->pluck('roomID')
+        ->first();
+
+    $favoriteroom = $favoriteroomID ? Room::find($favoriteroomID) : null;
+
+    $rooms = room::all();
+
+    $events = ecm::all();
+
+    $promos = Hmp::all();
+
+    return view('guest.dashboard', compact(
+        'guesttotalreservation',
+        'previousReservations',
+        'recentstay',
+        'favoriteroom',
+        'events',
+        'rooms',
+        'promos',
+    ));
 });
 
 // Guest

@@ -117,55 +117,83 @@
 
         <!-- Enhanced Statistics Cards -->
        
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <!-- Total Reservations -->
-            <div class="stat-card card bg-base-100 shadow-xl border-2 border-transparent hover:border-blue-400 hover:bg-gradient-to-br hover:from-blue-50 hover:to-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
-                <div class="card-body items-center text-center p-6">
-                    <div class="bg-gradient-to-br from-blue-400 to-blue-600 rounded-full p-4 mb-4 group-hover:scale-110 transition-transform duration-300 group-hover:shadow-lg">
-                        <i data-lucide="calendar-days" class="w-8 h-8 text-white"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold text-base-content">Total Reservations</h3>
-                    <div class="stat-value text-3xl font-bold text-primary group-hover:scale-105 transition-transform duration-300">12</div>
-                    <div class="stat-desc text-success font-medium">+2 this month</div>
-                </div>
+ <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Total Reservations -->
+    <div class="stat-card card bg-base-100 shadow-lg border-2 border-transparent hover:border-blue-400 hover:bg-gradient-to-br hover:from-blue-50 hover:to-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
+        <div class="card-body items-center text-center p-6">
+            <div class="bg-gradient-to-br from-blue-400 to-blue-600 rounded-full p-4 mb-4">
+                <i data-lucide="calendar-days" class="w-8 h-8 text-white"></i>
             </div>
-
-            <!-- Loyalty Points -->
-            <div class="stat-card card bg-base-100 shadow-xl border-2 border-transparent hover:border-green-400 hover:bg-gradient-to-br hover:from-green-50 hover:to-green-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
-                <div class="card-body items-center text-center p-6">
-                    <div class="bg-gradient-to-br from-green-400 to-green-600 rounded-full p-4 mb-4 group-hover:scale-110 transition-transform duration-300 group-hover:shadow-lg">
-                        <i data-lucide="coins" class="w-8 h-8 text-white"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold text-base-content">Loyalty Points</h3>
-                    <div class="stat-value text-3xl font-bold text-secondary group-hover:scale-105 transition-transform duration-300">4,250</div>
-                    <div class="stat-desc text-info font-medium">Ready to redeem</div>
-                </div>
+            <h3 class="text-lg font-semibold">Total Reservations</h3>
+            <div class="stat-value text-3xl font-bold text-primary">
+                {{ $guesttotalreservation }}
             </div>
-
-            <!-- Favorite Room -->
-            <div class="stat-card card bg-base-100 shadow-xl border-2 border-transparent hover:border-purple-400 hover:bg-gradient-to-br hover:from-purple-50 hover:to-purple-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
-                <div class="card-body items-center text-center p-6">
-                    <div class="bg-gradient-to-br from-purple-400 to-purple-600 rounded-full p-4 mb-4 group-hover:scale-110 transition-transform duration-300 group-hover:shadow-lg">
-                        <i data-lucide="heart" class="w-8 h-8 text-white"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold text-base-content">Favorite Room</h3>
-                    <div class="stat-value text-xl font-bold text-accent group-hover:scale-105 transition-transform duration-300">Ocean View</div>
-                    <div class="stat-desc font-medium">Suite</div>
-                </div>
-            </div>
-
-            <!-- Recent Reservation -->
-            <div class="stat-card card bg-base-100 shadow-xl border-2 border-transparent hover:border-yellow-400 hover:bg-gradient-to-br hover:from-yellow-50 hover:to-yellow-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
-                <div class="card-body items-center text-center p-6">
-                    <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full p-4 mb-4 group-hover:scale-110 transition-transform duration-300 group-hover:shadow-lg">
-                        <i data-lucide="clock" class="w-8 h-8 text-white"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold text-base-content">Recent Stay</h3>
-                    <div class="stat-value text-lg font-bold text-warning group-hover:scale-105 transition-transform duration-300">Jun 15-20</div>
-                    <div class="stat-desc font-medium">2023</div>
-                </div>
+            <div class="stat-desc text-success font-medium">
+                @php
+                    $diff = $guesttotalreservation - $previousReservations;
+                    $sign = $diff >= 0 ? '+' : '';
+                @endphp
+                {{ $sign.$diff }} vs last month
             </div>
         </div>
+    </div>
+
+    <!-- Upcoming Events -->
+    <div class="stat-card card bg-base-100 shadow-lg border-2 border-transparent hover:border-purple-400 hover:bg-gradient-to-br hover:from-purple-50 hover:to-purple-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
+        <div class="card-body items-center text-center p-6">
+            <div class="bg-gradient-to-br from-purple-400 to-purple-600 rounded-full p-4 mb-4">
+                <i data-lucide="calendar-check" class="w-8 h-8 text-white"></i>
+            </div>
+            <h3 class="text-lg font-semibold">Upcoming Events</h3>
+            <div class="stat-value text-xl font-bold text-accent">
+                {{ $events->count() }}
+            </div>
+            <div class="stat-desc font-medium">
+                Check your upcoming hotel events
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Reservation -->
+    <div class="stat-card card bg-base-100 shadow-lg border-2 border-transparent hover:border-yellow-400 hover:bg-gradient-to-br hover:from-yellow-50 hover:to-yellow-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
+        <div class="card-body items-center text-center p-6">
+            <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full p-4 mb-4">
+                <i data-lucide="clock" class="w-8 h-8 text-white"></i>
+            </div>
+            <h3 class="text-lg font-semibold">Recent Stay</h3>
+            <div class="stat-value text-lg font-bold text-warning">
+                @if($recentstay)
+                    {{ \Carbon\Carbon::parse($recentstay->reservation_checkin)->format('M d') }} -
+                    {{ \Carbon\Carbon::parse($recentstay->reservation_checkout)->format('M d') }}
+                @else
+                    N/A
+                @endif
+            </div>
+            <div class="stat-desc font-medium">
+                @if($recentstay)
+                    {{ \Carbon\Carbon::parse($recentstay->reservation_checkin)->format('Y') }}
+                @else
+                    -
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <!-- Loyalty Points -->
+    <div class="stat-card card bg-base-100 shadow-lg border-2 border-transparent hover:border-green-400 hover:bg-gradient-to-br hover:from-green-50 hover:to-green-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
+        <div class="card-body items-center text-center p-6">
+            <div class="bg-gradient-to-br from-green-400 to-green-600 rounded-full p-4 mb-4">
+                <i data-lucide="coins" class="w-8 h-8 text-white"></i>
+            </div>
+            <h3 class="text-lg font-semibold">Loyalty Points</h3>
+            <div class="stat-value text-3xl font-bold text-secondary">
+                {{ Auth::guard('guest')->user()->loyalty_points ?? 0 }}
+            </div>
+            <div class="stat-desc text-info font-medium">Ready to redeem</div>
+        </div>
+    </div>
+</div>
+
 
         
      
@@ -262,89 +290,112 @@
 </script>
 
 
-<div class="card  shadow-xl">
-  <div class="card-body">
-    <!-- Carousel Showcase -->
-    <div class="relative w-full overflow-hidden" id="showcaseCarousel">
-      <div class="flex transition-transform duration-700 ease-in-out" id="showcaseSlides">
-        
-        <!-- Slide 1 -->
-        <div class="w-full flex-shrink-0 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 px-4">
-          <!-- Standard Room -->
-          <div class="card bg-base-100 shadow-lg border">
-            <figure class="px-4 pt-4">
-              <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=250&fit=crop"
-                alt="Standard Room" class="rounded-xl h-48 w-full object-cover" />
-            </figure>
-            <div class="card-body">
-              <h2 class="card-title">Standard Room <div class="badge badge-primary">Popular</div></h2>
-              <p class="text-base-content/70">Cozy and affordable with all the essentials.</p>
-            </div>
-          </div>
 
-          <!-- Deluxe Room -->
-          <div class="card bg-base-100 shadow-lg border">
-            <figure class="px-4 pt-4">
-              <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=400&h=250&fit=crop"
-                alt="Deluxe Room" class="rounded-xl h-48 w-full object-cover" />
-            </figure>
-            <div class="card-body">
-              <h2 class="card-title">Deluxe Room <div class="badge badge-secondary">Premium</div></h2>
-              <p class="text-base-content/70">Spacious room with premium amenities and views.</p>
-            </div>
-          </div>
 
-          <!-- Ocean View Suite -->
-          <div class="card bg-base-100 shadow-lg border">
-            <figure class="px-4 pt-4">
-              <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=250&fit=crop"
-                alt="Ocean View Suite" class="rounded-xl h-48 w-full object-cover" />
-            </figure>
-            <div class="card-body">
-              <h2 class="card-title">Ocean View Suite <div class="badge badge-accent">Luxury</div></h2>
-              <p class="text-base-content/70">Breathtaking ocean views with exclusive comfort.</p>
+
+
+
+ <!-- Parent Container with Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+
+    <!-- Featured Rooms Carousel -->
+    <div class="card bg-white shadow-lg rounded-xl border border-gray-100 overflow-hidden">
+        <div class="p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 bg-blue-900">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400">
+                        <path d="M21 10.78V8C21 6.9 20.1 6 19 6H5C3.9 6 3 6.9 3 8V10.78C3.39 10.47 3.86 10.25 4.4 10.17C5.28 10.05 6.2 10.36 6.85 11.01L10 14.16L13.15 11.01C14.45 9.71 16.55 9.71 17.85 11.01C18.39 11.55 18.71 12.27 18.74 13.03H21V10.78Z"/>
+                        <path d="M2 19V17H22V19C22 20.1 21.1 21 20 21H4C2.9 21 2 20.1 2 19Z"/>
+                    </svg>
+                </div>
+                Featured Rooms
+            </h2>
+
+            <div class="relative w-full rounded-xl overflow-hidden" id="roomCarousel">
+                @foreach($rooms as $index => $room)
+                <div class="carousel-slide {{ $index === 0 ? 'block' : 'hidden' }}">
+                    <img src="{{ $room->roomphoto }}" alt="{{ $room->roomtype }}" class="w-full h-80 object-cover rounded-xl">
+                    <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30 rounded-xl"></div>
+                    <div class="absolute inset-0 p-8 flex items-center">
+                        <div class="text-white max-w-2xl">
+                            <h3 class="text-3xl font-bold mb-3">{{ $room->roomtype }}</h3>
+                            <p class="text-xl mb-2 opacity-90">{{ $room->roomsize }} sqm • Max {{ $room->roommaxguest }} guests</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="badge px-3 py-1 rounded-full text-white border-white border bg-transparent text-sm">₱{{ $room->roomprice }}/night</span>
+                                @if($room->roomfeatures)
+                                    @foreach(explode(',', $room->roomfeatures) as $feature)
+                                        <span class="badge px-3 py-1 rounded-full text-yellow-400 border border-yellow-400 bg-transparent text-sm">{{ trim($feature) }}</span>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
             </div>
-          </div>
         </div>
-
-
-      </div>
     </div>
 
-    <!-- Controls -->
-    <div class="flex justify-center w-full py-4 gap-2">
-      <button class="btn btn-sm" onclick="prevShowcase()">❮</button>
-      <button class="btn btn-sm" onclick="nextShowcase()">❯</button>
+    <!-- Promotions Carousel -->
+    <div class="card bg-white shadow-lg rounded-xl border border-gray-100 overflow-hidden">
+        <div class="p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 bg-blue-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                Promotions
+            </h2>
+
+            <div class="relative w-full rounded-xl overflow-hidden" id="promoCarousel">
+                @foreach($promos as $index => $promo)
+                <div class="carousel-slide {{ $index === 0 ? 'block' : 'hidden' }}">
+                    <img src="{{ $promo->hotelpromophoto }}" alt="{{ $promo->hotelpromoname }}" class="w-full h-80 object-cover rounded-xl">
+                    <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30 rounded-xl"></div>
+                    <div class="absolute inset-0 p-8 flex items-center">
+                        <div class="text-white max-w-2xl">
+                            <h3 class="text-3xl font-bold mb-3">{{ $promo->hotelpromoname }}</h3>
+                            <p class="text-xl mb-2 opacity-90">{{ $promo->hotelpromodaterange }}</p>
+                            <p class="text-lg opacity-80 mb-4">{{ $promo->hotelpromodescription }}</p>
+                            @if($promo->hotelpromotag)
+                            <div class="flex flex-wrap gap-2">
+                                <span class="badge px-3 py-1 rounded-full text-yellow-400 border border-yellow-400 bg-transparent text-sm">{{ $promo->hotelpromotag }}</span>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
     </div>
-  </div>
+
 </div>
 
 <script>
-  let showcaseIndex = 0;
-  const showcaseSlides = document.getElementById('showcaseSlides');
-  const totalShowcaseSlides = showcaseSlides.children.length;
+    function initCarousel(carouselId, interval = 5000) {
+        const carousel = document.getElementById(carouselId);
+        const slides = carousel.querySelectorAll('.carousel-slide');
+        let current = 0;
 
-  function updateShowcase() {
-    showcaseSlides.style.transform = `translateX(-${showcaseIndex * 100}%)`;
-  }
+        setInterval(() => {
+            slides[current].classList.add('hidden');
+            slides[current].classList.remove('block');
+            current = (current + 1) % slides.length;
+            slides[current].classList.remove('hidden');
+            slides[current].classList.add('block');
+        }, interval);
+    }
 
-  function nextShowcase() {
-    showcaseIndex = (showcaseIndex + 1) % totalShowcaseSlides;
-    updateShowcase();
-  }
-
-  function prevShowcase() {
-    showcaseIndex = (showcaseIndex - 1 + totalShowcaseSlides) % totalShowcaseSlides;
-    updateShowcase();
-  }
-
-  // Auto slide every 6s
-  setInterval(nextShowcase, 6000);
-
-  // Init
-  updateShowcase();
+    document.addEventListener('DOMContentLoaded', () => {
+        initCarousel('roomCarousel', 5000);
+        initCarousel('promoCarousel', 5000);
+    });
 </script>
-
+    
+ 
+</div>
 
 
    
