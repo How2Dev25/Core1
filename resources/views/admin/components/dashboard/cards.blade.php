@@ -105,10 +105,7 @@
             <div class="mb-8">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-semibold text-gray-800">Operational Metrics</h2>
-                    <button class="text-blue-600 text-sm font-medium flex items-center">
-                        <span>View Details</span>
-                        <i class="fas fa-chevron-right ml-1 text-xs"></i>
-                    </button>
+                   
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                     <!-- Total Reservations -->

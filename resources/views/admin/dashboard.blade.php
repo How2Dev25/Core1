@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function () {
    
     {{-- modals --}}
 
-    @include('admin.components.frontdesk.viewroom')
+  
     
    
    @livewireScripts

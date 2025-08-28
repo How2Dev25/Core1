@@ -34,32 +34,34 @@
         </div>
 
 
-           <div class="collapse group">
-          <input type="checkbox" class="peer" /> 
-          <div class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
-            <div class="flex items-center">
-              <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-                <i data-lucide="calendar-check" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
-              </div>
-              <span class="ml-3 sidebar-text">Hotel User - Management</span>
-            </div>
-            <i class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon" data-lucide="chevron-down"></i>
-          </div>
-          <div class="collapse-content pl-14 pr-4 py-1 space-y-1"> 
-            <a href="/bas" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
-              <span class="flex items-center gap-2">
-                <i data-lucide="bed" class="w-4 h-4 text-[#F7B32B]"></i>
-                Room Reservation
-              </span>
-            </a>
-            <a href="/aibas" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
-              <span class="flex items-center gap-2">
-                <i data-lucide="bot" class="w-4 h-4 text-[#F7B32B]"></i>
-                AI Assistance
-              </span>
-            </a>
-          </div>
-        </div>
+ <div class="collapse group">
+  <input type="checkbox" class="peer" /> 
+  <div class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
+    <div class="flex items-center">
+      <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
+        <i data-lucide="users" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+      </div>
+      <span class="ml-3 sidebar-text">Account Management</span>
+    </div>
+    <i class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon" data-lucide="chevron-down"></i>
+  </div>
+  <div class="collapse-content pl-14 pr-4 py-1 space-y-1"> 
+    <a href="/departmentaccount" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+      <span class="flex items-center gap-2">
+        <i data-lucide="briefcase" class="w-4 h-4 text-[#F7B32B]"></i>
+        Department Accounts
+      </span>
+    </a>
+    <a href="/guestaccount" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+      <span class="flex items-center gap-2">
+        <i data-lucide="user" class="w-4 h-4 text-[#F7B32B]"></i>
+        Guest Accounts
+      </span>
+    </a>
+  
+  </div>
+</div>
+
         
 
           <!-- Section Label -->

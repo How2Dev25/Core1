@@ -332,6 +332,23 @@ Route::get('/employeedashboard', function() {
     ));
 });
 
+Route::get('/departmentaccount', function(){
+    $employee = DeptAccount::all();
+    $totalemployee = DeptAccount::count();
+    $activeemployee = DeptAccount::where('status', 'Active')->count();
+   $inactiveemployee = DeptAccount::where('status', '!=', 'Active')->count();
+    return view('admin.departmentaccount', compact(
+        'employee', 'totalemployee', 'activeemployee', 'inactiveemployee'));
+});
+
+Route::get('/guestaccount', function(){
+    $guest = Guest::paginate(5); // 10 guests per page
+    $totalguest = Guest::count();
+    $checkinguest = Reservation::where('reservation_bookingstatus', 'Checked in')->count();
+    $pendingguest = Reservation::where('reservation_bookingstatus', 'Pending')->count();
+
+    return view('admin.guestaccount', compact('guest', 'checkinguest', 'pendingguest', 'totalguest'));
+});
 Route::get('/hmp', function(){
     employeeAuthCheck();
     $hmpdata = Hmp::latest()->get();
