@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditTrails;
 use App\Models\DeptAccount;
+use App\Models\DeptLogs;
 use App\Models\Ecm;
 use App\Models\Reservation;
 use App\Models\room;
@@ -30,14 +32,14 @@ class ApiController extends Controller
              $getroom = room::all();
 
              return response()->json([
-                'success' => 'true',
+                'success' => true,
                 'message' => 'Rooms retrieve uccessfully',
                 'data' => $getroom,
              ],200);
         }
         catch (\Exception $e){
             return response()->json([
-                'success' => 'false',
+                'success' => false,
                 'message' => 'Failed to retrieve rooms',
                 'data' => $e->getMessage()
             ], 500);
@@ -61,14 +63,14 @@ class ApiController extends Controller
         $getEvents = Ecm::where('eventstatus', 'Approved')->get();
 
         return response()->json([
-            'success' => 'true',
+            'success' => true,
             'message' => 'Events Successfully Retrieved',
             'data' => $getEvents,
         ], 200);
     }
     catch(\Exception $e){
         return response()->json([
-            'success' => 'false',
+            'success' => false,
             'message' => 'Failed to get events',
             'data' => $e->getMessage(),
         ], 500);
@@ -96,20 +98,76 @@ class ApiController extends Controller
             )->get();
 
             return response([
-                'success' => 'true',
+                'success' => true,
                 'message' => 'Data Retrieved Successfully',
                 'data' => $hotelaccounts,
             ], 200);
         }
         catch(\Exception $e){
             return response([
-                'success' => 'false',
+                'success' => false,
                 'message' => 'Failed to retrieve data',
                 'data' => $e->getMessage(),
             ], 500);
         }
+    }
 
-    
+    public function hoteldeptLogs(Request $request){
+        $token = $request->header('Authorization');
+
+       
+     if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Unauthorized. Invalid API token.'
+        ], 401);
+    }
+
+    try{
+        $departmentloghotel = DeptLogs::all();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Department Logs Successfully Retrieved',
+            'data' => $departmentloghotel,
+        ], 200);
+    }
+    catch(\Exception $e){
+        return response()->json([
+            'success' => false,
+            'message' => 'Department Logs Failed to Fetch',
+            'data' => $e->getMessage(),
+        ], 500);
+    }
+    }
+
+    public function hotelaudit(Request $request){
+         $token = $request->header('Authorization');
+
+       
+     if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Unauthorized. Invalid API token.'
+        ], 401);
+    }
+
+    try{
+        $gethotelaudit = AuditTrails::all();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully Fetched Hotel Audit Trails And Transactions',
+            'data' => $gethotelaudit,
+        ], 200);
+    }
+    catch(\Exception $e){
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to Fetch Hotel Audit Trails And Transactions',
+            'data' => $e->getMessage(),
+        ], 500);
+    }
     }
 
 
@@ -190,14 +248,14 @@ public function hotelincome(Request $request)
             $stockrequest = stockRequest::where('core1_request_status', 'Approved')->get();
 
             return response()->json([
-                'success' => 'true',
+                'success' => true,
                 'message' => 'Data Successfully Retrived',
                 'data' => $stockrequest,
             ], 200);
         }
         catch(\Exception $e){
             return response()->json([
-                'success' => 'true',
+                'success' => false,
                 'message' => 'Failed to Retrieve Data',
                 'data' => $e->getMessage(),
             ], 500);
