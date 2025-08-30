@@ -16,7 +16,7 @@ use Spatie\Browsershot\Browsershot;
 use Illuminate\Support\Facades\View;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-
+use App\Models\AuditTrails;
 
 
 class reservationController extends Controller
@@ -320,6 +320,19 @@ HTML;
     }
 
 
+     AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Booking And Reservation',
+            'action' => 'Create Booking',
+            'activity' => 'Create Booking For ' .$form['guestname'],
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
+
+
 
     session()->flash('success', 'Reservation Success. Receipt #: ' . $receiptNo . ' | Booking ID: ' . $bookingID);
 
@@ -348,24 +361,57 @@ HTML;
 
         $reservationID->update($form);
 
+          AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Booking And Reservation',
+            'action' => 'Modify Booking',
+            'activity' => 'Modify Booking ' .$reservationID->bookingID,
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
+
+
         session()->flash('modified', 'Reservation Has Been Modified');
 
         return redirect()->back();
     }
 
-    public function delete( Reservation $reservationID){
-        $roomIDUpdate = $reservationID->roomID;
+        public function delete(Reservation $reservationID)
+        {
+            $roomIDUpdate = $reservationID->roomID;
 
-        room::where('roomID', $roomIDUpdate)->update([
-            'roomstatus' => 'Available',
-        ]);
+            // Update room status back to Available
+            Room::where('roomID', $roomIDUpdate)->update([
+                'roomstatus' => 'Available',
+            ]);
 
-        $reservationID->delete();
-        
-        session()->flash('removed', 'Reservation Has been removed');
+            // Delete reservation
+            $reservationID->delete();
 
-        return redirect()->back();
-    }
+            // Only log audit trail if default Auth user is logged in
+            if (Auth::check()) {
+                $user = Auth::user();
+
+                AuditTrails::create([
+                    'dept_id'       => $user->Dept_id,
+                    'dept_name'     => $user->dept_name,
+                    'modules_cover' => 'Booking And Reservation',
+                    'action'        => 'Remove Booking',
+                    'activity'      => 'Remove Booking ' . $reservationID->bookingID,
+                    'employee_name' => $user->employee_name,
+                    'employee_id'   => $user->employee_id,
+                    'role'          => $user->role,
+                    'date'          => Carbon::now()->toDateTimeString(),
+                ]);
+            }
+
+            session()->flash('removed', 'Reservation has been removed');
+
+            return redirect()->back();
+        }
 
 
   public function confirm(Reservation $reservationID)
@@ -480,6 +526,22 @@ HTML;
         Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
     }
 
+     if (Auth::check()) {
+                $user = Auth::user();
+
+                AuditTrails::create([
+                    'dept_id'       => $user->Dept_id,
+                    'dept_name'     => $user->dept_name,
+                    'modules_cover' => 'Front Desk And Reception',
+                    'action'        => 'Confirm Booking',
+                    'activity'      => 'Confirm Booking ID ' . $reservationID->bookingID,
+                    'employee_name' => $user->employee_name,
+                    'employee_id'   => $user->employee_id,
+                    'role'          => $user->role,
+                    'date'          => Carbon::now()->toDateTimeString(),
+                ]);
+            }
+
     session()->flash('confirm', 'Reservation Status Has Been Confirmed');
     return redirect()->back();
 }
@@ -495,6 +557,23 @@ HTML;
         room::where('roomID', $roomID)->update([
             'roomstatus' => 'Occupied',
         ]);
+
+        
+     if (Auth::check()) {
+                $user = Auth::user();
+
+                AuditTrails::create([
+                    'dept_id'       => $user->Dept_id,
+                    'dept_name'     => $user->dept_name,
+                    'modules_cover' => 'Front Desk And Reception',
+                    'action'        => 'Check In Booking',
+                    'activity'      => 'Check In Booking ID ' . $reservationID->bookingID,
+                    'employee_name' => $user->employee_name,
+                    'employee_id'   => $user->employee_id,
+                    'role'          => $user->role,
+                    'date'          => Carbon::now()->toDateTimeString(),
+                ]);
+            }
 
         session()->flash('checkin', 'Guest Has Checked In');
 
@@ -600,8 +679,22 @@ HTML;
                 }
 
 
+                
+                if (Auth::check()) {
+                $user = Auth::user();
 
-
+                AuditTrails::create([
+                    'dept_id'       => $user->Dept_id,
+                    'dept_name'     => $user->dept_name,
+                    'modules_cover' => 'Front Desk And Reception',
+                    'action'        => 'Check Out Booking',
+                    'activity'      => 'Check Out Booking ID ' . $reservationID->bookingID,
+                    'employee_name' => $user->employee_name,
+                    'employee_id'   => $user->employee_id,
+                    'role'          => $user->role,
+                    'date'          => Carbon::now()->toDateTimeString(),
+                ]);
+            }
                     session()->flash('checkout', 'Guest Has Been Checked Out');
 
                     return redirect()->back();
@@ -706,6 +799,21 @@ HTML;
                 }
 
 
+                 if (Auth::check()) {
+                $user = Auth::user();
+
+                AuditTrails::create([
+                    'dept_id'       => $user->Dept_id,
+                    'dept_name'     => $user->dept_name,
+                    'modules_cover' => 'Front Desk And Reception',
+                    'action'        => 'Cancel Booking',
+                    'activity'      => 'Cancel Booking ' . $reservationID->bookingID,
+                    'employee_name' => $user->employee_name,
+                    'employee_id'   => $user->employee_id,
+                    'role'          => $user->role,
+                    'date'          => Carbon::now()->toDateTimeString(),
+                ]);
+            }
 
          
 
@@ -836,6 +944,22 @@ public function generateInvoice($reservationID)
 
     // Return PDF URL (optional, if you still want to open/download it)
     $pdfUrl = asset("images/invoices/invoice_{$booking->reservationID}.pdf");
+
+      if (Auth::check()) {
+                $user = Auth::user();
+
+                AuditTrails::create([
+                    'dept_id'       => $user->Dept_id,
+                    'dept_name'     => $user->dept_name,
+                    'modules_cover' => 'Front Desk And Reception',
+                    'action'        => 'Generate Invoice',
+                    'activity'      => 'Generate Invoice ' . $booking->bookingID,
+                    'employee_name' => $user->employee_name,
+                    'employee_id'   => $user->employee_id,
+                    'role'          => $user->role,
+                    'date'          => Carbon::now()->toDateTimeString(),
+                ]);
+            }
     return redirect($pdfUrl);
 }
 // guest

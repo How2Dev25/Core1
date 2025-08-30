@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Ecm;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use App\Models\AuditTrails;
 
 
 
@@ -34,6 +37,20 @@ class ecmController extends Controller
         $form['eventphoto'] = $filepath;
 
         Ecm::create($form);
+
+
+          AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Event And Conference',
+            'action' => 'Add Event',
+            'activity' => 'Add An Event',
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
+
 
         session()->flash('eventcreated', 'Event Has Been Created');
 
@@ -72,6 +89,18 @@ class ecmController extends Controller
 
         $eventID->update($form);
 
+         AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Event And Conference',
+            'action' => 'Add Event',
+            'activity' => 'Modify Event '. $eventID->eventID,
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
+
         session()->flash('eventmodify', 'Event Has Been Modified');
         return redirect()->back();
 
@@ -79,6 +108,18 @@ class ecmController extends Controller
 
     public function delete(Ecm $eventID){
         $eventID->delete();
+
+         AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Event And Conference',
+            'action' => 'Remove Event',
+            'activity' => 'Remove Event '. $eventID->eventID,
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
         session()->flash('eventdelete', 'Event Has Been Deleted');
         return redirect()->back();
     }
@@ -88,6 +129,18 @@ class ecmController extends Controller
         'eventstatus' => 'Approved'
        ]);
 
+        AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Event And Conference',
+            'action' => 'Approve Event',
+            'activity' => 'Approve Event '. $eventID->eventID,
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
+
        session()->flash('eventapprove', 'Event Has Been Approved');
        return redirect()->back();
     }
@@ -96,7 +149,18 @@ class ecmController extends Controller
         $eventID->update([
          'eventstatus' => 'Cancelled'
         ]);
- 
+        
+         AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Event And Conference',
+            'action' => 'Cancel Event',
+            'activity' => 'Approve Event '. $eventID->eventID,
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
         session()->flash('eventcancelled', 'Event Has Been Cancelled');
         return redirect()->back();
      }

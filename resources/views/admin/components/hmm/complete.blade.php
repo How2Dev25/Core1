@@ -11,7 +11,7 @@
       Confirm Mark As Complete
     </h3>
 
-    <p class="mb-6 text-sm text-gray-700">Are you sure you want to mark this Room As Complete For Maintenance  This action cannot be undone.</p>
+    <p class="mb-6 text-sm text-gray-700">Are you sure you want to mark this Room #{{ $room->roomID }} As Complete For Maintenance  This action cannot be undone.</p>
 
     <form id="delete-inventory-form" method="POST" action="/completemaintenance/{{ $room->roommaintenanceID }}">
       @csrf

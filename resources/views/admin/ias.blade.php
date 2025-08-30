@@ -270,7 +270,6 @@
  <table class="table">
   <thead>
     <tr class="bg-gray-100">
-      <th>#</th>
       <th>Request ID</th>
       <th>Category</th>
       <th>Item Name</th>
@@ -284,7 +283,6 @@
   <tbody>
     @forelse ($stock as $stocks)
       <tr>
-        <td>{{ $stocks->core1_stockID }}</td>
         <td>{{ $stocks->core1_requestID }}</td>
         <td>
           <span class="badge badge-outline flex items-center gap-1">
@@ -423,7 +421,10 @@
             {{ $stocks->core1_request_needed }} 
           </span>
         </td>
-        <td>{{ $stocks->created_at->diffForHumans() }}</td>
+       <td>
+    {{ $stocks->created_at->format('Y-m-d H:i') }} 
+    ({{ $stocks->created_at->diffForHumans() }})
+</td>
         <td>
           <div class="flex gap-2">
           

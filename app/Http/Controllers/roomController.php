@@ -7,7 +7,9 @@ use App\Models\room_maintenance;
 use Illuminate\Http\Request;
 use App\Models\room;
 use Termwind\Components\Raw;
-
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use App\Models\AuditTrails;
 
 class roomController extends Controller
 {
@@ -89,10 +91,22 @@ class roomController extends Controller
                 'roomdescription' => $description,
                 'roomprice' => $price,
                 'roomstatus' => 'Available',
-                'roomphoto' => 'images/defaults/default.jpg'
+                'roomphoto' => 'images/defaults/hotel.png'
             ];
 
             room::create($roomData);
+
+               AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Room Management And Service',
+            'action' => 'Create Room',
+            'activity' => 'Creating Of Room',
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
 
              session()->flash('roomcreated', 'Room Has Been Added');
 
@@ -128,7 +142,7 @@ class roomController extends Controller
         $request->file('roomphoto')->move(public_path('images/rooms/'), $filename);
         $form['roomphoto'] = $filepath;
 
-      
+        
 
          $createRoom =  room::create($form);
 
@@ -143,6 +157,19 @@ if ($form['roomstatus'] === 'Maintenance') {
     ]);
 }
 
+    AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Room Management And Service',
+            'action' => 'Create Room',
+            'activity' => 'Creating Of Room',
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
+
+
         session()->flash('roomcreated', 'Room Has Been Added');
 
         return redirect()->back();
@@ -150,6 +177,19 @@ if ($form['roomstatus'] === 'Maintenance') {
 
     public function delete(Request $request, room $roomID){
         $roomID->delete();
+
+            AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Room Management And Service',
+            'action' => 'Removal Of Room',
+            'activity' => 'Removed Room #' . $roomID->roomID,
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
+
 
         session()->flash('roomdeleted', 'Room Has Been Deleted');
 
@@ -208,6 +248,19 @@ if ($form['roomstatus'] === 'Maintenance') {
                             ]);
             }
 
+
+                        AuditTrails::create([
+                        'dept_id' => Auth::user()->Dept_id,
+                        'dept_name' => Auth::user()->dept_name,
+                        'modules_cover' => 'Room Management And Service',
+                        'action' => 'Modify Of Room',
+                        'activity' => 'Modify Room #' . $roomID->roomID,
+                        'employee_name' => Auth::user()->employee_name,
+                        'employee_id' => Auth::user()->employee_id,
+                        'role' => Auth::user()->role,
+                        'date' => Carbon::now()->toDateTimeString(),
+                    ]);
+
                     session()->flash('roommodify', 'Room Has been Modified');
 
                     return redirect()->back();
@@ -243,6 +296,18 @@ if ($form['roomstatus'] === 'Maintenance') {
             'additionalroomphoto' => $form['additionalroomphoto'],
         ]);
 
+                     AuditTrails::create([
+                        'dept_id' => Auth::user()->Dept_id,
+                        'dept_name' => Auth::user()->dept_name,
+                        'modules_cover' => 'Room Management And Service',
+                        'action' => 'Added Photo',
+                        'activity' => 'Added Additional Photo For  #' .$form['roomID'],
+                        'employee_name' => Auth::user()->employee_name,
+                        'employee_id' => Auth::user()->employee_id,
+                        'role' => Auth::user()->role,
+                        'date' => Carbon::now()->toDateTimeString(),
+                    ]);
+
         session()->flash('photoadded', 'Additional Photo for this Room Has Been Added');
 
         return redirect()->back();
@@ -250,6 +315,18 @@ if ($form['roomstatus'] === 'Maintenance') {
 
     public function deleteroomphoto(additionalRoom $roomphotoID){
         $roomphotoID->delete();
+
+         AuditTrails::create([
+                        'dept_id' => Auth::user()->Dept_id,
+                        'dept_name' => Auth::user()->dept_name,
+                        'modules_cover' => 'Room Management And Service',
+                        'action' => 'Remove Additional Photo',
+                        'activity' => 'Removed Additional Photo For  #' .$roomphotoID->roomID,
+                        'employee_name' => Auth::user()->employee_name,
+                        'employee_id' => Auth::user()->employee_id,
+                        'role' => Auth::user()->role,
+                        'date' => Carbon::now()->toDateTimeString(),
+                    ]);
 
          session()->flash('photoremoved', 'Photo Has Been Removed');
 

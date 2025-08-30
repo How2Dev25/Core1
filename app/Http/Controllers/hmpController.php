@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Hmp;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use App\Models\AuditTrails;
 
 class hmpController extends Controller
 {
@@ -24,6 +27,19 @@ class hmpController extends Controller
         $form['hotelpromophoto'] = $filepath;
 
         Hmp::create($form);
+
+          AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Hotel Marketing And Promotion',
+            'action' => 'Create Marketing Promo',
+            'activity' => 'Create Marketing Promo',
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
+
 
         session()->flash('promoupload', 'Promo ' .$form['hotelpromoname']. ' Has been Added');
 
@@ -53,6 +69,18 @@ class hmpController extends Controller
 
         $promoID->update($form);
 
+          AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Hotel Marketing And Promotion',
+            'action' => 'Update Marketing Promo',
+            'activity' => 'Modify Promo' . $promoID->promoID,
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
+
         session()->flash('promoupdate', $form['hotelpromoname']. ' Has Been Updated');
 
         return redirect()->back();
@@ -60,6 +88,18 @@ class hmpController extends Controller
 
     public function deletehmp(Hmp $promoID){
         $promoID->delete();
+
+         AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Hotel Marketing And Promotion',
+            'action' => 'Remove Marketing Promo',
+            'activity' => 'Remove Promo' . $promoID->promoID,
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
 
         session()->flash('promodelete', $promoID->hotelpromoname. ' Has Been Removed');
 

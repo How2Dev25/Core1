@@ -149,7 +149,7 @@
       </div>
       @endif
 
-      <thead class="bg-base-200">
+      <thead class="bg-blue-900 text-white">
         <tr>
           <th>Item</th>
           <th>Category</th>

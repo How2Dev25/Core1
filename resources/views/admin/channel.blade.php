@@ -222,7 +222,7 @@
   
   <table class="table">
     <!-- head -->
-    <thead>
+    <thead class="bg-blue-900 text-white">
       <tr>
         
         <th>Listing ID</th>

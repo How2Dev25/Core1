@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Inventory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use App\Models\AuditTrails;
 
 class inventoryController extends Controller
 {
@@ -38,6 +41,18 @@ class inventoryController extends Controller
         'core1_inventory_code' => 'SH-'.str_pad($inventory->core1_inventoryID, 2, '0', STR_PAD_LEFT)
     ]);
     $inventory->save();
+
+     AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Inventory And Stocks',
+            'action' => 'Add Inventory',
+            'activity' => 'Add Inventory',
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
 
     session()->flash('inventorycreated', $form['core1_inventory_name']. ' Has been Added To The Inventory');
 
@@ -74,6 +89,19 @@ class inventoryController extends Controller
 
         $core1_inventoryID->update($form);
 
+
+         AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Inventory And Stocks',
+            'action' => 'Modify Inventory',
+            'activity' => 'Modify ' . $core1_inventoryID->core1_inventory_name,
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
+
         session()->flash('inventorymodified',  $core1_inventoryID->core1_inventory_code. ' Has Been Modified');
 
         return redirect()->back();
@@ -82,6 +110,18 @@ class inventoryController extends Controller
 
     public function delete(Inventory $core1_inventoryID){
         $core1_inventoryID->delete();
+
+         AuditTrails::create([
+            'dept_id' => Auth::user()->Dept_id,
+            'dept_name' => Auth::user()->dept_name,
+            'modules_cover' => 'Inventory And Stocks',
+            'action' => 'Remove Inventory',
+            'activity' => 'Remove ' . $core1_inventoryID->core1_inventory_name,
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id' => Auth::user()->employee_id,
+            'role' => Auth::user()->role,
+            'date' => Carbon::now()->toDateTimeString(),
+        ]);
 
         session()->flash('inventorydeleted',  'Inventory Has Been Removed');
 

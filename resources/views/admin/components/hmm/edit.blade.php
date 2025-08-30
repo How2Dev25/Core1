@@ -17,7 +17,7 @@
           <i data-lucide="home" class="w-5 h-5"></i>
         </div>
         <div>
-          <h4 class="font-medium">Room {{ $room->roomnumber }}</h4>
+          <h4 class="font-medium">Room {{ $room->roomID }}</h4>
           <p class="text-sm text-gray-500">Maintenance ID: {{ $room->roommaintenanceID }}</p>
         </div>
       </div>

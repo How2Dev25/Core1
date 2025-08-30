@@ -36,7 +36,7 @@
           <section class="w-full min-h-screen p-5">
             
             {{-- cards --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
   <!-- Card 1: Active Promotions (Blue) -->
   <div class="card border border-blue-100 bg-gradient-to-br from-blue-50 to-white
               transition-all duration-300 ease-in-out
@@ -87,30 +87,8 @@
     </div>
   </div>
 
-  <!-- Card 3: Promo Revenue (Purple) -->
-  <div class="card border border-purple-100 bg-gradient-to-br from-purple-50 to-white
-              transition-all duration-300 ease-in-out
-              hover:shadow-lg hover:-translate-y-1 hover:border-purple-200
-              hover:bg-gradient-to-br hover:from-purple-500 hover:to-white
-              group">
-    <div class="card-body p-6">
-      <div class="flex items-center gap-4 mb-4">
-        <div class="p-3 rounded-box bg-purple-100 text-purple-600
-                   group-hover:bg-purple-600 group-hover:text-white
-                   transition-colors duration-300">
-          <i class='bx bx-credit-card text-2xl'></i>
-        </div>
-        <div>
-          <h3 class="text-lg font-semibold text-gray-700 group-hover:text-purple-800 transition-colors">Promo Revenue</h3>
-          <p class="text-sm text-gray-500 group-hover:text-purple-600 transition-colors">From promotions</p>
-        </div>
-      </div>
-      <p class="text-3xl font-bold text-gray-800 mb-2 group-hover:text-purple-900 transition-colors">₱24,589</p>
-      <div class="text-sm text-purple-600 font-medium group-hover:text-purple-700 transition-colors">
-        <i class='bx bx-trending-up'></i> 12% from last month
-      </div>
-    </div>
-  </div>
+
+  
 
   <!-- Card 4: Customer Engagement (Amber) -->
   <div class="card border border-amber-100 bg-gradient-to-br from-amber-50 to-white
