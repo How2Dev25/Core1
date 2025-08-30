@@ -33,8 +33,7 @@
           <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">User Management</span>
         </div>
 
-
- <div class="collapse group">
+<div class="collapse group">
   <input type="checkbox" class="peer" /> 
   <div class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
     <div class="flex items-center">
@@ -45,36 +44,42 @@
     </div>
     <i class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon" data-lucide="chevron-down"></i>
   </div>
+
   <div class="collapse-content pl-14 pr-4 py-1 space-y-1"> 
+    <!-- Department Accounts -->
     <a href="/departmentaccount" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
       <span class="flex items-center gap-2">
-        <i data-lucide="briefcase" class="w-4 h-4 text-[#F7B32B]"></i>
+        <i data-lucide="building-2" class="w-4 h-4 text-[#F7B32B]"></i>
         Department Accounts
       </span>
     </a>
 
-     <a href="/departmentlogs" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+    <!-- Department Logs -->
+    <a href="/departmentlogs" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
       <span class="flex items-center gap-2">
-        <i data-lucide="briefcase" class="w-4 h-4 text-[#F7B32B]"></i>
+        <i data-lucide="file-text" class="w-4 h-4 text-[#F7B32B]"></i>
         Department Logs
       </span>
     </a>
 
-     <a href="/audittrail" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+    <!-- Audit Trails & Transactions -->
+    <a href="/audittrails" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
       <span class="flex items-center gap-2">
-        <i data-lucide="briefcase" class="w-4 h-4 text-[#F7B32B]"></i>
-         Audit Trails & Transactions
+        <i data-lucide="activity" class="w-4 h-4 text-[#F7B32B]"></i>
+        Audit Trails & Transactions
       </span>
     </a>
+
+    <!-- Guest Accounts -->
     <a href="/guestaccount" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
       <span class="flex items-center gap-2">
         <i data-lucide="user" class="w-4 h-4 text-[#F7B32B]"></i>
         Guest Accounts
       </span>
     </a>
-  
   </div>
 </div>
+
 
         
 

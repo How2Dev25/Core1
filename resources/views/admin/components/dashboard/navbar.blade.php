@@ -185,13 +185,13 @@
 
           <!-- User Dropdown -->
           <div class="dropdown dropdown-end">
-  <label tabindex="0" class="btn btn-ghost btn-circle avatar">
-    <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
-      <span class="text-white font-bold text-sm">
-        {{ strtoupper(substr(Auth::user()->employee_name, 0, 2)) }}
-      </span>
-    </div>
-  </label>
+<label tabindex="0" 
+  class="btn btn-ghost btn-circle flex items-center justify-center bg-blue-500 rounded-full w-10 h-10">
+    <span class="text-white font-bold text-sm leading-none">
+      {{ strtoupper(substr(Auth::user()->employee_name, 0, 2)) }}
+    </span>
+</label>
+
   <ul tabindex="0" class="dropdown-content menu mt-1 z-[100] w-52 bg-[#001f54] rounded-box shadow-xl">
     <!-- User Profile Section -->
 <li class="p-3 border-b">

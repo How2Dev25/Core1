@@ -11,6 +11,7 @@ use App\Http\Controllers\roomController;
 use App\Http\Controllers\roommantenanceController;
 use App\Http\Controllers\stockController;
 use App\Http\Controllers\userController;
+use App\Models\AuditTrails;
 use App\Models\Channel;
 use App\Models\DeptAccount;
 use App\Models\DeptLogs;
@@ -385,7 +386,52 @@ Route::get('/departmentlogs', function (Request $request) {
     'totallogs', 'successfullogs', 'failedlogs'));
 });
 
+Route::get('/audittrails', function (Request $request) {
+    $query = AuditTrails::query();
 
+
+
+    // 🔍 Search by employee_name or employee_id
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('employee_name', 'like', "%{$search}%")
+              ->orWhere('employee_id', 'like', "%{$search}%")
+              ->orWhere('modules_cover', 'like', "%{$search}%");
+        });
+    }
+
+    // 📂 Filter by module
+    if ($request->filled('filter')) {
+        $query->where('modules_cover', $request->filter);
+    }
+
+    // 📅 Order by custom `date` column
+    $audittrails = $query->orderBy('date', 'desc')
+        ->paginate(10)
+        ->appends($request->only('filter', 'search'));
+
+    $categories = [
+        'Channel Management',
+        'Event And Conference',
+        'Hotel Marketing And Promotion',
+        'Inventory And Stocks',
+        'Housekeeping And Maintenance',
+        'Room Management And Service',
+        'Booking And Reservation',
+        'Front Desk And Reception',
+    ];
+
+      // 📊 Counts per module
+    $moduleCounts = AuditTrails::select('modules_cover', DB::raw('COUNT(*) as total'))
+        ->groupBy('modules_cover')
+        ->pluck('total', 'modules_cover');
+
+    // 📊 Total logs
+    $totalLogs = AuditTrails::count();
+
+    return view('admin.audittrails', compact('audittrails', 'categories', 'moduleCounts', 'totalLogs'));
+});
 Route::get('/hmp', function(){
     employeeAuthCheck();
     $hmpdata = Hmp::latest()->get();

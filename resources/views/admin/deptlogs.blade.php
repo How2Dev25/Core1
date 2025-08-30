@@ -43,7 +43,7 @@
         <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 transition-slow ">
             {{-- Subsystem Name --}}
           <div class="pb-5 border-b border-base-300 animate-fadeIn">
-            <h1 class="text-2xl font-bold bg-white bg-clip-text text-[#191970]">Department Logs</h1>
+            <h1 class="text-2xl font-bold bg-white bg-clip-text text-[#191970]">Department Accounts</h1>
           </div>
             {{-- Subsystem Name --}}
 
@@ -202,7 +202,7 @@
               </span>
             @endif
           </td>
-          <td class="px-4 py-3">{{ \Carbon\Carbon::parse($deptlog->date)->format('Y-m-d H:i') }} ({{ \Carbon\Carbon::parse($deptlog->date)->diffForHumans() }})</td>
+          <td class="px-4 py-3">{{ $deptlog->date }}</td>
           <td class="px-4 py-3">
             <button class="btn btn-primary btn-xs" onclick="document.getElementById('logModal_{{$deptlog->dept_logs_id}}').showModal()">
               <i class="fa-solid fa-eye"></i>
@@ -261,7 +261,108 @@
 
    
    @foreach ($deptlogs as $deptlog)
-    @include('admin.components.deptlogs.view')
+       <dialog id="logModal_{{$deptlog->dept_logs_id}}" class="modal">
+  <div class="modal-box max-w-2xl">
+    <h3 class="font-bold text-xl mb-6 text-blue-900">📋 Log Details</h3>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <!-- Log ID -->
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text font-semibold">Log ID</span>
+        </div>
+        <input type="text" value="LOG001" class="input input-bordered w-full" readonly />
+      </label>
+
+      <!-- Department -->
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text font-semibold">Department</span>
+        </div>
+        <input type="text" value="HR" class="input input-bordered w-full" readonly />
+      </label>
+
+      <!-- Employee ID -->
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text font-semibold">Employee ID</span>
+        </div>
+        <input type="text" value="{{$deptlog->employee_id}}" class="input input-bordered w-full" readonly />
+      </label>
+
+      <!-- Employee Name -->
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text font-semibold">Employee Name</span>
+        </div>
+        <input type="text" value="{{$deptlog->employee_name}}" class="input input-bordered w-full" readonly />
+      </label>
+
+      <!-- Role -->
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text font-semibold">Role</span>
+        </div>
+        <input type="text" value="{{$deptlog->role}}" class="input input-bordered w-full" readonly />
+      </label>
+
+      <!-- Log Type -->
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text font-semibold">Log Type</span>
+        </div>
+        <input type="text" value="{{$deptlog->log_type}}" class="input input-bordered w-full" readonly />
+      </label>
+
+      <!-- Status -->
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text font-semibold">Log Status</span>
+        </div>
+        <input type="text" value="Active" class="input input-bordered w-full text-green-600 font-bold" readonly />
+      </label>
+
+      <!-- Attempts -->
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text font-semibold">Attempt Count</span>
+        </div>
+        <input type="text" value="3" class="input input-bordered w-full" readonly />
+      </label>
+
+      <!-- Failure Reason -->
+      <label class="form-control sm:col-span-2">
+        <div class="label">
+          <span class="label-text font-semibold">Failure Reason</span>
+        </div>
+        <input type="text" value="N/A" class="input input-bordered w-full" readonly />
+      </label>
+
+      <!-- Cooldown -->
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text font-semibold">Cooldown</span>
+        </div>
+        <input type="text" value="None" class="input input-bordered w-full" readonly />
+      </label>
+
+      <!-- Date -->
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text font-semibold">Date</span>
+        </div>
+        <input type="text" value="2025-08-30" class="input input-bordered w-full" readonly />
+      </label>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-action mt-6">
+      <form method="dialog">
+        <button class="btn btn-primary">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
 
    @endforeach
 
