@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DeptLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DeptAccount;
@@ -22,11 +23,11 @@ class userController extends Controller
     const COOLDOWN_SECONDS = 300;        
 
     
- public function login(Request $request)
+public function login(Request $request)
 {
     $form = $request->validate([
         'employee_id' => 'required',
-        'password' => 'required',
+        'password'    => 'required',
     ]);
 
     $user = DeptAccount::where('employee_id', $form['employee_id'])->first();
@@ -37,17 +38,17 @@ class userController extends Controller
 
     if ($attemptData && $attemptData['count'] >= self::MAX_LOGIN_ATTEMPTS) {
         $lastAttempt = $attemptData['last'];
-        $remaining = self::COOLDOWN_SECONDS - (time() - $lastAttempt);
+        $remaining   = self::COOLDOWN_SECONDS - (time() - $lastAttempt);
 
         if ($remaining > 0) {
             $minutes = ceil($remaining / 60);
-            return back()->with('loginError', "Your account is temporarily banned. Try again in $minutes minute(s).");
+            return back()->with('loginError', "Your account is temporarily locked. Try again in $minutes minute(s).");
         } else {
             Session::forget($loginAttemptsKey);
         }
     }
 
-    // --- Validate password (securely) ---
+    // --- Validate password ---
     if ($user && $user->password === $form['password']) {
         // Generate OTP
         $otp = rand(100000, 999999);
@@ -56,8 +57,9 @@ class userController extends Controller
         Session::put('otp_expiry', Carbon::now()->addMinutes(5)->timestamp);
         Session::put('pending_employee_id', $user->employee_id);
         Session::put('pending_email', $user->email);
+        Session::put('otp_attempts', 0);
 
-        // Send OTP Email
+        // Send OTP
         $this->sendOtpMail($user->email, $user->name ?? $user->employee_id, $otp);
 
         return redirect('/employeeloginotp')->with('status', 'We sent a 6-digit OTP to your email.');
@@ -74,49 +76,104 @@ class userController extends Controller
     ])->onlyInput('employee_id');
 }
 
-    public function verifyOTP(Request $request)
-    {
-        $otpInput = implode('', $request->only(['otp1','otp2','otp3','otp4','otp5','otp6']));
 
-        if (!Session::has('otp') || !Session::has('otp_expiry') || !Session::has('pending_employee_id')) {
-            return redirect('/employeelogin')->with('loginError', 'No pending OTP found. Please login again.');
-        }
+   public function verifyOTP(Request $request)
+{
+    $otpInput   = implode('', $request->only(['otp1','otp2','otp3','otp4','otp5','otp6']));
+    $employeeId = Session::get('pending_employee_id');
+    $user       = $employeeId ? DeptAccount::where('employee_id', $employeeId)->first() : null;
 
-        // OTP expired
-        if (time() > Session::get('otp_expiry')) {
-            Session::forget(['otp','otp_expiry','pending_employee_id','pending_role','pending_Dept_id','pending_email','otp_attempts']);
-            return redirect('/employeelogin')->with('loginError', 'OTP expired. Please login again.');
-        }
-
-        $storedOtp = (string) Session::get('otp');
-        $employeeId = Session::get('pending_employee_id');
-
-        if ($otpInput === $storedOtp && $otpInput !== '') {
-            // ✅ Success
-            $user = DeptAccount::where('employee_id', $employeeId)->first();
-            Session::forget(['otp','otp_expiry','otp_attempts','pending_employee_id','pending_role','pending_Dept_id','pending_email']);
-
-            if ($user) {
-                Auth::login($user);
-                $request->session()->regenerate();
-                session()->flash('showwelcome');
-                return redirect('/employeedashboard')->with('success', 'OTP Verified!');
-            }
-
-            return redirect('/employeelogin')->with('loginError', 'User not found.');
-        }
-
-        // ❌ Wrong OTP
-        $attempts = Session::get('otp_attempts', 0) + 1;
-        Session::put('otp_attempts', $attempts);
-
-        if ($attempts >= self::MAX_OTP_ATTEMPTS) {
-            Session::forget(['pending_employee_id','pending_role','pending_Dept_id','pending_email','otp','otp_expiry']);
-            return redirect('/employeelogin')->with('loginError', 'Too many incorrect OTP attempts. Please try again later.');
-        }
-
-       return back()->with('loginError', "Incorrect OTP. Attempt {$attempts} of " . self::MAX_OTP_ATTEMPTS . ".");
+    // No OTP session
+    if (!$user || !Session::has('otp') || !Session::has('otp_expiry')) {
+        DeptLogs::create([
+            'dept_id'       => $user->Dept_id ?? null,
+            'employee_id'   => $employeeId,
+            'employee_name' => $user->employee_name ?? 'Unknown',
+            'log_status'    => 'Failed',
+            'attempt_count' => Session::get('otp_attempts', 0),
+            'failure_reason'=> 'No pending OTP found',
+            'cooldown'      => '2 Minutes',
+            'date'          => Carbon::now()->toDateTimeString(),
+            'role'          => $user->role ?? 'Unknown',
+            'log_type'      => 'Login',
+        ]);
+        return redirect('/employeelogin')->with('loginError', 'No pending OTP found. Please login again.');
     }
+
+    // Expired OTP
+    if (Carbon::now()->timestamp > Session::get('otp_expiry')) {
+        $attempts = Session::get('otp_attempts', 0);
+
+        Session::forget(['otp','otp_expiry','otp_attempts','pending_employee_id','pending_email']);
+
+        DeptLogs::create([
+            'dept_id'       => $user->Dept_id,
+            'employee_id'   => $user->employee_id,
+            'employee_name' => $user->employee_name,
+            'log_status'    => 'Failed',
+            'attempt_count' => $attempts,
+            'failure_reason'=> 'OTP expired',
+            'cooldown'      => '2 Minutes',
+            'date'          => Carbon::now()->toDateTimeString(),
+            'role'          => $user->role,
+            'log_type'      => 'Login',
+        ]);
+
+        return redirect('/employeelogin')->with('loginError', 'OTP expired. Please login again.');
+    }
+
+    // Match OTP
+    $storedOtp = (string) Session::get('otp');
+
+    if ($otpInput === $storedOtp && $otpInput !== '') {
+        Session::forget(['otp','otp_expiry','otp_attempts','pending_employee_id','pending_email']);
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        // ✅ Success Log
+        DeptLogs::create([
+            'dept_id'       => $user->Dept_id,
+            'employee_id'   => $user->employee_id,
+            'employee_name' => $user->employee_name,
+            'log_status'    => 'Success',
+            'attempt_count' => 0,
+            'failure_reason'=> null,
+            'cooldown'      => null,
+            'date'          => Carbon::now()->toDateTimeString(),
+            'role'          => $user->role,
+            'log_type'      => 'Login',
+        ]);
+
+        session()->flash('showwelcome');
+        return redirect('/employeedashboard')->with('success', 'OTP Verified!');
+    }
+
+    // Wrong OTP
+    $attempts = Session::get('otp_attempts', 0) + 1;
+    Session::put('otp_attempts', $attempts);
+
+    if ($attempts >= self::MAX_OTP_ATTEMPTS) {
+        Session::forget(['otp','otp_expiry','otp_attempts','pending_employee_id','pending_email']);
+
+        DeptLogs::create([
+            'dept_id'       => $user->Dept_id,
+            'employee_id'   => $user->employee_id,
+            'employee_name' => $user->employee_name,
+            'log_status'    => 'Failed',
+            'attempt_count' => $attempts,
+            'failure_reason'=> 'Too many OTP attempts',
+            'cooldown'      => '2 Minutes',
+            'date'          => Carbon::now()->toDateTimeString(),
+            'role'          => $user->role,
+            'log_type'      => 'Login',
+        ]);
+
+        return redirect('/employeelogin')->with('loginError', 'Too many incorrect OTP attempts. Please try again later.');
+    }
+
+    return back()->with('loginError', "Incorrect OTP. Attempt {$attempts} of " . self::MAX_OTP_ATTEMPTS . ".");
+}
 
 
 public function sendOtpMail($toEmail, $toName, $otp)
@@ -183,6 +240,20 @@ public function sendOtpMail($toEmail, $toName, $otp)
 
 public function logout(Request $request)
 {
+      DeptLogs::create([
+            'dept_id'       => Auth::user()->Dept_id,
+            'employee_id'   => Auth::user()->employee_id,
+            'employee_name' => Auth::user()->employee_name,
+            'log_status'    => 'Success',
+            'attempt_count' =>  1,
+            'failure_reason'=>  null,
+            'cooldown'      =>  null,
+            'date'          =>  Carbon::now()->toDateTimeString(),
+            'role'          =>  Auth::user()->role,
+            'log_type'      => 'Logout',
+        ]);
+
+
     Auth::logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();

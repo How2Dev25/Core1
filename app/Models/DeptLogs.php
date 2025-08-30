@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
+
+class DeptLogs extends Model
+{
+     use HasFactory, Notifiable;
+
+    protected $table = 'department_logs';
+
+    protected $primaryKey = 'dept_logs_id';
+
+    protected $fillable = [
+        'dept_logs_id',
+        'dept_id',
+        'employee_id',
+        'employee_name',
+        'log_status',
+        'attempt_count',
+        'failure_reason',
+        'cooldown',
+        'date',
+        'role',
+        'log_type',
+    ];
+
+     public $timestamps = false;
+
+
+}

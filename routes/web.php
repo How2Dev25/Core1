@@ -13,6 +13,7 @@ use App\Http\Controllers\stockController;
 use App\Http\Controllers\userController;
 use App\Models\Channel;
 use App\Models\DeptAccount;
+use App\Models\DeptLogs;
 use App\Models\Ecm;
 use App\Models\Guest;
 use App\Models\Hmp;
@@ -333,6 +334,7 @@ Route::get('/employeedashboard', function() {
 });
 
 Route::get('/departmentaccount', function(){
+     employeeAuthCheck();
     $employee = DeptAccount::all();
     $totalemployee = DeptAccount::count();
     $activeemployee = DeptAccount::where('status', 'Active')->count();
@@ -342,6 +344,7 @@ Route::get('/departmentaccount', function(){
 });
 
 Route::get('/guestaccount', function(){
+     employeeAuthCheck();
     $guest = Guest::paginate(5); // 10 guests per page
     $totalguest = Guest::count();
     $checkinguest = Reservation::where('reservation_bookingstatus', 'Checked in')->count();
@@ -349,6 +352,40 @@ Route::get('/guestaccount', function(){
 
     return view('admin.guestaccount', compact('guest', 'checkinguest', 'pendingguest', 'totalguest'));
 });
+
+Route::get('/departmentlogs', function (Request $request) {
+    employeeAuthCheck();
+
+    $query = DeptLogs::query();
+
+    // 🔎 Filtering
+    if ($request->filled('status')) {
+        $query->where('log_status', $request->status);
+    }
+    if ($request->filled('type')) {
+        $query->where('log_type', $request->type);
+    }
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('employee_name', 'like', "%{$search}%")
+              ->orWhere('employee_id', 'like', "%{$search}%")
+              ->orWhere('dept_id', 'like', "%{$search}%");
+        });
+    }
+
+    // 📄 Pagination (10 per page)
+    $deptlogs = $query->orderByDesc('date')->paginate(10)->withQueryString();
+    $totallogs = deptlogs::count();
+    $successfullogs = deptlogs::where('log_status', 'Success')->count();
+    $failedlogs = deptlogs::where('log_status', 'Failed')->count();
+    
+
+    return view('admin.deptlogs', compact('deptlogs', 
+    'totallogs', 'successfullogs', 'failedlogs'));
+});
+
+
 Route::get('/hmp', function(){
     employeeAuthCheck();
     $hmpdata = Hmp::latest()->get();

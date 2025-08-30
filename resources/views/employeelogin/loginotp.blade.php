@@ -16,7 +16,7 @@
     
 
 <body>
-   <section class="relative w-full h-screen">
+   <section class="relative w-full min-h-screen">
 
   <!-- Background image with overlay -->
   <div class="absolute inset-0 bg-cover bg-center z-0" style="background-image: url('{{ asset('images/defaults/hotel3.jpg') }}');"></div>

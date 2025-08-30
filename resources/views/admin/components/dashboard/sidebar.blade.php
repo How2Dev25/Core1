@@ -52,6 +52,20 @@
         Department Accounts
       </span>
     </a>
+
+     <a href="/departmentlogs" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+      <span class="flex items-center gap-2">
+        <i data-lucide="briefcase" class="w-4 h-4 text-[#F7B32B]"></i>
+        Department Logs
+      </span>
+    </a>
+
+     <a href="/audittrail" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+      <span class="flex items-center gap-2">
+        <i data-lucide="briefcase" class="w-4 h-4 text-[#F7B32B]"></i>
+         Audit Trails & Transactions
+      </span>
+    </a>
     <a href="/guestaccount" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
       <span class="flex items-center gap-2">
         <i data-lucide="user" class="w-4 h-4 text-[#F7B32B]"></i>

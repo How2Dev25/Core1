@@ -126,7 +126,7 @@
       @foreach ($employee as $employees)
       <tr class="hover:bg-gray-50 transition">
         <td class="font-medium">{{$employees->employee_id}}</td>
-        <td>{{$employees->Dept_id}}</td>
+        <td>{{$employees->dept_name}}</td>
         <td>
           <div class="flex items-center gap-3">
         <div class="avatar">
@@ -138,7 +138,6 @@
             </div>
             <div>
               <div class="font-bold">{{$employees->employee_name}}</div>
-              <div class="text-sm opacity-50">{{$employees->Dept_id}}</div>
             </div>
           </div>
         </td>
