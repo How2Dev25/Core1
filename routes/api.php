@@ -1,0 +1,28 @@
+<?php
+
+use App\Http\Controllers\ApiController;
+use App\Http\Controllers\roomController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+
+
+
+// integration with Admin 
+// rooms 
+Route::get('/core1rooms', [ApiController::class, 'rooms'] );
+// events
+Route::get('/core1events', [ApiController::class, 'events'] );
+// User Management
+Route::get('/accounts', [ApiController::class, 'hotelaccounts']);
+
+// integration With  Financials
+Route::get('/core1financials', [ApiController::class, 'hotelincome']);
+
+// integration with Logistics 2 
+Route::get('/core1stockrequest', [ApiController::class, 'stockrequest']);
+
+
+
+
+
+
