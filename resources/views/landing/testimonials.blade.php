@@ -95,26 +95,122 @@
         </div>
         
         <!-- Additional Reviews Stats -->
-        <div class="mt-16 text-center">
-            <div class="inline-flex items-center gap-8 p-8 rounded-lg shadow-lg" style="background-color: white; border: 2px solid #F7B32B;">
-                <div class="text-center">
-                    <div class="text-3xl font-bold" style="color: #001f54;">4.9</div>
-                    <div class="flex justify-center gap-1 my-2">
-                        <span style="color: #F7B32B; font-size: 16px;">★★★★★</span>
-                    </div>
-                    <div class="text-sm" style="color: #666;">Average Rating</div>
-                </div>
-                <div class="w-px h-16" style="background-color: #F7B32B;"></div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold" style="color: #001f54;">2,847</div>
-                    <div class="text-sm" style="color: #666;">Total Reviews</div>
-                </div>
-                <div class="w-px h-16" style="background-color: #F7B32B;"></div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold" style="color: #001f54;">96%</div>
-                    <div class="text-sm" style="color: #666;">Recommend Rate</div>
-                </div>
+      <section id="reviews" class="py-20 bg-gray-100" data-aos="fade-up">
+  <div class="max-w-6xl mx-auto px-4">
+    <!-- Title -->
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 md:mb-16 text-[#001f54]" 
+        data-aos="fade-down" data-aos-delay="100">
+      Guest <span class="text-[#F7B32B]">Reviews</span>
+    </h2>
+
+    <!-- Testimonials Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+      
+      <!-- Testimonial 1 -->
+      <div class="card shadow-lg rounded-lg bg-white border-l-4 border-[#F7B32B]" 
+           data-aos="fade-right" data-aos-delay="200">
+        <div class="card-body p-6">
+          <!-- Rating -->
+          <div class="mb-4 flex items-center gap-1">
+            <span class="text-[#F7B32B] text-xl">★</span><span class="text-[#F7B32B] text-xl">★</span><span class="text-[#F7B32B] text-xl">★</span><span class="text-[#F7B32B] text-xl">★</span><span class="text-[#F7B32B] text-xl">★</span>
+            <span class="ml-2 text-sm text-gray-600">5.0</span>
+          </div>
+          <!-- Text -->
+          <p class="mb-6 text-gray-700 leading-relaxed italic">
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Assumenda enim aut repudiandae ab quasi veniam voluptates culpa hic!
+          </p>
+          <!-- Reviewer -->
+          <div class="flex items-center">
+            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4 bg-gradient-to-br from-[#001f54] to-[#003f88]">
+              L
             </div>
+            <div>
+              <h4 class="font-bold text-base md:text-lg text-[#001f54]">Liroz Marthy</h4>
+              <p class="text-sm text-gray-600">Fairview Quezon City</p>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="card shadow-lg rounded-lg bg-white border-l-4 border-[#F7B32B]" 
+           data-aos="fade-up" data-aos-delay="300">
+        <div class="card-body p-6">
+          <!-- Rating -->
+          <div class="mb-4 flex items-center gap-1">
+            <span class="text-[#F7B32B] text-xl">★</span><span class="text-[#F7B32B] text-xl">★</span><span class="text-[#F7B32B] text-xl">★</span><span class="text-[#F7B32B] text-xl">★</span><span class="text-[#F7B32B] text-xl">★</span>
+            <span class="ml-2 text-sm text-gray-600">5.0</span>
+          </div>
+          <!-- Text -->
+          <p class="mb-6 text-gray-700 leading-relaxed italic">
+            Sa buntag nga hilom, naglakaw si Nardo dala ang pan ug kape. Ang hangin bugnaw, ang adlaw nagdan-ag, pero wa gihapon siyay plano.
+          </p>
+          <!-- Reviewer -->
+          <div class="flex items-center">
+            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4 bg-gradient-to-br from-[#001f54] to-[#003f88]">
+              P
+            </div>
+            <div>
+              <h4 class="font-bold text-base md:text-lg text-[#001f54]">Princess Mara Lae Larie</h4>
+              <p class="text-sm text-gray-600">Cebu City</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="card shadow-lg rounded-lg bg-white border-l-4 border-[#F7B32B]" 
+           data-aos="fade-up" data-aos-delay="400">
+        <div class="card-body p-6">
+          <!-- Rating -->
+          <div class="mb-4 flex items-center gap-1">
+            <span class="text-[#F7B32B] text-xl">★</span><span class="text-[#F7B32B] text-xl">★</span><span class="text-[#F7B32B] text-xl">★</span><span class="text-[#F7B32B] text-xl">★</span><span class="text-[#F7B32B] text-xl">★</span>
+            <span class="ml-2 text-sm text-gray-600">5.0</span>
+          </div>
+          <!-- Text -->
+          <p class="mb-6 text-gray-700 leading-relaxed italic">
+            Maagang gumising si Pedro, hawak ang pandesal at malamig na kape. Tahimik ang kalsada, pero magulo ang isip.
+          </p>
+          <!-- Reviewer -->
+          <div class="flex items-center">
+            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4 bg-gradient-to-br from-[#001f54] to-[#003f88]">
+              V
+            </div>
+            <div>
+              <h4 class="font-bold text-base md:text-lg text-[#001f54]">VinzTian Jopherson</h4>
+              <p class="text-sm text-gray-600">Ilocos Vigan</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Stats -->
+    <div class="mt-12 md:mt-16 text-center">
+      <div class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 p-6 md:p-8 rounded-lg shadow-lg bg-white border-2 border-[#F7B32B]">
+        
+        <div class="text-center">
+          <div class="text-2xl md:text-3xl font-bold text-[#001f54]">4.9</div>
+          <div class="flex justify-center gap-1 my-2 text-[#F7B32B] text-sm md:text-base">★★★★★</div>
+          <div class="text-xs md:text-sm text-gray-600">Average Rating</div>
+        </div>
+        
+        <div class="hidden md:block w-px h-12 md:h-16 bg-[#F7B32B]"></div>
+        
+        <div class="text-center">
+          <div class="text-2xl md:text-3xl font-bold text-[#001f54]">2,847</div>
+          <div class="text-xs md:text-sm text-gray-600">Total Reviews</div>
+        </div>
+        
+        <div class="hidden md:block w-px h-12 md:h-16 bg-[#F7B32B]"></div>
+        
+        <div class="text-center">
+          <div class="text-2xl md:text-3xl font-bold text-[#001f54]">96%</div>
+          <div class="text-xs md:text-sm text-gray-600">Recommend Rate</div>
+        </div>
+      </div>
+    </div>
+  </div>
     </div>
 </section>
