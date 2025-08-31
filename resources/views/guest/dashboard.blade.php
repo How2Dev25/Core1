@@ -9,7 +9,7 @@
  
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <title>{{$title}} - Booking And Reservation</title>
+    <title>{{$title}} - Dashboard</title>
       @livewireStyles
 </head>
 

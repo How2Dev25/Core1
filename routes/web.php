@@ -772,7 +772,17 @@ $reserverooms = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1
 });
 
 
+Route::get('/aiguest', function(){
+    guestAuthCheck();
+
+    return view('guest.aibookingguest');
+});
+
+Route::get('/aisuggestion', function(){
+    return view('guest.components.dashboard.bas.withsuggestion');
+});
 
 
+Route::post('/aisubmit',[reservationController::class, 'aisubmit']);
 
 
