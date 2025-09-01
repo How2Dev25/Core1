@@ -89,7 +89,7 @@
     </tr>
     <tr>
         <td colspan="4" class="text-right">Booked Date</td>
-        <td class="text-right">{{ date('M d, Y', strtotime($booking->created_at)) }}</td>
+        <td class="text-right">{{ date('Y-m-d') }}</td>
     </tr>
     <tr>
         <td colspan="4" class="text-right">Subtotal</td>
