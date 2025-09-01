@@ -771,17 +771,14 @@ public function generateInvoice($reservationID)
         ->where('core1_reservation.reservationID', $reservationID)
         ->firstOrFail();
 
-    // Absolute path to logo
-    $logoPath = public_path('images/logo/sonly.png');
     $bookedDate = date('M d, Y', strtotime($booking->created_at));
-    $paymentstatus = $booking->payment_status; // safer than Reservation::value()
+    $paymentstatus = $booking->payment_status;
 
-    // Render Blade template for PDF
+    // Render Blade template for PDF (without images)
     $html = view('admin.components.invoices.invoices-pdf', [
-        'booking'      => $booking,
-        'logoPath'     => $logoPath,
-        'bookedDate'   => $bookedDate,
-        'paymentstatus'=> $paymentstatus,
+        'booking'       => $booking,
+        'bookedDate'    => $bookedDate,
+        'paymentstatus' => $paymentstatus,
     ])->render();
 
     // PDF save path
@@ -792,13 +789,9 @@ public function generateInvoice($reservationID)
         mkdir(dirname($pdfPath), 0755, true);
     }
 
-    // Generate PDF using Browsershot
-    Browsershot::html($html)
-        ->showBackground()
-        ->format('A4')
-        ->margins(10, 10, 10, 10)
-        ->waitUntilNetworkIdle()
-        ->timeout(120)
+    // Generate PDF using DomPDF
+    Pdf::loadHTML($html)
+        ->setPaper('A4')
         ->save($pdfPath);
 
     // -------------------------
@@ -818,9 +811,6 @@ public function generateInvoice($reservationID)
         $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
         $mail->addAddress($booking->guestemailaddress, $booking->guestname);
 
-        // Embed logo
-        $mail->addEmbeddedImage($logoPath, 'hotelLogo');
-
         // Attach invoice PDF
         if (file_exists($pdfPath)) {
             $mail->addAttachment($pdfPath, "Invoice_{$booking->bookingID}.pdf");
@@ -829,7 +819,7 @@ public function generateInvoice($reservationID)
         $mail->isHTML(true);
         $mail->Subject = "Booking Invoice - {$booking->bookingID}";
 
-        // HTML email body
+        // HTML email body (no images)
         $mailBody = <<<HTML
         <!DOCTYPE html>
         <html lang="en">
@@ -842,7 +832,6 @@ public function generateInvoice($reservationID)
 
             <!-- Header -->
             <div style="background-color:#001f54; padding:30px 20px; text-align:center;">
-                <img src="cid:hotelLogo" alt="Soliera Hotel Logo" style="width:80px; height:80px; border-radius:50%; margin-bottom:15px;">
                 <h1 style="color:#F7B32B; margin:0; font-size:28px; font-weight:bold;">SOLIERA HOTEL</h1>
                 <p style="color:#ffffff; margin:10px 0 0 0; font-size:16px;">Savor The Stay, Dine With Elegance</p>
             </div>
@@ -885,25 +874,24 @@ public function generateInvoice($reservationID)
         Log::error("Invoice email could not be sent: {$mail->ErrorInfo}");
     }
 
-    // Return PDF URL (optional, if you still want to open/download it)
-    $pdfUrl = asset("images/invoices/invoice_{$booking->reservationID}.pdf");
+    // Audit Trail
+    if (Auth::check()) {
+        $user = Auth::user();
+        AuditTrails::create([
+            'dept_id'       => $user->Dept_id,
+            'dept_name'     => $user->dept_name,
+            'modules_cover' => 'Front Desk And Reception',
+            'action'        => 'Generate Invoice',
+            'activity'      => 'Generate Invoice ' . $booking->bookingID,
+            'employee_name' => $user->employee_name,
+            'employee_id'   => $user->employee_id,
+            'role'          => $user->role,
+            'date'          => Carbon::now()->toDateTimeString(),
+        ]);
+    }
 
-      if (Auth::check()) {
-                $user = Auth::user();
-
-                AuditTrails::create([
-                    'dept_id'       => $user->Dept_id,
-                    'dept_name'     => $user->dept_name,
-                    'modules_cover' => 'Front Desk And Reception',
-                    'action'        => 'Generate Invoice',
-                    'activity'      => 'Generate Invoice ' . $booking->bookingID,
-                    'employee_name' => $user->employee_name,
-                    'employee_id'   => $user->employee_id,
-                    'role'          => $user->role,
-                    'date'          => Carbon::now()->toDateTimeString(),
-                ]);
-            }
-    return redirect($pdfUrl);
+    // Return PDF URL
+    return redirect(asset("images/invoices/invoice_{$booking->reservationID}.pdf"));
 }
 // guest
 
