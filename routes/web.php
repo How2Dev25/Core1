@@ -6,6 +6,7 @@ use App\Http\Controllers\hmpController;
 use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\landingController;
 use App\Http\Controllers\larController;
+use App\Http\Controllers\ratingController;
 use App\Http\Controllers\reservationController;
 use App\Http\Controllers\roomController;
 use App\Http\Controllers\roommantenanceController;
@@ -17,6 +18,7 @@ use App\Models\DeptAccount;
 use App\Models\DeptLogs;
 use App\Models\Ecm;
 use App\Models\Guest;
+use App\Models\guestRatings;
 use App\Models\Hmp;
 use App\Models\Inventory;
 use App\Models\room;
@@ -55,8 +57,39 @@ function employeeOtpCheck() {
 
 
 Route::get('/', function () {
-    return view('index');
+    $rooms = Room::all();
+    $ratingcomments = GuestRatings::all();
+
+    // Ratings summary
+    $averageRating   = GuestRatings::avg('rating_rating');
+    $totalReviews    = GuestRatings::count();
+    $recommendRate   = GuestRatings::where('rating_rating', '>=', 4)->count();
+    $recommendRate   = $totalReviews > 0 
+                        ? round(($recommendRate / $totalReviews) * 100) 
+                        : 0;
+
+    // Fetch promos and events
+    $promos = Hmp::where('hotelpromostatus', 'Active')->get();
+    $events = Ecm::where('eventstatus', 'Approved')->get();
+
+    $promoCount = $promos->count();
+    $eventCount = $events->count();
+
+    return view('index', compact(
+        'rooms',
+        'ratingcomments',
+        'averageRating',
+        'totalReviews',
+        'recommendRate',
+        'promos',
+        'events',
+        'promoCount',
+        'eventCount',
+    ));
 });
+
+
+Route::post('/landingrating', [ratingController::class, 'store']);
 
 // booking via landing
 

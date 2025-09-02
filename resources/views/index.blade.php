@@ -46,8 +46,14 @@
     <!-- Hero Section -->
     @include('landing.hero')
 
+     {{-- promo and events --}}
+
+     @include('landing.promoandevents')
+
     <!-- Rooms Section -->
     @include('landing.room')
+
+   
 
 <!-- Restaurant Section -->
     @include('landing.restaurant')

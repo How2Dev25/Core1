@@ -60,74 +60,75 @@
         </div>
 
         <!-- Sample Foods & Menus -->
-        <div class="mt-20" data-aos="fade-up" data-aos-delay="400">
-            <h3 class="text-3xl font-bold text-center mb-10">Menu <span class="text-[#F7B32B]">Highlights</span></h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="card bg-base-100 shadow-md" data-aos="zoom-in" data-aos-delay="100">
-        <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=400&q=80" alt="Signature Steak" class="w-full h-40 object-cover rounded-t-lg">
-        <div class="card-body items-center text-center">
-          <i class="fas fa-utensils text-4xl" style="color: #F7B32B;"></i>
-          <h3 class="card-title">Signature Steak</h3>
-          <p>Grilled premium steak cooked to perfection.</p>
-          <p class="font-semibold text-amber-600 mt-2">₱1,200</p>
-        </div>
-      </div>
+    <div class="mt-20" data-aos="fade-up" data-aos-delay="400">
+  <h3 class="text-3xl font-bold text-center mb-12">
+    Menu <span class="text-[#F7B32B]">Highlights</span>
+  </h3>
 
-      <!-- Food Card 2 -->
-      <div class="card bg-base-100 shadow-md" data-aos="zoom-in" data-aos-delay="150">
-        <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=400&q=80" alt="Seafood Platter" class="w-full h-40 object-cover rounded-t-lg">
-        <div class="card-body items-center text-center">
-          <i class="fas fa-utensils text-4xl" style="color: #F7B32B;"></i>
-          <h3 class="card-title">Seafood Platter</h3>
-          <p>Fresh assortment of seafood with local flavors.</p>
-          <p class="font-semibold text-amber-600 mt-2">₱1,500</p>
-        </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    
+    <!-- Food Card 1 -->
+    <div class="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500"
+         data-aos="zoom-in" data-aos-delay="100">
+      <div class="relative overflow-hidden">
+        <img src="{{asset('images/restaurant/Breakfast a la soliera/Ube Pancakes with Quezo de Bola Cream.png')}}" 
+             alt="Ube Pancakes with Quezo de Bola Cream" 
+             class="w-full h-48 object-cover transform group-hover:scale-110 transition-transform duration-500">
       </div>
+      <div class="p-6 text-center">
+        <h4 class="text-sm uppercase tracking-wide font-semibold text-[#F7B32B] mb-2">Breakfast a la Soliera</h4>
+        <h3 class="text-lg font-bold text-gray-800 mb-2">Ube Pancakes</h3>
+        <p class="text-gray-500 text-sm">with Quezo de Bola Cream</p>
+      </div>
+    </div>
 
-      <!-- Food Card 3 -->
-      <div class="card bg-base-100 shadow-md" data-aos="zoom-in" data-aos-delay="200">
-        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80" alt="Vegetarian Delight" class="w-full h-40 object-cover rounded-t-lg">
-        <div class="card-body items-center text-center">
-          <i class="fas fa-utensils text-4xl" style="color: #F7B32B;"></i>
-          <h3 class="card-title">Vegetarian Delight</h3>
-          <p>A mix of fresh vegetables and herbs in a savory sauce.</p>
-          <p class="font-semibold text-amber-600 mt-2">₱850</p>
-        </div>
+    <!-- Food Card 2 -->
+    <div class="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500"
+         data-aos="zoom-in" data-aos-delay="150">
+      <div class="relative overflow-hidden">
+        <img src="{{asset('images/restaurant/Dinner gastronomique/Beef Pares Osso Buco Style.png')}}" 
+             alt="Beef Pares Osso Buco Style" 
+             class="w-full h-48 object-cover transform group-hover:scale-110 transition-transform duration-500">
       </div>
+      <div class="p-6 text-center">
+        <h4 class="text-sm uppercase tracking-wide font-semibold text-[#F7B32B] mb-2">Dinner Gastronomique</h4>
+        <h3 class="text-lg font-bold text-gray-800 mb-2">Beef Pares</h3>
+        <p class="text-gray-500 text-sm">Osso Buco Style</p>
+      </div>
+    </div>
 
-      <!-- Food Card 4 -->
-      <div class="card bg-base-100 shadow-md" data-aos="zoom-in" data-aos-delay="250">
-        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=400&q=80" alt="Classic Burger" class="w-full h-40 object-cover rounded-t-lg">
-        <div class="card-body items-center text-center">
-          <i class="fas fa-utensils text-4xl" style="color: #F7B32B;"></i>
-          <h3 class="card-title">Classic Burger</h3>
-          <p>Juicy beef burger with fresh lettuce and special sauce.</p>
-          <p class="font-semibold text-amber-600 mt-2">₱650</p>
-        </div>
+    <!-- Food Card 3 -->
+    <div class="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500"
+         data-aos="zoom-in" data-aos-delay="200">
+      <div class="relative overflow-hidden">
+        <img src="{{asset('images/restaurant/Lunch Majectic Plates/Grilled Liempo with Tamarind Caramel.png')}}" 
+             alt="Grilled Liempo with Tamarind Caramel" 
+             class="w-full h-48 object-cover transform group-hover:scale-110 transition-transform duration-500">
       </div>
+      <div class="p-6 text-center">
+        <h4 class="text-sm uppercase tracking-wide font-semibold text-[#F7B32B] mb-2">Lunch Majestic Plates</h4>
+        <h3 class="text-lg font-bold text-gray-800 mb-2">Grilled Liempo</h3>
+        <p class="text-gray-500 text-sm">with Tamarind Caramel</p>
+      </div>
+    </div>
 
-      <!-- Food Card 5 -->
-      <div class="card bg-base-100 shadow-md" data-aos="zoom-in" data-aos-delay="300">
-        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" alt="Pasta Primavera" class="w-full h-40 object-cover rounded-t-lg">
-        <div class="card-body items-center text-center">
-          <i class="fas fa-utensils text-4xl" style="color: #F7B32B;"></i>
-          <h3 class="card-title">Pasta Primavera</h3>
-          <p>Fresh pasta with seasonal vegetables and herbs.</p>
-          <p class="font-semibold text-amber-600 mt-2">₱900</p>
-        </div>
+    <!-- Food Card 4 -->
+    <div class="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500"
+         data-aos="zoom-in" data-aos-delay="250">
+      <div class="relative overflow-hidden">
+        <img src="{{asset('images/restaurant/SIGNATURE DESSERT SELECTION/Calamansi Tart with Burnt Meringue.png')}}" 
+             alt="Calamansi Tart with Burnt Meringue" 
+             class="w-full h-48 object-cover transform group-hover:scale-110 transition-transform duration-500">
       </div>
+      <div class="p-6 text-center">
+        <h4 class="text-sm uppercase tracking-wide font-semibold text-[#F7B32B] mb-2">Signature Dessert Selection</h4>
+        <h3 class="text-lg font-bold text-gray-800 mb-2">Calamansi Tart</h3>
+        <p class="text-gray-500 text-sm">with Burnt Meringue</p>
+      </div>
+    </div>
 
-      <!-- Food Card 6 -->
-      <div class="card bg-base-100 shadow-md" data-aos="zoom-in" data-aos-delay="350">
-        <img src="https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=400&q=80" alt="Dessert Platter" class="w-full h-40 object-cover rounded-t-lg">
-        <div class="card-body items-center text-center">
-          <i class="fas fa-utensils text-4xl" style="color: #F7B32B;"></i>
-          <h3 class="card-title">Dessert Platter</h3>
-          <p>Assortment of cakes and pastries to end your meal sweetly.</p>
-          <p class="font-semibold text-amber-600 mt-2">₱700</p>
-        </div>
-      </div>
-            </div>
-        </div>
+  </div>
+</div>
+
     </div>
 </section>
