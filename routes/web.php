@@ -9,6 +9,7 @@ use App\Http\Controllers\larController;
 use App\Http\Controllers\ratingController;
 use App\Http\Controllers\reservationController;
 use App\Http\Controllers\roomController;
+use App\Http\Controllers\roomfeedbackController;
 use App\Http\Controllers\roommantenanceController;
 use App\Http\Controllers\stockController;
 use App\Http\Controllers\userController;
@@ -24,6 +25,7 @@ use App\Models\Inventory;
 use App\Models\room;
 use App\Models\Lar;
 use App\Models\room_maintenance;
+use App\Models\roomfeedbacks;
 use App\Models\stockRequest;
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Route;
@@ -812,6 +814,7 @@ Route::get('/aiguest', function(){
 });
 
 Route::get('/aisuggestion', function(){
+    guestAuthCheck();
     return view('guest.components.dashboard.bas.withsuggestion');
 });
 
@@ -819,3 +822,20 @@ Route::get('/aisuggestion', function(){
 Route::post('/aisubmit',[reservationController::class, 'aisubmit']);
 
 
+Route::get('/guestroomfeedback', function(){
+     guestAuthCheck();
+
+     $reserverooms = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+    ->where('core1_reservation.reservation_bookingstatus', 'Checked out')
+    ->where('core1_reservation.guestID', Auth::guard('guest')->user()->guestID)
+    ->orderBy('core1_reservation.created_at', 'desc')
+    ->select('core1_reservation.*', 'core1_room.*', 'core1_reservation.created_at as reservation_created_at')
+    ->get();
+
+    $myroomfeedbacks = roomfeedbacks::join('core1_guest', 'core1_guest.guestID', '=', 'core1_roomfeedback.guestID')
+    ->join('core1_room', 'core1_room.roomID', '=', 'core1_roomfeedback.roomID')
+    ->where('core1_roomfeedback.guestID', Auth::guard('guest')->user()->guestID)->latest('core1_roomfeedback.created_at')->get();
+    
+    return view('guest.roomfeedback', compact('reserverooms', 'myroomfeedbacks'));
+});
+Route::post('/submitroomfeedback', [roomfeedbackController::class, 'store']);

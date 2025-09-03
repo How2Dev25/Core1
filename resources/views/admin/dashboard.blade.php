@@ -146,17 +146,32 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Rooms
-    new Chart(document.getElementById('roomsChart'), {
-        type: 'doughnut',
-        data: {
-            labels: ['Available', 'Maintenance'],
-            datasets: [{
-                data: [{{ $totalrooms - $needmaintenance }}, {{ $needmaintenance }}],
-                backgroundColor: ['#22c55e', '#f59e0b']
-            }]
+new Chart(document.getElementById('roomsChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Available', 'Maintenance', 'Reserved'],
+        datasets: [{
+            data: [
+                {{ $totalrooms - $needmaintenance - $totalreservation }}, // Available
+                {{ $needmaintenance }}, // Maintenance
+                {{ $totalreservation }}  // Reserved
+            ],
+            backgroundColor: [
+                '#22c55e', // Green - Available
+                '#f59e0b', // Yellow - Maintenance
+                '#3b82f6'  // Blue - Reserved
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
         }
-    });
-
+    }
+});
     // Employees vs Guests
     new Chart(document.getElementById('employeesGuestsChart'), {
         type: 'bar',
