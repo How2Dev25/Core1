@@ -123,17 +123,17 @@
     <!-- Action Buttons -->
     <!-- Action Buttons -->
 <div class="flex justify-end gap-2">
-  <button 
+  <button onclick="document.getElementById('viewFeedbackModal-{{$myroomfeedback->roomfeedbackID}}').showModal()"
     class="px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 transition">
     View
   </button>
 
-  <button 
+  <button onclick="document.getElementById('editFeedbackModal-{{$myroomfeedback->roomfeedbackID}}').showModal()" 
     class="px-3 py-1.5 rounded-lg text-xs font-medium bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition">
     Edit
   </button>
 
-  <button 
+  <button onclick="document.getElementById('deleteFeedbackModal-{{$myroomfeedback->roomfeedbackID}}').showModal()"
     class="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-100 text-red-700 hover:bg-red-200 transition">
     Delete
   </button>
@@ -157,6 +157,8 @@
 
   <!-- Create Feedback Modal -->
   @include('guest.components.roomfeedback.create')
+
+
 </section>
 
 <style>
@@ -229,7 +231,11 @@
 
     {{-- modals --}}
  
-   
+   @foreach ($myroomfeedbacks as $myroomfeedback)
+       @include('guest.components.roomfeedback.edit')
+        @include('guest.components.roomfeedback.delete')
+        @include('guest.components.roomfeedback.view')
+   @endforeach
   
  
   </body>

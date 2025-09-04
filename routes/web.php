@@ -839,3 +839,5 @@ Route::get('/guestroomfeedback', function(){
     return view('guest.roomfeedback', compact('reserverooms', 'myroomfeedbacks'));
 });
 Route::post('/submitroomfeedback', [roomfeedbackController::class, 'store']);
+Route::delete('/deleteroomfeedback/{roomfeedbackID}', [roomfeedbackController::class, 'delete'] );
+Route::put('/updateroomfeedback/{roomfeedbackID}', [roomfeedbackController::class, 'update']);
