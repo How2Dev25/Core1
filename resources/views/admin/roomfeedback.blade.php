@@ -10,7 +10,7 @@
  
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <title>{{$title}} - Inventory And Stock</title>
+    <title>{{$title}} - Room Feedbacks</title>
 </head>
 @auth
     
@@ -107,49 +107,91 @@
   </div>
 
   <!-- Feedback Table -->
-  <div class="overflow-x-auto mt-5 rounded-xl border border-gray-100 shadow-lg">
-    <!-- Header -->
-    <div class="bg-blue-900 text-white px-6 py-4 rounded-t-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-      <div>
-        <h2 class="text-lg font-semibold">Room Feedbacks</h2>
-        <p class="text-sm opacity-80">Manage and respond to guest feedback</p>
-      </div>
-      <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-        <div class="flex border rounded-lg overflow-hidden">
-          <input type="text" placeholder="Search feedback..." class="px-3 py-2 w-full outline-none">
-          <button class="bg-yellow-400 text-blue-900 px-3 flex items-center justify-center">
-            <i class="fa-solid fa-search"></i>
-          </button>
-        </div>
-        <select class="border rounded-lg px-3 py-2">
-          <option disabled selected>Filter by</option>
-          <option>All Feedback</option>
-          <option>Positive</option>
-          <option>Negative</option>
-          <option>Needs Response</option>
-          <option>Resolved</option>
-        </select>
-      </div>
+ <div class="overflow-x-auto mt-5 rounded-xl border border-gray-100 shadow-lg">
+  <!-- Header -->
+  <div class="bg-blue-900 text-white px-6 py-4 rounded-t-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div>
+      <h2 class="text-lg font-semibold">Room Feedbacks</h2>
+      <p class="text-sm opacity-80">Manage and respond to guest feedback</p>
     </div>
-
-    <!-- Table -->
-    <table class="table w-full">
-      <thead class="bg-gray-100">
-        <tr>
-          <th>Guest</th>
-          <th>Room</th>
-          <th>Rating</th>
-          <th>Feedback</th>
-          <th>Date</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Keep your existing <tr> rows here (just updated styles if needed) -->
-      </tbody>
-    </table>
+    <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+      <div class="flex border rounded-lg overflow-hidden">
+        <input type="text" placeholder="Search feedback..." class="px-3 py-2 w-full outline-none">
+        <button class="bg-yellow-400 text-blue-900 px-3 flex items-center justify-center">
+          <i class="fa-solid fa-search"></i>
+        </button>
+      </div>
+      <select class="border rounded-lg px-3 py-2">
+        <option disabled selected>Filter by</option>
+        <option>All Feedback</option>
+        <option>Positive</option>
+        <option>Negative</option>
+        <option>Needs Response</option>
+        <option>Resolved</option>
+      </select>
+    </div>
   </div>
+
+  <!-- Table -->
+  <table class="table w-full">
+    <thead class="bg-gray-100">
+      <tr>
+        <th>Guest</th>
+        <th>Room</th>
+        <th>Rating</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @forelse($myroomfeedbacks as $myroomfeedback)
+      <tr class="hover:bg-gray-50">
+        <td class="flex items-center gap-3">
+          <img src="{{asset($myroomfeedback->guest_photo)}}" alt="avatar" class="w-10 h-10 rounded-full shadow-md">
+          <span class="font-medium">{{$myroomfeedback->guest_name}}</span>
+        </td>
+        <td>{{$myroomfeedback->roomID}} {{$myroomfeedback->roomtype}}</td>
+        <td>
+          <div class="flex text-yellow-400">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-regular fa-star"></i>
+          </div>
+        </td>
+        <td>{{ \Carbon\Carbon::parse($myroomfeedback->roomfeedbackdate)->format('M d, Y') }}</td>
+        <td>
+         <span class="px-3 py-1 rounded-full text-xs font-medium
+        @if($myroomfeedback->roomfeedbackstatus == 'Open')
+          bg-yellow-100 text-yellow-700
+        @elseif($myroomfeedback->roomfeedbackstatus == 'Closed')
+          bg-green-100 text-green-700
+        @else
+          bg-gray-100 text-gray-600
+        @endif">
+        {{ $myroomfeedback->roomfeedbackstatus }}
+      </span>
+        </td>
+        <td class="flex gap-2 justify-center items-center">
+  <!-- Respond Button -->
+  <button class="btn btn-primary btn-xs" >
+    <i class="fa-solid fa-reply"></i>
+  </button>
+
+  <!-- Delete Button -->
+  <button class="btn btn-error btn-xs">
+    <i class="fa-solid fa-trash"></i>
+  </button>
+</td>
+      </tr>
+      @empty
+      @endforelse
+    </tbody>
+  </table>
+</div>
+
 
   <!-- Pagination -->
   <div class="flex justify-center mt-6">
@@ -192,6 +234,9 @@
 
   @endauth
   @include('javascriptfix.soliera_js')
+
+  {{-- recycable modals --}}
+  
 
   <script src="{{asset('javascript/photouploadglobal.js')}}"></script>
   

@@ -587,7 +587,11 @@ Route::put('usestocks/{core1_inventoryID}', [roommantenanceController::class, 'u
 // room feedbacks
 Route::get('/roomfeedback', function(){
      employeeAuthCheck();
-    return view('admin.roomfeedback');
+
+     $myroomfeedbacks = roomfeedbacks::join('core1_guest', 'core1_guest.guestID', '=', 'core1_roomfeedback.guestID')
+    ->join('core1_room', 'core1_room.roomID', '=', 'core1_roomfeedback.roomID')
+    ->latest('core1_roomfeedback.created_at')->get();
+    return view('admin.roomfeedback', compact('myroomfeedbacks'));
 });
 Route::get('/servicefeedback', function(){
      employeeAuthCheck();
