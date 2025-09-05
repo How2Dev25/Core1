@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Room;
+use App\Models\room;
 use Illuminate\Support\Facades\DB;
 
 class RoomDisplay extends Component
@@ -57,7 +57,7 @@ class RoomDisplay extends Component
 
     public function render()
     {
-        $query = Room::query()->where('roomstatus', 'Available');
+        $query = room::query()->where('roomstatus', 'Available');
 
         // Category filter
         if ($this->category) {
@@ -102,21 +102,21 @@ class RoomDisplay extends Component
         $rooms = $query->paginate(6);
 
         // Get suggested rooms (random selection)
-        $suggestedRooms = Room::where('roomstatus', 'Available')
+        $suggestedRooms = room::where('roomstatus', 'Available')
             ->inRandomOrder()
             ->take(3)
             ->get();
 
         // Get filter stats
         $stats = [
-            'total_available' => Room::where('roomstatus', 'Available')->count(),
-            'categories' => Room::where('roomstatus', 'Available')
+            'total_available' => room::where('roomstatus', 'Available')->count(),
+            'categories' => room::where('roomstatus', 'Available')
                 ->select('roomtype', DB::raw('count(*) as count'))
                 ->groupBy('roomtype')
                 ->get(),
             'price_range' => [
-                'min' => Room::where('roomstatus', 'Available')->min('roomprice'),
-                'max' => Room::where('roomstatus', 'Available')->max('roomprice')
+                'min' => room::where('roomstatus', 'Available')->min('roomprice'),
+                'max' => room::where('roomstatus', 'Available')->max('roomprice')
             ]
         ];
 
