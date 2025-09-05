@@ -585,14 +585,56 @@ Route::delete('/deletemaintenance/{roommaintenanceID}', [roommantenanceControlle
 Route::put('usestocks/{core1_inventoryID}', [roommantenanceController::class, 'use']);
 
 // room feedbacks
-Route::get('/roomfeedback', function(){
-     employeeAuthCheck();
+Route::get('/roomfeedback', function(Request $request) {
+    employeeAuthCheck();
 
-     $myroomfeedbacks = roomfeedbacks::join('core1_guest', 'core1_guest.guestID', '=', 'core1_roomfeedback.guestID')
+    // Get filter (Open/Closed/All)
+    $statusFilter = $request->get('status', 'all');
+
+    // Build base query
+   $query = roomfeedbacks::join('core1_guest', 'core1_guest.guestID', '=', 'core1_roomfeedback.guestID')
     ->join('core1_room', 'core1_room.roomID', '=', 'core1_roomfeedback.roomID')
-    ->latest('core1_roomfeedback.created_at')->get();
-    return view('admin.roomfeedback', compact('myroomfeedbacks'));
+    ->latest('core1_roomfeedback.created_at');
+
+// Apply filter if not "all"
+if ($statusFilter === 'Open') {
+    $query->where('roomfeedbackstatus', 'Open');
+} elseif ($statusFilter === 'Closed') {
+    $query->where('roomfeedbackstatus', 'Closed');
+}
+
+// Paginate results (10 per page)
+$myroomfeedbacks = $query->paginate(10)->withQueryString();
+
+
+    // Stats
+    $stats = [
+        'total'    => roomfeedbacks::count(),
+        'positive' => roomfeedbacks::where('roomrating', '>=', 4)->count(),
+        'negative' => roomfeedbacks::where('roomrating', '<=', 2)->count(),
+        'pending'  => roomfeedbacks::where('roomfeedbackstatus', 'Open')->count(),
+    ];
+
+    // Trend stats
+    $currentMonthCount = roomfeedbacks::whereMonth('roomfeedbackdate', Carbon::now()->month)
+        ->whereYear('roomfeedbackdate', Carbon::now()->year)
+        ->count();
+    $lastMonthCount = roomfeedbacks::whereMonth('roomfeedbackdate', Carbon::now()->subMonth()->month)
+        ->whereYear('roomfeedbackdate', Carbon::now()->subMonth()->year)
+        ->count();
+
+    $stats['trend'] = [
+        'current' => $currentMonthCount,
+        'last'    => $lastMonthCount,
+        'percent' => $lastMonthCount > 0
+                        ? round((($currentMonthCount - $lastMonthCount) / $lastMonthCount) * 100, 1)
+                        : 100,
+    ];
+
+    return view('admin.roomfeedback', compact('myroomfeedbacks', 'stats', 'statusFilter'));
 });
+
+Route::put('/feedbackrespond/{roomfeedbackID}', [roomfeedbackController::class, 'respond']);
 Route::get('/servicefeedback', function(){
      employeeAuthCheck();
     return view('admin.servicefeedback');

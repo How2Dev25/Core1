@@ -176,6 +176,19 @@
     </div>
   </div>
 
+  <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg stat-card">
+  <div class="flex items-center justify-between">
+    <div>
+      <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Guest Relationship</h3>
+      <p class="text-3xl font-bold text-gray-800 mt-2">{{ $moduleCounts['Guest Relationship Management'] ?? 0 }}</p>
+      <span class="text-sm text-gray-500">Feedback & Loyalty</span>
+    </div>
+    <div class="w-16 h-16 flex items-center justify-center bg-blue-900 rounded-xl">
+      <i data-lucide="users" class="w-8 h-8 text-yellow-400"></i>
+    </div>
+  </div>
+</div>
+
 </div>
 
 

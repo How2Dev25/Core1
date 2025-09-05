@@ -84,7 +84,7 @@ class roommantenanceController extends Controller
             $roomID = $roommaintenanceID->roomID;
 
            Room::where('roomID', $roomID)->update([
-                'roomstatus' => 'Avaiable',
+                'roomstatus' => 'Available',
             ]);
 
             $roommaintenanceID->delete();

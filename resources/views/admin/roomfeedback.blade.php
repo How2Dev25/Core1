@@ -38,73 +38,98 @@
           <!-- Room Feedbacks CRM Section -->
 <section class="flex-1 p-6">
   <!-- Stats Grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+ <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-    <!-- Total Feedback -->
-    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Feedback</h3>
-          <p class="text-3xl font-bold text-gray-800 mt-2">248</p>
-          <div class="flex items-center mt-3">
-            <span class="text-sm font-medium text-gray-500">+12% from last month</span>
-          </div>
-        </div>
-        <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
-          <i class="fa-solid fa-comments text-yellow-400 text-2xl"></i>
-        </div>
+
+<!-- Total Feedback -->
+<div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+  <div class="flex items-center justify-between">
+    <div>
+      <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Feedback</h3>
+      <p class="text-3xl font-bold text-gray-800 mt-2">{{ $stats['total'] }}</p>
+      <div class="flex items-center mt-3">
+        @php
+          $trendPercent = $stats['trend']['percent'];
+        @endphp
+        <span class="text-sm font-medium {{ $trendPercent >= 0 ? 'text-green-600' : 'text-red-600' }}">
+          {{ $trendPercent >= 0 ? '+' : '' }}{{ $trendPercent }}% from last month
+        </span>
       </div>
     </div>
-
-    <!-- Positive Feedback -->
-    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Positive</h3>
-          <p class="text-3xl font-bold text-gray-800 mt-2">186</p>
-          <div class="flex items-center mt-3">
-            <span class="text-sm font-medium text-gray-500">75% of total</span>
-          </div>
-        </div>
-        <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
-          <i class="fa-solid fa-face-smile text-yellow-400 text-2xl"></i>
-        </div>
-      </div>
+    <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+      <i class="fa-solid fa-comments text-yellow-400 text-2xl"></i>
     </div>
-
-    <!-- Negative Feedback -->
-    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Negative</h3>
-          <p class="text-3xl font-bold text-gray-800 mt-2">42</p>
-          <div class="flex items-center mt-3">
-            <span class="text-sm font-medium text-gray-500">17% of total</span>
-          </div>
-        </div>
-        <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
-          <i class="fa-solid fa-face-frown text-yellow-400 text-2xl"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- Pending Feedback -->
-    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Pending</h3>
-          <p class="text-3xl font-bold text-gray-800 mt-2">20</p>
-          <div class="flex items-center mt-3">
-            <span class="text-sm font-medium text-gray-500">Needs Response</span>
-          </div>
-        </div>
-        <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
-          <i class="fa-solid fa-circle-exclamation text-yellow-400 text-2xl"></i>
-        </div>
-      </div>
-    </div>
-
   </div>
+</div>
+
+  <!-- Positive Feedback -->
+  <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Positive</h3>
+        <p class="text-3xl font-bold text-gray-800 mt-2">{{ $stats['positive'] }}</p>
+        <div class="flex items-center mt-3">
+          <span class="text-sm font-medium text-gray-500">
+            {{ $stats['total'] > 0 ? round(($stats['positive'] / $stats['total']) * 100) : 0 }}% of total
+          </span>
+        </div>
+      </div>
+      <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+        <i class="fa-solid fa-face-smile text-yellow-400 text-2xl"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Negative Feedback -->
+  <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Negative</h3>
+        <p class="text-3xl font-bold text-gray-800 mt-2">{{ $stats['negative'] }}</p>
+        <div class="flex items-center mt-3">
+          <span class="text-sm font-medium text-gray-500">
+            {{ $stats['total'] > 0 ? round(($stats['negative'] / $stats['total']) * 100) : 0 }}% of total
+          </span>
+        </div>
+      </div>
+      <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+        <i class="fa-solid fa-face-frown text-yellow-400 text-2xl"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pending Feedback -->
+  <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Pending</h3>
+        <p class="text-3xl font-bold text-gray-800 mt-2">{{ $stats['pending'] }}</p>
+        <div class="flex items-center mt-3">
+          <span class="text-sm font-medium text-gray-500">Needs Response</span>
+        </div>
+      </div>
+      <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+        <i class="fa-solid fa-circle-exclamation text-yellow-400 text-2xl"></i>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+    @if(session('success'))
+    <div class="mb-4 mt-5 px-4 py-3 rounded-lg bg-green-100 border border-green-300 text-green-800 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>{{ session('success') }}</span>
+        </div>
+        <button onclick="this.parentElement.remove()" class="text-green-600 hover:text-green-900">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+@endif
 
   <!-- Feedback Table -->
  <div class="overflow-x-auto mt-5 rounded-xl border border-gray-100 shadow-lg">
@@ -114,22 +139,14 @@
       <h2 class="text-lg font-semibold">Room Feedbacks</h2>
       <p class="text-sm opacity-80">Manage and respond to guest feedback</p>
     </div>
-    <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-      <div class="flex border rounded-lg overflow-hidden">
-        <input type="text" placeholder="Search feedback..." class="px-3 py-2 w-full outline-none">
-        <button class="bg-yellow-400 text-blue-900 px-3 flex items-center justify-center">
-          <i class="fa-solid fa-search"></i>
-        </button>
-      </div>
-      <select class="border rounded-lg px-3 py-2">
-        <option disabled selected>Filter by</option>
-        <option>All Feedback</option>
-        <option>Positive</option>
-        <option>Negative</option>
-        <option>Needs Response</option>
-        <option>Resolved</option>
-      </select>
-    </div>
+    <form method="GET" action="{{ url('/roomfeedback') }}">
+  <select name="status" onchange="this.form.submit()"
+        class="border rounded-lg px-3 py-2 text-sm text-black border-gray-300 bg-white">
+  <option value="all" {{ $statusFilter === 'all' ? 'selected' : '' }}>All</option>
+  <option value="Open" {{ $statusFilter === 'Open' ? 'selected' : '' }}>Open</option>
+  <option value="Closed" {{ $statusFilter === 'Closed' ? 'selected' : '' }}>Closed</option>
+</select>
+  </form>
   </div>
 
   <!-- Table -->
@@ -153,13 +170,11 @@
         </td>
         <td>{{$myroomfeedback->roomID}} {{$myroomfeedback->roomtype}}</td>
         <td>
-          <div class="flex text-yellow-400">
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-regular fa-star"></i>
-          </div>
+          <div class="flex  gap-1 mb-2">
+          @for ($i = 1; $i <= 5; $i++)
+            <i class="fa-star text-sm {{ $myroomfeedback->roomrating >= $i ? 'fa-solid' : 'fa-regular' }}" style="color: #F7B32B;"></i>
+          @endfor
+        </div>
         </td>
         <td>{{ \Carbon\Carbon::parse($myroomfeedback->roomfeedbackdate)->format('M d, Y') }}</td>
         <td>
@@ -176,12 +191,12 @@
         </td>
         <td class="flex gap-2 justify-center items-center">
   <!-- Respond Button -->
-  <button class="btn btn-primary btn-xs" >
+  <button class="btn btn-primary btn-xs" onclick="document.getElementById('viewFeedbackModal-{{$myroomfeedback->roomfeedbackID}}').showModal()" >
     <i class="fa-solid fa-reply"></i>
   </button>
 
   <!-- Delete Button -->
-  <button class="btn btn-error btn-xs">
+  <button onclick="document.getElementById('deleteFeedbackModal-{{$myroomfeedback->roomfeedbackID}}').showModal()" class="btn btn-error btn-xs">
     <i class="fa-solid fa-trash"></i>
   </button>
 </td>
@@ -227,7 +242,10 @@
 
     {{-- modals --}}
  
-   
+  @foreach ($myroomfeedbacks as $myroomfeedback)
+        @include('admin.components.roomfeedback.respond')
+        @include('admin.components.roomfeedback.delete')
+  @endforeach
   
  
   </body>
