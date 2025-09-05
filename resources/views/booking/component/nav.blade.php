@@ -11,7 +11,7 @@
     
     <div class="navbar-center hidden lg:flex">
         <ul class="menu menu-horizontal px-1 gap-0.5 ">
-            <li><a href="#about" class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">About</a></li>
+            <li><a href="/#about" class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">About</a></li>
             <li><a href="#rooms" class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">Rooms</a></li>
             <li><a href="#restaurant" class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">Restaurant</a></li>
             <li><a href="#ameneties" class="text-white hover:bg-[#F7B32B] hover:text-white font-bold py-1.5 px-2.5 text-[0.95rem]">Ameneties</a></li>

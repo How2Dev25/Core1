@@ -17,6 +17,19 @@
 
 @auth('guest')
 
+<style>
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
 <body class="bg-base-100">
     <div class="flex h-screen overflow-hidden">
       <!-- Sidebar -->
@@ -70,5 +83,7 @@
  
     
 @endauth
+
+ <script src="{{asset('javascript/counting.js')}}"></script>
   
 </html>

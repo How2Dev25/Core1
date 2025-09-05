@@ -53,7 +53,7 @@
                         </li>
                     </ul>
                 </div>
-                <a href="#contact" class="btn btn-outline border-[#F7B32B] text-black hover:bg-[#F7B32B] hover:text-white px-8 py-3">
+                <a href="https://restaurant.soliera-hotel-restaurant.com/" class="btn btn-outline border-[#F7B32B] text-black hover:bg-[#F7B32B] hover:text-white px-8 py-3">
                     Make Reservation
                 </a>
             </div>

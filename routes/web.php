@@ -849,7 +849,16 @@ $reserverooms = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1
     ->orderBy('core1_reservation.created_at', 'desc')
     ->select('core1_reservation.*', 'core1_room.*', 'core1_reservation.created_at as reservation_created_at')
     ->get();
-  return view('guest.myreservation', ['reserverooms' => $reserverooms]);
+
+    $totalreservation = Reservation::where('core1_reservation.guestID', Auth::guard('guest')->user()->guestID)->count();
+    $approvereservation = Reservation::where('core1_reservation.guestID', Auth::guard('guest')->user()->guestID)
+    ->where('reservation_bookingstatus', 'Confirmed')->count();
+    $cancelledreservation = Reservation::where('core1_reservation.guestID', Auth::guard('guest')->user()->guestID)
+    ->where('reservation_bookingstatus', 'Cancelled')->count();
+    $pendingreservation = Reservation::where('core1_reservation.guestID', Auth::guard('guest')->user()->guestID)
+    ->where('reservation_bookingstatus', 'Pending')->count();
+  return view('guest.myreservation', compact('reserverooms', 'totalreservation', 
+  'approvereservation','pendingreservation', 'cancelledreservation'));
 });
 
 

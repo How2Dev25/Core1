@@ -45,10 +45,8 @@
     <div class="flex items-center justify-between">
       <div>
         <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Reservations</h3>
-        <p class="text-3xl font-bold text-gray-800 mt-2">120</p>
-        <div class="flex items-center mt-3">
-          <span class="text-sm font-medium text-gray-500">100% of total</span>
-        </div>
+        <p class="text-3xl font-bold text-gray-800 mt-2">{{$totalreservation}}</p>
+       
       </div>
       <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
         <i class="fa-solid fa-bed text-yellow-400 text-2xl"></i>
@@ -61,10 +59,8 @@
     <div class="flex items-center justify-between">
       <div>
         <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Confirmed</h3>
-        <p class="text-3xl font-bold text-gray-800 mt-2">85</p>
-        <div class="flex items-center mt-3">
-          <span class="text-sm font-medium text-gray-500">71% of total</span>
-        </div>
+        <p class="text-3xl font-bold text-gray-800 mt-2">{{$approvereservation}}</p>
+        
       </div>
       <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
         <i class="fa-solid fa-circle-check text-yellow-400 text-2xl"></i>
@@ -77,10 +73,8 @@
     <div class="flex items-center justify-between">
       <div>
         <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Pending</h3>
-        <p class="text-3xl font-bold text-gray-800 mt-2">25</p>
-        <div class="flex items-center mt-3">
-          <span class="text-sm font-medium text-gray-500">21% of total</span>
-        </div>
+        <p class="text-3xl font-bold text-gray-800 mt-2">{{$pendingreservation}}</p>
+        
       </div>
       <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
         <i class="fa-solid fa-clock text-yellow-400 text-2xl"></i>
@@ -93,10 +87,8 @@
     <div class="flex items-center justify-between">
       <div>
         <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Cancelled</h3>
-        <p class="text-3xl font-bold text-gray-800 mt-2">10</p>
-        <div class="flex items-center mt-3">
-          <span class="text-sm font-medium text-gray-500">8% of total</span>
-        </div>
+        <p class="text-3xl font-bold text-gray-800 mt-2">{{$cancelledreservation}}</p>
+       
       </div>
       <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
         <i class="fa-solid fa-circle-xmark text-yellow-400 text-2xl"></i>

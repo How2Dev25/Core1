@@ -16,19 +16,20 @@
                 
                 <!-- Quick Stats -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
-                    <div class="border-yellow-400 border-2 rounded-2xl p-6">
-                        <div class="text-3xl font-bold">{{ $stats['total_available'] }}</div>
-                        <div class="text-sm opacity-80">Available Rooms</div>
-                    </div>
-                    <div class="border-yellow-400 border-2 rounded-2xl p-6">
-                        <div class="text-3xl font-bold">₱{{ number_format($stats['price_range']['min']) }}</div>
-                        <div class="text-sm opacity-80">Starting From</div>
-                    </div>
-                    <div class="border-yellow-400 border-2 rounded-2xl p-6">
-                        <div class="text-3xl font-bold">{{ $stats['categories']->count() }}</div>
-                        <div class="text-sm opacity-80">Room Categories</div>
-                    </div>
-                </div>
+    <div class="border-yellow-400 border-2 rounded-2xl p-6 text-center">
+        <div class="text-3xl font-bold counter count-up" data-target="{{ $stats['total_available'] }}">{{ $stats['total_available'] }}</div>
+        <div class="text-sm opacity-80">Available Rooms</div>
+    </div>
+    <div class="border-yellow-400 border-2 rounded-2xl p-6 text-center">
+        <div class="text-3xl font-bold counter count-up" data-target="{{ $stats['price_range']['min'] }}">{{ $stats['price_range']['min'] }}</div>
+        <div class="text-lg opacity-80 font-bold">Starting Price </div>
+    </div>
+    <div class="border-yellow-400 border-2 rounded-2xl p-6 text-center">
+        <div class="text-3xl font-bold counter count-up" data-target="{{ $stats['categories']->count() }}">{{ $stats['categories']->count() }}</div>
+        <div class="text-sm opacity-80">Room Categories</div>
+    </div>
+</div>
+
             </div>
         </div>
     </div>
@@ -38,7 +39,7 @@
           <div class="container mx-auto px-4 pb-12">
         <!-- Suggested Rooms Section -->
         <div class="mb-8">
-            <div class="flex items-center justify-between mb-6 gap-2">
+            <div class="flex items-center justify-between mb-6 gap-2 max-md:flex-col">
                 <h2 class="text-2xl font-bold text-gray-800">Suggested For You</h2>
                 <button wire:click="$toggle('showSuggested')" 
                         class="btn btn-primary">
@@ -49,33 +50,36 @@
                 </button>
             </div>
 
-            @if($showSuggested)
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                @foreach($suggestedRooms as $room)
-                <div class=" rounded-2xl p-6 bg-white shadow-lg">
-                    <div class="flex items-center mb-4">
-                              <div class="w-16 h-16 rounded-xl overflow-hidden flex items-center justify-center">
-                          <img src="{{ asset($room->roomphoto) }}" 
-                              alt="Room {{ $room->roomID }}" 
-                              class="w-full h-full object-cover">
-                      </div>
-                        <div class="ml-4">
-                            <h3 class="font-bold text-gray-800">Room #{{ $room->roomID }}</h3>
-                            <p class="text-sm text-gray-600">{{ $room->roomtype }} Room</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-700 mb-3">{{ Str::limit($room->roomfeatures, 80) }}</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-lg font-bold text-indigo-600">₱{{ number_format($room->roomprice) }}/night</span>
-                        <a href="/roomdetails/{{ $room->roomID }}" 
-                           class="btn btn-primary btn-sm">
-                            Book Now
-                        </a>
-                    </div>
-                </div>
-                @endforeach
+          @if($showSuggested)
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    @foreach($suggestedRooms as $index => $room)
+    <div 
+        class="rounded-2xl p-6 bg-white shadow-lg opacity-0 translate-y-5 transition-all duration-700 ease-out"
+        style="animation: fadeUp 0.5s ease-out forwards; animation-delay: {{ $index * 0.2 }}s"
+    >
+        <div class="flex items-center mb-4">
+            <div class="w-16 h-16 rounded-xl overflow-hidden flex items-center justify-center">
+                <img src="{{ asset($room->roomphoto) }}" 
+                     alt="Room {{ $room->roomID }}" 
+                     class="w-full h-full object-cover">
             </div>
-            @endif
+            <div class="ml-4">
+                <h3 class="font-bold text-gray-800">Room #{{ $room->roomID }}</h3>
+                <p class="text-sm text-gray-600">{{ $room->roomtype }} Room</p>
+            </div>
+        </div>
+        <p class="text-sm text-gray-700 mb-3">{{ Str::limit($room->roomfeatures, 80) }}</p>
+        <div class="flex items-center justify-between">
+            <span class="text-lg font-bold text-indigo-600">₱{{ number_format($room->roomprice) }}/night</span>
+            <a href="/roomdetails/{{ $room->roomID }}" 
+               class="btn btn-primary btn-sm">
+                Book Now
+            </a>
+        </div>
+    </div>
+    @endforeach
+</div>
+@endif
         </div>
 
         <!-- Enhanced Filters Section -->
