@@ -121,14 +121,14 @@
     <!-- Total Reservations -->
     <div class="stat-card card bg-base-100 shadow-lg border-2 border-transparent hover:border-blue-400 hover:bg-gradient-to-br hover:from-blue-50 hover:to-blue-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
         <div class="card-body items-center text-center p-6">
-            <div class="bg-gradient-to-br from-blue-400 to-blue-600 rounded-full p-4 mb-4">
-                <i data-lucide="calendar-days" class="w-8 h-8 text-white"></i>
+            <div class="bg-blue-900 rounded-full p-4 mb-4">
+                <i data-lucide="calendar-days" class="w-8 h-8 text-yellow-400"></i>
             </div>
             <h3 class="text-lg font-semibold">Total Reservations</h3>
-            <div class="stat-value text-3xl font-bold text-primary">
+            <div class="stat-value text-3xl font-bold text-yellow-400">
                 {{ $guesttotalreservation }}
             </div>
-            <div class="stat-desc text-success font-medium">
+            <div class="stat-desc text-blue-900 font-medium">
                 @php
                     $diff = $guesttotalreservation - $previousReservations;
                     $sign = $diff >= 0 ? '+' : '';
@@ -141,14 +141,14 @@
     <!-- Upcoming Events -->
     <div class="stat-card card bg-base-100 shadow-lg border-2 border-transparent hover:border-purple-400 hover:bg-gradient-to-br hover:from-purple-50 hover:to-purple-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
         <div class="card-body items-center text-center p-6">
-            <div class="bg-gradient-to-br from-purple-400 to-purple-600 rounded-full p-4 mb-4">
-                <i data-lucide="calendar-check" class="w-8 h-8 text-white"></i>
+            <div class="bg-blue-900 rounded-full p-4 mb-4">
+                <i data-lucide="calendar-check" class="w-8 h-8 text-yellow-400"></i>
             </div>
             <h3 class="text-lg font-semibold">Upcoming Events</h3>
-            <div class="stat-value text-xl font-bold text-accent">
+            <div class="stat-value text-xl font-bold text-yellow-400">
                 {{ $events->count() }}
             </div>
-            <div class="stat-desc font-medium">
+            <div class="stat-desc font-medium text-blue-900">
                 Check your upcoming hotel events
             </div>
         </div>
@@ -157,11 +157,11 @@
     <!-- Recent Reservation -->
     <div class="stat-card card bg-base-100 shadow-lg border-2 border-transparent hover:border-yellow-400 hover:bg-gradient-to-br hover:from-yellow-50 hover:to-yellow-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
         <div class="card-body items-center text-center p-6">
-            <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full p-4 mb-4">
-                <i data-lucide="clock" class="w-8 h-8 text-white"></i>
+            <div class="bg-blue-900 rounded-full p-4 mb-4">
+                <i data-lucide="clock" class="w-8 h-8 text-yellow-400"></i>
             </div>
             <h3 class="text-lg font-semibold">Recent Stay</h3>
-            <div class="stat-value text-lg font-bold text-warning">
+            <div class="stat-value text-lg font-bold text-yellow-400">
                 @if($recentstay)
                     {{ \Carbon\Carbon::parse($recentstay->reservation_checkin)->format('M d') }} -
                     {{ \Carbon\Carbon::parse($recentstay->reservation_checkout)->format('M d') }}
@@ -182,14 +182,14 @@
     <!-- Loyalty Points -->
     <div class="stat-card card bg-base-100 shadow-lg border-2 border-transparent hover:border-green-400 hover:bg-gradient-to-br hover:from-green-50 hover:to-green-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
         <div class="card-body items-center text-center p-6">
-            <div class="bg-gradient-to-br from-green-400 to-green-600 rounded-full p-4 mb-4">
-                <i data-lucide="coins" class="w-8 h-8 text-white"></i>
+            <div class="bg-blue-900 rounded-full p-4 mb-4">
+                <i data-lucide="coins" class="w-8 h-8 text-yellow-400"></i>
             </div>
             <h3 class="text-lg font-semibold">Loyalty Points</h3>
-            <div class="stat-value text-3xl font-bold text-secondary">
+            <div class="stat-value text-3xl font-bold text-yellow-400">
                 {{ Auth::guard('guest')->user()->loyalty_points ?? 0 }}
             </div>
-            <div class="stat-desc text-info font-medium">Ready to redeem</div>
+            <div class="stat-desc font-medium text-blue-900">Ready to redeem</div>
         </div>
     </div>
 </div>
@@ -204,7 +204,9 @@
     <div class="card bg-base-100 shadow-xl mb-8">
         <div class="card-header">
             <h2 class="text-2xl font-bold p-6 pb-2 flex items-center gap-3">
-                <i data-lucide="calendar-heart" class="w-7 h-7 text-primary"></i>
+                <div class="rounded-xl bg-blue-900 p-2 shadow-lg">
+                <i data-lucide="calendar-heart" class="w-7 h-7 text-yellow-400"></i>
+                </div>
                 Upcoming Hotel Events
             </h2>
         </div>

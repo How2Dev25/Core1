@@ -109,10 +109,10 @@
           <div class="mt-4 p-4 bg-blue-50 rounded-xl text-sm text-blue-900">
             <p class="font-semibold mb-2">Try sample prompts:</p>
        <ul class="list-disc list-inside space-y-1">
-  <li>"Standard room with a table and WiFi for 2 nights from October 10 to October 12 – preferably in a quiet spot."</li>
-  <li>"Suite for 4 people from August 5 to August 12 – would be great to have a few extra towels."</li>
-  <li>"Deluxe room with a balcony and fan from September 5 to September 7 – hoping to get a couple of extra pillows."</li>
-  <li>"Executive room for honeymoon from November 15 to November 22 – something simple to make it feel a bit special."</li>
+  <li>"Standard room with a table and WiFi for 2 nights from October 10 2025 to October 12 2025 – preferably in a quiet spot."</li>
+  <li>"Suite for 4 people from August 5 2025  to August 12 2025  – would be great to have a few extra towels."</li>
+  <li>"Deluxe room with a balcony and fan from September 5 2025  to September 7 2025  – hoping to get a couple of extra pillows."</li>
+  <li>"Executive room for honeymoon from November 15 2025  to November 22 2025  – something simple to make it feel a bit special."</li>
 </ul>
           </div>
 

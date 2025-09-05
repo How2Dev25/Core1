@@ -13,6 +13,8 @@
       @livewireStyles
 </head>
 
+
+
 @auth('guest')
 
 <body class="bg-base-100">
