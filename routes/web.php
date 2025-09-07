@@ -21,6 +21,7 @@ use App\Models\DeptAccount;
 use App\Models\DeptLogs;
 use App\Models\Ecm;
 use App\Models\ecmtype;
+use App\Models\facility;
 use App\Models\Guest;
 use App\Models\guestRatings;
 use App\Models\Hmp;
@@ -487,9 +488,11 @@ Route::delete('/deletehmp/{promoID}', [hmpController::class, 'deletehmp']);
 Route::get('/ecm', function(){
      employeeAuthCheck();
 
-     $eventtypes = ecmtype::latest()->get();
+     $eventtypes = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')
+     ->latest('core1_eventtype.created_at')->get();
+    $facilities = facility::where('facility_type', 'Event')->latest()->get();
    
-    return view('admin.ecm',  compact('eventtypes'));
+    return view('admin.ecm',  compact('eventtypes', 'facilities'));
 });
 Route::post('/createecm', [ecmController::class, 'store']);
 Route::put('/editecm/{eventID}', [ecmController::class, 'update']);
@@ -501,7 +504,8 @@ Route::put('/cancelecm/{eventID}', [ecmController::class, 'cancel']);
 
 Route::get('/facilities', function(){
     employeeAuthCheck();
-    return view('admin.facilities');
+    $facilities = facility::latest()->get();
+    return view('admin.facilities', compact('facilities'));
 });
 
 Route::post('/facilitycreate', [facilityController::class, 'store']);

@@ -46,17 +46,31 @@
         </div>
 
         <!-- Facility -->
-        <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1">Facility / Room</label>
-            <select name="facilityID" class="select select-bordered w-full rounded-xl focus:border-yellow-400 focus:ring focus:ring-yellow-200">
-                <option value="">-- Select Facility --</option>
-               
-                    <option value="{{$eventtype->facilityID}}" >
-                       {{$eventtype->facilityID}}
-                    </option>
-              
-            </select>
-        </div>
+     <!-- Facility -->
+<div class="col-span-1 md:col-span-2">
+  <label class="block text-sm font-semibold text-gray-700 mb-1">Facility / Room</label>
+  <select name="facilityID" 
+          id="modify_facility_select_{{ $eventtype->eventtype_ID }}" 
+          class="select select-bordered w-full rounded-xl focus:border-yellow-400 focus:ring focus:ring-yellow-200"
+          onchange="showModifyFacilityPhoto({{ $eventtype->eventtype_ID }})">
+      <option value="">-- Select Facility --</option>
+      @foreach($facilities as $facility)
+          <option value="{{ $facility->facilityID }}" 
+                  data-photo="{{ $facility->facility_photo ? asset($facility->facility_photo) : '' }}"
+                  {{ $eventtype->facilityID == $facility->facilityID ? 'selected' : '' }}>
+              {{ $facility->facility_name }}
+          </option>
+      @endforeach
+  </select>
+
+  <!-- Facility photo preview -->
+  <div id="modify_facility_photo_container_{{ $eventtype->eventtype_ID }}" class="mt-4 flex justify-center">
+    <img id="modify_facility_photo_preview_{{ $eventtype->eventtype_ID }}" 
+         class="hidden max-h-40 rounded-xl border border-gray-200 shadow-sm object-cover"
+         src="{{ $eventtype->facility && $eventtype->facility->facility_photo ? asset($eventtype->facility->facility_photo) : '' }}"
+         alt="Facility Preview">
+  </div>
+</div>
 
         <!-- Duration -->
         <div>
@@ -206,4 +220,27 @@
       `;
       wrapper.appendChild(div);
   }
+</script>
+
+<script>
+  function showModifyFacilityPhoto(eventtypeId){
+    const select = document.getElementById('modify_facility_select_' + eventtypeId);
+    const preview = document.getElementById('modify_facility_photo_preview_' + eventtypeId);
+    const photoUrl = select.options[select.selectedIndex].dataset.photo;
+
+    if(photoUrl){
+      preview.src = photoUrl;
+      preview.classList.remove('hidden');
+    } else {
+      preview.src = "";
+      preview.classList.add('hidden');
+    }
+  }
+
+  // Auto-show the selected facility photo on modal open
+  document.addEventListener("DOMContentLoaded", function(){
+    @foreach($eventtypes as $et)
+      showModifyFacilityPhoto({{ $et->eventtype_ID }});
+    @endforeach
+  });
 </script>

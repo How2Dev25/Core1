@@ -9,10 +9,11 @@ class facility extends Model
 {
        use HasFactory;
 
-    protected $table = 'facilities';
+    protected $table = 'core1_facility';
     protected $primaryKey = 'facilityID';
 
     protected $fillable = [
+        'facilityID',
         'facility_name',
         'facility_capacity',
         'facility_type',

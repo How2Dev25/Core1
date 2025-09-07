@@ -93,42 +93,95 @@
   <!-- Header with Create Button -->
   <div class="flex items-center justify-between">
     <h2 class="text-2xl font-bold text-gray-800">Facilities</h2>
-    <button onclick="document.getElementById('create_facility_modal').showModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition-all">
+    <button onclick="document.getElementById('create_facility_modal').showModal()" class="btn btn-primary">
       + Create Facility
     </button>
   </div>
+
+
+  @if(session('success'))
+  <div class="alert alert-success shadow-lg rounded-xl mb-4 mt-4">
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M9 12l2 2l4-4m6 2a9 9 0 11-18 0a9 9 0 0118 0z" />
+    </svg>
+    <span>{{ session('success') }}</span>
+  </div>
+@endif
 
   <!-- Facility Grid -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     
     <!-- Facility Card -->
-    <div class="border border-gray-200 rounded-xl shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all">
-      <!-- Facility Photo -->
-      <img src="https://via.placeholder.com/400x200" alt="Facility Photo" class="w-full h-40 object-cover">
-      
-      <!-- Facility Info -->
-      <div class="p-5 space-y-3">
-        <div>
-          <h3 class="text-lg font-semibold text-gray-800">Grand Ballroom</h3>
-          <p class="text-sm text-gray-500">Type: Event | Capacity: 300</p>
-        </div>
 
-        <p class="text-sm text-gray-600">
-          A luxurious ballroom suitable for weddings, galas, and large events.
-        </p>
+@forelse($facilities as $facility)
+  <div class="border border-gray-200 rounded-xl shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all">
+    <!-- Facility Photo -->
+    <img src="{{ $facility->facility_photo ? asset($facility->facility_photo) : 'https://via.placeholder.com/400x200' }}"
+         alt="Facility Photo"
+         class="w-full h-40 object-cover">
 
+    <!-- Facility Info -->
+    <div class="p-5 space-y-3">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-800">{{ $facility->facility_name }}</h3>
+        <p class="text-sm text-gray-500">Type: {{ $facility->facility_type }} | Capacity: {{ $facility->facility_capacity ?? 'N/A' }}</p>
+      </div>
+
+      <!-- Description -->
+      <p class="text-sm text-gray-600">
+        {{ $facility->facility_description ?? 'No description available.' }}
+      </p>
+
+      <!-- Amenities -->
+      @if(!empty($facility->facility_amenities))
         <div class="flex flex-wrap gap-2 text-xs">
-          <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full">Sound System</span>
-          <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full">Lighting</span>
-          <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded-full">Projector</span>
+          @foreach($facility->facility_amenities as $amenity)
+            <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full">{{ $amenity }}</span>
+          @endforeach
         </div>
+      @endif
 
-        <div class="flex justify-between items-center pt-3 border-t text-sm">
-          <span class="font-medium text-gray-700">Status:</span>
-          <span class="px-2 py-1 rounded-lg text-white bg-green-600">Available</span>
-        </div>
+      <!-- Status -->
+      <div class="flex justify-between items-center pt-3 border-t text-sm">
+        <span class="font-medium text-gray-700">Status:</span>
+        <span class="px-2 py-1 rounded-lg text-white {{ $facility->facility_status === 'Active' ? 'bg-green-600' : 'bg-red-600' }}">
+          {{ $facility->facility_status ?? 'Inactive' }}
+        </span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex justify-end gap-3 mt-4">
+        <!-- Edit Button -->
+        <button onclick="document.getElementById('edit_facility_modal_{{$facility->facilityID}}').showModal()"
+          class="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition flex items-center gap-1">
+          <i data-lucide="pencil" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Delete Button -->
+        <button onclick="document.getElementById('delete_modal_{{ $facility->facilityID }}').showModal()"
+          class="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition flex items-center gap-1">
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
       </div>
     </div>
+  </div>
+
+  <!-- DaisyUI Delete Confirmation Modal -->
+ 
+@empty
+  <div class="col-span-full flex flex-col items-center justify-center py-16 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2h6v2m-6-6h.01M12 3C7.03 3 3 7.03 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-4.97-4.03-9-9-9z" />
+    </svg>
+    <h3 class="text-lg font-semibold text-gray-700 mb-2">No Facilities Found</h3>
+    <p class="text-sm text-gray-500 mb-4 text-center max-w-md">You haven’t added any facilities yet. Create one to start managing event and conference spaces.</p>
+    <button onclick="create_facility_modal.showModal()" class="btn btn-primary rounded-xl">
+      + Create Facility
+    </button>
+  </div>
+@endforelse
+
 
   </div>
 </section>
@@ -149,9 +202,12 @@
     </div>
 
     {{-- modals --}}
-    @include('admin.components.ecm.createtype')
-   
   
+   
+    @foreach ( $facilities as $facility )
+        @include('admin.components.ecm.deletefacility')
+        @include('admin.components.ecm.editfacility')
+    @endforeach
     @include('admin.components.ecm.createfacility')
   
  

@@ -19,7 +19,7 @@ class FacilityController extends Controller
             'facility_name' => 'required|string|max:255',
             'facility_capacity' => 'nullable|integer',
             'facility_type' => 'required|in:Event,Conference',
-            'facility_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'facility_photo' => 'required',
             'facility_description' => 'nullable|string',
             'facility_amenities' => 'nullable|array',
             'facility_amenities.*' => 'nullable|string|max:255',
@@ -35,8 +35,8 @@ class FacilityController extends Controller
 
         // Handle amenities (store as JSON)
         if ($request->filled('facility_amenities')) {
-            $form['facility_amenities'] = json_encode($request->facility_amenities);
-        }
+                $form['facility_amenities'] = $request->facility_amenities;
+            }
 
         $facility = facility::create($form);
 
@@ -44,7 +44,7 @@ class FacilityController extends Controller
         AuditTrails::create([
             'dept_id' => Auth::user()->Dept_id,
             'dept_name' => Auth::user()->dept_name,
-            'modules_cover' => 'Facility Management',
+            'modules_cover' => 'Event And Conference',
             'action' => 'Create Facility',
             'activity' => 'Created Facility ' . $facility->facility_name,
             'employee_name' => Auth::user()->employee_name,
@@ -59,65 +59,63 @@ class FacilityController extends Controller
     /**
      * Update an existing facility.
      */
-    public function modify(Request $request, facility $facility)
-    {
-        $form = $request->validate([
-            'facility_name' => 'nullable|string|max:255',
-            'facility_capacity' => 'nullable|integer',
-            'facility_type' => 'nullable|in:Event,Conference',
-            'facility_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'facility_description' => 'nullable|string',
-            'facility_amenities' => 'nullable|array',
-            'facility_amenities.*' => 'nullable|string|max:255',
-        ]);
+  public function modify(Request $request, facility $facilityID)
+{
+    $form = $request->validate([
+        'facility_name' => 'nullable|string|max:255',
+        'facility_capacity' => 'nullable|integer',
+        'facility_type' => 'nullable|in:Event,Conference',
+        'facility_photo' => 'nullable|image',
+        'facility_description' => 'nullable|string',
+        'facility_amenities' => 'nullable|array',
+        'facility_amenities.*' => 'nullable|string|max:255',
+    ]);
 
-        // Photo handling
-        if ($request->hasFile('facility_photo')) {
-            $filename = time() . '_' . $request->file('facility_photo')->getClientOriginalName();
-            $filepath = 'images/facilityphotos/' . $filename;
-            $request->file('facility_photo')->move(public_path('images/facilityphotos/'), $filename);
-            $form['facility_photo'] = $filepath;
-        } else {
-            $form['facility_photo'] = $facility->facility_photo;
-        }
-
-        // Amenities handling
-        if ($request->filled('facility_amenities')) {
-            $form['facility_amenities'] = json_encode($request->facility_amenities);
-        }
-
-        $facility->update($form);
-
-        // Audit trail
-        AuditTrails::create([
-            'dept_id' => Auth::user()->Dept_id,
-            'dept_name' => Auth::user()->dept_name,
-            'modules_cover' => 'Facility Management',
-            'action' => 'Modify Facility',
-            'activity' => 'Modified Facility ' . $facility->facility_name,
-            'employee_name' => Auth::user()->employee_name,
-            'employee_id' => Auth::user()->employee_id,
-            'role' => Auth::user()->role,
-            'date' => Carbon::now()->toDateTimeString(),
-        ]);
-
-        return redirect()->back()->with('success', 'Facility has been updated successfully.');
+    // Photo handling
+    if ($request->hasFile('facility_photo')) {
+        $filename = time() . '_' . $request->file('facility_photo')->getClientOriginalName();
+        $filepath = 'images/facilityphotos/' . $filename;
+        $request->file('facility_photo')->move(public_path('images/facilityphotos/'), $filename);
+        $form['facility_photo'] = $filepath;
+    } else {
+        $form['facility_photo'] = $facilityID->facility_photo;
     }
+
+    // Amenities handling (always update, even if empty)
+    $form['facility_amenities'] = $request->facility_amenities ?? [];
+
+    $facilityID->update($form);
+
+    // Audit trail
+    AuditTrails::create([
+        'dept_id' => Auth::user()->Dept_id,
+        'dept_name' => Auth::user()->dept_name,
+        'modules_cover' => 'Event And Conference',
+        'action' => 'Modify Facility',
+        'activity' => 'Modified Facility ' . $facilityID->facility_name,
+        'employee_name' => Auth::user()->employee_name,
+        'employee_id' => Auth::user()->employee_id,
+        'role' => Auth::user()->role,
+        'date' => Carbon::now()->toDateTimeString(),
+    ]);
+
+    return redirect()->back()->with('success', 'Facility has been updated successfully.');
+}
 
     /**
      * Delete a facility.
      */
-    public function delete(facility $facility)
+    public function delete(facility $facilityID)
     {
-        $name = $facility->facility_name;
+        $name = $facilityID->facility_name;
 
-        $facility->delete();
+        $facilityID->delete();
 
         // Audit trail
         AuditTrails::create([
             'dept_id' => Auth::user()->Dept_id,
             'dept_name' => Auth::user()->dept_name,
-            'modules_cover' => 'Facility Management',
+            'modules_cover' => 'Event And Conference',
             'action' => 'Delete Facility',
             'activity' => 'Deleted Facility ' . $name,
             'employee_name' => Auth::user()->employee_name,

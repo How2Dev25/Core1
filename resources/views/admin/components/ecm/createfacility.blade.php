@@ -5,7 +5,7 @@
     <h3 class="font-bold text-2xl text-blue-900 mb-4">Create Facility</h3>
 
     <!-- Form -->
-    <form method="POST" action="/facilities" enctype="multipart/form-data" class="space-y-4">
+    <form method="POST" action="/facilitycreate" enctype="multipart/form-data" class="space-y-4">
       @csrf
 
       <!-- Grid Layout -->
