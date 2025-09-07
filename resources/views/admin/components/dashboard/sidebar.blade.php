@@ -231,16 +231,49 @@
           <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">Marketing</span>
         </div>
 
+        {{-- ecm --}}
+       <div class="collapse group">
+  <input type="checkbox" class="peer" /> 
+  <div class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
+    <div class="flex items-center">
+      <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
+        <i data-lucide="calendar-range" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+      </div>
+      <span class="ml-3 sidebar-text">Event & Conference</span>
+    </div>
+    <i class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon" data-lucide="chevron-down"></i>
+  </div>
 
-        <a href="/ecm" class="block">
-          <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
-            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="calendar-days" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
-            </div>
-            <span class="ml-3 sidebar-text">Events And Conference</span>
-          </div>
-        </a>
+  <div class="collapse-content pl-14 pr-4 py-1 space-y-1"> 
+    <!-- Events -->
+    <a href="/ecm" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+      <span class="flex items-center gap-2">
+        <i data-lucide="calendar-days" class="w-4 h-4 text-[#F7B32B]"></i>
+        Events
+      </span>
+    </a>
 
+    <!-- Conference -->
+    <a href="/conference" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+      <span class="flex items-center gap-2">
+        <i data-lucide="users" class="w-4 h-4 text-[#F7B32B]"></i>
+        Conference
+      </span>
+    </a>
+
+    <!-- Facilities -->
+    <a href="/facilities" class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+      <span class="flex items-center gap-2">
+        <i data-lucide="building-2" class="w-4 h-4 text-[#F7B32B]"></i>
+        Facilities
+      </span>
+    </a>
+  </div>
+</div>
+
+
+
+       
         <a href="/hmp" class="block">
           <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
             <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">

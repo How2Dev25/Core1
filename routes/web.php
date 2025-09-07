@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\channelController;
 use App\Http\Controllers\ecmController;
+use App\Http\Controllers\eventtypeController;
+use App\Http\Controllers\facilityController;
 use App\Http\Controllers\hmpController;
 use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\landingController;
@@ -18,6 +20,7 @@ use App\Models\Channel;
 use App\Models\DeptAccount;
 use App\Models\DeptLogs;
 use App\Models\Ecm;
+use App\Models\ecmtype;
 use App\Models\Guest;
 use App\Models\guestRatings;
 use App\Models\Hmp;
@@ -470,10 +473,10 @@ Route::get('/audittrails', function (Request $request) {
 Route::get('/hmp', function(){
     employeeAuthCheck();
     $hmpdata = Hmp::latest()->get();
-     $events = Ecm::where('eventstatus', 'Approved')->latest()->get();
+   
       $rooms = room::where('roomstatus', 'Available')->latest()->get();
 
-    return view('admin.hmp', ['hmpdata' => $hmpdata, 'rooms' => $rooms, 'events' => $events]);
+    return view('admin.hmp', ['hmpdata' => $hmpdata, 'rooms' => $rooms,]);
 });
 Route::post('/createhmp', [hmpController::class, 'createhmp']);
 Route::get('/searchhmp', [hmpController::class, 'index']);
@@ -483,18 +486,32 @@ Route::delete('/deletehmp/{promoID}', [hmpController::class, 'deletehmp']);
 // events and conference module
 Route::get('/ecm', function(){
      employeeAuthCheck();
-    $events = Ecm::latest()->get();
-    $totalevents = Ecm::count();
-    $approvedevents = Ecm::where('eventstatus', 'Approved')->count();
-    $cancelledevents = Ecm::where('eventstatus', 'cancelled')->count();
-    return view('admin.ecm', ['events' => $events, 'totalevents' => 
-    $totalevents, 'approvedevents' => $approvedevents, 'cancelledevents' => $cancelledevents]);
+
+     $eventtypes = ecmtype::latest()->get();
+   
+    return view('admin.ecm',  compact('eventtypes'));
 });
 Route::post('/createecm', [ecmController::class, 'store']);
 Route::put('/editecm/{eventID}', [ecmController::class, 'update']);
 Route::delete('/deleteecm/{eventID}', [ecmController::class, 'delete']);
 Route::put('/approveecm/{eventID}', [ecmController::class, 'approved']);
 Route::put('/cancelecm/{eventID}', [ecmController::class, 'cancel']);
+
+// facilities ecm
+
+Route::get('/facilities', function(){
+    employeeAuthCheck();
+    return view('admin.facilities');
+});
+
+Route::post('/facilitycreate', [facilityController::class, 'store']);
+Route::put('/facilitymodify/{facilityID}', [facilityController::class, 'modify']);
+Route::delete('/facilitydelete/{facilityID}', [facilityController::class, 'delete']);
+
+// event type
+Route::post('/createecmtype', [eventtypeController::class, 'store']);
+Route::put('/updateecmtype/{eventtype_ID}', [eventtypeController::class, 'modify']);
+Route::delete('/deleteecmtype/{eventtype_ID}', [eventtypeController::class, 'delete']);
 
 Route::get('/roommanagement', function(Request $request) {
      employeeAuthCheck();

@@ -296,72 +296,7 @@
       @endforelse
     </div>
 
-    <div class="mt-2 mb-2">
-        <h1 class="font-bold text-2xl">Approved Events</h1>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
-        @forelse ($events as $event)
-    <div class="card bg-base-100 shadow-sm hover:shadow-md transition-shadow">
-        <div class="card-body p-4">
-            <div class="flex items-start gap-4">
-                <!-- Event Image -->
-                <div class="avatar">
-                    <div class="mask mask-squircle w-12 h-12">
-                        <img src="{{asset($event->eventphoto)}}" alt="{{$event->eventname}}">
-                    </div>
-                </div>
-                
-                <!-- Event Details -->
-                <div class="flex-1">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-bold">{{$event->eventtype}}</h3>
-                            <p class="text-sm text-gray-500">#{{$event->eventID}} • {{$event->eventname}}</p>
-                        </div>
-                        
-                        <!-- Status Badge -->
-                        <div>
-                            @if ($event->eventstatus == "Approved")
-                                <span class="badge badge-success">Approved</span>
-                            @elseif ($event->eventstatus == "Pending")
-                                <span class="badge badge-warning">Pending</span>
-                            @elseif ($event->eventstatus == "Cancelled")
-                                <span class="badge badge-error">Cancelled</span>
-                            @else
-                                <span class="badge badge-neutral">Unknown</span>
-                            @endif
-                        </div>
-                    </div>
-                    
-                    <div class="mt-2 text-sm">
-                        <p><span class="font-medium">Organizer:</span> {{$event->eventorganizername}}</p>
-                        <div class="flex gap-4 mt-1">
-                            <p><span class="font-medium">Date:</span> {{$event->eventdate}}</p>
-                            <p><span class="font-medium">Duration:</span> {{$event->eventdays}} days</p>
-                        </div>
-                    </div>
-                    
-                 
-                
-                </div>
-            </div>
-        </div>
-    </div>
-@empty
-    <div class="col-span-full py-12 text-center">
-        <div class="flex flex-col items-center justify-center text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-inbox">
-                <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
-                <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
-            </svg>
-            <span class="mt-2 text-sm font-medium">No Data found</span>
-        </div>
-    </div>
-@endforelse
-    
-     </div>
-
+  
 
         </section>
   

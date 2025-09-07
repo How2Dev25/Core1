@@ -12,26 +12,26 @@ class Ecm extends Model
 
     protected $table = 'core1_ecm';
 
-    protected $primaryKey = 'eventID';
+    protected $primaryKey = 'eventbookingID';
 
-    protected $fillable = [
-        'eventID',
-        'eventphoto',
-        'eventname',
-        'eventtype',
-        'eventorganizername',
-        'eventcontactemail',
-        'eventcontactnumber',
-        'eventdate',
-        'event_time_start',
-        'event_time_end',
-        'event_time_end',
-        'eventneedroombooking',
-        'eventequipment',
-        'eventspecialrequest',
-        'eventstatus',
-        'eventdays',
-        'eventexpectedguest',
-       
-    ];
+        protected $fillable = [
+            'eventbookingID',
+            'eventtype_ID',
+            'eventstatus',
+            'eventorganizer_email',
+            'eventorganizer_name',
+            'eventorganizer_phone',
+            'event_name',
+            'event_specialrequest',
+            'event_equipment',
+            'event_paymentstatus',
+            'event_paymentmethod',
+            'event_bookedate',
+            'event_checkin',
+            'event_checkout',
+            'guestID',
+            'event_eventreceipt',
+            'event_bookingreceiptID',
+        ];
+
 }
