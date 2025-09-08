@@ -7,55 +7,64 @@ use App\Models\Ecm;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\AuditTrails;
+use App\Models\ecmtype;
 
 
 
 class ecmController extends Controller
 {
-    public function store(Request $request){
-        $form = $request->validate([
-            'eventphoto' => 'required',
-            'eventname' => 'required',
-            'eventtype' => 'required',
-            'eventorganizername' => 'required',
-            'eventcontactemail' => 'required',
-            'eventcontactnumber' => 'required',
-            'eventdate' => 'required',
-            'event_time_start' => 'required',
-            'event_time_end' => 'required',
-            'eventexpectedguest' => 'required',
-            'eventneedroombooking' => 'required',
-            'eventequipment' => 'required',
-            'eventspecialrequest' => 'required',
-            'eventstatus' => 'required',
-            'eventdays' => 'required',
-        ]);
+  public function store(Request $request)
+{
+    dd($request->all());
+    // ✅ Validate & store into $form
+    $form = $request->validate([
+        'eventtype_ID'        => 'required',
+        'eventorganizer_email'=> 'required',
+        'eventorganizer_name' => 'required',
+        'eventorganizer_phone'=> 'required',
+        'event_name'          => 'required',
+        'event_specialrequest'=> 'nullable',
+        'event_equipment'     => 'nullable',
+        'event_paymentstatus' => 'required',
+        'event_paymentmethod' => 'required',
+        'event_checkin'       => 'required',
+        'event_checkout'      => 'required',
+    ]);
 
-        $filename = time() . '_' . $request->file('eventphoto')->getClientOriginalName();
-        $filepath = 'images/ecm/' .$filename;
-        $request->file('eventphoto')->move(public_path('images/ecm/'), $filename);
-        $form['eventphoto'] = $filepath;
+    // ✅ Add extra fields not from form
+    $form['eventstatus']            = 'Pending';
+    $form['event_bookedate']        = Carbon::now()->toDateString();
+            if (Auth::guard('guest')->check()) {
+            $form['guestID'] = Auth::guard('guest')->user()->guestID;
+        } else {
+    $form['guestID'] = null;
+}
+    $form['event_eventreceipt']     = null;
+    $form['event_bookingreceiptID'] = strtoupper(uniqid("ECM-"));
+    $form['event_paymentstatus'] = 'Unpaid';
 
-        Ecm::create($form);
+    // ✅ Create ECM record
+    $ecm = Ecm::create($form);
+
+    // ✅ Audit trail
+    AuditTrails::create([
+        'dept_id'       => Auth::user()->Dept_id,
+        'dept_name'     => Auth::user()->dept_name,
+        'modules_cover' => 'Event And Conference',
+        'action'        => 'Create ECM Booking',
+        'activity'      => 'Created ECM for ' . $ecm->event_name,
+        'employee_name' => Auth::user()->employee_name,
+        'employee_id'   => Auth::user()->employee_id,
+        'role'          => Auth::user()->role,
+        'date'          => Carbon::now()->toDateTimeString(),
+    ]);
 
 
-          AuditTrails::create([
-            'dept_id' => Auth::user()->Dept_id,
-            'dept_name' => Auth::user()->dept_name,
-            'modules_cover' => 'Event And Conference',
-            'action' => 'Add Event',
-            'activity' => 'Add An Event',
-            'employee_name' => Auth::user()->employee_name,
-            'employee_id' => Auth::user()->employee_id,
-            'role' => Auth::user()->role,
-            'date' => Carbon::now()->toDateTimeString(),
-        ]);
+    // ✅ Flash success message
+    session()->flash('success', 'ECM booking has been successfully created.');
 
-
-        session()->flash('eventcreated', 'Event Has Been Created');
-
-        return redirect()->back();
-    }
+    return redirect()->back();
+}
 
     public function update(Request $request, Ecm $eventID){
         $form = $request->validate([
@@ -163,6 +172,19 @@ class ecmController extends Controller
         ]);
         session()->flash('eventcancelled', 'Event Has Been Cancelled');
         return redirect()->back();
+     }
+
+
+     public function bookevent($eventtype_ID){
+
+
+ $eventtype = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')
+    ->where('core1_eventtype.eventtype_ID', $eventtype_ID)
+    ->first();
+
+    return view('admin.components.ecm.bookingpage', compact('eventtype'));
+     
+     
      }
 
 }

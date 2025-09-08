@@ -215,7 +215,7 @@
     </button>
 
     <!-- Booking Button -->
-    <button type="button" class="group/btn flex items-center gap-2 px-4 py-2 text-green-600 hover:text-white hover:bg-green-600 rounded-lg transition-all duration-300 border border-green-200 hover:border-green-600 hover:shadow-lg hover:shadow-green-200"
+    <a href="/eventbooking/{{ $eventtype->eventtype_ID }}" class="group/btn flex items-center gap-2 px-4 py-2 text-green-600 hover:text-white hover:bg-green-600 rounded-lg transition-all duration-300 border border-green-200 hover:border-green-600 hover:shadow-lg hover:shadow-green-200"
             onclick="document.getElementById('booking_modal_{{ $eventtype->eventtype_ID }}').showModal()">
         <!-- Lucide Calendar Icon -->
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover/btn:rotate-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -225,7 +225,7 @@
             <line x1="3" y1="10" x2="21" y2="10"/>
         </svg>
        
-    </button>
+    </a>
 </div>
 
     </div>

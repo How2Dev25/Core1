@@ -489,6 +489,7 @@ Route::get('/ecm', function(){
      employeeAuthCheck();
 
      $eventtypes = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')
+     ->where('core1_eventtype.eventtype_name', '!=', 'Conference' )
      ->latest('core1_eventtype.created_at')->get();
     $facilities = facility::where('facility_type', 'Event')->latest()->get();
    
@@ -499,6 +500,10 @@ Route::put('/editecm/{eventID}', [ecmController::class, 'update']);
 Route::delete('/deleteecm/{eventID}', [ecmController::class, 'delete']);
 Route::put('/approveecm/{eventID}', [ecmController::class, 'approved']);
 Route::put('/cancelecm/{eventID}', [ecmController::class, 'cancel']);
+
+// booking event and conference
+Route::get('/eventbooking/{eventtype_ID}', [ecmController::class, 'bookevent']);
+Route::post('/bookthisevent', [ecmController::class, 'store']);
 
 // facilities ecm
 
