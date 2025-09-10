@@ -15,6 +15,7 @@ class Ecm extends Model
     protected $primaryKey = 'eventbookingID';
 
         protected $fillable = [
+            'eventbookingID',
             'eventtype_ID',
             'eventstatus',
             'eventorganizer_email',

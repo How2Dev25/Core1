@@ -10,6 +10,7 @@ use App\Http\Controllers\landingController;
 use App\Http\Controllers\larController;
 use App\Http\Controllers\ratingController;
 use App\Http\Controllers\reservationController;
+use App\Http\Controllers\restoController;
 use App\Http\Controllers\roomController;
 use App\Http\Controllers\roomfeedbackController;
 use App\Http\Controllers\roommantenanceController;
@@ -26,6 +27,7 @@ use App\Models\Guest;
 use App\Models\guestRatings;
 use App\Models\Hmp;
 use App\Models\Inventory;
+use App\Models\restointegration;
 use App\Models\room;
 use App\Models\Lar;
 use App\Models\room_maintenance;
@@ -94,6 +96,23 @@ Route::get('/', function () {
     ));
 });
 
+// resto integ
+
+Route::get('/restoadmin', function () {
+    $totalmenu = restointegration::count();
+    $activemenu = restointegration::where('menu_status', 'Available')->count();
+    $inactivemenu = restointegration::where('menu_status', 'Unavailable')->count();
+
+    // Paginate 5 per page
+    $menus = restointegration::latest()->paginate(5);
+
+    return view('admin.resto', compact('menus', 'totalmenu', 'activemenu', 'inactivemenu'));
+});
+Route::post('/addmenu', [restoController::class, 'store']);
+Route::put('/updatemenu/{menuID}',[restoController::class, 'modify'] );
+Route::delete('/deletemenu/{menuID}', [restoController::class, 'delete'] );
+
+// rating
 
 Route::post('/landingrating', [ratingController::class, 'store']);
 

@@ -292,6 +292,22 @@
           </div>
         </a>
 
+
+                    <!-- Section Label -->
+        <div class="px-4 py-2 mt-4">
+          <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">Integration</span>
+        </div>
+
+
+      <a href="/restoadmin" class="block">
+        <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
+          <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
+            <i data-lucide="utensils" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+          </div>
+          <span class="ml-3 sidebar-text">Restaurant Menu</span>
+        </div>
+      </a>
+
      
       </nav>
     </div>
