@@ -8,6 +8,7 @@ use App\Http\Controllers\hmpController;
 use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\landingController;
 use App\Http\Controllers\larController;
+use App\Http\Controllers\orderController;
 use App\Http\Controllers\ratingController;
 use App\Http\Controllers\reservationController;
 use App\Http\Controllers\restoController;
@@ -34,6 +35,7 @@ use App\Models\room_maintenance;
 use App\Models\roomfeedbacks;
 use App\Models\stockRequest;
 use App\Models\Reservation;
+use App\Models\restoCart;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -941,3 +943,30 @@ Route::get('/guestroomfeedback', function(){
 Route::post('/submitroomfeedback', [roomfeedbackController::class, 'store']);
 Route::delete('/deleteroomfeedback/{roomfeedbackID}', [roomfeedbackController::class, 'delete'] );
 Route::put('/updateroomfeedback/{roomfeedbackID}', [roomfeedbackController::class, 'update']);
+
+
+// guest foodmenu
+
+Route::get('/menuorder', function () {
+    guestAuthCheck();
+    $checkinroom = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')->where('core1_reservation.guestID', Auth::guard('guest')->user()->guestID)
+    ->where('core1_reservation.reservation_bookingstatus', 'Checked in')->latest('core1_reservation.created_at')->get();
+    $menus = restointegration::latest()->paginate(6); // 6 menus per page
+
+    $mycart = restoCart::join('resto_integration', 'resto_integration.menuID', '=', 'resto_cart.menuID')
+    ->where('resto_cart.guestID', Auth::guard('guest')->user()->guestID)
+    ->latest('resto_cart.created_at')
+    ->get();
+    return view('guest.ordermenu', compact('menus', 'checkinroom', 'mycart'));
+});
+
+Route::get('/myorder', function(){
+    $mycart = restoCart::join('resto_integration', 'resto_integration.menuID', '=', 'resto_cart.menuID')
+    ->where('resto_cart.guestID', Auth::guard('guest')->user()->guestID)
+    ->latest('resto_cart.created_at')
+    ->get();
+    return view('guest.myorders', compact('mycart'));
+});
+
+Route::post('/addtocart', [orderController::class, 'addtocart']);
+Route::delete('/deletecart/{cartID}', [orderController::class, 'deletefromcart']);

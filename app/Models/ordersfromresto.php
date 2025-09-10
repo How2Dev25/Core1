@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
+
+class ordersfromresto extends Model
+{
+     use HasFactory, Notifiable;
+
+     protected $table = 'orderfromresto';
+
+     protected $primaryKey = 'orderID';
+
+     protected $fillable = [
+        'orderID',
+        'menuID',
+        'bookingID',
+        'order_quantity',
+        'order_status',
+        'guestID',
+        'orderguest_name',
+        'orderguest_email',
+        'orderguest_contact',
+     ];
+}

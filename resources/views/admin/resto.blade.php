@@ -48,6 +48,7 @@
             {{-- Subsystem Name --}}
 
   <section class="flex-1 p-6">
+
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
    <!-- Total Menus -->
@@ -201,7 +202,6 @@
 </button>
 
 <!-- Delete Confirmation Modal -->
-
 
           </td>
         </tr>
