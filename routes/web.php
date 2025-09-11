@@ -28,6 +28,7 @@ use App\Models\Guest;
 use App\Models\guestRatings;
 use App\Models\Hmp;
 use App\Models\Inventory;
+use App\Models\ordersfromresto;
 use App\Models\restointegration;
 use App\Models\room;
 use App\Models\Lar;
@@ -970,3 +971,13 @@ Route::get('/myorder', function(){
 
 Route::post('/addtocart', [orderController::class, 'addtocart']);
 Route::delete('/deletecart/{cartID}', [orderController::class, 'deletefromcart']);
+
+Route::get('/ordercart', [orderController::class, 'confirmorder']);
+
+Route::get('/recentorders', function(){
+      $mycart = ordersfromresto::join('resto_integration', 'resto_integration.menuID', '=', 'orderfromresto.menuID')
+    ->where('orderfromresto.guestID', Auth::guard('guest')->user()->guestID)
+    ->latest('orderfromresto.created_at')
+    ->get();
+    return view('guest.recentorders', compact('mycart'));
+});
