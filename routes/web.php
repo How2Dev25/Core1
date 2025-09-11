@@ -981,3 +981,6 @@ Route::get('/recentorders', function(){
     ->get();
     return view('guest.recentorders', compact('mycart'));
 });
+
+Route::delete('/cancelorder/{orderID}', [orderController::class, 'cancelorder']);
+Route::put('/deliverorder/{orderID}', [orderController::class, 'delivered']);

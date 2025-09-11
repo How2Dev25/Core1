@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ordersfromresto;
 use App\Models\restoCart;
+use App\Models\restointegration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -56,6 +57,20 @@ class orderController extends Controller
     }
 
     return redirect()->back()->with('success', 'Success we received your order.');
+}
+
+public function cancelorder(ordersfromresto $orderID){
+    $orderID -> delete();
+
+    return redirect()->back()->with('success', 'Order Has Been Cancelled');
+}
+
+public function delivered(ordersfromresto $orderID){
+    $orderID->update([
+        'order_status' => 'Delivered',
+    ]);
+
+    return redirect()->back()->with('success', 'Order Has Been Delivered');
 }
 
 
