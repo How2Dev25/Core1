@@ -1,26 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invoice #{{ $booking->reservationID }}</title>
-<style>
-    body { font-family: Arial, sans-serif; font-size:12px; color:#333; background:#f4f4f4; margin:0; padding:0; }
-    .container { max-width:700px; margin:20px auto; background:#fff; border-radius:8px; overflow:hidden; }
-    .header { background:#1e40af; color:#fff; padding:20px; display:flex; justify-content:space-between; align-items:center; }
-    .header h1 { margin:0; font-size:20px; }
-    .header p { margin:0; color:#facc15; font-style:italic; }
-    .section { padding:15px; }
-    .section h2 { margin:0 0 5px 0; color:#1e40af; font-size:16px; }
-    .section hr { border:none; border-top:2px solid #facc15; margin-bottom:10px; }
-    table { width:100%; border-collapse:collapse; margin-top:10px; }
-    th, td { padding:8px; border:1px solid #ddd; }
-    th { background:#1e40af; color:#fff; text-align:left; }
-    .text-right { text-align:right; }
-    .total { background:#facc15; color:#1e40af; font-weight:bold; }
-    .footer { text-align:center; font-size:10px; color:#666; padding:10px; background:#f4f4f4; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice #{{ $booking->reservationID }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            color: #333;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 10px auto;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        .header {
+            background: #1e40af;
+            color: #fff;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .header p {
+            margin: 0;
+            color: #facc15;
+            font-style: italic;
+            font-size: 10px;
+        }
+
+        .section {
+            padding: 8px 0;
+        }
+
+        .section h2 {
+            margin: 0 0 5px 0;
+            color: #1e40af;
+            font-size: 14px;
+        }
+
+        .section hr {
+            border: none;
+            border-top: 1px solid #facc15;
+            margin: 5px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+            font-size: 10px;
+        }
+
+        th,
+        td {
+            padding: 5px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #1e40af;
+            color: #fff;
+            text-align: left;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .total {
+            background: #facc15;
+            color: #1e40af;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 9px;
+            color: #666;
+            padding: 8px;
+            background: #f4f4f4;
+        }
+
+        /* --- Print & PDF Settings --- */
+        @page {
+            size: A4;
+            margin: 10mm;
+        }
+
+        @media print {
+            body {
+                margin: 0;
+                background: #fff;
+            }
+
+            .container {
+                page-break-before: avoid;
+                page-break-after: avoid;
+                page-break-inside: avoid;
+            }
+
+            table,
+            tr,
+            td,
+            th {
+                page-break-inside: avoid !important;
+            }
+        }
+    </style>
 </head>
+
 <body>
     <div class="container">
 
@@ -55,17 +160,31 @@
 
         <!-- Booking Details -->
         @php
-            use Carbon\Carbon;
-            $checkIn = Carbon::parse($booking->reservation_checkin);
-            $checkOut = Carbon::parse($booking->reservation_checkout);
-            $totalNights = $checkIn->diffInDays($checkOut);
-            $subtotal = $booking->roomprice * $totalNights;
-            $taxRate = 0.12;
-            $taxAmount = $subtotal * $taxRate;
-            $serviceFeeRate = 0.02;
-            $serviceFee = $subtotal * $serviceFeeRate;
-            $totalAmount = $subtotal + $taxAmount + $serviceFee;
+use Carbon\Carbon;
+$checkIn = Carbon::parse($booking->reservation_checkin);
+$checkOut = Carbon::parse($booking->reservation_checkout);
+$totalNights = $checkIn->diffInDays($checkOut);
+
+// Room totals
+$subtotal = $booking->roomprice * $totalNights;
+$taxRate = 0.12;
+$taxAmount = $subtotal * $taxRate;
+$serviceFeeRate = 0.02;
+$serviceFee = $subtotal * $serviceFeeRate;
+$roomTotal = $subtotal + $taxAmount + $serviceFee;
+
+// Restaurant totals
+$orderTotal = 0;
+if (isset($orders[$booking->bookingID])) {
+    foreach ($orders[$booking->bookingID] as $order) {
+        $orderTotal += $order->menu_price * $order->order_quantity;
+    }
+}
+
+// Grand total
+$grandTotal = $roomTotal + $orderTotal;
         @endphp
+
         <div class="section">
             <h2>Booking Details</h2>
             <hr>
@@ -79,38 +198,95 @@
                         <th class="text-right">Price</th>
                     </tr>
                 </thead>
-               <tbody>
-    <tr>
-        <td>{{ $booking->roomID }} - {{ $booking->roomtype }}</td>
-        <td>{{ $checkIn->format('M d, Y') }}</td>
-        <td>{{ $checkOut->format('M d, Y') }}</td>
-        <td>{{ $totalNights }}</td>
-        <td class="text-right">{{ number_format($booking->roomprice, 2) }}</td>
-    </tr>
-    <tr>
-        <td colspan="4" class="text-right">Booked Date</td>
-        <td class="text-right">{{ date('Y-m-d') }}</td>
-    </tr>
-    <tr>
-        <td colspan="4" class="text-right">Subtotal</td>
-        <td class="text-right">{{ number_format($subtotal, 2) }}</td>
-    </tr>
-    <tr>
-        <td colspan="4" class="text-right">Tax (12%)</td>
-        <td class="text-right">{{ number_format($taxAmount, 2) }}</td>
-    </tr>
-    <tr>
-        <td colspan="4" class="text-right">Service Fee (2%)</td>
-        <td class="text-right">{{ number_format($serviceFee, 2) }}</td>
-    </tr>
-    <tr class="total">
-        <td colspan="4" class="text-right">Total Amount</td>
-        <td class="text-right">{{ number_format($totalAmount, 2) }}</td>
-    </tr>
-</tbody>
+                <tbody>
+                    <tr>
+                        <td>{{ $booking->roomID }} - {{ $booking->roomtype }}</td>
+                        <td>{{ $checkIn->format('M d, Y') }}</td>
+                        <td>{{ $checkOut->format('M d, Y') }}</td>
+                        <td>{{ $totalNights }}</td>
+                        <td class="text-right">{{ number_format($booking->roomprice, 2) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-right">Booked Date</td>
+                        <td class="text-right">{{ date('Y-m-d') }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-right">Subtotal</td>
+                        <td class="text-right">{{ number_format($subtotal, 2) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-right">Tax (12%)</td>
+                        <td class="text-right">{{ number_format($taxAmount, 2) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-right">Service Fee (2%)</td>
+                        <td class="text-right">{{ number_format($serviceFee, 2) }}</td>
+                    </tr>
+                    <tr class="total">
+                        <td colspan="4" class="text-right">Room Total</td>
+                        <td class="text-right">{{ number_format($roomTotal, 2) }}</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
 
+        <!-- Restaurant Orders -->
+        @if($orders->isNotEmpty())
+            <div class="section">
+                <h2>Restaurant Orders</h2>
+                <hr>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th class="text-right">Price</th>
+                            <th class="text-right">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($orders as $order)
+                            @php
+        $lineTotal = $order->menu_price * $order->order_quantity;
+                            @endphp
+                            <tr>
+                                <td>{{ $order->menu_name }}</td>
+                                <td>{{ $order->order_quantity }}</td>
+                                <td class="text-right">{{ number_format($order->menu_price, 2) }}</td>
+                                <td class="text-right">{{ number_format($lineTotal, 2) }}</td>
+                            </tr>
+                        @endforeach
+                        <tr class="total">
+                            <td colspan="3" class="text-right">Restaurant Total</td>
+                            <td class="text-right">{{ number_format($restaurantTotal, 2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        @endif
+        <!-- Grand Total -->
+        <div class="section">
+            <h2>Grand Total</h2>
+            <hr>
+            <table>
+                <tbody>
+                    <tr>
+                        <td colspan="4" class="text-right">Room Total</td>
+                        <td class="text-right">{{ number_format($hotelTotal, 2) }}</td>
+                    </tr>
+                    @if($orders->isNotEmpty())
+                        <tr>
+                            <td colspan="4" class="text-right">Restaurant Total</td>
+                            <td class="text-right">{{ number_format($restaurantTotal, 2) }}</td>
+                        </tr>
+                    @endif
+                    <tr class="total">
+                        <td class="text-right" colspan="4">Grand Total</td>
+                        <td class="text-right">{{ number_format($hotelTotal + $restaurantTotal, 2) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <!-- Payment Info -->
         <div class="section">
             <h2>Payment Information</h2>
@@ -127,4 +303,5 @@
 
     </div>
 </body>
+
 </html>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Inventory;
 use App\Models\Reservation;
+use App\Models\restobillingandpayments;
 use App\Models\room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\View;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use App\Models\AuditTrails;
+use Illuminate\Support\Facades\DB;
 
 
 class reservationController extends Controller
@@ -769,27 +771,63 @@ public function generateInvoice($reservationID)
     // Fetch reservation with room info
     $booking = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
         ->where('core1_reservation.reservationID', $reservationID)
+        ->select(
+            'core1_reservation.*',
+            'core1_room.roomtype',
+            'core1_room.roomprice'
+        )
         ->firstOrFail();
 
-    $bookedDate = date('M d, Y', strtotime($booking->created_at));
+    $bookedDate    = date('M d, Y', strtotime($booking->created_at));
     $paymentstatus = $booking->payment_status;
 
-    // Render Blade template for PDF (without images)
+    // ✅ Fetch restaurant orders for this booking (only Delivered)
+    $orders = DB::table('orderfromresto')
+        ->join('resto_integration', 'resto_integration.menuID', '=', 'orderfromresto.menuID')
+        ->select(
+            'orderfromresto.*',
+            'resto_integration.menu_name',
+            'resto_integration.menu_description',
+            'resto_integration.menu_photo',
+            'resto_integration.menu_price'
+        )
+        ->where('orderfromresto.bookingID', $booking->bookingID)
+        ->where('orderfromresto.order_status', 'Delivered')
+        ->get();
+
+    // ✅ Compute totals (Hotel + Restaurant)
+      $nights = Carbon::parse($booking->reservation_checkin)
+    ->diffInDays(Carbon::parse($booking->reservation_checkout));
+
+    $roomSubtotal = $booking->roomprice * $nights;
+    $vat          = $roomSubtotal * 0.12;
+    $serviceFee   = $roomSubtotal * 0.02;
+    $hotelTotal   = $roomSubtotal + $vat + $serviceFee;
+
+    $restaurantTotal = $orders->sum(function($order) {
+        return $order->menu_price * $order->order_quantity;
+    });
+
+   
+
+    // ✅ Render Blade template for PDF (pass all data)
     $html = view('admin.components.invoices.invoices-pdf', [
-        'booking'       => $booking,
-        'bookedDate'    => $bookedDate,
-        'paymentstatus' => $paymentstatus,
+        'booking'         => $booking,
+        'bookedDate'      => $bookedDate,
+        'paymentstatus'   => $paymentstatus,
+        'orders'          => $orders,
+        'hotelTotal'      => $hotelTotal,
+        'restaurantTotal' => $restaurantTotal,
     ])->render();
 
     // PDF save path
     $pdfPath = public_path("images/invoices/invoice_{$booking->reservationID}.pdf");
 
-    // Ensure directory exists
     if (!file_exists(dirname($pdfPath))) {
         mkdir(dirname($pdfPath), 0755, true);
     }
 
-    // Generate PDF using DomPDF
+    // Generate PDF
     Pdf::loadHTML($html)
         ->setPaper('A4')
         ->save($pdfPath);
@@ -805,13 +843,12 @@ public function generateInvoice($reservationID)
         $mail->SMTPAuth   = true;
         $mail->Username   = env('MAIL_USERNAME');
         $mail->Password   = env('MAIL_PASSWORD');
-        $mail->SMTPSecure = env('MAIL_ENCRYPTION'); // tls or ssl
+        $mail->SMTPSecure = env('MAIL_ENCRYPTION');
         $mail->Port       = env('MAIL_PORT');
 
         $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
         $mail->addAddress($booking->guestemailaddress, $booking->guestname);
 
-        // Attach invoice PDF
         if (file_exists($pdfPath)) {
             $mail->addAttachment($pdfPath, "Invoice_{$booking->bookingID}.pdf");
         }
@@ -819,7 +856,8 @@ public function generateInvoice($reservationID)
         $mail->isHTML(true);
         $mail->Subject = "Booking Invoice - {$booking->bookingID}";
 
-        // HTML email body (no images)
+        $mail->Body = 
+         // HTML email body (no images)
         $mailBody = <<<HTML
         <!DOCTYPE html>
         <html lang="en">
@@ -867,14 +905,12 @@ public function generateInvoice($reservationID)
         </html>
         HTML;
 
-        $mail->Body = $mailBody;
         $mail->send();
-
     } catch (Exception $e) {
         Log::error("Invoice email could not be sent: {$mail->ErrorInfo}");
     }
 
-    // Audit Trail
+    // ✅ Audit Trail
     if (Auth::check()) {
         $user = Auth::user();
         AuditTrails::create([
@@ -888,11 +924,33 @@ public function generateInvoice($reservationID)
             'role'          => $user->role,
             'date'          => Carbon::now()->toDateTimeString(),
         ]);
+
+            if ($orders->isNotEmpty()) {
+                foreach ($orders as $order) {
+                    restobillingandpayments::create([
+                        'client_name'    => $booking->guestname,
+                        'client_email'   => $booking->guestemailaddress,
+                        'client_contact' => $booking->guestphonenumber,
+                        'invoice_number' => $booking->reservation_receipt,
+                        'invoice_date'   => Carbon::now()->format('Y-m-d'),
+                        'due_date'       => Carbon::parse($booking->reservation_checkout)->format('Y-m-d'),
+                        'status'         => $paymentstatus,
+                        'description'    => $order->menu_name,
+                        'quantity'       => $order->order_quantity,
+                        'unit_price'     => $order->menu_price,
+                        'total_amount'   => $order->menu_price * $order->order_quantity,
+                        'payment_date'   => $booking->updated_at ?? null,
+                        'payment_amount' => $order->menu_price * $order->order_quantity,
+                        'MOP'            => $booking->payment_method ?? 'Cash',
+                        'trans_ref'      => $booking->reservation_receipt ?? null,
+                    ]);
+                }
+            }
     }
 
-    // Return PDF URL
     return redirect(asset("images/invoices/invoice_{$booking->reservationID}.pdf"));
 }
+
 // guest
 
 public function gueststore(Request $request)
