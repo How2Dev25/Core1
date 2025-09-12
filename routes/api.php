@@ -23,6 +23,10 @@ Route::get('/core1financials', [ApiController::class, 'hotelincome']);
 // integration with Logistics 2 
 Route::get('/core1stockrequest', [ApiController::class, 'stockrequest']);
 
+// integration with resto
+
+Route::get('/restobillingandpayments', [ApiController::class, 'fetchrestobillingandpayments']);
+
 
 
 

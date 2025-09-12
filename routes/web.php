@@ -685,8 +685,13 @@ $myroomfeedbacks = $query->paginate(10)->withQueryString();
 Route::put('/feedbackrespond/{roomfeedbackID}', [roomfeedbackController::class, 'respond']);
 Route::get('/servicefeedback', function(){
      employeeAuthCheck();
-    return view('admin.servicefeedback');
+
+     $ratings = guestRatings::latest()->get();
+
+    return view('admin.servicefeedback', compact('ratings'));
 });
+
+Route::delete('/servicefeedback/delete/{ratingID}', [ratingController::class, 'delete']);
 
 
 // Channel Management
@@ -782,6 +787,9 @@ Route::put('/editlar/{loyaltyID}', [larController::class, 'modify']);
 Route::put('/expirelar/{loyaltyID}', [larController::class, 'expired']);
 Route::delete('/deletelar/{loyaltyID}', [larController::class, 'delete']);
 Route::post('/guestadd/{loyaltyID}', [larController::class, 'addtoguest']);
+
+
+
 
 
 

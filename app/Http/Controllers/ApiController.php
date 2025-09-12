@@ -7,10 +7,12 @@ use App\Models\DeptAccount;
 use App\Models\DeptLogs;
 use App\Models\Ecm;
 use App\Models\Reservation;
+use App\Models\restobillingandpayments;
 use App\Models\room;
 use App\Models\stockRequest;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Exception;
 
 class ApiController extends Controller
 {
@@ -257,6 +259,36 @@ public function hotelincome(Request $request)
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to Retrieve Data',
+                'data' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // integration wtih restaurant
+
+    public function fetchrestobillingandpayments(Request $request){
+         $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        try{
+            $billingandpaymentsresto = restobillingandpayments::all();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Successfully Fetched',
+                'data' => $billingandpaymentsresto,
+            ], 200);
+        }
+        catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'Cant fetch data',
                 'data' => $e->getMessage(),
             ], 500);
         }

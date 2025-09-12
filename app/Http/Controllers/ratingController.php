@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\guestRatings;
 use Illuminate\Http\Request;
+use Svg\Tag\Rect;
 
 class ratingController extends Controller
 {
@@ -20,5 +21,12 @@ class ratingController extends Controller
 
        return redirect()->to(url()->previous() . '#reviews')
     ->with('success', 'Thanks for your review!');
+    }
+
+
+    public function delete(guestRatings $ratingID){
+            $ratingID->delete();
+
+            return redirect()->back()->with('success', 'Feedback Has Been Removed');
     }
 }
