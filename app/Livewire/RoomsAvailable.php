@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\Room;
+use App\Models\room;
 
 class RoomsAvailable extends Component
 {
@@ -13,7 +13,7 @@ class RoomsAvailable extends Component
 
     public function render()
     {
-        $rooms = Room::query()
+        $rooms = room::query()
             ->when($this->statusFilter, function($query) {
                 return $query->where('roomstatus', $this->statusFilter);
             })
