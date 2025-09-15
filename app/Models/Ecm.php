@@ -32,6 +32,7 @@ class Ecm extends Model
             'guestID',
             'event_eventreceipt',
             'event_bookingreceiptID',
+            'event_numguest',
         ];
 
 }

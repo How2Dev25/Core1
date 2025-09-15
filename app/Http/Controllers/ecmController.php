@@ -15,7 +15,7 @@ class ecmController extends Controller
 {
   public function store(Request $request)
 {
-    dd($request->all());
+   
     // ✅ Validate & store into $form
     $form = $request->validate([
         'eventtype_ID'        => 'required',
@@ -25,10 +25,10 @@ class ecmController extends Controller
         'event_name'          => 'required',
         'event_specialrequest'=> 'nullable',
         'event_equipment'     => 'nullable',
-        'event_paymentstatus' => 'required',
         'event_paymentmethod' => 'required',
         'event_checkin'       => 'required',
         'event_checkout'      => 'required',
+        'event_numguest' => 'required',
     ]);
 
     // ✅ Add extra fields not from form
