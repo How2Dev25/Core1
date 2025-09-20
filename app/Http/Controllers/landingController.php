@@ -46,7 +46,21 @@ public function storereservation(Request $request)
         'guestaddress' => 'required',
         'guestcontactperson' => 'required',
         'guestcontactpersonnumber' => 'required',
-    ]);
+    ],[
+        'roomID.required' => 'Please select a room.',
+    'reservation_checkin.required' => 'Check-in date is missing.',
+    'reservation_checkout.required' => 'Check-out date is missing.',
+    'reservation_specialrequest.required' => 'Special request cannot be empty.',
+    'reservation_numguest.required' => 'Please specify the number of guests.',
+    'guestname.required' => 'We need your full name.',
+    'guestphonenumber.required' => 'A phone number is required.',
+    'guestemailaddress.required' => 'An email address is required.',
+    'guestbirthday.required' => 'Please enter your birth date.',
+    'guestaddress.required' => 'Address cannot be empty.',
+    'guestcontactperson.required' => 'Emergency contact person is required.',
+    'guestcontactpersonnumber.required' => 'Emergency contact number is required.',
+    ]
+);
 
     $form['payment_method'] = "Pay at Hotel";
     $form['reservation_bookingstatus'] = 'Pending';
@@ -115,7 +129,7 @@ $totalFormatted = number_format($total, 2);
         $mail->addAddress($form['guestemailaddress'], $form['guestname']);
          $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo'); // Make sure file exists
         $mail->isHTML(true);
-        $mail->Subject = "Booking Confirmation - $bookingID";
+        $mail->Subject = "Booking Details - $bookingID";
 
         // Email HTML body
         $mailBody = <<<HTML
@@ -124,7 +138,7 @@ $totalFormatted = number_format($total, 2);
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Booking Confirmation - Soliera Hotel</title>
+<title>Booking Details - Soliera Hotel</title>
 </head>
 <body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
 <div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
@@ -145,7 +159,7 @@ $totalFormatted = number_format($total, 2);
 
 <!-- Main Content -->
 <div style="padding:30px 20px;">
-    <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Booking Confirmation</h2>
+    <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Your Booking Details</h2>
     
     <!-- Booking Details -->
     <div style="background-color:#f8f9fa; border-radius:8px; padding:20px; margin-bottom:20px; border-left:4px solid #F7B32B;">

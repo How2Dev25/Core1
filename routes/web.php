@@ -124,7 +124,9 @@ Route::post('/landingrating', [ratingController::class, 'store']);
 Route::get('/bookinglanding', function(){
     return view('booking.booking');
 });
-
+Route::get('/roomselectionlanding', function(){
+    return view('booking.roomselection');
+});
 Route::get('/selectedroom/{roomID}', [landingController::class, 'selectedroom']);
 Route::get('/bookconfirmlanding/{roomID}', [landingController::class, 'bookconfirmlanding']);
 Route::post('/guestcreatereservationlanding', [landingController::class, 'storereservation']);
