@@ -79,7 +79,51 @@
                 </div>
             </div>
 
-            <!-- Section 4 -->
+            <!-- Section 4 - Consumer Protection -->
+            <div class="card bg-yellow-50 border border-yellow-200">
+                <div class="card-body p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-user-shield text-yellow-400"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-blue-900 mb-3">4. Consumer Protection</h4>
+                            <p class="text-gray-700 leading-relaxed">
+                                In line with the <strong>Consumer Act of the Philippines (Republic Act No.
+                                    7394)</strong>,
+                                Soliera Hotel & Restaurant upholds fair trade practices and ensures the safety and
+                                quality of its services.
+                                Guests have the right to accurate information, fair pricing, and protection against
+                                deceptive, unfair, or unconscionable sales practices.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5 - Electronic Commerce -->
+            <div class="card bg-yellow-50 border border-yellow-200">
+                <div class="card-body p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-laptop text-yellow-400"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-blue-900 mb-3">5. Electronic Commerce</h4>
+                            <p class="text-gray-700 leading-relaxed">
+                                In accordance with the <strong>Electronic Commerce Act of 2000 (Republic Act No.
+                                    8792)</strong>,
+                                Soliera Hotel & Restaurant recognizes the validity and enforceability of electronic
+                                transactions.
+                                Online reservations, payments, and communications conducted through our platform are
+                                considered legally binding and secure.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 6 - Guest Responsibilities -->
             <div class="card bg-blue-50 border border-blue-100">
                 <div class="card-body p-6">
                     <div class="flex items-start gap-4">
@@ -87,10 +131,10 @@
                             <i class="fas fa-user-check text-yellow-400"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-lg text-blue-900 mb-3">4. Guest Responsibilities</h4>
+                            <h4 class="font-bold text-lg text-blue-900 mb-3">6. Guest Responsibilities</h4>
                             <p class="text-gray-700 leading-relaxed">
-                                Guests are expected to conduct themselves respectfully and follow hotel rules. Damages
-                                caused will be charged accordingly.
+                                Guests are expected to conduct themselves respectfully and follow hotel rules.
+                                Damages caused will be charged accordingly.
                             </p>
                         </div>
                     </div>
@@ -113,9 +157,8 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 justify-end">
-
                 <button id="accept_btn" class="btn bg-gray-400 text-gray-200 btn-sm cursor-not-allowed" disabled
-                    onclick="acceptTerms()">>
+                    onclick="acceptTerms()">
                     <i class="fas fa-check mr-2"></i>
                     I Accept
                 </button>
@@ -128,6 +171,14 @@
         <button>close</button>
     </form>
 </dialog>
+
+<!-- Button to show modal for demo purposes -->
+<div class="text-center mt-8">
+    <button class="btn bg-blue-900 hover:bg-blue-800 text-white" onclick="showTermsModal()">
+        <i class="fas fa-file-contract mr-2"></i>
+        Show Terms & Conditions
+    </button>
+</div>
 
 <script>
     // Show modal on page load
