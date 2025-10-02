@@ -34,6 +34,7 @@ use App\Models\room;
 use App\Models\Lar;
 use App\Models\room_maintenance;
 use App\Models\roomfeedbacks;
+use App\Models\roomtypes;
 use App\Models\stockRequest;
 use App\Models\Reservation;
 use App\Models\restoCart;
@@ -577,6 +578,15 @@ Route::get('/roommanagement', function(Request $request) {
         'totalrooms' => $totalrooms
     ]);
 });
+
+Route::get('/roomtypesadmin', function(){
+    $roomtypes = roomtypes::latest()->get();
+    return view('admin.roomtypes', compact('roomtypes'));
+});
+
+Route::post('/createroomtype', [roomController::class, 'storeroomtype']);
+Route::put('/modifyroomtype/{roomtypesID}', [roomController::class, 'modifyroomtype']);
+Route::delete('/deleteroomtype/{roomtypesID}', [roomController::class, 'deleteroomtype']);
 // FOR AI
 Route::post('/processRoomPrompt', [RoomController::class, 'processRoomPrompt']);
 // 

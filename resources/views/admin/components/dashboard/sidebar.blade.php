@@ -215,6 +215,14 @@
               Door Locks
             </span>
           </a>
+
+          <a href="/roomtypesadmin"
+            class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+            <span class="flex items-center gap-2">
+              <i data-lucide="key" class="w-4 h-4 text-[#F7B32B]"></i>
+              Room Types
+            </span>
+          </a>
         </div>
       </div>
 

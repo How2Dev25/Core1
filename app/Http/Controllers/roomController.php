@@ -10,6 +10,7 @@ use Termwind\Components\Raw;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\AuditTrails;
+use App\Models\roomtypes;
 
 class roomController extends Controller
 {
@@ -349,6 +350,35 @@ if ($form['roomstatus'] === 'Maintenance') {
           $room = room::where('roomID', $roomID)->first();
 
           return view('guest.components.dashboard.rooms.reserveroom', ['room' => $room]);
+    }
+
+
+    public function storeroomtype(Request $request){
+        $form = $request->validate([
+            'roomtype_name' => 'required',
+            'roomtype_description' => 'required',
+        ]);
+
+        roomtypes::create($form);
+
+        return redirect()->back()->with('success', 'Room Type Has Been Added');
+    }
+
+    public function modifyroomtype(Request $request, roomtypes $roomtypesID){
+        $form = $request->validate([
+            'roomtype_name' => 'required',
+            'roomtype_description' => 'required',
+        ]);
+
+        $roomtypesID->update($form);
+
+       return redirect()->back()->with('success', 'Room Type Has Been Modified');
+    }
+
+    public function deleteroomtype(roomtypes $roomtypesID){
+        $roomtypesID->delete();
+
+        return redirect()->back()->with('success', 'Room Type Has Been Removed');
     }
 
 
