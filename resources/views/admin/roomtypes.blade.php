@@ -56,7 +56,7 @@
                                 <div class="flex items-center justify-between">
                                     <div>
                                         <h3 class="text-sm font-medium text-gray-600 uppercase">Total Room Types</h3>
-                                        <p class="text-3xl font-bold text-gray-800 mt-2">8</p>
+                                        <p class="text-3xl font-bold text-gray-800 mt-2">{{$totalroomtypes}}</p>
                                         <span class="text-sm text-gray-500">Across All Categories</span>
                                     </div>
                                     <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
@@ -70,7 +70,7 @@
                                 <div class="flex items-center justify-between">
                                     <div>
                                         <h3 class="text-sm font-medium text-gray-600 uppercase">Active</h3>
-                                        <p class="text-3xl font-bold text-gray-800 mt-2">6</p>
+                                        <p class="text-3xl font-bold text-gray-800 mt-2">{{$totalroomtypes}}</p>
                                         <span class="text-sm text-gray-500">Currently Available</span>
                                     </div>
                                     <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
@@ -84,7 +84,7 @@
                                 <div class="flex items-center justify-between">
                                     <div>
                                         <h3 class="text-sm font-medium text-gray-600 uppercase">Inactive</h3>
-                                        <p class="text-3xl font-bold text-gray-800 mt-2">2</p>
+                                        <p class="text-3xl font-bold text-gray-800 mt-2">0</p>
                                         <span class="text-sm text-gray-500">Not Available</span>
                                     </div>
                                     <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">

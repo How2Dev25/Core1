@@ -133,9 +133,10 @@ class roomController extends Controller
             'roomdescription' => 'required',
             'roomphoto' => 'required',
             'roomprice' => 'required',
-            'roomstatus' => 'required',
         ]);
 
+        $form['roomstatus'] = 'Available';
+        $form['roomfeatures'] = implode(',', $form['roomfeatures']);
         
 
         $filename = time(). '_' . $request->file('roomphoto')->getClientOriginalName();

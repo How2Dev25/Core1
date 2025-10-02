@@ -569,19 +569,23 @@ Route::get('/roommanagement', function(Request $request) {
             ->paginate(6)
             ->appends($request->query()); // Preserve all query parameters
 
+            $roomtypes = roomtypes::latest()->get();
+
     return view('admin.roomanagement', [
         'rooms' => $rooms, 
         'occupiedrooms' => $occupiedrooms,
         'availablerooms' => $availablerooms,
         'maintenancerooms' => $maintenancerooms,
         'reservedrooms' => $reservedrooms,
-        'totalrooms' => $totalrooms
+        'totalrooms' => $totalrooms,
+        'roomtypes' => $roomtypes,
     ]);
 });
 
 Route::get('/roomtypesadmin', function(){
+    $totalroomtypes = roomtypes::count();
     $roomtypes = roomtypes::latest()->get();
-    return view('admin.roomtypes', compact('roomtypes'));
+    return view('admin.roomtypes', compact('roomtypes', 'totalroomtypes'));
 });
 
 Route::post('/createroomtype', [roomController::class, 'storeroomtype']);
