@@ -66,8 +66,97 @@ function employeeOtpCheck() {
 
 // 
 
+// RBAC for admin
+function verifydashboard(){
+    if(Auth::user()->role !== 'Hotel Admin'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
 
+function verifyusermanagement(){
+    if(Auth::user()->role !== 'Hotel Admin'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
 
+function verifyfrontdesk(){
+    if(Auth::user()->role !== 'Hotel Admin' && Auth::user()->role !== 'Receptionist'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
+
+function verifybilling(){
+    if(Auth::user()->role !== 'Hotel Admin' && Auth::user()->role !== 'Receptionist'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
+
+function verifycrm(){
+    if(Auth::user()->role !== 'Hotel Admin' && Auth::user()->role !== 'Guest Relationship Head'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
+
+function verifyloyaltyandrewards(){
+    if(Auth::user()->role !== 'Hotel Admin' && Auth::user()->role !== 'Receptionist'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
+
+function verifyroommanagement(){
+    if(Auth::user()->role !== 'Hotel Admin' && Auth::user()->role !== 'Room Attendant' && Auth::user()->role !== 'Room Manager'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
+
+function verifydoorlock(){
+    if(Auth::user()->role !== 'Hotel Admin' && Auth::user()->role !== 'Receptionist'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
+
+function verifyroomtypes(){
+    if(Auth::user()->role !== 'Hotel Admin' && Auth::user()->role !== 'Room Attendant' && Auth::user()->role !== 'Room Manager'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
+
+function verifyhousekeeping(){
+    if(Auth::user()->role !== 'Hotel Admin' && Auth::user()->role !== 'Maintenance Staff' && Auth::user()->role !== 'Room Manager' && Auth::user()->role !== 'Room Attendant'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
+
+function verifyinventory(){
+    if(Auth::user()->role !== 'Hotel Admin' && Auth::user()->role !== 'Material Custodian' && Auth::user()->role !== 'Hotel Inventory Manager'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
+
+function verifyevent(){
+    if(Auth::user()->role !== 'Hotel Admin'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
+
+function verifyhotelmarketing(){
+    if(Auth::user()->role !== 'Hotel Admin' && Auth::user()->role !== 'Hotel Marketing Officer'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
+
+function verifychannel(){
+    if(Auth::user()->role !== 'Hotel Admin' && Auth::user()->role !== 'Receptionist'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
+
+function verifyintegrationresto(){
+    if(Auth::user()->role !== 'Hotel Admin'){
+        return redirect('/restrictedemployee')->send();
+    }
+}
+// 
 Route::get('/', function () {
     $rooms = Room::all();
     $ratingcomments = GuestRatings::all();
@@ -103,6 +192,11 @@ Route::get('/', function () {
 // resto integ
 
 Route::get('/restoadmin', function () {
+
+   employeeAuthCheck();
+
+   verifyintegrationresto();
+
     $totalmenu = restointegration::count();
     $activemenu = restointegration::where('menu_status', 'Available')->count();
     $inactivemenu = restointegration::where('menu_status', 'Unavailable')->count();
@@ -176,6 +270,8 @@ Route::get('/restrictedemployee', function(){
 
 Route::get('/employeedashboard', function() {
     employeeAuthCheck();
+
+    verifydashboard();
 
     // === Reservations ===
     $totalreservation = Reservation::count();
@@ -400,6 +496,7 @@ Route::get('/employeedashboard', function() {
 
 Route::get('/departmentaccount', function(){
      employeeAuthCheck();
+     verifyusermanagement();
     $employee = DeptAccount::all();
     $totalemployee = DeptAccount::count();
     $activeemployee = DeptAccount::where('status', 'Active')->count();
@@ -410,6 +507,7 @@ Route::get('/departmentaccount', function(){
 
 Route::get('/guestaccount', function(){
      employeeAuthCheck();
+     verifyusermanagement();
     $guest = Guest::paginate(5); // 10 guests per page
     $totalguest = Guest::count();
     $checkinguest = Reservation::where('reservation_bookingstatus', 'Checked in')->count();
@@ -420,6 +518,7 @@ Route::get('/guestaccount', function(){
 
 Route::get('/departmentlogs', function (Request $request) {
     employeeAuthCheck();
+    verifyusermanagement();
 
     $query = DeptLogs::query();
 
@@ -451,6 +550,8 @@ Route::get('/departmentlogs', function (Request $request) {
 });
 
 Route::get('/audittrails', function (Request $request) {
+     employeeAuthCheck();
+    verifyusermanagement();
     $query = AuditTrails::query();
 
 
@@ -498,6 +599,7 @@ Route::get('/audittrails', function (Request $request) {
 });
 Route::get('/hmp', function(){
     employeeAuthCheck();
+    verifyhotelmarketing();
     $hmpdata = Hmp::latest()->get();
    
       $rooms = room::where('roomstatus', 'Available')->latest()->get();
@@ -512,6 +614,7 @@ Route::delete('/deletehmp/{promoID}', [hmpController::class, 'deletehmp']);
 // events and conference module
 Route::get('/ecm', function(){
      employeeAuthCheck();
+     verifyevent();
 
      $eventtypes = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')
      ->where('core1_eventtype.eventtype_name', '!=', 'Conference' )
@@ -534,6 +637,7 @@ Route::post('/bookthisevent', [ecmController::class, 'store']);
 
 Route::get('/facilities', function(){
     employeeAuthCheck();
+    verifyevent();
     $facilities = facility::latest()->get();
     return view('admin.facilities', compact('facilities'));
 });
@@ -549,6 +653,7 @@ Route::delete('/deleteecmtype/{eventtype_ID}', [eventtypeController::class, 'del
 
 Route::get('/roommanagement', function(Request $request) {
      employeeAuthCheck();
+    verifyroommanagement();
     $totalrooms = Room::count();
     $occupiedrooms = Room::where('roomstatus', 'Occupied')->count();
     $availablerooms = Room::where('roomstatus', 'Available')->count();
@@ -583,6 +688,8 @@ Route::get('/roommanagement', function(Request $request) {
 });
 
 Route::get('/roomtypesadmin', function(){
+     employeeAuthCheck();
+     verifyroomtypes();
     $totalroomtypes = roomtypes::count();
     $roomtypes = roomtypes::latest()->get();
     return view('admin.roomtypes', compact('roomtypes', 'totalroomtypes'));
@@ -605,6 +712,7 @@ Route::delete('/deleteroomphoto/{roomphotoID}', [roomController::class, 'deleter
 // Inventory And Stocks
 Route::get('/ias', function(){
      employeeAuthCheck();
+     verifyinventory();
     $totalItems = Inventory::count();
     $instock = Inventory::sum('core1_inventory_stocks');
     $lowstock = Inventory::whereColumn('core1_inventory_stocks', '<', 'core1_inventory_threshold')->count();
@@ -627,6 +735,7 @@ Route::delete('/deletestockrequest/{core1_stockID}', [stockController::class, 'd
 // Housekeeping And Maintenance 
 Route::get('/hmm', function(){
      employeeAuthCheck();
+     verifyhousekeeping();
       $roomID = room::where('roomstatus', '!=', 'Occupied')->where('roomstatus', '!=', 'Maintenance')->latest()->get();
       $inventory = Inventory::latest()->get();
       $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
@@ -651,7 +760,7 @@ Route::put('usestocks/{core1_inventoryID}', [roommantenanceController::class, 'u
 // room feedbacks
 Route::get('/roomfeedback', function(Request $request) {
     employeeAuthCheck();
-
+    verifycrm();
     // Get filter (Open/Closed/All)
     $statusFilter = $request->get('status', 'all');
 
@@ -701,6 +810,7 @@ $myroomfeedbacks = $query->paginate(10)->withQueryString();
 Route::put('/feedbackrespond/{roomfeedbackID}', [roomfeedbackController::class, 'respond']);
 Route::get('/servicefeedback', function(){
      employeeAuthCheck();
+     verifycrm();
 
      $ratings = guestRatings::latest()->get();
 
@@ -713,6 +823,7 @@ Route::delete('/servicefeedback/delete/{ratingID}', [ratingController::class, 'd
 // Channel Management
 Route::get('/channel', function(){
      employeeAuthCheck();
+     verifychannel();
     $rooms = room::where('roomstatus', 'Available')->latest()->get();
    $channels = Channel::join('core1_room', 'core1_room.roomID', '=', 'channel_table.roomID')
     ->select('channel_table.*', 'core1_room.*', 'channel_table.created_at as createdchannel')
@@ -735,6 +846,7 @@ Route::delete('/deletelisting/{channelID}', [channelController::class, 'delete']
 // booking and reservation
 Route::get('/bas', function(){
      employeeAuthCheck();
+     verifyfrontdesk();
     $rooms = room::where('roomstatus', 'Available')->latest()->get();
     $reserverooms =  Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
         ->latest('core1_reservation.created_at')
@@ -742,6 +854,7 @@ Route::get('/bas', function(){
     return  view('admin.bas', ['rooms' => $rooms, 'reserverooms' => $reserverooms]);
 });
 Route::get('/aibas', function(){
+     employeeAuthCheck();
     return view('admin.aibas');
 });
 
@@ -756,6 +869,7 @@ Route::post('/guestcreatereservation', [reservationController::class, 'gueststor
 
 Route::get('/reservationpage', function(){
      employeeAuthCheck();
+     verifyfrontdesk();
     $rooms = room::where('roomstatus', 'Available')->latest()->get();
     return view('admin.components.bas.reservationpage', ['rooms' => $rooms]);
 });
@@ -769,6 +883,7 @@ Route::get('/aiform', function(){
 // front desk
 Route::get('/frontdesk', function(){
      employeeAuthCheck();
+     verifyfrontdesk();
        $reserverooms =  Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
         ->latest('core1_reservation.created_at')
         ->get();
@@ -785,6 +900,7 @@ Route::put('/reservationconfirm/{reservationID}', [reservationController::class,
 
 Route::get('lar', function(){
      employeeAuthCheck();
+     verifyloyaltyandrewards();
     $rooms = room::whereNotIn('roomID', function ($query) {
     $query->select('roomID')->from('core1_loyaltyandrewards');
 })->get();
