@@ -77,7 +77,7 @@ public function login(Request $request)
 }
 
 
-   public function verifyOTP(Request $request)
+public function verifyOTP(Request $request)
 {
     $otpInput   = implode('', $request->only(['otp1','otp2','otp3','otp4','otp5','otp6']));
     $employeeId = Session::get('pending_employee_id');
@@ -126,8 +126,10 @@ public function login(Request $request)
     $storedOtp = (string) Session::get('otp');
 
     if ($otpInput === $storedOtp && $otpInput !== '') {
+        // Clear old OTP session
         Session::forget(['otp','otp_expiry','otp_attempts','pending_employee_id','pending_email']);
 
+        // Authenticate the user
         Auth::login($user);
         $request->session()->regenerate();
 
@@ -146,34 +148,50 @@ public function login(Request $request)
         ]);
 
         session()->flash('showwelcome');
-        return redirect('/employeedashboard')->with('success', 'OTP Verified!');
+
+        // ✅ Role-based redirect logic
+        switch ($user->role) {
+            case 'Hotel Admin':
+                return redirect('/employeedashboard')->with('success', 'Welcome Hotel Admin!');
+            case 'Receptionist':
+                return redirect('/frontdesk')->with('success', 'Welcome Receptionist!');
+            case 'Guest Relationship Head':
+                return redirect('/roomfeedback')->with('success', 'Welcome GR Head!');
+            case 'Room Manager':
+                return redirect('/roommanagement')->with('success', 'Welcome Room Manager!');
+            case 'Room Attendant':
+                return redirect('/hmm')->with('success', 'Welcome Room Attendant!');
+            case 'Maintenance Staff':
+                return redirect('/hmm')->with('success', 'Welcome Maintenance Staff!');
+            case 'Hotel Marketing Officer':
+                return redirect('/hmp')->with('success', 'Welcome Marketing Officer!');
+            case 'Material Custodian':
+                return redirect('/ias')->with('success', 'Welcome Material Custodian!');
+            case 'Hotel Inventory Manager':
+                return redirect('/ias')->with('success', 'Welcome Inventory Manager!');
+            default:
+                return redirect('/employeedashboard')->with('success', 'OTP Verified!');
+        }
     }
 
-    // Wrong OTP
-    $attempts = Session::get('otp_attempts', 0) + 1;
-    Session::put('otp_attempts', $attempts);
+    // Invalid OTP
+    $attempts = Session::increment('otp_attempts');
+    DeptLogs::create([
+        'dept_id'       => $user->Dept_id,
+        'employee_id'   => $user->employee_id,
+        'employee_name' => $user->employee_name,
+        'log_status'    => 'Failed',
+        'attempt_count' => $attempts,
+        'failure_reason'=> 'Invalid OTP entered',
+        'cooldown'      => null,
+        'date'          => Carbon::now()->toDateTimeString(),
+        'role'          => $user->role,
+        'log_type'      => 'Login',
+    ]);
 
-    if ($attempts >= self::MAX_OTP_ATTEMPTS) {
-        Session::forget(['otp','otp_expiry','otp_attempts','pending_employee_id','pending_email']);
-
-        DeptLogs::create([
-            'dept_id'       => $user->Dept_id,
-            'employee_id'   => $user->employee_id,
-            'employee_name' => $user->employee_name,
-            'log_status'    => 'Failed',
-            'attempt_count' => $attempts,
-            'failure_reason'=> 'Too many OTP attempts',
-            'cooldown'      => '2 Minutes',
-            'date'          => Carbon::now()->toDateTimeString(),
-            'role'          => $user->role,
-            'log_type'      => 'Login',
-        ]);
-
-        return redirect('/employeelogin')->with('loginError', 'Too many incorrect OTP attempts. Please try again later.');
-    }
-
-    return back()->with('loginError', "Incorrect OTP. Attempt {$attempts} of " . self::MAX_OTP_ATTEMPTS . ".");
+    return back()->with('loginError', 'Invalid OTP. Please try again.');
 }
+
 
 
 public function sendOtpMail($toEmail, $toName, $otp)

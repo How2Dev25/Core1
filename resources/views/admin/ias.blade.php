@@ -34,6 +34,8 @@
 
           {{-- content --}}
        <section class="p-4 bg-base-100 rounded-box space-y-6">
+           {{-- greetings --}}
+           @include('admin.components.dashboard.welcome')
   <!-- Header Section -->
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
     <div>

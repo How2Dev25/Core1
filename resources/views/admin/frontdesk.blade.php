@@ -38,20 +38,22 @@
           {{-- Subsystem Name --}}
 
           <section class="p-5">
+            {{-- greetings --}}
+            @include('admin.components.dashboard.welcome')
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 mt-5">
 
 
               <!-- Card 1 - Total Reservation -->
               <div class="card border border-blue-100 bg-gradient-to-br from-blue-50 to-white
-                transition-all duration-300 ease-in-out
-                hover:shadow-lg hover:-translate-y-1 hover:border-blue-500
-                hover:bg-gradient-to-br hover:from-blue-100 hover:to-white
-                group">
+                  transition-all duration-300 ease-in-out
+                  hover:shadow-lg hover:-translate-y-1 hover:border-blue-500
+                  hover:bg-gradient-to-br hover:from-blue-100 hover:to-white
+                  group">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
                     <div class="p-3 rounded-lg bg-blue-100 text-blue-600
-                     group-hover:bg-blue-600 group-hover:text-white
-                     transition-colors duration-300">
+                       group-hover:bg-blue-600 group-hover:text-white
+                       transition-colors duration-300">
                       <i data-lucide="book-check"></i>
                     </div>
                     <div>
@@ -64,15 +66,15 @@
 
               <!-- Card 2 - Available Rooms -->
               <div class="card border border-green-100 bg-gradient-to-br from-green-50 to-white
-                transition-all duration-300 ease-in-out
-                hover:shadow-lg hover:-translate-y-1 hover:border-green-500
-                hover:bg-gradient-to-br hover:from-green-100 hover:to-white
-                group">
+                  transition-all duration-300 ease-in-out
+                  hover:shadow-lg hover:-translate-y-1 hover:border-green-500
+                  hover:bg-gradient-to-br hover:from-green-100 hover:to-white
+                  group">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
                     <div class="p-3 rounded-lg bg-green-100 text-green-600
-                     group-hover:bg-green-600 group-hover:text-white
-                     transition-colors duration-300">
+                       group-hover:bg-green-600 group-hover:text-white
+                       transition-colors duration-300">
                       <i data-lucide="hotel"></i>
                     </div>
                     <div>
@@ -85,15 +87,15 @@
 
               <!-- Card 3 - Occupied Rooms -->
               <div class="card border border-purple-100 bg-gradient-to-br from-purple-50 to-white
-                transition-all duration-300 ease-in-out
-                hover:shadow-lg hover:-translate-y-1 hover:border-purple-500
-                hover:bg-gradient-to-br hover:from-purple-100 hover:to-white
-                group">
+                  transition-all duration-300 ease-in-out
+                  hover:shadow-lg hover:-translate-y-1 hover:border-purple-500
+                  hover:bg-gradient-to-br hover:from-purple-100 hover:to-white
+                  group">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
                     <div class="p-3 rounded-lg bg-purple-100 text-purple-600
-                     group-hover:bg-purple-600 group-hover:text-white
-                     transition-colors duration-300">
+                       group-hover:bg-purple-600 group-hover:text-white
+                       transition-colors duration-300">
                       <i data-lucide="book-open-check"></i>
                     </div>
                     <div>
@@ -106,15 +108,15 @@
 
               <!-- Card 4 - Channels Booking -->
               <div class="card border border-amber-100 bg-gradient-to-br from-amber-50 to-white
-                transition-all duration-300 ease-in-out
-                hover:shadow-lg hover:-translate-y-1 hover:border-amber-500
-                hover:bg-gradient-to-br hover:from-amber-100 hover:to-white
-                group">
+                  transition-all duration-300 ease-in-out
+                  hover:shadow-lg hover:-translate-y-1 hover:border-amber-500
+                  hover:bg-gradient-to-br hover:from-amber-100 hover:to-white
+                  group">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
                     <div class="p-3 rounded-lg bg-amber-100 text-amber-600
-                     group-hover:bg-amber-600 group-hover:text-white
-                     transition-colors duration-300">
+                       group-hover:bg-amber-600 group-hover:text-white
+                       transition-colors duration-300">
                       <i data-lucide="square-arrow-out-up-right"></i>
                     </div>
                     <div>
