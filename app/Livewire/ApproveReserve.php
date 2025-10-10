@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Reservation;
+use App\Models\dynamicBilling;
 use Illuminate\Support\Facades\DB;
 
 class ApproveReserve extends Component
@@ -58,9 +59,17 @@ class ApproveReserve extends Component
             ->get()
             ->groupBy('bookingID'); // group so you can easily show per booking
 
+            $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+            $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+
+            $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
+            $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
+
         return view('livewire.approve-reserve', [
             'reserverooms' => $reserverooms,
             'orders' => $orders,
+            'serviceFeedynamic' => $serviceFeedynamic,
+            'taxRatedynamic' => $taxRatedynamic,
         ]);
     }
 }

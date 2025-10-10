@@ -36,5 +36,9 @@ class Reservation extends Model
             'payment_method',
             'bookingID',
             'payment_status',
+            'subtotal',
+            'vat',
+            'serviceFee',
+            'total'
         ];
 }

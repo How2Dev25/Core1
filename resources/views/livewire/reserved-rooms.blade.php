@@ -35,10 +35,11 @@
           @php
             $nights = \Carbon\Carbon::parse($reserveroom->reservation_checkin)
               ->diffInDays(\Carbon\Carbon::parse($reserveroom->reservation_checkout));
-            $subtotal = $reserveroom->roomprice * $nights;
-            $vat = $subtotal * 0.12;
-            $serviceFee = $subtotal * 0.02;
-            $total = $subtotal + $vat + $serviceFee;
+            $subtotal = $reserveroom->subtotal;
+            $vat = $reserveroom->vat;
+            $serviceFee = $reserveroom->serviceFee;
+            $total = $reserveroom->total;
+
           @endphp
 
           <tr class="border-t border-gray-100 hover:bg-gray-50">
@@ -88,13 +89,13 @@
             <!-- Status -->
             <td class="py-4 px-4">
               <span class="badge py-1.5 px-3
-                                                        @if(strtolower($reserveroom->reservation_bookingstatus) == 'pending') badge-neutral
-                                                        @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'confirmed') badge-success
-                                                        @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'checked in') badge-primary
-                                                        @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'checked out') badge-warning
-                                                        @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'cancelled') badge-error
-                                                        @endif
-                                                    ">
+                                                          @if(strtolower($reserveroom->reservation_bookingstatus) == 'pending') badge-neutral
+                                                          @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'confirmed') badge-success
+                                                          @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'checked in') badge-primary
+                                                          @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'checked out') badge-warning
+                                                          @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'cancelled') badge-error
+                                                          @endif
+                                                      ">
                 {{ ucfirst($reserveroom->reservation_bookingstatus) }}
               </span>
             </td>
@@ -103,12 +104,12 @@
             <td class="py-4 px-4">
               <div class="text-sm">
                 <span class="
-                                                            @if(strtolower($reserveroom->payment_status) == 'pending') text-yellow-600 font-semibold
-                                                            @elseif(strtolower($reserveroom->payment_status) == 'paid') text-green-600 font-semibold
-                                                            @elseif(strtolower($reserveroom->payment_status) == 'failed') text-red-600 font-semibold
-                                                            @else text-gray-600
-                                                            @endif
-                                                        ">
+                                                              @if(strtolower($reserveroom->payment_status) == 'pending') text-yellow-600 font-semibold
+                                                              @elseif(strtolower($reserveroom->payment_status) == 'paid') text-green-600 font-semibold
+                                                              @elseif(strtolower($reserveroom->payment_status) == 'failed') text-red-600 font-semibold
+                                                              @else text-gray-600
+                                                              @endif
+                                                          ">
                   {{ ucfirst($reserveroom->payment_status) }}
                 </span>
                 <div class="text-xs text-gray-500 mt-1">
@@ -126,9 +127,9 @@
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l6.232-6.232a2.121 
-                                           2.121 0 113 3L12 14H9v-3z" />
+                                             2.121 0 113 3L12 14H9v-3z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 19H5a2 2 0 01-2-2V7a2 2 0 
-                                           012-2h7" />
+                                             012-2h7" />
                   </svg>
                 </button>
 

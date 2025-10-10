@@ -10,6 +10,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use App\Models\dynamicBilling;
 
 class landingController extends Controller
 {
@@ -26,9 +27,13 @@ class landingController extends Controller
 
         public function bookconfirmlanding($roomID){
           $room = room::where('roomID', $roomID)->first();
-          
+                    
+            $servicefee = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+            $taxrate = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+            $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person Fee')->value('dynamic_price');
 
-          return view('booking.bookingconfirmation', ['room' => $room]);
+          return view('booking.bookingconfirmation', ['room' => $room, 'servicefee' => $servicefee, 'taxrate' => $taxrate
+        ,'additionalpersonfee' => $additionalpersonfee]);
     }
 
 
@@ -47,6 +52,10 @@ public function storereservation(Request $request)
         'guestaddress' => 'required',
         'guestcontactperson' => 'required',
         'guestcontactpersonnumber' => 'required',
+        'subtotal' => 'required',
+        'vat' => 'required',
+        'serviceFee' => 'required',
+        'total' => 'required',
     ],[
         'roomID.required' => 'Please select a room.',
     'reservation_checkin.required' => 'Check-in date is missing.',
@@ -95,10 +104,10 @@ public function storereservation(Request $request)
    $nights = (strtotime($form['reservation_checkout']) - strtotime($form['reservation_checkin'])) / (60*60*24);
 
 // Calculate amounts for the entire stay
-$subtotal = $roomprice * $nights;
-$serviceFee = round($subtotal * 0.02, 2);
-$vat = round($subtotal * 0.12, 2);
-$total = $subtotal + $serviceFee + $vat;
+$subtotal = $reservation->subtotal;
+$serviceFee = $reservation->serviceFee;
+$vat = $reservation->vat;
+$total = $reservation->total;
 
 // Format numbers for email
 $subtotalFormatted = number_format($subtotal, 2);
@@ -112,8 +121,12 @@ $totalFormatted = number_format($total, 2);
     $checkin = date('F j, Y', strtotime($form['reservation_checkin']));
     $checkout = date('F j, Y', strtotime($form['reservation_checkout']));
 
-   
+            $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+            $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
 
+            $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
+            $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
+            
     // PHPMailer Integration
     $mail = new PHPMailer(true);
 
@@ -188,8 +201,8 @@ $totalFormatted = number_format($total, 2);
         <h3 style="color:#001f54; margin:0 0 15px 0; font-size:18px;">Payment Summary</h3>
         <table style="width:100%; border-collapse:collapse;">
             <tr><td style="padding:8px 0; color:#666;">Subtotal:</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$subtotalFormatted</td></tr>
-            <tr><td style="padding:8px 0; color:#666;">Service Fee (2%):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$serviceFeeFormatted</td></tr>
-            <tr><td style="padding:8px 0; color:#666;">VAT (12%):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$vatFormatted</td></tr>
+            <tr><td style="padding:8px 0; color:#666;">Service Fee ($serviceFeedynamic):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$serviceFeeFormatted</td></tr>
+            <tr><td style="padding:8px 0; color:#666;">VAT ($taxRatedynamic):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$vatFormatted</td></tr>
             <tr style="border-top:2px solid #F7B32B;">
                 <td style="padding:12px 0 8px 0; color:#001f54; font-weight:bold; font-size:18px;">Total Amount:</td>
                 <td style="padding:12px 0 8px 0; color:#001f54; font-weight:bold; font-size:18px; text-align:right;">₱$totalFormatted</td>
@@ -220,7 +233,7 @@ HTML;
         Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
     }
 
-    return redirect()->route('booking.success', $reservation->reservationID);
+    return redirect()->route('booking.success', $reservation->reservationID, );
 }
 
 

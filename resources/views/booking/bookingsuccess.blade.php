@@ -171,10 +171,10 @@
 
               $nights = $checkin->diffInDays($checkout);
 
-              $subtotal = $roomprice * $nights;
-              $vat = $subtotal * 0.12;
-              $serviceFee = $subtotal * 0.02;
-              $total = $subtotal + $vat + $serviceFee;
+              $subtotal = $reservation->subtotal;
+              $vat = $reservation->vat;
+              $serviceFee = $reservation->serviceFee;
+              $total = $reservation->total;
             @endphp
 
             <div class="bg-white rounded-xl p-6 shadow border">
@@ -185,11 +185,11 @@
                   <p class="font-bold">₱{{ number_format($subtotal, 2) }}</p>
                 </div>
                 <div class="flex justify-between text-orange-600">
-                  <p>VAT (12%)</p>
+                  <p>VAT ({{$taxRatedynamic}})</p>
                   <p class="font-bold">₱{{ number_format($vat, 2) }}</p>
                 </div>
                 <div class="flex justify-between text-blue-600">
-                  <p>Service Fee (2%)</p>
+                  <p>Service Fee ({{$serviceFeedynamic}})</p>
                   <p class="font-bold">₱{{ number_format($serviceFee, 2) }}</p>
                 </div>
                 <hr>

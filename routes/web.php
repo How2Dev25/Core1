@@ -233,7 +233,18 @@ Route::get('/booking/success/{id}', function($id) {
     $roomprice = Room::where('roomID', $reservation->roomID)->value('roomprice');
     $roomtype  = Room::where('roomID', $reservation->roomID)->value('roomtype');
 
-    return view('booking.bookingsuccess', compact('reservation', 'roomprice', 'roomtype'));
+             $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+            $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+
+            $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
+            $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
+ return view('booking.bookingsuccess', compact(
+        'reservation', 
+        'roomprice', 
+        'roomtype', 
+        'serviceFeedynamic', 
+        'taxRatedynamic'
+    ));
 })->name('booking.success');
 
 // Login 
@@ -853,7 +864,16 @@ Route::get('/bas', function(){
     $reserverooms =  Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
         ->latest('core1_reservation.created_at')
         ->get();
-    return  view('admin.bas', ['rooms' => $rooms, 'reserverooms' => $reserverooms]);
+
+         $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+        $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+
+            $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
+            $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
+    return  view('admin.bas', ['rooms' => $rooms, 'reserverooms' => $reserverooms, 
+    'serviceFeedynamic' => $serviceFeedynamic,
+    'taxRatedynamic' => $taxRatedynamic,
+]);
 });
 Route::get('/aibas', function(){
      employeeAuthCheck();

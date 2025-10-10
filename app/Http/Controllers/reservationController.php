@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\View;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use App\Models\AuditTrails;
+use App\Models\dynamicBilling;
 use Illuminate\Support\Facades\DB;
 
 
@@ -393,10 +394,16 @@ HTML;
     $nights = (strtotime($reservationID->reservation_checkout) - strtotime($reservationID->reservation_checkin)) / (60*60*24);
 
     // Payment calculations
-    $subtotal = $roomprice * $nights;
-    $serviceFee = round($subtotal * 0.02, 2);
-    $vat = round($subtotal * 0.12, 2);
-    $total = $subtotal + $serviceFee + $vat;
+        $subtotal =  $reservationID->subtotal;
+        $vat =  $reservationID->vat;
+        $serviceFee =  $reservationID->serviceFee;
+        $total =  $reservationID->total;
+
+         $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+            $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+
+            $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
+            $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
 
     // Format numbers
     $subtotalFormatted = number_format($subtotal, 2);
@@ -461,8 +468,8 @@ HTML;
 <h3 style="color:#001f54; font-size:18px; margin-bottom:10px;">Payment Summary</h3>
 <table style="width:100%; border-collapse:collapse;">
 <tr><td style="padding:8px 0; color:#666;">Subtotal:</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$subtotalFormatted</td></tr>
-<tr><td style="padding:8px 0; color:#666;">Service Fee (2%):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$serviceFeeFormatted</td></tr>
-<tr><td style="padding:8px 0; color:#666;">VAT (12%):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$vatFormatted</td></tr>
+<tr><td style="padding:8px 0; color:#666;">Service Fee ($serviceFeedynamic):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$serviceFeeFormatted</td></tr>
+<tr><td style="padding:8px 0; color:#666;">VAT ($taxRatedynamic):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$vatFormatted</td></tr>
 <tr style="border-top:2px solid #F7B32B;"><td style="padding:8px 0; font-weight:bold;">Total:</td><td style="padding:8px 0; font-weight:bold; text-align:right;">₱$totalFormatted</td></tr>
 </table>
 </div>

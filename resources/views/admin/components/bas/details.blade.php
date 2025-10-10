@@ -58,10 +58,10 @@ $nights = \Carbon\Carbon::parse($reserveroom->reservation_checkin)
                     </h4>
 
                     @php
-$subtotal = $reserveroom->roomprice * $nights;
-$vat = $subtotal * 0.12;
-$serviceFee = $subtotal * 0.02;
-$total = $subtotal + $vat + $serviceFee;
+$subtotal = $reserveroom->subtotal;
+$vat = $reserveroom->vat;
+$serviceFee = $reserveroom->serviceFee;
+$total = $reserveroom->total;
 
 // restaurant orders total
 $restaurantTotal = 0;
@@ -77,25 +77,31 @@ $grandTotal = $total + $restaurantTotal;
 
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                            <div class="space-y-2">
-                                <div class="flex justify-between">
-                                    <span>Room Rate ({{ $nights }} nights):</span>
-                                    <span>₱{{ number_format($reserveroom->roomprice * $nights, 2) }}</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>Service Fee (2%):</span>
-                                    <span>₱{{ number_format($serviceFee, 2) }}</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>VAT (12%):</span>
-                                    <span>₱{{ number_format($vat, 2) }}</span>
-                                </div>
-                                <div class="flex justify-between font-semibold text-primary border-t pt-2 mt-2">
-                                    <span>Room Total:</span>
-                                    <span>₱{{ number_format($total, 2) }}</span>
-                                </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span>Room Rate ({{ $nights }} nights):</span>
+                                <span>₱{{ number_format($reserveroom->roomprice * $nights, 2) }}</span>
                             </div>
-
+                        
+                            {{-- Subtotal --}}
+                            <div class="flex justify-between">
+                                <span>Subtotal:</span>
+                                <span>₱{{ number_format($subtotal, 2) }}</span>
+                            </div>
+                        
+                            <div class="flex justify-between">
+                                <span>Service Fee ({{$serviceFeedynamic}}):</span>
+                                <span>₱{{ number_format($serviceFee, 2) }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>VAT ({{$taxRatedynamic}}):</span>
+                                <span>₱{{ number_format($vat, 2) }}</span>
+                            </div>
+                            <div class="flex justify-between font-semibold text-primary border-t pt-2 mt-2">
+                                <span>Room Total:</span>
+                                <span>₱{{ number_format($total, 2) }}</span>
+                            </div>
+                        </div>
                             <div class="space-y-2">
                                 <div class="flex justify-between">
                                     <span>Restaurant Total:</span>
