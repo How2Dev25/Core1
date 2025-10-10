@@ -26,6 +26,7 @@ class landingController extends Controller
 
         public function bookconfirmlanding($roomID){
           $room = room::where('roomID', $roomID)->first();
+          
 
           return view('booking.bookingconfirmation', ['room' => $room]);
     }

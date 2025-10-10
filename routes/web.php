@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\billingController;
 use App\Http\Controllers\channelController;
 use App\Http\Controllers\ecmController;
 use App\Http\Controllers\eventtypeController;
@@ -21,6 +22,7 @@ use App\Models\AuditTrails;
 use App\Models\Channel;
 use App\Models\DeptAccount;
 use App\Models\DeptLogs;
+use App\Models\dynamicBilling;
 use App\Models\Ecm;
 use App\Models\ecmtype;
 use App\Models\facility;
@@ -1017,6 +1019,21 @@ Route::get('/guestdashboard', function() {
         'promos',
     ));
 });
+
+Route::get('/managefees', function(){
+    employeeAuthCheck();
+    verifyfrontdesk();
+
+    $feedata = dynamicBilling::latest()->get();
+
+   $servicefee = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+$taxrate = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+$additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person Fee')->value('dynamic_price');
+
+    return view('admin.billingfee', compact('feedata', 'servicefee', 'taxrate', 'additionalpersonfee'));
+});
+Route::post('/createfee', [billingController::class, 'store']);
+Route::put('/updatefee/{dynamic_billingID}', [billingController::class, 'modify']);
 
 // Guest
 Route::get('/showrooms', function(){
