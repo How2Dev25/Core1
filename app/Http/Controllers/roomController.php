@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\AuditTrails;
 use App\Models\roomtypes;
+use App\Models\dynamicBilling;
 
 class roomController extends Controller
 {
@@ -349,8 +350,12 @@ if ($form['roomstatus'] === 'Maintenance') {
 
     public function reservethisroom($roomID){
           $room = room::where('roomID', $roomID)->first();
+           $servicefee = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+            $taxrate = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+            $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person Fee')->value('dynamic_price');
 
-          return view('guest.components.dashboard.rooms.reserveroom', ['room' => $room]);
+          return view('guest.components.dashboard.rooms.reserveroom', ['room' => $room, 'servicefee' => $servicefee
+        , 'taxrate' => $taxrate, 'additionalpersonfee' => $additionalpersonfee]);
     }
 
 

@@ -104,6 +104,10 @@ public function searchRooms(Request $request)
     'guestaddress' => 'required',
     'guestcontactperson' => 'required',
     'guestcontactpersonnumber' => 'required',
+    'subtotal' => 'required',
+    'vat' => 'required',
+    'serviceFee' => 'required',
+    'total' => 'required',
 ], [
     'roomID.required' => 'Please select a room.',
     'reservation_checkin.required' => 'Check-in date is missing.',
@@ -152,10 +156,10 @@ public function searchRooms(Request $request)
             $nights = (strtotime($form['reservation_checkout']) - strtotime($form['reservation_checkin'])) / (60*60*24);
 
             // Calculate amounts for the entire stay
-            $subtotal = $roomprice * $nights;
-            $serviceFee = round($subtotal * 0.02, 2);
-            $vat = round($subtotal * 0.12, 2);
-            $total = $subtotal + $serviceFee + $vat;
+            $subtotal = $reservation->subtotal;
+            $serviceFee = $reservation->serviceFee;
+            $vat = $reservation->vat;
+            $total = $reservation->total;
 
             // Format numbers for email
             $subtotalFormatted = number_format($subtotal, 2);
@@ -169,11 +173,19 @@ public function searchRooms(Request $request)
     $checkin = date('F j, Y', strtotime($form['reservation_checkin']));
     $checkout = date('F j, Y', strtotime($form['reservation_checkout']));
 
+    
+            $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+            $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+
+            $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
+            $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
+
     // Calculate nights
    
 
 
-     $mail = new PHPMailer(true);
+    // PHPMailer Integration
+    $mail = new PHPMailer(true);
 
     try {
         $mail->isSMTP();
@@ -218,7 +230,7 @@ public function searchRooms(Request $request)
 
 <!-- Main Content -->
 <div style="padding:30px 20px;">
-        <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Your Booking Details</h2>
+    <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Your Booking Details</h2>
     
     <!-- Booking Details -->
     <div style="background-color:#f8f9fa; border-radius:8px; padding:20px; margin-bottom:20px; border-left:4px solid #F7B32B;">
@@ -230,7 +242,7 @@ public function searchRooms(Request $request)
             <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Check-in:</td><td style="padding:8px 0; color:#001f54;">$checkin</td></tr>
             <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Check-out:</td><td style="padding:8px 0; color:#001f54;">$checkout</td></tr>
             <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Nights:</td><td style="padding:8px 0; color:#001f54;">$nights</td></tr>
-            <tr>
+             <tr>
                 <td style="padding:8px 0;color:#666;font-weight:bold;">Booked Date:</td>
                 <td style="padding:8px 0;color:#001f54;">$bookedDate</td>
             </tr>
@@ -246,8 +258,8 @@ public function searchRooms(Request $request)
         <h3 style="color:#001f54; margin:0 0 15px 0; font-size:18px;">Payment Summary</h3>
         <table style="width:100%; border-collapse:collapse;">
             <tr><td style="padding:8px 0; color:#666;">Subtotal:</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$subtotalFormatted</td></tr>
-            <tr><td style="padding:8px 0; color:#666;">Service Fee (2%):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$serviceFeeFormatted</td></tr>
-            <tr><td style="padding:8px 0; color:#666;">VAT (12%):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$vatFormatted</td></tr>
+            <tr><td style="padding:8px 0; color:#666;">Service Fee ($serviceFeedynamic):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$serviceFeeFormatted</td></tr>
+            <tr><td style="padding:8px 0; color:#666;">VAT ($taxRatedynamic):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$vatFormatted</td></tr>
             <tr style="border-top:2px solid #F7B32B;">
                 <td style="padding:12px 0 8px 0; color:#001f54; font-weight:bold; font-size:18px;">Total Amount:</td>
                 <td style="padding:12px 0 8px 0; color:#001f54; font-weight:bold; font-size:18px; text-align:right;">₱$totalFormatted</td>
@@ -989,6 +1001,10 @@ public function gueststore(Request $request)
         'guestcontactperson' => 'required',
         'guestcontactpersonnumber' => 'required',
         'payment_method' => 'required',
+         'subtotal' => 'required',
+            'vat' => 'required',
+            'serviceFee' => 'required',
+            'total' => 'required',
     ],[
         'roomID.required' => 'Please select a room.',
         'reservation_checkin.required' => 'Check-in date is missing.',
@@ -1037,11 +1053,10 @@ public function gueststore(Request $request)
 
         $nights = (strtotime($form['reservation_checkout']) - strtotime($form['reservation_checkin'])) / (60*60*24);
 
-            // Calculate amounts for the entire stay
-            $subtotal = $roomprice * $nights;
-            $serviceFee = round($subtotal * 0.02, 2);
-            $vat = round($subtotal * 0.12, 2);
-            $total = $subtotal + $serviceFee + $vat;
+            $subtotal = $reservation->subtotal;
+            $serviceFee = $reservation->serviceFee;
+            $vat = $reservation->vat;
+            $total = $reservation->total;
 
             // Format numbers for email
             $subtotalFormatted = number_format($subtotal, 2);
@@ -1055,9 +1070,17 @@ public function gueststore(Request $request)
     $checkin = date('F j, Y', strtotime($form['reservation_checkin']));
     $checkout = date('F j, Y', strtotime($form['reservation_checkout']));
 
+    
+            $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+            $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+
+            $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
+            $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
+
     // Calculate nights
 
-      $mail = new PHPMailer(true);
+      // PHPMailer Integration
+    $mail = new PHPMailer(true);
 
     try {
         $mail->isSMTP();
@@ -1072,7 +1095,7 @@ public function gueststore(Request $request)
         $mail->addAddress($form['guestemailaddress'], $form['guestname']);
          $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo'); // Make sure file exists
         $mail->isHTML(true);
-        $mail->Subject = "Booking Details- $bookingID";
+        $mail->Subject = "Booking Details - $bookingID";
 
         // Email HTML body
         $mailBody = <<<HTML
@@ -1114,7 +1137,7 @@ public function gueststore(Request $request)
             <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Check-in:</td><td style="padding:8px 0; color:#001f54;">$checkin</td></tr>
             <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Check-out:</td><td style="padding:8px 0; color:#001f54;">$checkout</td></tr>
             <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Nights:</td><td style="padding:8px 0; color:#001f54;">$nights</td></tr>
-            <tr>
+             <tr>
                 <td style="padding:8px 0;color:#666;font-weight:bold;">Booked Date:</td>
                 <td style="padding:8px 0;color:#001f54;">$bookedDate</td>
             </tr>
@@ -1130,8 +1153,8 @@ public function gueststore(Request $request)
         <h3 style="color:#001f54; margin:0 0 15px 0; font-size:18px;">Payment Summary</h3>
         <table style="width:100%; border-collapse:collapse;">
             <tr><td style="padding:8px 0; color:#666;">Subtotal:</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$subtotalFormatted</td></tr>
-            <tr><td style="padding:8px 0; color:#666;">Service Fee (2%):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$serviceFeeFormatted</td></tr>
-            <tr><td style="padding:8px 0; color:#666;">VAT (12%):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$vatFormatted</td></tr>
+            <tr><td style="padding:8px 0; color:#666;">Service Fee ($serviceFeedynamic):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$serviceFeeFormatted</td></tr>
+            <tr><td style="padding:8px 0; color:#666;">VAT ($taxRatedynamic):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$vatFormatted</td></tr>
             <tr style="border-top:2px solid #F7B32B;">
                 <td style="padding:12px 0 8px 0; color:#001f54; font-weight:bold; font-size:18px;">Total Amount:</td>
                 <td style="padding:12px 0 8px 0; color:#001f54; font-weight:bold; font-size:18px; text-align:right;">₱$totalFormatted</td>

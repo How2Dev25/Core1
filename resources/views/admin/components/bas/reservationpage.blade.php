@@ -91,7 +91,7 @@
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         @forelse ($rooms as $room)
                                             <div class="card bg-base-100 shadow-md hover:shadow-xl border-2 border-transparent hover:border-primary transition-all cursor-pointer relative group"
-                                                onclick="selectRoom(this, {{$room->roomID}}, {{$room->roomprice}})">
+                                                onclick="selectRoom(this,  {{$room->roomID}}, {{$room->roomprice}}, {{$room->roommaxguest}})">
                                                 <figure class="relative h-40 overflow-hidden rounded-t-box">
                                                     <img src="{{ asset($room->roomphoto) }}"
                                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -200,10 +200,8 @@
                                                 class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
                                                 required />
                                         </div>
-
                                         <div class="form-control">
-
-                                            <label class="label font-semibold text-[#001f54] mb-2">
+                                            <label class="label font-semibold text-[#001f54] mb-2" id="guestCountLabel">
                                                 <span class="flex items-center gap-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -213,13 +211,17 @@
                                                         <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
                                                         <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                                                     </svg>
-                                                    Number of Guests
+                                                    Number of Guests (Select a room first)
                                                     <span class="text-red-500">*</span>
                                                 </span>
                                             </label>
-                                            <input required type="number" name="reservation_numguest" min="1"
+
+                                            <input type="number" name="reservation_numguest" min="1"
                                                 class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
-                                                required />
+                                                placeholder="Select a room first" disabled oninput="validateGuestCount()" />
+
+                                            <!-- Dynamic note for guest count -->
+                                            <p id="extraGuestNote" class="text-sm mt-1 hidden"></p>
                                         </div>
 
                                         <div class="form-control md:col-span-2">
@@ -400,6 +402,10 @@
                                                 class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
                                                 required />
                                         </div>
+                                        <input type="hidden" name="subtotal" id="hiddenSubtotal">
+                                        <input type="hidden" name="vat" id="hiddenVat">
+                                        <input type="hidden" name="serviceFee" id="hiddenServiceFee">
+                                        <input type="hidden" name="total" id="hiddenTotal">
                                     </div>
                                 </div>
                             </div>
@@ -525,7 +531,7 @@
                                                     <circle cx="6.5" cy="6.5" r="2.5"></circle>
                                                     <circle cx="17.5" cy="17.5" r="2.5"></circle>
                                                 </svg>
-                                                VAT (12%)
+                                                VAT ({{ intval($taxrate) }}%)
                                             </span>
                                             <span id="vatAmount" class="font-bold text-orange-600">₱0.00</span>
                                         </div>
@@ -540,7 +546,7 @@
                                                     <line x1="6" y1="10" x2="13" y2="10" />
                                                     <line x1="6" y1="14" x2="12" y2="14" />
                                                 </svg>
-                                                Service Fee (2%)
+                                                Service Fee ({{ intval($servicefee) }}%)
                                             </span>
                                             <span id="serviceFee" class="font-bold text-blue-600">₱0.00</span>
                                         </div>
@@ -608,8 +614,9 @@
             lucide.createIcons();
 
             let selectedRoomPrice = 0;
+            let selectedRoomMaxGuest = 0;
 
-            function selectRoom(cardElement, roomID, roomPrice) {
+            function selectRoom(cardElement, roomID, roomPrice, roomMaxGuest) {
                 document.querySelectorAll('.card').forEach(card => {
                     card.classList.remove('border-primary', 'bg-primary/10');
                     const indicator = card.querySelector('.selection-indicator');
@@ -622,14 +629,80 @@
 
                 document.getElementById('selectedRoomID').value = roomID;
                 selectedRoomPrice = roomPrice;
+                selectedRoomMaxGuest = roomMaxGuest;
 
-                document.getElementById('roomPrice').innerText = roomPrice.toFixed(2);
+                document.getElementById('roomPrice').innerText = '₱' + roomPrice.toFixed(2);
+
+                // Update the guest input with new max value and placeholder
+                const guestInput = document.querySelector('[name="reservation_numguest"]');
+                guestInput.max = roomMaxGuest + 2; // Allow 2 extra guests beyond max capacity
+                guestInput.placeholder = `1-${roomMaxGuest + 2} guests`;
+                guestInput.disabled = false; // Enable the input
+
+                // Update the label to show current room's max guests
+                updateGuestLabel(roomMaxGuest);
+
                 calculateSubtotal();
             }
+
+            function updateGuestLabel(maxGuests) {
+                const guestLabel = document.querySelector('label[for="reservation_numguest"]');
+                if (guestLabel) {
+                    guestLabel.innerHTML = `
+                                            <span class="flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                                    <circle cx="9" cy="7" r="4"></circle>
+                                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                                </svg>
+                                                Number of Guests (Max ${maxGuests} included, ₱${additionalFee} per extra guest)
+                                                <span class="text-red-500">*</span>
+                                            </span>
+                                        `;
+                }
+            }
+
+            function validateGuestCount() {
+                const guestInput = document.querySelector('[name="reservation_numguest"]');
+                const extraGuestNote = document.getElementById('extraGuestNote');
+
+                if (!guestInput.value || !selectedRoomMaxGuest) return;
+
+                const guestCount = parseInt(guestInput.value);
+                const maxGuests = selectedRoomMaxGuest;
+
+                if (guestCount > maxGuests) {
+                    const extraGuests = guestCount - maxGuests;
+                    // Show info about extra charges
+                    extraGuestNote.textContent = `${extraGuests} extra guest(s) - ₱${additionalFee * extraGuests} one-time fee added`;
+                    extraGuestNote.classList.remove('hidden');
+                    extraGuestNote.classList.remove('text-orange-600');
+                    extraGuestNote.classList.add('text-blue-600');
+                } else if (guestCount === maxGuests) {
+                    // Show info message at max capacity
+                    extraGuestNote.textContent = `Room at standard capacity (${maxGuests} guests included)`;
+                    extraGuestNote.classList.remove('hidden');
+                    extraGuestNote.classList.remove('text-orange-600');
+                    extraGuestNote.classList.add('text-green-600');
+                } else {
+                    // Hide note when within limits
+                    extraGuestNote.classList.add('hidden');
+                }
+
+                calculateSubtotal();
+            }
+
+            const taxRate = {{ $taxrate }};
+            const serviceFeeRate = {{ $servicefee }};
+            const additionalFee = {{ $additionalpersonfee }};
 
             function calculateSubtotal() {
                 const checkin = document.querySelector('[name="reservation_checkin"]').value;
                 const checkout = document.querySelector('[name="reservation_checkout"]').value;
+                const guestCount = parseInt(document.querySelector('[name="reservation_numguest"]').value) || 1;
 
                 if (!checkin || !checkout || selectedRoomPrice === 0) return;
 
@@ -640,23 +713,37 @@
 
                 document.getElementById('numNights').innerText = numNights;
 
-                const subtotal = numNights * selectedRoomPrice;
-                const vat = subtotal * 0.12;
-                const serviceFee = subtotal * 0.02; // 2% service fee
+                let subtotal = numNights * selectedRoomPrice;
+
+                // Add one-time extra charges if guests exceed the room's max capacity
+                if (guestCount > selectedRoomMaxGuest) {
+                    const extraGuests = guestCount - selectedRoomMaxGuest;
+                    subtotal += extraGuests * additionalFee; // One-time fee, not multiplied by nights
+                }
+
+                const vat = subtotal * (taxRate / 100);
+                const serviceFee = subtotal * (serviceFeeRate / 100);
                 const total = subtotal + vat + serviceFee;
 
-                document.getElementById('subtotal').innerText = subtotal.toFixed(2);
-                document.getElementById('vatAmount').innerText = vat.toFixed(2);
-                document.getElementById('serviceFee').innerText = serviceFee.toFixed(2); // make sure you added this span in HTML
-                document.getElementById('totalAmount').innerText = total.toFixed(2);
+                document.getElementById('subtotal').innerText = '₱' + subtotal.toFixed(2);
+                document.getElementById('vatAmount').innerText = '₱' + vat.toFixed(2);
+                document.getElementById('serviceFee').innerText = '₱' + serviceFee.toFixed(2);
+                document.getElementById('totalAmount').innerText = '₱' + total.toFixed(2);
+
+                document.getElementById('hiddenSubtotal').value = subtotal.toFixed(2);
+                document.getElementById('hiddenVat').value = vat.toFixed(2);
+                document.getElementById('hiddenServiceFee').value = serviceFee.toFixed(2);
+                document.getElementById('hiddenTotal').value = total.toFixed(2);
             }
 
             document.addEventListener('DOMContentLoaded', () => {
                 const checkinInput = document.querySelector('[name="reservation_checkin"]');
                 const checkoutInput = document.querySelector('[name="reservation_checkout"]');
+                const guestInput = document.querySelector('[name="reservation_numguest"]');
 
                 checkinInput.addEventListener('change', calculateSubtotal);
                 checkoutInput.addEventListener('change', calculateSubtotal);
+                guestInput.addEventListener('input', validateGuestCount);
 
                 // Age validation
                 const birthdayInput = document.getElementById('guestbirthday');

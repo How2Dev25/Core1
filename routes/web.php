@@ -892,8 +892,15 @@ Route::post('/guestcreatereservation', [reservationController::class, 'gueststor
 Route::get('/reservationpage', function(){
      employeeAuthCheck();
      verifyfrontdesk();
+$servicefee = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+$taxrate = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+$additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person Fee')->value('dynamic_price');
     $rooms = room::where('roomstatus', 'Available')->latest()->get();
-    return view('admin.components.bas.reservationpage', ['rooms' => $rooms]);
+
+    return view('admin.components.bas.reservationpage', ['rooms' => $rooms, 
+    'servicefee' => $servicefee,
+    'taxrate' => $taxrate,
+    'additionalpersonfee' => $additionalpersonfee,]);
 });
 
 Route::get('/aiform', function(){
