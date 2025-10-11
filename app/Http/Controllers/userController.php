@@ -511,12 +511,6 @@ public function resendGuestOtp(Request $request)
                 'guest_photo' => $googleUser->getAvatar(),
                 'guest_password' => Hash::make(str()->random(16)), // random password
             ]);
-        } else {
-            // Optional: update avatar/name if changed
-            $guest->update([
-                'guest_name' => $googleUser->getName(),
-                'guest_photo' => $googleUser->getAvatar(),
-            ]);
         }
 
         Auth::guard('guest')->login($guest);
@@ -524,6 +518,42 @@ public function resendGuestOtp(Request $request)
         session()->flash('showwelcome');
 
         return redirect('/guestdashboard');
+    }
+
+     public function updateguest(Request $request, Guest $guestID)
+    {
+       
+
+        // ✅ Validate the inputs
+        $validated = $request->validate([
+            'guest_name' => 'required|string|max:255',
+            'guest_email' => 'required',
+            'guest_mobile' => 'required|string|max:20',
+            'guest_birthday' => 'required|date',
+            'guest_address' => 'required|string|max:500',
+            'guest_photo' => 'nullable',
+            'guest_password' => 'nullable|confirmed',
+        ]);
+
+        // ✅ Handle profile photo upload if present
+        if ($request->hasFile('guest_photo')) {
+            $photo = $request->file('guest_photo');
+            $photoName = time() . '_' . $photo->getClientOriginalName();
+            $photo->move(public_path('uploads/guest_photos'), $photoName);
+            $validated['guest_photo'] = 'uploads/guest_photos/' . $photoName;
+        }
+
+        // ✅ Handle password update if filled
+        if (!empty($validated['guest_password'])) {
+            $validated['guest_password'] = Hash::make($validated['guest_password']);
+        } else {
+            unset($validated['guest_password']); // don't overwrite with null
+        }
+
+        // ✅ Update guest info
+         $guestID->update($validated);
+
+        return redirect()->back()->with('success', 'Profile updated successfully!');
     }
 
 }

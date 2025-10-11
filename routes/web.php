@@ -1174,3 +1174,9 @@ Route::get('/recentorders', function(){
 
 Route::delete('/cancelorder/{orderID}', [orderController::class, 'cancelorder']);
 Route::put('/deliverorder/{orderID}', [orderController::class, 'delivered']);
+
+Route::get('/profileguest', function(){
+    return view('guest.profile');
+});
+
+Route::put('/guestupdate/{guestID}', [userController::class, 'updateguest']);
