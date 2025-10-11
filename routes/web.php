@@ -1089,8 +1089,14 @@ $reserverooms = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1
     ->where('reservation_bookingstatus', 'Cancelled')->count();
     $pendingreservation = Reservation::where('core1_reservation.guestID', Auth::guard('guest')->user()->guestID)
     ->where('reservation_bookingstatus', 'Pending')->count();
+
+       $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+        $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+
+         $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
+        $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
   return view('guest.myreservation', compact('reserverooms', 'totalreservation', 
-  'approvereservation','pendingreservation', 'cancelledreservation'));
+  'approvereservation','pendingreservation', 'cancelledreservation','serviceFeedynamic', 'taxRatedynamic'));
 });
 
 

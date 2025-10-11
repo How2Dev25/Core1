@@ -160,29 +160,27 @@
 
         <!-- Booking Details -->
         @php
-use Carbon\Carbon;
-$checkIn = Carbon::parse($booking->reservation_checkin);
-$checkOut = Carbon::parse($booking->reservation_checkout);
-$totalNights = $checkIn->diffInDays($checkOut);
+            use Carbon\Carbon;
+            $checkIn = Carbon::parse($booking->reservation_checkin);
+            $checkOut = Carbon::parse($booking->reservation_checkout);
+            $totalNights = $checkIn->diffInDays($checkOut);
 
-// Room totals
-$subtotal = $booking->roomprice * $totalNights;
-$taxRate = 0.12;
-$taxAmount = $subtotal * $taxRate;
-$serviceFeeRate = 0.02;
-$serviceFee = $subtotal * $serviceFeeRate;
-$roomTotal = $subtotal + $taxAmount + $serviceFee;
+            // Room totals
+            $subtotal = $roomSubtotal;
+            $taxAmount = $vat;
+            $serviceFee = $roomserviceFee;
+            $roomTotal = $hotelTotal;
 
-// Restaurant totals
-$orderTotal = 0;
-if (isset($orders[$booking->bookingID])) {
-    foreach ($orders[$booking->bookingID] as $order) {
-        $orderTotal += $order->menu_price * $order->order_quantity;
-    }
-}
+            // Restaurant totals
+            $orderTotal = 0;
+            if (isset($orders[$booking->bookingID])) {
+                foreach ($orders[$booking->bookingID] as $order) {
+                    $orderTotal += $order->menu_price * $order->order_quantity;
+                }
+            }
 
-// Grand total
-$grandTotal = $roomTotal + $orderTotal;
+            // Grand total
+            $grandTotal = $roomTotal + $orderTotal;
         @endphp
 
         <div class="section">
@@ -215,11 +213,11 @@ $grandTotal = $roomTotal + $orderTotal;
                         <td class="text-right">{{ number_format($subtotal, 2) }}</td>
                     </tr>
                     <tr>
-                        <td colspan="4" class="text-right">Tax (12%)</td>
+                        <td colspan="4" class="text-right">Tax ({{$taxRatedynamic}})</td>
                         <td class="text-right">{{ number_format($taxAmount, 2) }}</td>
                     </tr>
                     <tr>
-                        <td colspan="4" class="text-right">Service Fee (2%)</td>
+                        <td colspan="4" class="text-right">Service Fee ({{$serviceFeedynamic}})</td>
                         <td class="text-right">{{ number_format($serviceFee, 2) }}</td>
                     </tr>
                     <tr class="total">
