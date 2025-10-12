@@ -11,6 +11,8 @@ use PHPMailer\PHPMailer\Exception;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\dynamicBilling;
+use Stripe\Stripe;
+use Stripe\Checkout\Session as StripeSession;
 
 class landingController extends Controller
 {
@@ -56,6 +58,7 @@ public function storereservation(Request $request)
         'vat' => 'required',
         'serviceFee' => 'required',
         'total' => 'required',
+        'payment_method' => 'required',
     ],[
         'roomID.required' => 'Please select a room.',
     'reservation_checkin.required' => 'Check-in date is missing.',
@@ -69,14 +72,90 @@ public function storereservation(Request $request)
     'guestaddress.required' => 'Address cannot be empty.',
     'guestcontactperson.required' => 'Emergency contact person is required.',
     'guestcontactpersonnumber.required' => 'Emergency contact number is required.',
+    'payment_method.required' => 'Payment Method is required',
     ]
 );
 
-    $form['payment_method'] = "Pay at Hotel";
-    $form['reservation_bookingstatus'] = 'Pending';
+    
     $form['bookedvia'] = 'Soliera';
+            $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+            $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+
+            $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
+            $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
+
+if ($form['payment_method'] === 'online') {
+
+    \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    // ✅ Get room details
+    $room = Room::where('roomID', $form['roomID'])->first();
+
+    // 💰 Compute totals dynamically
+    $subtotal = $form['subtotal']; // base room total
+    $vat = $form['vat']; // dynamic VAT
+    $serviceFee = $form['serviceFee']; // dynamic service fee
+    $grandTotal = $form['total']; // final total (including VAT & service fee)
+
+    // 🏨 Room Image Endpoint (from .env)
+    $roomImageEndpoint = env('ROOM_IMAGE_ENDPOINT');
+    $roomImage = $roomImageEndpoint . $room->roomphoto;
+
+    // 🧾 Create Stripe Checkout Session
+    $checkout_session = \Stripe\Checkout\Session::create([
+        'payment_method_types' => ['card'],
+        'line_items' => [
+            // Breakdown items
+            [
+                'price_data' => [
+                    'currency' => 'php',
+                    'product_data' => [
+                        'name' => 'Room: ' . $room->roomID,
+                        'description' => 'Base room price before fees',
+                        'images' => [$roomImage],
+                    ],
+                    'unit_amount' => intval($subtotal * 100),
+                ],
+                'quantity' => 1,
+            ],
+            [
+                'price_data' => [
+                    'currency' => 'php',
+                    'product_data' => [
+                        'name' => "VAT ({$taxRatedynamic})",
+                        'description' => 'Value Added Tax',
+                    ],
+                    'unit_amount' => intval($vat * 100),
+                ],
+                'quantity' => 1,
+            ],
+            [
+                'price_data' => [
+                    'currency' => 'php',
+                    'product_data' => [
+                        'name' => "Service Fee ({$serviceFeedynamic})",
+                        'description' => 'Hotel service and transaction fee',
+                    ],
+                    'unit_amount' => intval($serviceFee * 100),
+                ],
+                'quantity' => 1,
+            ],
+        ],
+        // ✅ Only charge the actual total (sum of above items)
+        'mode' => 'payment',
+        'success_url' => route('payment.success.landing') . '?session_id={CHECKOUT_SESSION_ID}',
+        'cancel_url' => route('payment.cancel'),
+        'metadata' => [
+            'form' => json_encode($form),
+        ],
+    ]);
+
+    return redirect($checkout_session->url);
+}
+
     if ($form['payment_method'] === 'Pay at Hotel') {
         $form['payment_status'] = "Pending";
+        $form['reservation_bookingstatus'] = "Pending";
     }
 
     // Create reservation
@@ -121,11 +200,7 @@ $totalFormatted = number_format($total, 2);
     $checkin = date('F j, Y', strtotime($form['reservation_checkin']));
     $checkout = date('F j, Y', strtotime($form['reservation_checkout']));
 
-            $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
-            $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
-
-            $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
-            $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
+       
             
     // PHPMailer Integration
     $mail = new PHPMailer(true);

@@ -1180,3 +1180,9 @@ Route::get('/profileguest', function(){
 });
 
 Route::put('/guestupdate/{guestID}', [userController::class, 'updateguest']);
+
+
+// Online Payment 
+Route::get('/payment/success', [ReservationController::class, 'paymentSuccess'])->name('payment.success');
+Route::get('/payment/success/landing', [ReservationController::class, 'paymentSuccessLanding'])->name('payment.success.landing');
+Route::get('/payment/cancel', [ReservationController::class, 'paymentCancel'])->name('payment.cancel');

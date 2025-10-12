@@ -48,4 +48,9 @@ return [
                   : env('GOOGLE_REDIRECT_URI_LOCAL'),
 ],
 
+'stripe' => [
+    'key' => env('STRIPE_KEY'),
+    'secret' => env('STRIPE_SECRET'),
+],
+
 ];
