@@ -102,7 +102,6 @@
 
 
 
-
               <div class="container mx-auto px-4 py-8">
                 <div class="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-8">
 
@@ -188,12 +187,12 @@
 
                                           <!-- Pricing Grid -->
                                           @php
-                    $nights = \Carbon\Carbon::parse($reserveroom->reservation_checkin)->diffInDays(\Carbon\Carbon::parse($reserveroom->reservation_checkout));
-                    $subtotal = $reserveroom->subtotal;
-                    $vat = $reserveroom->vat;
-                    $serviceFee = $reserveroom->serviceFee;
-                    $total = $reserveroom->total;
-                    $bookedDate = date('M d, Y', strtotime($reserveroom->reservation_created_at));
+    $nights = \Carbon\Carbon::parse($reserveroom->reservation_checkin)->diffInDays(\Carbon\Carbon::parse($reserveroom->reservation_checkout));
+    $subtotal = $reserveroom->subtotal;
+    $vat = $reserveroom->vat;
+    $serviceFee = $reserveroom->serviceFee;
+    $total = $reserveroom->total;
+    $bookedDate = date('M d, Y', strtotime($reserveroom->reservation_created_at));
                                           @endphp
 
                                           <div class="space-y-3">
@@ -306,6 +305,30 @@
 
 
           {{-- modals --}}
+          <!-- Success Modal -->
+<dialog id="geminiSuccessModal" class="modal">
+  <div class="modal-box max-w-md relative">
+    <form method="dialog" class="absolute top-4 right-4">
+      <button class="btn btn-sm btn-circle btn-ghost">&times;</button>
+    </form>
+
+    <div class="text-center p-6">
+      <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+
+      <h3 class="text-lg font-medium text-gray-900 mb-2">Booking Successful!</h3>
+      <p class="text-sm text-gray-500 mb-6">{{ session('success') }}</p>
+    </div>
+  </div>
+
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
+
 
 
 
@@ -323,6 +346,21 @@
         </main>
       </div>
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        @if(session('success'))
+          const modal = document.getElementById('geminiSuccessModal');
+          modal.showModal();
+
+          // Auto-close after 4 seconds
+          setTimeout(() => {
+            modal.close();
+          }, 4000);
+        @endif
+      });
+    </script>
+
 
 
     {{-- modals --}}

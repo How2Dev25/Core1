@@ -51,20 +51,14 @@
 <script>
   function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
-
     const toast = document.createElement('div');
     toast.className = `toast fixed bottom-0 right-0 mb-2 mr-2 bg-${type === 'success' ? 'green' : 'red'}-500 text-white p-3 rounded shadow flex items-center justify-between transform translate-x-24 opacity-0 transition-all duration-300`;
     toast.textContent = message;
-
     container.appendChild(toast);
-
-    // Trigger slide-in animation
     requestAnimationFrame(() => {
       toast.classList.remove('translate-x-24', 'opacity-0');
       toast.classList.add('translate-x-0', 'opacity-100');
     });
-
-    // Remove after 4s with slide-out
     setTimeout(() => {
       toast.classList.add('translate-x-24', 'opacity-0');
       toast.addEventListener('transitionend', () => toast.remove());
@@ -77,7 +71,6 @@
     const btnText = document.getElementById('btnText');
     const btnSpinner = document.getElementById('btnSpinner');
 
-    // Show loading
     confirmBtn.disabled = true;
     btnText.textContent = 'Processing...';
     btnSpinner.classList.remove('hidden');
@@ -88,15 +81,21 @@
       const response = await fetch(form.action, {
         method: form.method,
         body: formData,
-        headers: {
-          'Accept': 'application/json',  // <-- this tells Laravel to return JSON
-        },
+        headers: { 'Accept': 'application/json' }
       });
 
       const data = await response.json();
 
       if (response.ok) {
         document.getElementById('confirm_modal_bas2').close();
+
+        // ✅ Stripe payment
+        if (data.checkout_url) {
+          window.location.href = data.checkout_url;
+          return;
+        }
+
+        // ✅ Pay at Hotel
         showToast(`Booking successful! Booking ID: ${data.bookingID || 'N/A'}`, 'success');
       } else {
         throw new Error(data.message || 'Failed to book room');

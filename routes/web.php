@@ -1185,4 +1185,5 @@ Route::put('/guestupdate/{guestID}', [userController::class, 'updateguest']);
 // Online Payment 
 Route::get('/payment/success', [ReservationController::class, 'paymentSuccess'])->name('payment.success');
 Route::get('/payment/success/landing', [ReservationController::class, 'paymentSuccessLanding'])->name('payment.success.landing');
+Route::get('/payment/success/ai', [ReservationController::class, 'paymentSuccessAI'])->name('payment.success.ai');
 Route::get('/payment/cancel', [ReservationController::class, 'paymentCancel'])->name('payment.cancel');
