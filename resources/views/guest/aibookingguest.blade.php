@@ -178,6 +178,8 @@
             </div>
           </section>
 
+          @include('booking.terms')
+
         </main>
 
       </div>

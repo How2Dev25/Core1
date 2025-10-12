@@ -1,4 +1,5 @@
 <dialog id="terms_modal" class="modal">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <div class="modal-box w-11/12 max-w-4xl bg-white">
         <!-- Header -->
         <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
