@@ -100,7 +100,7 @@ if ($form['payment_method'] === 'online') {
     // 🏨 Room Image Endpoint (from .env)
     $roomImageEndpoint = env('ROOM_IMAGE_ENDPOINT');
     $roomImage = $roomImageEndpoint . $room->roomphoto;
-
+    session(['reservation_form' => $form]);
     // 🧾 Create Stripe Checkout Session
     $checkout_session = \Stripe\Checkout\Session::create([
         'payment_method_types' => ['card'],
@@ -145,9 +145,6 @@ if ($form['payment_method'] === 'online') {
         'mode' => 'payment',
         'success_url' => route('payment.success.landing') . '?session_id={CHECKOUT_SESSION_ID}',
         'cancel_url' => route('payment.cancel'),
-        'metadata' => [
-            'form' => json_encode($form),
-        ],
     ]);
 
     return redirect($checkout_session->url);
