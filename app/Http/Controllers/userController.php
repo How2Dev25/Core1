@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class userController extends Controller
 {
@@ -28,7 +29,23 @@ public function login(Request $request)
     $form = $request->validate([
         'employee_id' => 'required',
         'password'    => 'required',
+        'g-recaptcha-response' => 'required',
     ]);
+
+     // --- Verify reCAPTCHA token with Google ---
+    $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+        'secret'   => config('services.recaptcha.secret'),
+        'response' => $form['g-recaptcha-response'],
+    ]);
+
+    $captcha = $response->json();
+
+    if (!($captcha['success'] ?? false)) {
+        return back()->withErrors([
+            'g-recaptcha-response' => 'Please verify that you are not a robot.',
+        ]);
+    }
+
 
     $user = DeptAccount::where('employee_id', $form['employee_id'])->first();
 
@@ -361,7 +378,22 @@ public function guestlogin(Request $request)
     $form = $request->validate([
         'guest_email' => 'required|email',
         'guest_password' => 'required',
+        'g-recaptcha-response' => 'required', // Captcha
     ]);
+
+      // --- Verify reCAPTCHA token with Google ---
+    $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+        'secret'   => config('services.recaptcha.secret'),
+        'response' => $form['g-recaptcha-response'],
+    ]);
+
+    $captcha = $response->json();
+
+    if (!($captcha['success'] ?? false)) {
+        return back()->withErrors([
+            'g-recaptcha-response' => 'Please verify that you are not a robot.',
+        ]);
+    }
 
     // --- Login attempt cooldown ---
     $loginAttemptsKey = "guest_login_attempts_{$form['guest_email']}";

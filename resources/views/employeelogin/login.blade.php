@@ -142,9 +142,26 @@
                 </div>
               @enderror
 
+              @if ($errors->has('g-recaptcha-response'))
+                <div
+                  class="flex items-start space-x-2 mt-2 mb-2 p-3 bg-red-950/20 border border-red-500/30 rounded-lg animate-fade-in">
+                  <!-- Error Icon -->
+                  <svg class="w-4 h-4 mt-0.5 flex-shrink-0" style="color: #F7B32B;" fill="currentColor"
+                    viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 00-1 1v4a1 1 0 102 0V7a1 1 0 00-1-1zM9 13a1 1 0 112 0 1 1 0 01-2 0z"
+                      clip-rule="evenodd" />
+                  </svg>
+
+                  <!-- Error Message -->
+                  <p class="text-red-300 text-sm font-medium leading-relaxed">
+                    {{ $errors->first('g-recaptcha-response') }}
+                  </p>
+                </div>
+              @endif
+
               <!-- Sign In Button -->
-              <button type="submit" id="login-btn" class="w-full btn-primary btn opacity-50 cursor-not-allowed"
-                disabled>
+              <button id="login-btn" type="submit" class="w-full btn-primary btn">
                 Sign in
               </button>
             </form>
