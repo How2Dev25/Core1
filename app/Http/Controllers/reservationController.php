@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\guestnotification;
 use App\Models\Inventory;
 use App\Models\Reservation;
 use App\Models\restobillingandpayments;
@@ -19,6 +20,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use App\Models\AuditTrails;
 use App\Models\dynamicBilling;
+use App\Models\employeenotification;
 use Illuminate\Support\Facades\DB;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
@@ -96,7 +98,26 @@ $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person 
 }
 
 
-
+public function guestnotif($guestname, $guestID){
+    guestnotification::create([
+        'guestID' => $guestID,
+        'module' => 'Front Desk',
+        'guestname' => $guestname,
+        'topic' => 'Reservation',
+        'message' => 'Your Reservation Are Pending',
+        'status' => 'new',
+    ]);
+}
+public function employeenotif($guestname, $roomID)
+{
+    employeenotification::create([
+        'module' => 'Front Desk',
+        'message' => ($guestname ? $guestname . ' reserved room ' . $roomID : 'A guest reserved room ' . $roomID),
+        'topic' => 'Reservation',
+        'status' => 'new',
+        'guestname' => !empty($guestname) ? $guestname : null,
+    ]);
+}
 
    public function store(Request $request)
 {
@@ -311,6 +332,14 @@ HTML;
             'role' => Auth::user()->role,
             'date' => Carbon::now()->toDateTimeString(),
         ]);
+
+
+        // for notifications
+        $guestname = $form['guestname'];
+        $roomID = $form['roomID'];
+
+        $this->employeenotif($guestname, $roomID);
+        // 
 
 
 
@@ -2061,4 +2090,7 @@ HTML;
   
 }
 
+
 }
+
+
