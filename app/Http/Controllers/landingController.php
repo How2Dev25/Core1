@@ -13,9 +13,32 @@ use Carbon\Carbon;
 use App\Models\dynamicBilling;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
+use App\Models\guestnotification;
+use App\Models\employeenotification;
 
 class landingController extends Controller
 {
+
+    public function guestnotif($guestname, $guestID){
+    guestnotification::create([
+        'guestID' => $guestID,
+        'module' => 'Front Desk',
+        'guestname' => $guestname,
+        'topic' => 'Reservation',
+        'message' => 'Your Reservation Are Pending',
+        'status' => 'new',
+    ]);
+}
+public function employeenotif($guestname, $roomID)
+{
+    employeenotification::create([
+        'module' => 'Front Desk',
+        'message' => ($guestname ? $guestname . ' reserved room ' . $roomID : 'A guest reserved room ' . $roomID),
+        'topic' => 'Reservation',
+        'status' => 'new',
+        'guestname' => !empty($guestname) ? $guestname : null,
+    ]);
+}
    public function selectedroom($roomID){
         $room = room::where('roomID', $roomID)->first();
         $roomphotos = additionalRoom::
@@ -305,7 +328,20 @@ HTML;
         Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
     }
 
+
+ // for notifications
+        $guestname = $form['guestname'];
+        $roomID = $form['roomID'];
+
+        $this->employeenotif($guestname, $roomID);
+        // 
+
     return redirect()->route('booking.success', $reservation->reservationID, );
+
+    
+    
+
+
 }
 
 

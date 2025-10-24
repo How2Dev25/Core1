@@ -1,5 +1,5 @@
 @include('security.sessiontimeout')
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <header class="bg-base-100 shadow-sm z-10 border-b border-base-300 dark:border-gray-700" data-theme="light">
   <div class="px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">

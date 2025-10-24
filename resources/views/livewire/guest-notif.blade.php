@@ -5,7 +5,7 @@
     class="btn btn-ghost btn-circle relative w-12 h-12 flex items-center justify-center hover:bg-[#001f54]/20 transition">
     <i class="fa-solid fa-bell text-lg"></i>
 
-   @if($notifications->count() > 0)
+    @if($notifications->count() > 0)
     <span class="absolute top-1 right-1 flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-red-500 rounded-full border border-white">
         {{ $notifications->count() }}
     </span>
@@ -33,7 +33,7 @@
         <div class="max-h-96 overflow-y-auto space-y-2 p-2">
             @forelse($notifications as $notif)
                 <li class="bg-white rounded-lg px-4 py-3 shadow-sm hover:shadow-md transition relative">
-                    <button wire:click="removeNotification({{ $notif->notificationempID }})"
+                    <button wire:click="removeNotification({{ $notif->notificationguestID }})"
                         class="absolute top-2 right-2 text-gray-400 hover:text-red-500">
                         <i class="fa-solid fa-xmark w-4 h-4"></i>
                     </button>

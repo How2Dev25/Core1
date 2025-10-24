@@ -98,13 +98,13 @@ $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person 
 }
 
 
-public function guestnotif($guestname, $guestID){
+public function guestnotif($guestname, $guestID, $roomID){
     guestnotification::create([
         'guestID' => $guestID,
         'module' => 'Front Desk',
         'guestname' => $guestname,
         'topic' => 'Reservation',
-        'message' => 'Your Reservation Are Pending',
+        'message' => "Your Reservation For Room $roomID is Pending",
         'status' => 'new',
     ]);
 }
@@ -118,6 +118,110 @@ public function employeenotif($guestname, $roomID)
         'guestname' => !empty($guestname) ? $guestname : null,
     ]);
 }
+
+public function confirmnotif($guestname, $roomID, $guestID){
+ guestnotification::create([
+        'guestID' => $guestID,
+        'module' => 'Front Desk',
+        'guestname' => $guestname,
+        'topic' => 'Reservation',
+        'message' => "Your Reservation For Room $roomID Has Been Confirmed",
+        'status' => 'new',
+    ]);
+}
+
+public function cancelnotif($guestname, $roomID, $guestID){
+    guestnotification::create([
+        'guestID' => $guestID,
+        'module' => 'Front Desk',
+        'guestname' => $guestname,
+        'topic' => 'Reservation',
+        'message' => "Your Reservation For Room $roomID Has Been Cancelled",
+        'status' => 'new',
+    ]);
+
+     employeenotification::create([
+        'module' => 'Front Desk',
+        'message' => ($guestname ? $guestname . ' Cancelled Reservation for Room ' . $roomID : 'A guest cancelled reservation for room ' . $roomID),
+        'topic' => 'Reservation',
+        'status' => 'new',
+        'guestname' => !empty($guestname) ? $guestname : null,
+    ]);
+}
+
+public function checkinnotif($guestname, $roomID, $guestID){
+        guestnotification::create([
+        'guestID' => $guestID,
+        'module' => 'Front Desk',
+        'guestname' => $guestname,
+        'topic' => 'Reservation',
+        'message' => "You Have Check in on room $roomID",
+        'status' => 'new',
+    ]);
+
+     employeenotification::create([
+        'module' => 'Front Desk',
+        'message' => ($guestname ? $guestname . ' Check In  ' . $roomID : 'A guest Check in on room ' . $roomID),
+        'topic' => 'Reservation',
+        'status' => 'new',
+        'guestname' => !empty($guestname) ? $guestname : null,
+    ]);
+}
+
+public function deletenotif($guestname, $roomID, $guestID){
+        guestnotification::create([
+        'guestID' => $guestID,
+        'module' => 'Front Desk',
+        'guestname' => $guestname,
+        'topic' => 'Reservation',
+        'message' => "Your reservation for room $roomID are removed",
+        'status' => 'new',
+    ]);
+
+}
+
+
+public function checkoutnotif($guestname, $roomID, $guestID){
+        guestnotification::create([
+        'guestID' => $guestID,
+        'module' => 'Front Desk',
+        'guestname' => $guestname,
+        'topic' => 'Reservation',
+        'message' => "You Have Check out on room $roomID",
+        'status' => 'new',
+    ]);
+
+     employeenotification::create([
+        'module' => 'Front Desk',
+        'message' => ($guestname ? $guestname . ' Check Out on  ' . $roomID : 'A guest Check out on room ' . $roomID),
+        'topic' => 'Reservation',
+        'status' => 'new',
+        'guestname' => !empty($guestname) ? $guestname : null,
+    ]);
+}
+
+
+public function receiptnotif($guestname, $roomID, $guestID){
+   
+     employeenotification::create([
+        'module' => 'Front Desk',
+        'message' => "Invoice Has been sent to $guestname email address",
+        'topic' => 'Payment',
+        'status' => 'new',
+        'guestname' => !empty($guestname) ? $guestname : null,
+    ]);
+
+       guestnotification::create([
+        'guestID' => $guestID,
+        'module' => 'Front Desk',
+        'guestname' => $guestname,
+        'topic' => 'Payment',
+        'message' => "Your Receipt for Reservation Room $roomID is Email to your Email Address",
+        'status' => 'new',
+    ]);
+}
+
+
 
    public function store(Request $request)
 {
@@ -417,7 +521,15 @@ HTML;
                 ]);
             }
 
+            $guestname = $reservationID->guestname;
+            $roomID = $reservationID->roomID;
+           $guestID = $reservationID->guestID ?? null;
+
+            $this->deletenotif($guestname, $roomID, $guestID);
+
             session()->flash('removed', 'Reservation has been removed');
+
+            
 
             return redirect()->back();
         }
@@ -557,6 +669,10 @@ HTML;
                 ]);
             }
 
+              $guestID = $reservationID->guestID ?? null;
+
+            $this->confirmnotif($guestname, $roomID, $guestID);
+
     session()->flash('confirm', 'Reservation Status Has Been Confirmed');
     return redirect()->back();
 }
@@ -589,6 +705,12 @@ HTML;
                     'date'          => Carbon::now()->toDateTimeString(),
                 ]);
             }
+
+            
+              $guestID = $reservationID->guestID ?? null;
+              $guestname = $reservationID->guestname;
+
+            $this->confirmnotif($guestname, $roomID, $guestID);
 
         session()->flash('checkin', 'Guest Has Checked In');
 
@@ -710,6 +832,12 @@ HTML;
                     'date'          => Carbon::now()->toDateTimeString(),
                 ]);
             }
+
+                    $guestID = $reservationID->guestID ?? null;
+                    $guestname = $reservationID->guestname;
+
+                    $this->checkoutnotif($guestname, $roomID, $guestID);
+
                     session()->flash('checkout', 'Guest Has Been Checked Out');
 
                     return redirect()->back();
@@ -830,6 +958,11 @@ HTML;
                 ]);
             }
 
+                     $guestID = $reservationID->guestID ?? null;
+                    $guestname = $reservationID->guestname;
+
+                    $this->cancelnotif($guestname, $roomID, $guestID);
+
          
 
         return redirect()->back();
@@ -848,7 +981,9 @@ public function generateInvoice($reservationID)
             'core1_reservation.subtotal',
             'core1_reservation.vat',
             'core1_reservation.serviceFee',
-            'core1_reservation.total'
+            'core1_reservation.total',
+            'core1_reservation.roomID',
+            'core1_reservation.guestID',
         )
         ->firstOrFail();
 
@@ -1032,6 +1167,11 @@ public function generateInvoice($reservationID)
                 }
             }
     }
+
+    $guestname = $booking->guestname;
+    $roomID = $booking->roomID;
+    $guestID = $booking->guestID ?? null;
+    $this->receiptnotif($guestname, $roomID, $guestID);
 
     return redirect(asset("images/invoices/invoice_{$booking->reservationID}.pdf"));
 }
@@ -1308,7 +1448,12 @@ HTML;
         Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
     }
 
+        $guestname = $form['guestname'];
+        $roomID = $form['roomID'];
+        $guestID = $form['guestID'];
 
+        $this->employeenotif($guestname, $roomID);
+        $this->guestnotif($guestname, $guestID, $roomID);
 
 
 
@@ -1575,7 +1720,12 @@ HTML;
         Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
     }
 
+        $guestname = $form['guestname'];
+        $roomID = $form['roomID'];
+        $guestID = $form['guestID'];
 
+        $this->employeenotif($guestname, $roomID);
+        $this->guestnotif($guestname, $guestID, $roomID);
 
 
 
@@ -1746,6 +1896,13 @@ HTML;
     } catch (Exception $e) {
         Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
     }
+
+        $guestname = $form['guestname'];
+        $roomID = $form['roomID'];
+
+        $this->employeenotif($guestname, $roomID);
+       
+
      session()->forget('reservation_form'); 
     return redirect()->route('booking.success', $reservation->reservationID)
         ->with('success', 'Payment successful! Your booking has been confirmed.');
@@ -1917,6 +2074,14 @@ HTML;
     } catch (Exception $e) {
         Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
     }
+
+         $guestname = $form['guestname'];
+        $roomID = $form['roomID'];
+        $guestID = $form['guestID'];
+
+        $this->employeenotif($guestname, $roomID);
+        $this->guestnotif($guestname, $guestID, $roomID);
+
     session()->forget('reservation_form'); 
     return redirect()->back()->with('success', 'Booking ID: ' . $bookingID);
     
@@ -2082,6 +2247,14 @@ HTML;
     } catch (Exception $e) {
         Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
     }
+
+     $guestname = $form['guestname'];
+        $roomID = $form['roomID'];
+        $guestID = $form['guestID'];
+
+        $this->employeenotif($guestname, $roomID);
+        $this->guestnotif($guestname, $guestID, $roomID);
+
     session()->forget('reservation_form'); 
 
    session()->flash('success', ' Booking ID: ' . $bookingID);

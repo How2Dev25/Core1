@@ -15,13 +15,24 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use App\Models\employeenotification;
 
 class userController extends Controller
 {
 
      const MAX_OTP_ATTEMPTS = 3;         
     const MAX_LOGIN_ATTEMPTS = 5;        
-    const COOLDOWN_SECONDS = 300;        
+    const COOLDOWN_SECONDS = 300;     
+    
+    public function securitynotif($employeename, $employeerole){
+        employeenotification::create([
+            'module' => 'Security',
+            'message' => "$employeename ($employeerole) has successfully logged in to the system.",
+            'topic' => 'Security',
+            'status' => 'new',
+            'guestname' => null,
+        ]);
+    }
 
     
 public function login(Request $request)
@@ -163,6 +174,11 @@ public function verifyOTP(Request $request)
             'role'          => $user->role,
             'log_type'      => 'Login',
         ]);
+
+        $employeename = $user->employee_name;
+        $employeerole = $user->role;
+
+        $this->securitynotif($employeename, $employeerole);
 
         session()->flash('showwelcome');
 
