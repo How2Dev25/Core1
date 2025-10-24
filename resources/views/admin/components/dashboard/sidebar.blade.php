@@ -6,11 +6,8 @@
     <h1 class="text-xl font-bold text-white items-center gap-2">
       <img id="sidebar-logo" src="{{asset('images/logo/logofinal.png')}}" alt="">
       <img id="sonly" class="hidden w-full h-25" src="{{asset('images/logo/sonly.png')}}" alt="">
-
     </h1>
   </div>
-
-
 
   <!-- Navigation Menu -->
   <div class="flex-1 flex flex-col overflow-y-auto">
@@ -22,18 +19,16 @@
         </div>
 
         <!-- Dashboard -->
-
         <a href="/employeedashboard" class="block">
           <div
-            class=" flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
-            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="home" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+            class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
+            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+              <i class="fas fa-home text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Dashboard</span>
           </div>
         </a>
       @endif
-
 
       @if(Auth::user()->role === 'Hotel Admin')
         <div class="px-4 py-2">
@@ -45,13 +40,13 @@
           <div
             class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
             <div class="flex items-center">
-              <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-                <i data-lucide="users" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+              <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+                <i class="fas fa-users text-[#F7B32B] group-hover:text-white"></i>
               </div>
               <span class="ml-3 sidebar-text">Account Management</span>
             </div>
-            <i class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"
-              data-lucide="chevron-down"></i>
+            <i
+              class="fas fa-chevron-down w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"></i>
           </div>
 
           <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
@@ -59,7 +54,7 @@
             <a href="/departmentaccount"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="building-2" class="w-4 h-4 text-[#F7B32B]"></i>
+                <i class="fas fa-building w-4 h-4 text-[#F7B32B]"></i>
                 Department Accounts
               </span>
             </a>
@@ -68,7 +63,7 @@
             <a href="/departmentlogs"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="file-text" class="w-4 h-4 text-[#F7B32B]"></i>
+                <i class="fas fa-file-alt w-4 h-4 text-[#F7B32B]"></i>
                 Department Logs
               </span>
             </a>
@@ -77,7 +72,7 @@
             <a href="/audittrails"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="activity" class="w-4 h-4 text-[#F7B32B]"></i>
+                <i class="fas fa-chart-line w-4 h-4 text-[#F7B32B]"></i>
                 Audit Trails & Transactions
               </span>
             </a>
@@ -86,7 +81,7 @@
             <a href="/guestaccount"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="user" class="w-4 h-4 text-[#F7B32B]"></i>
+                <i class="fas fa-user w-4 h-4 text-[#F7B32B]"></i>
                 Guest Accounts
               </span>
             </a>
@@ -94,10 +89,7 @@
         </div>
       @endif
 
-
-
       <!-- Section Label -->
-
       @if(Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Receptionist')
         <div class="px-4 py-2 mt-4">
           <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">Operations</span>
@@ -107,19 +99,18 @@
         <a href="/frontdesk" class="block">
           <div
             class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
-            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="monitor" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+              <i class="fas fa-desktop text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Front Desk And Reception</span>
           </div>
         </a>
 
-
         <a href="/pointofsale" class="block">
           <div
             class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
-            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="shopping-bag" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+              <i class="fas fa-shopping-bag text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Point Of Sale</span>
           </div>
@@ -131,27 +122,25 @@
           <div
             class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
             <div class="flex items-center">
-              <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-                <i data-lucide="calendar-check" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+              <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+                <i class="fas fa-calendar-check text-[#F7B32B] group-hover:text-white"></i>
               </div>
               <span class="ml-3 sidebar-text">Booking And Reservations</span>
             </div>
-            <i class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"
-              data-lucide="chevron-down"></i>
+            <i
+              class="fas fa-chevron-down w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"></i>
           </div>
           <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
             <a href="/bas"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="bed" class="w-4 h-4 text-[#F7B32B]"></i>
+                <i class="fas fa-bed w-4 h-4 text-[#F7B32B]"></i>
                 Room Reservation
               </span>
             </a>
           </div>
         </div>
-
       @endif
-
 
       <!-- Section Label -->
       @if(Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Receptionist')
@@ -159,26 +148,25 @@
           <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">Billing</span>
         </div>
 
-
         <div class="collapse group">
           <input type="checkbox" class="peer" />
           <div
             class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
             <div class="flex items-center">
-              <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-                <i data-lucide="credit-card" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+              <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+                <i class="fas fa-credit-card text-[#F7B32B] group-hover:text-white"></i>
               </div>
               <span class="ml-3 sidebar-text">Billing and Payments</span>
             </div>
-            <i class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"
-              data-lucide="chevron-down"></i>
+            <i
+              class="fas fa-chevron-down w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"></i>
           </div>
 
           <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
             <a href="/guestpayments"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="wallet" class="w-4 h-4 text-[#F7B32B]"></i>
+                <i class="fas fa-wallet w-4 h-4 text-[#F7B32B]"></i>
                 Guest Payments
               </span>
             </a>
@@ -186,7 +174,7 @@
             <a href="/managefees"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="settings" class="w-4 h-4 text-[#F7B32B]"></i>
+                <i class="fas fa-cog w-4 h-4 text-[#F7B32B]"></i>
                 Manage Fees
               </span>
             </a>
@@ -194,23 +182,21 @@
             <a href="/transactionhistory"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="file-text" class="w-4 h-4 text-[#F7B32B]"></i>
+                <i class="fas fa-file-alt w-4 h-4 text-[#F7B32B]"></i>
                 Transaction History
               </span>
             </a>
           </div>
         </div>
-
-        <!-- Section Label -->
       @endif
-      
-       @if(
+
+      @if(
   Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Guest Relationship Head'
   || Auth::user()->role === 'Receptionist'
 )
-      <div class="px-4 py-2 mt-4">
-        <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">CRM</span>
-      </div>
+        <div class="px-4 py-2 mt-4">
+          <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">CRM</span>
+        </div>
       @endif
 
       <!-- Guest Management -->
@@ -220,26 +206,26 @@
           <div
             class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
             <div class="flex items-center">
-              <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-                <i data-lucide="users" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+              <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+                <i class="fas fa-users text-[#F7B32B] group-hover:text-white"></i>
               </div>
               <span class="ml-3 sidebar-text ">Guest Relationship Management</span>
             </div>
-            <i class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"
-              data-lucide="chevron-down"></i>
+            <i
+              class="fas fa-chevron-down w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"></i>
           </div>
           <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
             <a href="/roomfeedback"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="star" class="w-4 h-4 text-[#F7B32B]"></i>
+                <i class="fas fa-star w-4 h-4 text-[#F7B32B]"></i>
                 Room Feedbacks
               </span>
             </a>
             <a href="/servicefeedback"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="heart" class="w-4 h-4 text-[#F7B32B]"></i>
+                <i class="fas fa-heart w-4 h-4 text-[#F7B32B]"></i>
                 Service Feedbacks
               </span>
             </a>
@@ -247,90 +233,85 @@
         </div>
       @endif
 
-
       @if(Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Receptionist')
         <a href="/lar" class="block">
           <div
             class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
-            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="award" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+              <i class="fas fa-award text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Loyalty And Rewards</span>
           </div>
         </a>
       @endif
 
-
       <!-- Section Label -->
-     @if(
+      @if(
   Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Room Attendant'
   || Auth::user()->role === 'Room Manager' || Auth::user()->role === 'Maintenance Staff'
 )
         <div class="px-4 py-2 mt-4">
           <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">Room Management</span>
         </div>
+      @endif
 
-        @endif
-
-        <!-- Room Management -->
-@if(
+      <!-- Room Management -->
+      @if(
   Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Room Attendant'
   || Auth::user()->role === 'Room Manager'
 )
-          <div class="collapse group">
-            <input type="checkbox" class="peer" />
-            <div
-              class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
-              <div class="flex items-center">
-                <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-                  <i data-lucide="door-open" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
-                </div>
-                <span class="ml-3 sidebar-text">Room Management And Service</span>
+        <div class="collapse group">
+          <input type="checkbox" class="peer" />
+          <div
+            class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
+            <div class="flex items-center">
+              <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+                <i class="fas fa-door-open text-[#F7B32B] group-hover:text-white"></i>
               </div>
-              <i class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"
-                data-lucide="chevron-down"></i>
+              <span class="ml-3 sidebar-text">Room Management And Service</span>
             </div>
-            <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
-              @if(
-    Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Room Attendant'
-    || Auth::user()->role === 'Room Manager'
-  )
-                <a href="/roommanagement"
-                  class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
-                  <span class="flex items-center gap-2">
-                    <i data-lucide="bed" class="w-4 h-4 text-[#F7B32B]"></i>
-                    Rooms
-                  </span>
-                </a>
-              @endif
-
-              @if(Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Receptionist')
-                <a href="/servicemanagement"
-                  class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
-                  <span class="flex items-center gap-2">
-                    <i data-lucide="key" class="w-4 h-4 text-[#F7B32B]"></i>
-                    Door Locks
-                  </span>
-                </a>
-              @endif
-
-
-              @if(
-    Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Room Attendant'
-    || Auth::user()->role === 'Room Manager'
-  )
-                <a href="/roomtypesadmin"
-                  class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
-                  <span class="flex items-center gap-2">
-                    <i data-lucide="layers" class="w-4 h-4 text-[#F7B32B]"></i>
-                    Room Types
-                  </span>
-                </a>
-
-              @endif
-            </div>
+            <i
+              class="fas fa-chevron-down w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"></i>
           </div>
-@endif
+          <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
+            @if(
+    Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Room Attendant'
+    || Auth::user()->role === 'Room Manager'
+  )
+              <a href="/roommanagement"
+                class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+                <span class="flex items-center gap-2">
+                  <i class="fas fa-bed w-4 h-4 text-[#F7B32B]"></i>
+                  Rooms
+                </span>
+              </a>
+            @endif
+
+            @if(Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Receptionist')
+              <a href="/servicemanagement"
+                class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+                <span class="flex items-center gap-2">
+                  <i class="fas fa-key w-4 h-4 text-[#F7B32B]"></i>
+                  Door Locks
+                </span>
+              </a>
+            @endif
+
+            @if(
+    Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Room Attendant'
+    || Auth::user()->role === 'Room Manager'
+  )
+              <a href="/roomtypesadmin"
+                class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+                <span class="flex items-center gap-2">
+                  <i class="fas fa-layer-group w-4 h-4 text-[#F7B32B]"></i>
+                  Room Types
+                </span>
+              </a>
+            @endif
+          </div>
+        </div>
+      @endif
 
       @if(
   Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Maintenance Staff'
@@ -339,17 +320,13 @@
         <a href="/hmm" class="block">
           <div
             class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
-            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="brush-cleaning" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+              <i class="fas fa-broom text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Housekeeping And Maintenance</span>
           </div>
         </a>
       @endif
-
-
-
-
 
       <!-- Section Label -->
       @if(
@@ -363,14 +340,13 @@
         <a href="/ias" class="block">
           <div
             class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
-            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="package" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+              <i class="fas fa-boxes text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Inventory And Stock Management</span>
           </div>
         </a>
       @endif
-
 
       @if(
   Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Receptionist' || Auth::user()->role === 'Hotel Marketing Officer'
@@ -378,31 +354,22 @@
         <div class="px-4 py-2 mt-4">
           <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">Marketing</span>
         </div>
-
       @endif
 
-
-
-      @if(
-  Auth::user()->role === 'Hotel Admin'
-)
-        <!-- Section Label -->
-
-
-        {{-- ecm --}}
-
+      @if(Auth::user()->role === 'Hotel Admin')
+        <!-- Event & Conference Management -->
         <div class="collapse group">
           <input type="checkbox" class="peer" />
           <div
             class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
             <div class="flex items-center">
-              <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-                <i data-lucide="calendar-range" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+              <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+                <i class="fas fa-calendar-alt text-[#F7B32B] group-hover:text-white"></i>
               </div>
               <span class="ml-3 sidebar-text">Event & Conference</span>
             </div>
-            <i class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"
-              data-lucide="chevron-down"></i>
+            <i
+              class="fas fa-chevron-down w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"></i>
           </div>
 
           <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
@@ -410,7 +377,7 @@
             <a href="/ecm"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="calendar-days" class="w-4 h-4 text-[#F7B32B]"></i>
+                <i class="fas fa-calendar-day w-4 h-4 text-[#F7B32B]"></i>
                 Events
               </span>
             </a>
@@ -419,7 +386,7 @@
             <a href="/conference"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="users" class="w-4 h-4 text-[#F7B32B]"></i>
+                <i class="fas fa-users w-4 h-4 text-[#F7B32B]"></i>
                 Conference
               </span>
             </a>
@@ -428,7 +395,7 @@
             <a href="/facilities"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i data-lucide="building-2" class="w-4 h-4 text-[#F7B32B]"></i>
+                <i class="fas fa-building w-4 h-4 text-[#F7B32B]"></i>
                 Facilities
               </span>
             </a>
@@ -442,14 +409,13 @@
         <a href="/hmp" class="block">
           <div
             class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
-            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="megaphone" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+              <i class="fas fa-bullhorn text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Hotel Marketing And Promotion</span>
           </div>
         </a>
       @endif
-
 
       @if(
   Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Receptionist'
@@ -457,39 +423,34 @@
         <a href="/channel" class="block">
           <div
             class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
-            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="share-2" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+              <i class="fas fa-share-alt text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Channel Management</span>
           </div>
         </a>
       @endif
 
-
       <!-- Section Label -->
-      @if(
-  Auth::user()->role === 'Hotel Admin'
-)
+      @if(Auth::user()->role === 'Hotel Admin')
         <div class="px-4 py-2 mt-4">
           <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">Integration</span>
         </div>
 
-
         <a href="/restoadmin" class="block">
           <div
             class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
-            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="utensils" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+              <i class="fas fa-utensils text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Restaurant Menu</span>
           </div>
         </a>
       @endif
-
-
     </nav>
   </div>
 </div>
+
 <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
 
@@ -568,4 +529,13 @@
   #sidebar.loaded #sidebar-logo {
     opacity: 1;
   }
+    /* Position the hamburger bars */
+#line1, #line2, #line3 {
+  transition: all 0.3s ease;
+}
+
+/* Default state */
+.line1 { transform: translateY(-6px); }
+.line2 { transform: translateY(0); }
+.line3 { transform: translateY(6px); }
 </style>

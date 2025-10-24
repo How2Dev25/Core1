@@ -1,20 +1,19 @@
 <div
   class="bg-[#001f54] pt-5 pb-4 flex flex-col fixed md:relative h-full transition-all duration-300 ease-in-out shadow-xl transform -translate-x-full md:transform-none md:translate-x-0"
   id="sidebar">
+
   <!-- Sidebar Header -->
   <div class="flex items-center justify-between flex-shrink-0 px-4 mb-6 text-center">
     <h1 class="text-xl font-bold text-white items-center gap-2">
       <img id="sidebar-logo" src="{{asset('images/logo/logofinal.png')}}" alt="">
       <img id="sonly" class="hidden w-full h-25" src="{{asset('images/logo/sonly.png')}}" alt="">
-
     </h1>
   </div>
-
-
 
   <!-- Navigation Menu -->
   <div class="flex-1 flex flex-col overflow-y-auto">
     <nav class="flex-1 px-2 space-y-1">
+
       <!-- Section Label -->
       <div class="px-4 py-2">
         <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">Main Menu</span>
@@ -23,177 +22,149 @@
       <!-- Dashboard -->
       <a href="/guestdashboard" class="block">
         <div
-          class=" flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
+          class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
           <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-            <i data-lucide="home" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+            <i class="fa-solid fa-house text-[#F7B32B] group-hover:text-white"></i>
           </div>
           <span class="ml-3 sidebar-text">Dashboard</span>
         </div>
       </a>
 
-
-
-
-
-
-      <!-- Guest Management -->
-
-
+      <!-- My Reservations -->
       <a href="/myreservation" class="block">
         <div
           class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
           <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-            <i data-lucide="calendar-check" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+            <i class="fa-solid fa-calendar-check text-[#F7B32B] group-hover:text-white"></i>
           </div>
           <span class="ml-3 sidebar-text">My Reservations</span>
         </div>
       </a>
 
-
-
-      <!-- Reservation And Booking -->
+      <!-- Booking And Reservations -->
       <div class="collapse group">
         <input type="checkbox" class="peer" />
         <div
           class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
           <div class="flex items-center">
             <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="calendar-check" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+              <i class="fa-solid fa-calendar-days text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Booking And Reservations</span>
           </div>
-          <i class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"
-            data-lucide="chevron-down"></i>
+          <i
+            class="fa-solid fa-chevron-down text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"></i>
         </div>
         <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
           <a href="/showrooms"
             class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
             <span class="flex items-center gap-2">
-              <i data-lucide="bed" class="w-4 h-4 text-[#F7B32B]"></i>
-              Room Reservation
+              <i class="fa-solid fa-bed text-[#F7B32B]"></i> Room Reservation
             </span>
           </a>
           <a href="/aiguest"
             class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
             <span class="flex items-center gap-2">
-              <i data-lucide="bot" class="w-4 h-4 text-[#F7B32B]"></i>
-              AI Assistance
+              <i class="fa-solid fa-robot text-[#F7B32B]"></i> AI Assistance
             </span>
           </a>
         </div>
       </div>
 
+      <!-- Provide Feedback -->
       <div class="collapse group">
         <input type="checkbox" class="peer" />
         <div
           class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
           <div class="flex items-center">
             <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="users" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+              <i class="fa-solid fa-users text-[#F7B32B] group-hover:text-white"></i>
             </div>
-            <span class="ml-3 sidebar-text ">Provide Feedback</span>
+            <span class="ml-3 sidebar-text">Provide Feedback</span>
           </div>
-          <i class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"
-            data-lucide="chevron-down"></i>
+          <i
+            class="fa-solid fa-chevron-down text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"></i>
         </div>
         <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
           <a href="/guestroomfeedback"
             class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
             <span class="flex items-center gap-2">
-              <i data-lucide="star" class="w-4 h-4 text-[#F7B32B]"></i>
-              Room Feedbacks
+              <i class="fa-solid fa-star text-[#F7B32B]"></i> Room Feedbacks
             </span>
           </a>
           <a href="#"
             class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
             <span class="flex items-center gap-2">
-              <i data-lucide="heart" class="w-4 h-4 text-[#F7B32B]"></i>
-              Service Feedbacks
+              <i class="fa-solid fa-heart text-[#F7B32B]"></i> Service Feedbacks
             </span>
           </a>
         </div>
       </div>
 
-
-
+      <!-- Restaurant -->
       <div class="collapse group">
         <input type="checkbox" class="peer" />
         <div
           class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
           <div class="flex items-center">
             <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-              <i data-lucide="utensils" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+              <i class="fa-solid fa-utensils text-[#F7B32B] group-hover:text-white"></i>
             </div>
             <span class="ml-3 sidebar-text">Restaurant</span>
           </div>
-          <i class="w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"
-            data-lucide="chevron-down"></i>
+          <i
+            class="fa-solid fa-chevron-down text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"></i>
         </div>
-
         <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
-          <!-- Order Menu -->
           <a href="/menuorder"
             class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
             <span class="flex items-center gap-2">
-              <i data-lucide="list" class="w-4 h-4 text-[#F7B32B]"></i>
-              Order Menu
+              <i class="fa-solid fa-list text-[#F7B32B]"></i> Order Menu
             </span>
           </a>
-
-          <!-- My Cart -->
           <a href="/myorder"
             class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
             <span class="flex items-center gap-2">
-              <i data-lucide="utensils-crossed" class="w-4 h-4 text-[#F7B32B]"></i>
-              My Orders
+              <i class="fa-solid fa-bowl-food text-[#F7B32B]"></i> My Orders
             </span>
           </a>
-
-          <!-- Recent Orders -->
           <a href="/recentorders"
             class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
             <span class="flex items-center gap-2">
-              <i data-lucide="clock" class="w-4 h-4 text-[#F7B32B]"></i>
-              Recent Orders
+              <i class="fa-solid fa-clock text-[#F7B32B]"></i> Recent Orders
             </span>
           </a>
         </div>
       </div>
 
-
-
-      <a href="" class="block">
+      <!-- Rewards -->
+      <a href="#" class="block">
         <div
           class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
           <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-            <i data-lucide="award" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+            <i class="fa-solid fa-award text-[#F7B32B] group-hover:text-white"></i>
           </div>
           <span class="ml-3 sidebar-text">Loyalty And Rewards</span>
         </div>
       </a>
 
-
-      <!-- Other menu items -->
-
-
-      <a href="" class="block">
+      <!-- Events -->
+      <a href="#" class="block">
         <div
           class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
           <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-            <i data-lucide="calendar-days" class="w-5 h-5 text-[#F7B32B] group-hover:text-white"></i>
+            <i class="fa-solid fa-calendar-days text-[#F7B32B] group-hover:text-white"></i>
           </div>
           <span class="ml-3 sidebar-text">View Events</span>
         </div>
       </a>
 
-
-
-
     </nav>
   </div>
 </div>
-<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
+<!-- Sidebar overlay for mobile -->
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
 <style>
   /* Mobile styles */
@@ -269,5 +240,25 @@
 
   #sidebar.loaded #sidebar-logo {
     opacity: 1;
+  }
+
+  /* Position the hamburger bars */
+  #line1,
+  #line2,
+  #line3 {
+    transition: all 0.3s ease;
+  }
+
+  /* Default state */
+  .line1 {
+    transform: translateY(-6px);
+  }
+
+  .line2 {
+    transform: translateY(0);
+  }
+
+  .line3 {
+    transform: translateY(6px);
   }
 </style>

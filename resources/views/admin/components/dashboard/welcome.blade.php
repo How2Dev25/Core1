@@ -5,7 +5,7 @@
             <!-- Close (X) Button on Top Right -->
             <button class="absolute top-4 right-4 text-primary-content/70 hover:text-red-400 transition"
                 onclick="dismissWelcome()">
-                <i data-lucide="x" class="w-6 h-6"></i>
+                <i class="fa-solid fa-xmark w-6 h-6"></i>
             </button>
 
             <!-- Grid Layout -->

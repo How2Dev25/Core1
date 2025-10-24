@@ -16,6 +16,7 @@
         "vite": "^6.2.4"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^7.1.0",
         "puppeteer": "^24.17.0"
     }
 }

@@ -4,9 +4,11 @@
   <div class="px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center">
-        <button onclick="toggleSidebar()"
-          class="btn btn-ghost btn-sm hover:bg-base-300  transition-all hover:scale-105">
-          <i data-lucide="menu" class="w-5 h-5"></i>
+        <button id="hamburgerBtn" onclick="toggleSidebar()"
+          class="btn btn-ghost btn-sm hover:bg-base-300 transition-all hover:scale-105 relative flex flex-col justify-center items-center w-10 h-10">
+          <span class="bar line1 absolute w-5 h-0.5 bg-current rounded transition-all duration-300"></span>
+          <span class="bar line2 absolute w-5 h-0.5 bg-current rounded transition-all duration-300"></span>
+          <span class="bar line3 absolute w-5 h-0.5 bg-current rounded transition-all duration-300"></span>
         </button>
       </div>
       <div class="flex items-center gap-4">
