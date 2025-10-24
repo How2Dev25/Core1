@@ -85,7 +85,7 @@
               </p>
               <div
                 class="bg-blue-900 text-yellow-400 px-6 py-3 rounded-full font-bold text-lg shadow-lg transform group-hover:bg-blue-800 transition-all duration-300">
-                <i class="fas fa-calendar-star mr-2"></i>
+                <i class="fa-solid fa-calendar-days mr-2"></i>
                 Book Event
               </div>
             </div>
