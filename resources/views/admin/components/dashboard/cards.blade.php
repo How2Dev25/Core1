@@ -8,11 +8,11 @@
                                         <div class="flex-1">
                                             <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Current
                                                 Revenue</h3>
-                                            <p class="text-3xl font-bold text-gray-800 mt-2">
+                                            <p class="text-2xl font-bold text-gray-800 mt-2">
                                                 ₱{{ number_format($revenueCurrent, 2) }}</p>
                                             <div class="flex items-center mt-3">
                                                 @php
-    $revenueArrowClass = $revenueChange >= 0 ? 'fa-arrow-up text-green-500' : 'fa-arrow-down text-red-500';
+$revenueArrowClass = $revenueChange >= 0 ? 'fa-arrow-up text-green-500' : 'fa-arrow-down text-red-500';
                                                 @endphp
                                                 <span
                                                     class="text-sm font-medium flex items-center {{ $revenueChange >= 0 ? 'text-green-500' : 'text-red-500' }}">
@@ -23,7 +23,7 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900 flex-shrink-0 ml-4">
+                                            class="w-12 h-12 rounded-xl flex items-center justify-center bg-blue-900 flex-shrink-0 ml-4">
                                             <i class="fa-solid fa-peso-sign text-yellow-400 text-2xl"></i>
                                         </div>
                                     </div>
@@ -36,11 +36,11 @@
                                         <div class="flex-1">
                                             <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Avg Daily
                                                 Rate</h3>
-                                            <p class="text-3xl font-bold text-gray-800 mt-2">
+                                            <p class="text-2xl font-bold text-gray-800 mt-2">
                                                 ₱{{ number_format($avgDailyRateCurrent, 2) }}</p>
                                             <div class="flex items-center mt-3">
                                                 @php
-    $adrArrowClass = $avgDailyRateChange >= 0 ? 'fa-arrow-up text-green-500' : 'fa-arrow-down text-red-500';
+$adrArrowClass = $avgDailyRateChange >= 0 ? 'fa-arrow-up text-green-500' : 'fa-arrow-down text-red-500';
                                                 @endphp
                                                 <span
                                                     class="text-sm font-medium flex items-center {{ $avgDailyRateChange >= 0 ? 'text-green-500' : 'text-red-500' }}">
@@ -51,7 +51,7 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900 flex-shrink-0 ml-4">
+                                            class="w-12 h-12 rounded-xl flex items-center justify-center bg-blue-900 flex-shrink-0 ml-4">
                                             <i class="fa-solid fa-chart-line text-yellow-400 text-2xl"></i>
                                         </div>
                                     </div>
@@ -64,11 +64,11 @@
                                         <div class="flex-1">
                                             <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">RevPAR
                                             </h3>
-                                            <p class="text-3xl font-bold text-gray-800 mt-2">
+                                            <p class="text-2xl font-bold text-gray-800 mt-2">
                                                 ₱{{ number_format($revPARCurrent, 2) }}</p>
                                             <div class="flex items-center mt-3">
                                                 @php
-    $revPARArrowClass = $revPARChange >= 0 ? 'fa-arrow-up text-green-500' : 'fa-arrow-down text-red-500';
+$revPARArrowClass = $revPARChange >= 0 ? 'fa-arrow-up text-green-500' : 'fa-arrow-down text-red-500';
                                                 @endphp
                                                 <span
                                                     class="text-sm font-medium flex items-center {{ $revPARChange >= 0 ? 'text-green-500' : 'text-red-500' }}">
@@ -79,7 +79,7 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900 flex-shrink-0 ml-4">
+                                            class="w-12 h-12 rounded-xl flex items-center justify-center bg-blue-900 flex-shrink-0 ml-4">
                                             <i class="fa-solid fa-house-chimney text-yellow-400 text-2xl"></i>
                                         </div>
                                     </div>
@@ -92,12 +92,12 @@
                                         <div class="flex-1">
                                             <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Occupancy
                                                 Rate</h3>
-                                            <p class="text-3xl font-bold text-gray-800 mt-2">
+                                            <p class="text-2xl font-bold text-gray-800 mt-2">
                                                 {{ number_format($occupancyCurrent, 1) }}%
                                             </p>
                                             <div class="flex items-center mt-3">
                                                 @php
-    $occupancyArrowClass = $occupancyChange >= 0 ? 'fa-arrow-up text-green-500' : 'fa-arrow-down text-red-500';
+$occupancyArrowClass = $occupancyChange >= 0 ? 'fa-arrow-up text-green-500' : 'fa-arrow-down text-red-500';
                                                 @endphp
                                                 <span
                                                     class="text-sm font-medium flex items-center {{ $occupancyChange >= 0 ? 'text-green-500' : 'text-red-500' }}">
@@ -108,7 +108,7 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900 flex-shrink-0 ml-4">
+                                            class="w-12 h-12 rounded-xl flex items-center justify-center bg-blue-900 flex-shrink-0 ml-4">
                                             <i class="fa-solid fa-bed text-yellow-400 text-2xl"></i>
                                         </div>
                                     </div>
