@@ -58,12 +58,12 @@
 
 
                         <!-- Revenue Metrics Section -->
-                        <div class="flex gap-5">
-                            <div class="w-1/2">
+                        <div class="flex gap-5 max-md:flex-col">
+                            <div class="w-1/2 max-md:w-full">
                                 @include('admin.components.dashboard.cards')
                             </div>
                             <!-- Recent Activities -->
-                            <div class="flex-1">
+                            <div class="flex-1 max-md:w-full">
                                 @include('admin.components.dashboard.recentactivities')
                             </div>
                         </div>
@@ -201,8 +201,8 @@
                                     labels: ['Available', 'Maintenance', 'Reserved'],
                                     datasets: [{
                                         data: [
-                                                                                                                                                {{ $totalrooms - $needmaintenance - $totalreservation }}, // Available
-                                                                                                                                                {{ $needmaintenance }}, // Maintenance
+                                                                                                                                                            {{ $totalrooms - $needmaintenance - $totalreservation }}, // Available
+                                                                                                                                                            {{ $needmaintenance }}, // Maintenance
                                             {{ $totalreservation }}  // Reserved
                                         ],
                                         backgroundColor: [

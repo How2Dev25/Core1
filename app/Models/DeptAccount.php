@@ -11,6 +11,8 @@ class DeptAccount extends Authenticatable
 
     protected $table = 'department_accounts';
     protected $primaryKey = 'Dept_no';
+
+      public $timestamps = false; // ✅ Add this line
   
 
     protected $fillable = [
@@ -28,4 +30,11 @@ class DeptAccount extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+
+
+public function additionalInfo()
+{
+    return $this->hasOne(additionalinfoadmin::class, 'Dept_no', 'Dept_no');
+}
 }

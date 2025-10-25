@@ -16,6 +16,7 @@ use PHPMailer\PHPMailer\Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Models\employeenotification;
+use App\Models\additionalinfoadmin;
 
 class userController extends Controller
 {
@@ -43,7 +44,7 @@ public function login(Request $request)
         'g-recaptcha-response' => 'required',
     ]);
 
-     // --- Verify reCAPTCHA token with Google ---
+    // --- Verify reCAPTCHA ---
     $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
         'secret'   => config('services.recaptcha.secret'),
         'response' => $form['g-recaptcha-response'],
@@ -57,10 +58,9 @@ public function login(Request $request)
         ]);
     }
 
-
     $user = DeptAccount::where('employee_id', $form['employee_id'])->first();
 
-    // --- Login attempt cooldown ---
+    // --- Login cooldown ---
     $loginAttemptsKey = "login_attempts_{$form['employee_id']}";
     $attemptData = Session::get($loginAttemptsKey);
 
@@ -76,9 +76,16 @@ public function login(Request $request)
         }
     }
 
-    // --- Validate password ---
-    if ($user && $user->password === $form['password']) {
-        // Generate OTP
+    // --- Validate password (supports both hashed & plaintext) ---
+    $validPassword = false;
+    if ($user) {
+        if (Hash::check($form['password'], $user->password)) {
+            $validPassword = true;
+        }
+    }
+
+    if ($validPassword) {
+        // --- OTP generation ---
         $otp = rand(100000, 999999);
 
         Session::put('otp', $otp);
@@ -87,13 +94,12 @@ public function login(Request $request)
         Session::put('pending_email', $user->email);
         Session::put('otp_attempts', 0);
 
-        // Send OTP
         $this->sendOtpMail($user->email, $user->name ?? $user->employee_id, $otp);
 
         return redirect('/employeeloginotp')->with('status', 'We sent a 6-digit OTP to your email.');
     }
 
-    // Wrong credentials → increment attempts
+    // --- Wrong credentials → increment attempts ---
     $attemptData = $attemptData ?? ['count' => 0, 'last' => time()];
     $attemptData['count']++;
     $attemptData['last'] = time();
@@ -103,7 +109,6 @@ public function login(Request $request)
         'employee_id' => 'Invalid Employee ID or password.',
     ])->onlyInput('employee_id');
 }
-
 
 public function verifyOTP(Request $request)
 {
@@ -603,6 +608,75 @@ public function resendGuestOtp(Request $request)
 
         return redirect()->back()->with('success', 'Profile updated successfully!');
     }
+
+public function updateadmin(Request $request)
+{
+      /** @var \App\Models\DeptAccount $user */
+    $user = Auth::user();
+
+    // ✅ Validate incoming data
+    $validated = $request->validate([
+        'dept_name' => 'required|string|max:255',
+        'employee_name' => 'required|string|max:255',
+        'role' => 'nullable|string|max:255',
+        'adminphoto' => 'nullable',
+        'password' => 'nullable|confirmed',
+        'email' => 'nullable',
+        'status' => 'nullable',
+        'employee_id' => 'nullable',
+    ]);
+
+    // ✅ Protect role & dept name (not editable by user)
+    unset($validated['dept_name'], $validated['role'], $validated['status'], $validated['employee_id']);
+
+    // ✅ Update employee name
+    $user->employee_name = $validated['employee_name'];
+
+      if (!empty($validated['email'])) {
+        $user->email = $validated['email'];
+    }
+
+    // ✅ Hash and update password if provided
+    if (!empty($validated['password'])) {
+        $user->password = Hash::make($validated['password']);
+    }
+
+    // ✅ Save updated info
+    $user->save();
+
+    // ✅ Handle photo upload (manual method)
+    if ($request->hasFile('adminphoto')) {
+        $photo = $request->file('adminphoto');
+        $photoName = time() . '_' . $photo->getClientOriginalName();
+
+        // Create uploads folder if it doesn't exist
+        $destinationPath = public_path('uploads/admin_photos');
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0777, true);
+        }
+
+        // Move the uploaded photo
+        $photo->move($destinationPath, $photoName);
+
+        // Save the photo path to DB
+        additionalinfoadmin::updateOrCreate(
+            ['Dept_no' => $user->Dept_no],
+            ['adminphoto' => 'uploads/admin_photos/' . $photoName]
+        );
+    }
+
+            $message = 'Profile updated successfully!';
+        if (!empty($validated['password'])) {
+            $message = 'Profile and password updated successfully!';
+        }
+
+        return back()->with('success', $message);
+
+    
+}
+
+
+
 
 }
 

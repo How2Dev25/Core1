@@ -41,9 +41,9 @@
 
                     <!-- View My Profile Button -->
                     <div class="flex justify-center md:justify-start mt-6 w-full">
-                        <a href=""
+                        <a href="/adminprofile"
                             class="btn btn-primary flex items-center gap-2 px-4 py-2 text-sm md:text-base w-full md:w-auto">
-                            <i data-lucide="user" class="w-5 h-5"></i>
+                            <i class="fa-solid fa-user w-5 h-5"></i>
                             <span>View My Profile</span>
                         </a>
                     </div>

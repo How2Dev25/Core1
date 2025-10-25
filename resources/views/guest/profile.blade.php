@@ -51,7 +51,7 @@
                     {{-- Subsystem Name --}}
 
 
-                    <section class="w-fullmin-h-screen mt-5">
+                    <section class="w-full min-h-screen mt-5">
                         @if (session('success'))
                             <div id="success-message"
                                 class="mb-6 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-4 rounded-xl shadow-lg flex items-center space-x-4 animate-slide-down">

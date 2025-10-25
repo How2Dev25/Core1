@@ -24,11 +24,22 @@
 
         <!-- User Dropdown -->
         <div class="dropdown dropdown-end">
+          @php
+            $user = Auth::user();
+            $photo = $user->additionalInfo->adminphoto ?? null;
+            $initials = strtoupper(substr($user->employee_name ?? 'AA', 0, 2));
+          @endphp
+
           <label tabindex="0"
-            class="btn btn-ghost btn-circle flex items-center justify-center bg-blue-500 rounded-full w-10 h-10">
-            <span class="text-white font-bold text-sm leading-none">
-              {{ strtoupper(substr(Auth::user()->employee_name, 0, 2)) }}
-            </span>
+            class="btn btn-ghost btn-circle flex items-center justify-center bg-blue-500 rounded-full w-10 h-10 overflow-hidden">
+
+            @if ($photo && file_exists(public_path($photo)))
+              <img src="{{ asset($photo) }}" alt="Profile Photo" class="w-full h-full object-cover">
+            @else
+              <span class="text-white font-bold text-sm leading-none">
+                {{ $initials }}
+              </span>
+            @endif
           </label>
 
           <ul tabindex="0" class="dropdown-content menu mt-1 z-[100] w-52 bg-[#001f54] rounded-box shadow-xl">
@@ -37,12 +48,15 @@
               <div class="bg-blue-700/50 rounded-md shadow-md flex items-center gap-3">
 
                 <!-- Avatar with initials -->
-                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
-                  <span class="text-white font-bold text-sm">
-                    {{ strtoupper(substr(Auth::user()->employee_name, 0, 2)) }}
-                  </span>
+                <div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-blue-500">
+                  @if ($photo && file_exists(public_path($photo)))
+                    <img src="{{ asset($photo) }}" alt="Profile Photo" class="w-full h-full object-cover">
+                  @else
+                    <span class="text-white font-bold text-sm">
+                      {{ $initials }}
+                    </span>
+                  @endif
                 </div>
-
                 <!-- User Info -->
                 <div>
                   <p class="font-medium text-white">{{ Auth::user()->employee_name }}</p>
@@ -53,21 +67,24 @@
 
             <!-- Menu Items -->
             <li>
-              <a class="flex items-center gap-2 px-4 py-2 text-white hover:bg-blue-700/50 transition-colors">
-                <i data-lucide="user" class="w-4 h-4"></i>
+              <a href="/adminprofile"
+                class="flex items-center gap-2 px-4 py-2 text-white hover:bg-blue-700/50 transition-colors">
+                <i class="fa-solid fa-user w-4 h-4"></i>
                 <span>Profile</span>
               </a>
             </li>
+
             <li>
               <a class="flex items-center gap-2 px-4 py-2 text-white hover:bg-blue-700/50 transition-colors">
-                <i data-lucide="settings" class="w-4 h-4"></i>
+                <i class="fa-solid fa-gear w-4 h-4"></i>
                 <span>Settings</span>
               </a>
             </li>
-            <li class="">
+
+            <li>
               <a href="/employeelogout"
                 class="flex items-center gap-2 px-4 py-2 text-white hover:bg-blue-700/50 transition-colors">
-                <i data-lucide="log-out" class="w-4 h-4"></i>
+                <i class="fa-solid fa-right-from-bracket w-4 h-4"></i>
                 <span>Sign out</span>
               </a>
             </li>

@@ -280,6 +280,13 @@ Route::get('/restrictedemployee', function(){
 // Admins
 
 // dashboard
+Route::get('/adminprofile', function(){
+     employeeAuthCheck();
+    return view('admin.profile');
+});
+Route::middleware(['auth'])->group(function () {
+    Route::put('/department/profile/update', [userController::class, 'updateadmin'])->name('department.profile.update');
+});
 
 Route::get('/employeedashboard', function() {
     employeeAuthCheck();
@@ -474,22 +481,26 @@ Route::get('/employeedashboard', function() {
 
      $rooms = Room::inRandomOrder()->take(6)->get(); // Get 6 rooms
         
-   $sessions = DB::table('sessions')
+ $sessions = DB::table('sessions')
     ->join('department_accounts', 'sessions.user_id', '=', 'department_accounts.Dept_no')
+    ->leftJoin('additionalinfoadmin', 'department_accounts.Dept_no', '=', 'additionalinfoadmin.Dept_no')
     ->whereBetween('sessions.last_activity', [
-        Carbon::today()->timestamp,          // Start of today (00:00)
-        Carbon::tomorrow()->timestamp - 1    // End of today (23:59)
+        Carbon::today()->timestamp,
+        Carbon::tomorrow()->timestamp - 1
     ])
     ->orderBy('sessions.last_activity', 'desc')
     ->select(
         'sessions.*',
         'department_accounts.employee_name',
         'department_accounts.role',
-        'department_accounts.dept_name'
+        'department_accounts.dept_name',
+        'department_accounts.employee_id',
+        'department_accounts.status',
+        'department_accounts.email',
+        'adminphoto',
     )
     ->take(5)
     ->get();
-
     return view('admin.dashboard', compact(
         'totalreservation',
         'reservationThisWeek',
