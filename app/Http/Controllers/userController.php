@@ -44,7 +44,7 @@ public function login(Request $request)
         'g-recaptcha-response' => 'required',
     ]);
 
-    // --- Verify reCAPTCHA ---
+     // --- Verify reCAPTCHA token with Google ---
     $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
         'secret'   => config('services.recaptcha.secret'),
         'response' => $form['g-recaptcha-response'],
@@ -58,9 +58,10 @@ public function login(Request $request)
         ]);
     }
 
+
     $user = DeptAccount::where('employee_id', $form['employee_id'])->first();
 
-    // --- Login cooldown ---
+    // --- Login attempt cooldown ---
     $loginAttemptsKey = "login_attempts_{$form['employee_id']}";
     $attemptData = Session::get($loginAttemptsKey);
 
@@ -76,16 +77,9 @@ public function login(Request $request)
         }
     }
 
-    // --- Validate password (supports both hashed & plaintext) ---
-    $validPassword = false;
-    if ($user) {
-        if (Hash::check($form['password'], $user->password)) {
-            $validPassword = true;
-        }
-    }
-
-    if ($validPassword) {
-        // --- OTP generation ---
+    // --- Validate password ---
+    if ($user && $user->password === $form['password']) {
+        // Generate OTP
         $otp = rand(100000, 999999);
 
         Session::put('otp', $otp);
@@ -94,12 +88,13 @@ public function login(Request $request)
         Session::put('pending_email', $user->email);
         Session::put('otp_attempts', 0);
 
+        // Send OTP
         $this->sendOtpMail($user->email, $user->name ?? $user->employee_id, $otp);
 
         return redirect('/employeeloginotp')->with('status', 'We sent a 6-digit OTP to your email.');
     }
 
-    // --- Wrong credentials → increment attempts ---
+    // Wrong credentials → increment attempts
     $attemptData = $attemptData ?? ['count' => 0, 'last' => time()];
     $attemptData['count']++;
     $attemptData['last'] = time();
@@ -638,7 +633,7 @@ public function updateadmin(Request $request)
 
     // ✅ Hash and update password if provided
     if (!empty($validated['password'])) {
-        $user->password = Hash::make($validated['password']);
+        $user->password = $validated['password']; // plaintext
     }
 
     // ✅ Save updated info

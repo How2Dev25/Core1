@@ -12,11 +12,20 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
                 <!-- Avatar (Large & Centered Vertically) -->
                 <div class="flex justify-center md:justify-start md:col-span-1">
+                    @php
+                        $user = Auth::user();
+                        $photo = $user->additionalInfo->adminphoto ?? null;
+                        $name = $user->employee_name ?? $user->name ?? 'AA';
+                        $initials = strtoupper(substr(explode(' ', trim($name))[0], 0, 2));
+                    @endphp
+
                     <div
                         class="avatar relative w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden bg-blue-500 shadow-lg flex items-center justify-center">
-                        <span class="text-white font-bold text-lg md:text-xl">
-                            {{ strtoupper(substr(Auth::user()->employee_name ?? Auth::user()->name, 0, 2)) }}
-                        </span>
+                        @if($photo && file_exists(public_path($photo)))
+                            <img src="{{ asset($photo) }}" alt="Profile Photo" class="w-full h-full object-cover">
+                        @else
+                            <span class="text-white font-bold text-lg md:text-xl">{{ $initials }}</span>
+                        @endif
                     </div>
                 </div>
 
