@@ -472,6 +472,24 @@ Route::get('/employeedashboard', function() {
     ->orderBy('month')
     ->get();
 
+     $rooms = Room::inRandomOrder()->take(6)->get(); // Get 6 rooms
+        
+   $sessions = DB::table('sessions')
+    ->join('department_accounts', 'sessions.user_id', '=', 'department_accounts.Dept_no')
+    ->whereBetween('sessions.last_activity', [
+        Carbon::today()->timestamp,          // Start of today (00:00)
+        Carbon::tomorrow()->timestamp - 1    // End of today (23:59)
+    ])
+    ->orderBy('sessions.last_activity', 'desc')
+    ->select(
+        'sessions.*',
+        'department_accounts.employee_name',
+        'department_accounts.role',
+        'department_accounts.dept_name'
+    )
+    ->take(5)
+    ->get();
+
     return view('admin.dashboard', compact(
         'totalreservation',
         'reservationThisWeek',
@@ -503,7 +521,9 @@ Route::get('/employeedashboard', function() {
         'revenueLast30Days',
         'avgDailyRateLast30Days',
         'revPARLast30Days',
-        'occupancyLast30Days'
+        'occupancyLast30Days',
+        'rooms',
+        'sessions'
     ));
 });
 

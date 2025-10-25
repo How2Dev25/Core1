@@ -49,18 +49,117 @@
                     {{-- Subsystem Name --}}
 
                     <section class="flex-1 p-6 ">
-                        <!-- Header -->
-
-                        {{-- greetings --}}
+                        <!-- Header with Greeting -->
                         @include('admin.components.dashboard.welcome')
-                        <!-- Revenue Section -->
 
-                        @include('admin.components.dashboard.cards')
-                        @include('admin.components.dashboard.graphs')
+                        <!-- Rooms & Events Showcase -->
+                        @include('admin.components.dashboard.roomsandevents')
 
 
+
+                        <!-- Revenue Metrics Section -->
+                        <div class="flex gap-5">
+                            <div class="w-1/2">
+                                @include('admin.components.dashboard.cards')
+                            </div>
+                            <!-- Recent Activities -->
+                            <div class="flex-1">
+                                @include('admin.components.dashboard.recentactivities')
+                            </div>
+                        </div>
+
+                        @include('admin.components.dashboard.operationalmetrics')
+
+
+                        <!-- Revenue Chart & Bookings Overview -->
+                        @include('admin.components.dashboard.revenueandbooking')
+
+                        <!-- Additional Metrics Section -->
+                        @include('admin.components.dashboard.additionalmetrics')
+
+                        <!-- Marketing & Events and loyalty Section -->
+                        @include('admin.components.dashboard.marketingeventsandloyalty')
+
+
+
+                        <!-- Analytics And Graphs Section -->
+                        @include('admin.components.dashboard.analyticsandgraphcs')
+                        <!-- Chart Modal -->
+                        <div id="chartModal"
+                            class="hidden fixed inset-0 backdrop-blur-xs  bg-opacity-40 flex items-center justify-center z-50">
+                            <div id="modalContent"
+                                class="bg-white rounded-2xl p-6 shadow-2xl w-[90%] md:w-[70%] lg:w-[60%] relative transform transition-all duration-300 scale-75 opacity-0">
+
+                                <!-- Close Button -->
+                                <button onclick="closeModal()"
+                                    class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">
+                                    <i class="fa-solid fa-xmark text-xl"></i>
+                                </button>
+
+                                <!-- Title + Optional Select -->
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 id="modalTitle" class="text-lg font-semibold text-gray-700"></h3>
+                                    <select id="modalTrendSelector"
+                                        class="hidden border border-gray-300 rounded px-2 py-1 text-sm">
+                                        <option value="revenue">Revenue</option>
+                                        <option value="adr">Avg Daily Rate</option>
+                                        <option value="revpar">RevPAR</option>
+                                        <option value="occupancy">Occupancy Rate</option>
+                                    </select>
+                                </div>
+
+                                <!-- Expanded Chart -->
+                                <div class="flex items-center justify-center">
+                                    <canvas id="expandedChart" class="w-full h-[400px]"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            let activeChart = null;
+
+                            function openModal(chartId, title) {
+                                const modal = document.getElementById('chartModal');
+                                const modalContent = document.getElementById('modalContent');
+                                const modalTitle = document.getElementById('modalTitle');
+
+                                modalTitle.textContent = title;
+                                modal.classList.remove('hidden');
+
+                                setTimeout(() => {
+                                    modalContent.classList.remove("scale-75", "opacity-0");
+                                    modalContent.classList.add("scale-100", "opacity-100");
+                                }, 10);
+
+                                if (activeChart) activeChart.destroy();
+
+                                const chartCanvas = document.getElementById(chartId);
+                                const chartInstance = Chart.getChart(chartCanvas);
+
+                                if (chartInstance) {
+                                    const ctx = document.getElementById('expandedChart').getContext('2d');
+                                    activeChart = new Chart(ctx, {
+                                        type: chartInstance.config.type,
+                                        data: JSON.parse(JSON.stringify(chartInstance.config.data)),
+                                        options: JSON.parse(JSON.stringify(chartInstance.config.options)),
+                                    });
+                                }
+                            }
+
+                            function closeModal() {
+                                const modal = document.getElementById('chartModal');
+                                const modalContent = document.getElementById('modalContent');
+
+                                modalContent.classList.remove("scale-100", "opacity-100");
+                                modalContent.classList.add("scale-75", "opacity-0");
+
+                                setTimeout(() => {
+                                    modal.classList.add('hidden');
+                                    if (activeChart) { activeChart.destroy(); activeChart = null; }
+                                }, 300);
+                            }
+                        </script>
                     </section>
-
 
                     <!-- Graph Section -->
 
@@ -102,8 +201,8 @@
                                     labels: ['Available', 'Maintenance', 'Reserved'],
                                     datasets: [{
                                         data: [
-                            {{ $totalrooms - $needmaintenance - $totalreservation }}, // Available
-                            {{ $needmaintenance }}, // Maintenance
+                                                                                                                                                {{ $totalrooms - $needmaintenance - $totalreservation }}, // Available
+                                                                                                                                                {{ $needmaintenance }}, // Maintenance
                                             {{ $totalreservation }}  // Reserved
                                         ],
                                         backgroundColor: [
@@ -244,7 +343,7 @@
                     </script>
 
 
-                   
+
 
 
 
