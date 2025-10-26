@@ -479,7 +479,7 @@ Route::get('/employeedashboard', function() {
     ->orderBy('month')
     ->get();
 
-     $rooms = Room::inRandomOrder()->take(6)->get(); // Get 6 rooms
+     $rooms = Room::inRandomOrder()->get(); // Get 6 rooms
         
  $sessions = DB::table('sessions')
     ->join('department_accounts', 'sessions.user_id', '=', 'department_accounts.Dept_no')
@@ -663,7 +663,7 @@ Route::get('/ecm', function(){
      $eventtypes = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')
      ->where('core1_eventtype.eventtype_name', '!=', 'Conference' )
      ->latest('core1_eventtype.created_at')->get();
-    $facilities = facility::where('facility_type', 'Event')->latest()->get();
+    $facilities = facility::latest()->get();
    
     return view('admin.ecm',  compact('eventtypes', 'facilities'));
 });
@@ -1061,11 +1061,28 @@ Route::get('/guestdashboard', function() {
 
     $favoriteroom = $favoriteroomID ? Room::find($favoriteroomID) : null;
 
-    $rooms = room::all();
+    
 
-    $events = ecm::all();
+    $events = ecmtype::all();
 
     $promos = Hmp::all();
+
+    $facility = facility::all();
+
+    $rooms = Room::inRandomOrder()->get(); // Get 6 rooms
+
+ $reservations = Reservation::where('guestID', $guestID)->get();
+
+    // ✅ Example: count reservations per month for the chart
+    $monthlyReservations = Reservation::where('guestID', $guestID)
+        ->selectRaw('MONTH(reservation_checkin) as month, COUNT(*) as total')
+        ->groupBy('month')
+        ->orderBy('month')
+        ->pluck('total', 'month')
+        ->toArray(); // ✅ Convert Collection to plain array
+
+    // ✅ Total reservations
+    $guestTotalReservation = $reservations->count();
 
     return view('guest.dashboard', compact(
         'guesttotalreservation',
@@ -1075,6 +1092,9 @@ Route::get('/guestdashboard', function() {
         'events',
         'rooms',
         'promos',
+        'facility',
+        'guestTotalReservation',
+        'monthlyReservations',
     ));
 });
 

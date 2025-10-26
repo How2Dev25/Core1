@@ -7,7 +7,7 @@
             onmouseup="this.classList.remove('dragging')" onmouseleave="this.classList.remove('dragging')">
             @forelse($rooms as $room)
                 <div class="group cursor-pointer flex-shrink-0 w-64 snap-start transition-transform ">
-                    <a target="_blank" href="/gotoroom/{{ $room->roomID }}">
+                    <a target="_blank" href="/roomdetails/{{ $room->roomID }}">
                         <div
                             class="duration-300 hover:scale-105 hover:shadow-xl aspect-video bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg overflow-hidden relative">
                             <img src="{{ asset($room->roomphoto) }}" alt="{{ $room->roomtype ?? 'Room' }}"

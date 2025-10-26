@@ -14,34 +14,58 @@
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-1">Facility Name</label>
           <input type="text" name="facility_name" placeholder="Enter facility name"
-                 class="input input-bordered w-full rounded-xl focus:border-yellow-400 focus:ring focus:ring-yellow-200" required>
+            class="input input-bordered w-full rounded-xl focus:border-yellow-400 focus:ring focus:ring-yellow-200"
+            required>
         </div>
 
         <!-- Capacity -->
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-1">Capacity</label>
           <input type="number" name="facility_capacity" placeholder="e.g. 150"
-                 class="input input-bordered w-full rounded-xl focus:border-yellow-400 focus:ring focus:ring-yellow-200">
+            class="input input-bordered w-full rounded-xl focus:border-yellow-400 focus:ring focus:ring-yellow-200">
         </div>
       </div>
 
       <!-- Type -->
       <div>
         <label class="block text-sm font-semibold text-gray-700 mb-1">Facility Type</label>
-        <select name="facility_type"
-                class="select select-bordered w-full rounded-xl focus:border-yellow-400 focus:ring focus:ring-yellow-200">
+        <select id="facilityType" name="facility_type"
+          class="select select-bordered w-full rounded-xl focus:border-yellow-400 focus:ring focus:ring-yellow-200">
           <option value="Event">Event</option>
           <option value="Conference">Conference</option>
+          <option value="Others">Others</option>
         </select>
+
+        <!-- Hidden input for "Others" -->
+        <input id="otherFacility" type="text" placeholder="Enter custom facility type"
+          class="mt-2 w-full rounded-xl border border-gray-300 p-2 focus:border-yellow-400 focus:ring focus:ring-yellow-200 hidden">
       </div>
 
+      <script>
+        const facilitySelect = document.getElementById('facilityType');
+        const otherInput = document.getElementById('otherFacility');
+
+        facilitySelect.addEventListener('change', () => {
+          if (facilitySelect.value === 'Others') {
+            otherInput.classList.remove('hidden');
+            otherInput.focus();
+            facilitySelect.removeAttribute('name'); // temporarily remove select name
+            otherInput.setAttribute('name', 'facility_type'); // input will submit as facility_type
+          } else {
+            otherInput.classList.add('hidden');
+            otherInput.value = '';
+            otherInput.removeAttribute('name'); // remove input name
+            facilitySelect.setAttribute('name', 'facility_type'); // restore select name
+          }
+        });
+      </script>
       <!-- Amenities (Dynamic Fields) -->
       <div>
         <label class="block text-sm font-semibold text-gray-700 mb-2">Amenities</label>
         <div id="facility_amenities_wrapper" class="space-y-2">
           <div class="flex gap-2">
             <input type="text" name="facility_amenities[]" placeholder="Enter an amenity"
-                   class="input input-bordered w-full rounded-xl focus:border-yellow-400 focus:ring focus:ring-yellow-200">
+              class="input input-bordered w-full rounded-xl focus:border-yellow-400 focus:ring focus:ring-yellow-200">
             <button type="button" class="btn btn-success rounded-xl" onclick="addAmenity()">+</button>
           </div>
         </div>
@@ -51,12 +75,12 @@
       <div>
         <label class="block text-sm font-semibold text-gray-700 mb-1">Facility Photo</label>
         <input type="file" name="facility_photo" id="create_facility_photo" accept="image/*"
-               class="file-input file-input-bordered w-full rounded-xl focus:border-yellow-400 focus:ring focus:ring-yellow-200"
-               onchange="previewFacilityPhoto(event)">
+          class="file-input file-input-bordered w-full rounded-xl focus:border-yellow-400 focus:ring focus:ring-yellow-200"
+          onchange="previewFacilityPhoto(event)">
         <!-- Preview -->
         <div class="mt-3 flex justify-center">
           <img id="create_facility_photo_preview" src="" alt="Photo Preview"
-               class="hidden max-h-40 rounded-xl border border-gray-200 shadow-sm">
+            class="hidden max-h-40 rounded-xl border border-gray-200 shadow-sm">
         </div>
       </div>
 
@@ -64,7 +88,7 @@
       <div>
         <label class="block text-sm font-semibold text-gray-700 mb-1">Description</label>
         <textarea name="facility_description" rows="4" placeholder="Write a short description..."
-                  class="textarea textarea-bordered w-full rounded-xl focus:border-yellow-400 focus:ring focus:ring-yellow-200"></textarea>
+          class="textarea textarea-bordered w-full rounded-xl focus:border-yellow-400 focus:ring focus:ring-yellow-200"></textarea>
       </div>
 
       <!-- Action Buttons -->
@@ -100,7 +124,7 @@
 
     if (input.files && input.files[0]) {
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         preview.src = e.target.result;
         preview.classList.remove('hidden');
       }

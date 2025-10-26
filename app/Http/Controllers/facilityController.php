@@ -18,7 +18,7 @@ class FacilityController extends Controller
         $form = $request->validate([
             'facility_name' => 'required|string|max:255',
             'facility_capacity' => 'nullable|integer',
-            'facility_type' => 'required|in:Event,Conference',
+            'facility_type' => 'required',
             'facility_photo' => 'required',
             'facility_description' => 'nullable|string',
             'facility_amenities' => 'nullable|array',
@@ -64,7 +64,7 @@ class FacilityController extends Controller
     $form = $request->validate([
         'facility_name' => 'nullable|string|max:255',
         'facility_capacity' => 'nullable|integer',
-        'facility_type' => 'nullable|in:Event,Conference',
+        'facility_type' => 'nullable',
         'facility_photo' => 'nullable|image',
         'facility_description' => 'nullable|string',
         'facility_amenities' => 'nullable|array',
