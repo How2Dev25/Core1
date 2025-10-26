@@ -173,10 +173,11 @@ Route::get('/', function () {
 
     // Fetch promos and events
     $promos = Hmp::where('hotelpromostatus', 'Active')->get();
-    $events = Ecm::where('eventstatus', 'Approved')->get();
+    $events = ecmtype::all();
+    $facility = facility::all();
 
     $promoCount = $promos->count();
-    $eventCount = $events->count();
+    
 
     return view('index', compact(
         'rooms',
@@ -185,9 +186,9 @@ Route::get('/', function () {
         'totalReviews',
         'recommendRate',
         'promos',
-        'events',
         'promoCount',
-        'eventCount',
+        'events',
+        'facility',
     ));
 });
 
