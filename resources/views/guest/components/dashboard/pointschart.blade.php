@@ -24,7 +24,7 @@
             labels: ['Available', 'Redeemed', 'Expired'],
             datasets: [{
                 data: [{{ Auth::guard('guest')->user()->loyalty_points ?? 0 }}, 150, 50],
-                backgroundColor: ['#10b981', '#fbbf24', '#ef4444'],
+                backgroundColor: ['#10b981', '#fbbf24', '#1c398e'],
                 borderWidth: 0
             }]
         },

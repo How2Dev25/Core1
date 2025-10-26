@@ -501,6 +501,12 @@ Route::get('/employeedashboard', function() {
     )
     ->take(5)
     ->get();
+
+    $events = ecmtype::all();
+
+    $promos = Hmp::all();
+
+    $facility = facility::all();
     return view('admin.dashboard', compact(
         'totalreservation',
         'reservationThisWeek',
@@ -534,7 +540,10 @@ Route::get('/employeedashboard', function() {
         'revPARLast30Days',
         'occupancyLast30Days',
         'rooms',
-        'sessions'
+        'sessions',
+        'events',
+        'facility',
+        'promos',
     ));
 });
 

@@ -55,17 +55,27 @@
                         <!-- Rooms & Events Showcase -->
                         @include('admin.components.dashboard.roomsandevents')
 
+                        {{-- facilities and events and promotioes --}}
+                        @include('admin.components.dashboard.showmarketing')
 
+                        <div class="grid grid-cols-2 max-md:grid-cols-1">
+                            @include('admin.components.dashboard.showfacility')
+                            <div class="flex-1">
+                                @include('admin.components.dashboard.showevents')
+                                <div class="flex-1 max-md:w-full">
+                                    @include('admin.components.dashboard.recentactivities')
+                                </div>
+                            </div>
+
+                        </div>
 
                         <!-- Revenue Metrics Section -->
                         <div class="flex gap-5 max-md:flex-col">
-                            <div class="w-1/2 max-md:w-full">
+                            <div class="w-full">
                                 @include('admin.components.dashboard.cards')
                             </div>
                             <!-- Recent Activities -->
-                            <div class="flex-1 max-md:w-full">
-                                @include('admin.components.dashboard.recentactivities')
-                            </div>
+
                         </div>
 
                         @include('admin.components.dashboard.operationalmetrics')
@@ -201,8 +211,8 @@
                                     labels: ['Available', 'Maintenance', 'Reserved'],
                                     datasets: [{
                                         data: [
-                                                                                                                                                            {{ $totalrooms - $needmaintenance - $totalreservation }}, // Available
-                                                                                                                                                            {{ $needmaintenance }}, // Maintenance
+                                                                                                                                                                                                            {{ $totalrooms - $needmaintenance - $totalreservation }}, // Available
+                                                                                                                                                                                                            {{ $needmaintenance }}, // Maintenance
                                             {{ $totalreservation }}  // Reserved
                                         ],
                                         backgroundColor: [
