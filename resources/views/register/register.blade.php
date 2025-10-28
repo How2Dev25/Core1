@@ -211,18 +211,18 @@
                                         <span class="absolute inset-y-0 right-3 flex items-center cursor-pointer"
                                             onclick="togglePassword('confirm_password','eye2')">
                                             <i id="eye2" class="fas fa-eye text-white/50"></i>
-                                        </span>y67
+                                        </span>
                                         <span id="password_error" class="text-red-500 text-sm mt-1 hidden">Passwords do
                                             not match</span>
                                     </div>
                                 </div>
 
                                 <div class="col-span-1 sm:col-span-2">
-                                    <div class="flex justify-between items-center mb-1">
+                                    <div class="flex flex-col gap-3 justify-between items-center mb-1">
                                         <span class="text-white/50 text-xs md:text-sm">
                                             Must be at least 8 characters, include uppercase letters, numbers & symbols.
                                         </span>
-                                        <span id="password_strength" class="text-xs font-medium"></span>
+                                        <span id="password_strength" class="text-lg font-medium"></span>
                                     </div>
                                     <div class="w-full bg-white/20 h-1 rounded">
                                         <div id="password_strength_bar"
@@ -287,50 +287,6 @@
     </script>
 
     <script>
-        const password = document.getElementById('guest_password');
-        const confirmPassword = document.getElementById('confirm_password');
-        const error = document.getElementById('password_error');
-        const submitBtn = document.getElementById('submitBtn');
-
-        // Check password match
-        function checkPassword() {
-            if (password.value && confirmPassword.value) {
-                if (password.value === confirmPassword.value) {
-                    error.classList.add('hidden');
-                    submitBtn.disabled = false;
-                } else {
-                    error.classList.remove('hidden');
-                    submitBtn.disabled = true;
-                }
-            } else {
-                submitBtn.disabled = true;
-                error.classList.add('hidden');
-            }
-        }
-
-        // Toggle password visibility
-        function togglePassword(fieldId, eyeId) {
-            const field = document.getElementById(fieldId);
-            const eye = document.getElementById(eyeId);
-
-            if (field.type === "password") {
-                field.type = "text";
-                eye.classList.remove("fa-eye");
-                eye.classList.add("fa-eye-slash");
-            } else {
-                field.type = "password";
-                eye.classList.remove("fa-eye-slash");
-                eye.classList.add("fa-eye");
-            }
-        }
-
-        password.addEventListener('input', checkPassword);
-        confirmPassword.addEventListener('input', checkPassword);
-    </script>
-
-
-
-    <script>
         function togglePassword(inputId, eyeId) {
             const input = document.getElementById(inputId);
             const eye = document.getElementById(eyeId);
@@ -386,37 +342,13 @@
             if (/[^A-Za-z0-9]/.test(password)) score++;
 
             if (score <= 1) {
-                return {
-                    label: "Weak Password ❌",
-                    bgColor: "bg-red-500",
-                    textColor: "text-red-500",
-                    width: "25%",
-                    score
-                };
+                return { label: "Weak Password ", bgColor: "bg-red-500", textColor: "text-red-500", width: "25%", score };
             } else if (score === 2) {
-                return {
-                    label: "Fair Strength ⚠️",
-                    bgColor: "bg-yellow-500",
-                    textColor: "text-yellow-500",
-                    width: "50%",
-                    score
-                };
+                return { label: "Fair Strength ", bgColor: "bg-yellow-500", textColor: "text-yellow-500", width: "50%", score };
             } else if (score === 3) {
-                return {
-                    label: "Good Strength ✅",
-                    bgColor: "bg-blue-500",
-                    textColor: "text-blue-500",
-                    width: "75%",
-                    score
-                };
+                return { label: "Good Strength ", bgColor: "bg-blue-500", textColor: "text-blue-500", width: "75%", score };
             } else {
-                return {
-                    label: "Strong Password ✅",
-                    bgColor: "bg-green-500",
-                    textColor: "text-green-500",
-                    width: "100%",
-                    score
-                };
+                return { label: "Strong Password ", bgColor: "bg-green-500", textColor: "text-green-500", width: "100%", score };
             }
         }
     </script>

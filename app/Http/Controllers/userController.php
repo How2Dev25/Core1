@@ -35,6 +35,13 @@ class userController extends Controller
         ]);
     }
 
+ public function cancelguestregistration(Guest $guestID){
+    $guestID->delete();
+
+    return redirect('/loginguest');
+}
+
+
     
 public function login(Request $request)
 {

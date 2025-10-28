@@ -1026,6 +1026,7 @@ Route::get('/photoupload', function(){
 });
 
 Route::post('/registerguest', [userController::class, 'create']);
+Route::delete('/cancelreg/{guestID}', [userController::class, 'cancelguestregistration']);
 
 Route::put('/upload-photo/{guestID}', [userController::class, 'profilesetup']);
 
