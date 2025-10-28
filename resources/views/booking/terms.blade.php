@@ -12,10 +12,7 @@
                     <p class="text-gray-600">Soliera Hotel & Restaurant</p>
                 </div>
             </div>
-            <button class="btn btn-sm btn-circle btn-ghost text-gray-400 hover:text-gray-600"
-                onclick="terms_modal.close()">
-                <i class="fas fa-times text-lg"></i>
-            </button>
+
         </div>
 
         <!-- Content -->
@@ -167,10 +164,8 @@
         </div>
     </div>
 
-    <!-- Click outside to close -->
-    <form method="dialog" class="modal-backdrop">
-        <button>close</button>
-    </form>
+
+
 </dialog>
 
 <!-- Button to show modal for demo purposes -->
@@ -237,4 +232,14 @@
         modal.showModal();
         modal.dispatchEvent(new Event('show'));
     }
+    document.addEventListener('click', function (event) {
+        const modal = document.getElementById('terms_modal');
+        const modalBox = modal.querySelector('.modal-box');
+
+        if (modal.open && !modalBox.contains(event.target)) {
+            event.stopPropagation();
+            modal.showModal(); // keep open
+        }
+    });
+
 </script>

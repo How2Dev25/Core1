@@ -68,7 +68,7 @@ class roommantenanceController extends Controller
             'dept_name' => Auth::user()->dept_name,
             'modules_cover' => 'Housekeeping And Maintenance',
             'action' => 'Modify Maintenance',
-            'activity' => 'Modify Room Maintenance For Room ' . $form['roomID'],
+            'activity' => 'Modify Room Maintenance For Room ' . $roomID,
             'employee_name' => Auth::user()->employee_name,
             'employee_id' => Auth::user()->employee_id,
             'role' => Auth::user()->role,

@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\EmployeeNotification;
+use App\Models\employeenotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -40,7 +40,7 @@ class EmployeeNotifications extends Component
             ->toArray();
 
         // Fetch as Collection (not array)
-        $this->notifications = EmployeeNotification::whereIn('module', $allowedModules)
+        $this->notifications = employeenotification::whereIn('module', $allowedModules)
             ->orderBy('notificationempID', 'desc')
             ->get();
     }
@@ -53,7 +53,7 @@ class EmployeeNotifications extends Component
                 return;
             }
 
-            EmployeeNotification::truncate();
+            employeenotification::truncate();
             $this->notifications = collect(); // Reset to an empty collection
             session()->flash('success', 'All notifications cleared successfully.');
         } catch (\Exception $e) {
@@ -64,7 +64,7 @@ class EmployeeNotifications extends Component
       public function removeNotification($notificationId)
     {
         try {
-            $notification = EmployeeNotification::find($notificationId);
+            $notification = employeenotification::find($notificationId);
 
             if (!$notification) {
                 session()->flash('info', 'Notification not found.');
