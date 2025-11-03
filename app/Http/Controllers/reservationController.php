@@ -26,6 +26,7 @@ use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
 use App\Models\guestloyaltypoints;
 use App\Models\Lar;
+use App\Models\loyaltyrules;
 
 class reservationController extends Controller
 {
@@ -90,6 +91,12 @@ $servicefee = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynam
 $taxrate = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
 $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person Fee')->value('dynamic_price');
 
+ $myloyaltypoints = guestloyaltypoints::where('guestID', Auth::guard('guest')->user()->guestID)
+            ->value('points_balance');
+
+     $loyaltyrules = loyaltyrules::all();
+
+
     return view('guest.components.bas.withsuggestion', [
         'rooms' => $rooms,
         'criteria' => $parsed,
@@ -100,6 +107,8 @@ $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person 
         'servicefee' => $servicefee,
         'taxrate' => $taxrate,
         'additionalpersonfee' => $additionalpersonfee,
+        'myloyaltypoints' => $myloyaltypoints,
+        'loyaltyrules' => $loyaltyrules,
     ]);
 }
 
@@ -1575,6 +1584,8 @@ public function aisubmit(Request $request)
             'vat' => 'required',
             'serviceFee' => 'required',
             'total' => 'required',
+              'loyalty_points_used' => 'required',
+            'loyalty_discount' => 'required',
     ]);
 
     $form['guestID'] = Auth::guard('guest')->user()->guestID;
@@ -1814,9 +1825,11 @@ HTML;
         $guestname = $form['guestname'];
         $roomID = $form['roomID'];
         $guestID = $form['guestID'];
+        $loyaltyPointsUsed = $form['loyalty_points_used'];
 
         $this->employeenotif($guestname, $roomID);
         $this->guestnotif($guestname, $guestID, $roomID);
+        $this->deductLoyaltyPoints($loyaltyPointsUsed, $guestID, $guestname );
 
 
 
@@ -2166,12 +2179,14 @@ HTML;
         Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
     }
 
-         $guestname = $form['guestname'];
+        $guestname = $form['guestname'];
         $roomID = $form['roomID'];
         $guestID = $form['guestID'];
+        $loyaltyPointsUsed = $form['loyalty_points_used'];
 
         $this->employeenotif($guestname, $roomID);
         $this->guestnotif($guestname, $guestID, $roomID);
+        $this->deductLoyaltyPoints($loyaltyPointsUsed, $guestID, $guestname );
 
     session()->forget('reservation_form'); 
     return redirect()->back()->with('success', 'Booking ID: ' . $bookingID);
@@ -2342,9 +2357,11 @@ HTML;
      $guestname = $form['guestname'];
         $roomID = $form['roomID'];
         $guestID = $form['guestID'];
+        $loyaltyPointsUsed = $form['loyalty_points_used'];
 
         $this->employeenotif($guestname, $roomID);
         $this->guestnotif($guestname, $guestID, $roomID);
+        $this->deductLoyaltyPoints($loyaltyPointsUsed, $guestID, $guestname );
 
     session()->forget('reservation_form'); 
 
