@@ -97,6 +97,17 @@ $grandTotal = $total + $restaurantTotal;
                                 <span>VAT ({{$taxRatedynamic}}):</span>
                                 <span>₱{{ number_format($vat, 2) }}</span>
                             </div>
+
+                            <div class="flex justify-between">
+                                <span>Points Spent :</span>
+                                <span>{{$reserveroom->loyalty_points_used}} Points</span>
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <span>loyalty Discount:</span>
+                                <span>₱{{$reserveroom->loyalty_discount}}</span>
+                            </div>
+                            
                             <div class="flex justify-between font-semibold text-primary border-t pt-2 mt-2">
                                 <span>Room Total:</span>
                                 <span>₱{{ number_format($total, 2) }}</span>

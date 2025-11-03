@@ -49,7 +49,7 @@
     <!-- Table View -->
     <div class="overflow-x-auto">
         <table class="table table-auto w-full">
-            <thead >
+            <thead>
                 <tr class="bg-blue-900 text-white text-sm">
                     <th class="py-3 px-4 text-left">Room & Guest</th>
                     <th class="py-3 px-4 text-left">Booking Details</th>
@@ -95,24 +95,24 @@
                         </td>
                         <td class="py-4 px-4">
                             <span class="badge py-1.5 px-3
-                                            @if(strtolower($reserveroom->reservation_bookingstatus) == 'pending') badge-neutral
-                                            @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'confirmed') badge-success
-                                            @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'checked in') badge-primary
-                                            @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'checked out') badge-warning
-                                            @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'cancelled') badge-error
-                                            @endif
-                                        ">
+                                                    @if(strtolower($reserveroom->reservation_bookingstatus) == 'pending') badge-neutral
+                                                    @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'confirmed') badge-success
+                                                    @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'checked in') badge-primary
+                                                    @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'checked out') badge-warning
+                                                    @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'cancelled') badge-error
+                                                    @endif
+                                                ">
                                 {{ ucfirst($reserveroom->reservation_bookingstatus) }}
                             </span>
                         </td>
                         <td class="py-4 px-4">
                             <span class="
-                                            @if(strtolower($reserveroom->payment_status) == 'pending') text-yellow-600 font-semibold
-                                            @elseif(strtolower($reserveroom->payment_status) == 'paid') text-green-600 font-semibold
-                                            @elseif(strtolower($reserveroom->payment_status) == 'failed') text-red-600 font-semibold
-                                            @else text-gray-600
-                                            @endif
-                                        ">
+                                                    @if(strtolower($reserveroom->payment_status) == 'pending') text-yellow-600 font-semibold
+                                                    @elseif(strtolower($reserveroom->payment_status) == 'paid') text-green-600 font-semibold
+                                                    @elseif(strtolower($reserveroom->payment_status) == 'failed') text-red-600 font-semibold
+                                                    @else text-gray-600
+                                                    @endif
+                                                ">
                                 {{ ucfirst($reserveroom->payment_status) }}
                             </span>
                         </td>
@@ -129,14 +129,17 @@
                                 </button>
 
                                 <!-- Edit button -->
-                            <button onclick="document.getElementById('edit_reservation_{{$reserveroom->reservationID}}').showModal()"
-                                class="btn btn-sm btn-ghost" title="View Room Details">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 
-                                             9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                </svg>
-                            </button>
+                                <button
+                                    onclick="document.getElementById('edit_reservation_{{$reserveroom->reservationID}}').showModal()"
+                                    class="btn btn-sm btn-ghost" title="View Room Details">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 
+                                                     9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                </button>
                                 <!-- More Actions Button -->
                                 <button
                                     onclick="document.getElementById('actions-drawer-{{$reserveroom->reservationID}}').classList.toggle('translate-x-full')"
@@ -150,11 +153,15 @@
 
                                 @if($reserveroom->payment_status === 'Paid')
                                     <!-- Trigger button -->
-                                    <button onclick="document.getElementById('confirm_receipt_{{$reserveroom->reservationID}}').showModal()"
-                                        class="btn btn-sm" title="Generate Receipt" style="background-color: #001f54; color: white;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m4 
-                                                   4h4a2 2 0 002-2v-4a2 2 0 00-2-2h-4a2 2 0 00-2 2v4a2 2 0 002 2z" />
+                                    <button
+                                        onclick="document.getElementById('confirm_receipt_{{$reserveroom->reservationID}}').showModal()"
+                                        class="btn btn-sm" title="Generate Receipt"
+                                        style="background-color: #001f54; color: white;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m4 
+                                                                   4h4a2 2 0 002-2v-4a2 2 0 00-2-2h-4a2 2 0 00-2 2v4a2 2 0 002 2z" />
                                         </svg>
                                     </button>
 
@@ -162,15 +169,16 @@
                                     <dialog id="confirm_receipt_{{$reserveroom->reservationID}}" class="modal">
                                         <div class="modal-box">
                                             <h3 class="text-lg font-bold">Generate Receipt</h3>
-                                            <p class="py-4">Are you sure you want to generate a receipt for this reservation?</p>
+                                            <p class="py-4">Are you sure you want to generate a receipt for this reservation?
+                                            </p>
                                             <div class="modal-action">
                                                 <!-- Cancel button -->
                                                 <form method="dialog">
                                                     <button class="btn">Cancel</button>
                                                 </form>
                                                 <!-- Confirm button -->
-                                                <a href="/printreceipt/{{$reserveroom->reservationID}}" target="_blank" class="btn btn-primary"
-                                                    style="background-color: #001f54; color: white;">
+                                                <a href="/printreceipt/{{$reserveroom->reservationID}}" target="_blank"
+                                                    class="btn btn-primary" style="background-color: #001f54; color: white;">
                                                     Yes, Generate
                                                 </a>
                                             </div>
@@ -205,66 +213,66 @@
 
     <!-- Details Modals -->
     @foreach($reserverooms as $reserveroom)
-                        <dialog id="details_modal_{{$reserveroom->reservationID}}" class="modal">
-                            <div class="modal-box max-w-4xl">
-                                <form method="dialog">
-                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                </form>
-                                <h3 class="font-bold text-lg mb-4">Reservation Details - Room #{{ $reserveroom->roomID }}</h3>
+                <dialog id="details_modal_{{$reserveroom->reservationID}}" class="modal">
+                    <div class="modal-box max-w-4xl">
+                        <form method="dialog">
+                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                        </form>
+                        <h3 class="font-bold text-lg mb-4">Reservation Details - Room #{{ $reserveroom->roomID }}</h3>
 
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <!-- Guest Information -->
-                                    <div>
-                                        <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                            </svg>
-                                            Guest Information
-                                        </h4>
-                                        <div class="space-y-2">
-                                            <p><span class="font-medium">Name:</span> {{ $reserveroom->guestname }}</p>
-                                            <p><span class="font-medium">Booking ID:</span> {{ $reserveroom->bookingID }}</p>
-                                            <p><span class="font-medium">Booked via:</span> {{ $reserveroom->bookedvia }}</p>
-                                            <p><span class="font-medium">Booked Date:</span>
-                                                {{ \Carbon\Carbon::parse($reserveroom->created_at)->format('M d, Y') }}</p>
-                                        </div>
-                                    </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Guest Information -->
+                            <div>
+                                <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                    Guest Information
+                                </h4>
+                                <div class="space-y-2">
+                                    <p><span class="font-medium">Name:</span> {{ $reserveroom->guestname }}</p>
+                                    <p><span class="font-medium">Booking ID:</span> {{ $reserveroom->bookingID }}</p>
+                                    <p><span class="font-medium">Booked via:</span> {{ $reserveroom->bookedvia }}</p>
+                                    <p><span class="font-medium">Booked Date:</span>
+                                        {{ \Carbon\Carbon::parse($reserveroom->created_at)->format('M d, Y') }}</p>
+                                </div>
+                            </div>
 
-                                    <!-- Stay Information -->
-                                    <div>
-                                        <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
-                                            Stay Information
-                                        </h4>
-                                        <div class="space-y-2">
-                                            @php
+                            <!-- Stay Information -->
+                            <div>
+                                <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    Stay Information
+                                </h4>
+                                <div class="space-y-2">
+                                    @php
         $nights = \Carbon\Carbon::parse($reserveroom->reservation_checkin)
             ->diffInDays(\Carbon\Carbon::parse($reserveroom->reservation_checkout));
-                                            @endphp
-                                            <p><span class="font-medium">Check-in:</span>
-                                                {{ \Carbon\Carbon::parse($reserveroom->reservation_checkin)->format('M d, Y') }}</p>
-                                            <p><span class="font-medium">Check-out:</span>
-                                                {{ \Carbon\Carbon::parse($reserveroom->reservation_checkout)->format('M d, Y') }}</p>
-                                            <p><span class="font-medium">Nights:</span> {{ $nights }}</p>
-                                            <p><span class="font-medium">Room Type:</span> {{ $reserveroom->roomtype }}</p>
-                                        </div>
-                                    </div>
+                                    @endphp
+                                    <p><span class="font-medium">Check-in:</span>
+                                        {{ \Carbon\Carbon::parse($reserveroom->reservation_checkin)->format('M d, Y') }}</p>
+                                    <p><span class="font-medium">Check-out:</span>
+                                        {{ \Carbon\Carbon::parse($reserveroom->reservation_checkout)->format('M d, Y') }}</p>
+                                    <p><span class="font-medium">Nights:</span> {{ $nights }}</p>
+                                    <p><span class="font-medium">Room Type:</span> {{ $reserveroom->roomtype }}</p>
                                 </div>
+                            </div>
+                        </div>
 
-                                <!-- Pricing Breakdown -->
-                                <div class="mt-6">
-                                <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                                    <i class="fa-solid fa-peso-sign text-primary"></i>
-                                    Pricing Breakdown
-                                </h4>
+                        <!-- Pricing Breakdown -->
+                        <div class="mt-6">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-peso-sign text-primary"></i>
+                                Pricing Breakdown
+                            </h4>
 
-                                    @php
+                            @php
         $subtotal = $reserveroom->subtotal;
         $vat = $reserveroom->vat;
         $serviceFee = $reserveroom->serviceFee;
@@ -280,156 +288,166 @@
 
         // final grand total
         $grandTotal = $total + $restaurantTotal;
-                                    @endphp
+                            @endphp
 
-                                    <div class="bg-gray-50 p-4 rounded-lg">
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                            <div class="space-y-2">
-                                                <div class="flex justify-between">
-                                                    <span>Room Rate ({{ $nights }} nights):</span>
-                                                    <span>₱{{ number_format($reserveroom->roomprice * $nights, 2) }}</span>
-                                                </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between">
+                                            <span>Room Rate ({{ $nights }} nights):</span>
+                                            <span>₱{{ number_format($reserveroom->roomprice * $nights, 2) }}</span>
+                                        </div>
 
-                                                {{-- Subtotal --}}
-                                                <div class="flex justify-between">
-                                                    <span>Subtotal:</span>
-                                                    <span>₱{{ number_format($subtotal, 2) }}</span>
-                                                </div>
+                                        {{-- Subtotal --}}
+                                        <div class="flex justify-between">
+                                            <span>Subtotal:</span>
+                                            <span>₱{{ number_format($subtotal, 2) }}</span>
+                                        </div>
 
-                                                <div class="flex justify-between">
-                                                    <span>Service Fee ({{$serviceFeedynamic}}):</span>
-                                                    <span>₱{{ number_format($serviceFee, 2) }}</span>
-                                                </div>
-                                                <div class="flex justify-between">
-                                                    <span>VAT ({{$taxRatedynamic}}):</span>
-                                                    <span>₱{{ number_format($vat, 2) }}</span>
-                                                </div>
-                                                <div class="flex justify-between font-semibold text-primary border-t pt-2 mt-2">
-                                                    <span>Room Total:</span>
-                                                    <span>₱{{ number_format($total, 2) }}</span>
-                                                </div>
-                                            </div>
-                                            <div class="space-y-2">
-                                                <div class="flex justify-between">
-                                                    <span>Restaurant Total:</span>
-                                                    <span>₱{{ number_format($restaurantTotal, 2) }}</span>
-                                                </div>
-                                                <div class="flex justify-between font-bold text-lg border-t pt-2 mt-2">
-                                                    <span>Grand Total:</span>
-                                                    <span class="text-primary">₱{{ number_format($grandTotal, 2) }}</span>
-                                                </div>
-                                                <div class="flex justify-between text-sm">
-                                                    <span>Payment Status:</span>
-                                                    <span class="
-                                                                                    @if(strtolower($reserveroom->payment_status) == 'pending') text-yellow-600 font-semibold
-                                                                                    @elseif(strtolower($reserveroom->payment_status) == 'paid') text-green-600 font-semibold
-                                                                                    @elseif(strtolower($reserveroom->payment_status) == 'failed') text-red-600 font-semibold
-                                                                                    @else text-gray-600
-                                                                                    @endif
-                                                                                ">
-                                                        {{ ucfirst($reserveroom->payment_status) }}
-                                                    </span>
-                                                </div>
-                                            </div>
+                                        <div class="flex justify-between">
+                                            <span>Service Fee ({{$serviceFeedynamic}}):</span>
+                                            <span>₱{{ number_format($serviceFee, 2) }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>VAT ({{$taxRatedynamic}}):</span>
+                                            <span>₱{{ number_format($vat, 2) }}</span>
+                                        </div>
+
+                                        <div class="flex justify-between">
+                                            <span>Points Spent :</span>
+                                            <span>{{$reserveroom->loyalty_points_used}} Points</span>
+                                        </div>
+
+                                        <div class="flex justify-between">
+                                            <span>loyalty Discount:</span>
+                                            <span>₱{{$reserveroom->loyalty_discount}}</span>
+                                        </div>
+                                        <div class="flex justify-between font-semibold text-primary border-t pt-2 mt-2">
+                                            <span>Room Total:</span>
+                                            <span>₱{{ number_format($total, 2) }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between">
+                                            <span>Restaurant Total:</span>
+                                            <span>₱{{ number_format($restaurantTotal, 2) }}</span>
+                                        </div>
+                                        <div class="flex justify-between font-bold text-lg border-t pt-2 mt-2">
+                                            <span>Grand Total:</span>
+                                            <span class="text-primary">₱{{ number_format($grandTotal, 2) }}</span>
+                                        </div>
+                                        <div class="flex justify-between text-sm">
+                                            <span>Payment Status:</span>
+                                            <span class="
+                                                                                                                @if(strtolower($reserveroom->payment_status) == 'pending') text-yellow-600 font-semibold
+                                                                                                                @elseif(strtolower($reserveroom->payment_status) == 'paid') text-green-600 font-semibold
+                                                                                                                @elseif(strtolower($reserveroom->payment_status) == 'failed') text-red-600 font-semibold
+                                                                                                                @else text-gray-600
+                                                                                                                @endif
+                                                                                                            ">
+                                                {{ ucfirst($reserveroom->payment_status) }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Restaurant Orders -->
-                                <div class="mt-6">
-                                    <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M4 6h16M4 12h16M4 18h16" />
-                                        </svg>
-                                        Restaurant Orders
-                                    </h4>
-
-                                    @if(isset($orders[$reserveroom->bookingID]) && count($orders[$reserveroom->bookingID]) > 0)
-                                        <div class="border rounded-lg divide-y">
-                                            @foreach($orders[$reserveroom->bookingID] as $order)
-                                                @php
-                $lineTotal = $order->menu_price * $order->order_quantity;
-                                                @endphp
-                                                <div class="p-3 flex items-center gap-4">
-                                                    <img src="{{ asset($order->menu_photo) }}" class="w-16 h-16 object-cover rounded">
-                                                    <div class="flex-1">
-                                                        <p class="font-medium">{{ $order->menu_name }}</p>
-                                                        <p class="text-sm text-gray-500">
-                                                            {{ $order->order_quantity }} × ₱{{ number_format($order->menu_price, 2) }}
-                                                        </p>
-                                                    </div>
-                                                    <div class="font-semibold">
-                                                        ₱{{ number_format($lineTotal, 2) }}
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @else
-                                        <div class="text-center py-6 text-gray-500 bg-gray-50 rounded-lg">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto mb-2 text-gray-400" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 17v-2h6v2m-7 4h8a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1V7a3 3 0 0 0-6 0v4H9a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2z" />
-                                            </svg>
-                                            No restaurant orders for this booking.
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                            <form method="dialog" class="modal-backdrop">
-                                <button>close</button>
-                            </form>
-                        </dialog>
-
-                        <!-- Actions Drawer -->
-                        <div id="actions-drawer-{{$reserveroom->reservationID}}"
-                            class="fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50">
-                            <div class="p-4 border-b relative">
-                                <h4 class="font-bold">Actions for Booking #{{$reserveroom->bookingID}}</h4>
-                                <button
-                                    onclick="document.getElementById('actions-drawer-{{$reserveroom->reservationID}}').classList.add('translate-x-full')"
-                                    class="absolute top-3 right-3 btn btn-xs btn-circle btn-ghost">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
-
-                            <div class="p-4 space-y-2 ">
-                                <button onclick="confirm_reservation_{{$reserveroom->reservationID}}.showModal()"
-                                    class="btn btn-sm btn-block btn-primary justify-start gap-2 @if(in_array($reserveroom->reservation_bookingstatus, ['Confirmed', 'Checked in', 'Checked out'])) hidden @endif">
-                                    Confirm Reservation
-                                </button>
-
-                                @if($reserveroom->reservation_bookingstatus === 'Confirmed')
-                                    <button onclick="checkin_reservation_{{$reserveroom->reservationID}}.showModal()"
-                                        class="btn btn-sm btn-block btn-primary justify-start gap-2">
-                                        Check-In Guest
-                                    </button>
-                                @endif
-
-                                @if($reserveroom->reservation_bookingstatus === 'Checked in')
-                                    <button onclick="checkout_reservation_{{$reserveroom->reservationID}}.showModal()"
-                                        class="btn btn-sm btn-block btn-warning btn-info justify-start gap-2">
-                                        Check-Out Guest
-                                    </button>
-                                @endif
-
-                                @if($reserveroom->reservation_bookingstatus != 'Confirmed')
-                                    <button onclick="cancel_reservation_{{$reserveroom->reservationID}}.showModal()"
-                                        class="btn btn-sm btn-block btn-info justify-start gap-2 @if(in_array($reserveroom->reservation_bookingstatus, ['Confirmed', 'Checked in', 'Checked out'])) hidden @endif">
-                                        Cancel Reservation
-                                    </button>
-                                @endif
-
-                                <button onclick="delete_reservation_{{$reserveroom->reservationID}}.showModal()"
-                                    class="btn btn-sm btn-block btn-error justify-start gap-2">
-                                    Delete Reservation
-                                </button>
                             </div>
                         </div>
+
+                        <!-- Restaurant Orders -->
+                        <div class="mt-6">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                                Restaurant Orders
+                            </h4>
+
+                            @if(isset($orders[$reserveroom->bookingID]) && count($orders[$reserveroom->bookingID]) > 0)
+                                <div class="border rounded-lg divide-y">
+                                    @foreach($orders[$reserveroom->bookingID] as $order)
+                                        @php
+                $lineTotal = $order->menu_price * $order->order_quantity;
+                                        @endphp
+                                        <div class="p-3 flex items-center gap-4">
+                                            <img src="{{ asset($order->menu_photo) }}" class="w-16 h-16 object-cover rounded">
+                                            <div class="flex-1">
+                                                <p class="font-medium">{{ $order->menu_name }}</p>
+                                                <p class="text-sm text-gray-500">
+                                                    {{ $order->order_quantity }} × ₱{{ number_format($order->menu_price, 2) }}
+                                                </p>
+                                            </div>
+                                            <div class="font-semibold">
+                                                ₱{{ number_format($lineTotal, 2) }}
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="text-center py-6 text-gray-500 bg-gray-50 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto mb-2 text-gray-400" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 17v-2h6v2m-7 4h8a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1V7a3 3 0 0 0-6 0v4H9a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2z" />
+                                    </svg>
+                                    No restaurant orders for this booking.
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                    <form method="dialog" class="modal-backdrop">
+                        <button>close</button>
+                    </form>
+                </dialog>
+
+                <!-- Actions Drawer -->
+                <div id="actions-drawer-{{$reserveroom->reservationID}}"
+                    class="fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50">
+                    <div class="p-4 border-b relative">
+                        <h4 class="font-bold">Actions for Booking #{{$reserveroom->bookingID}}</h4>
+                        <button
+                            onclick="document.getElementById('actions-drawer-{{$reserveroom->reservationID}}').classList.add('translate-x-full')"
+                            class="absolute top-3 right-3 btn btn-xs btn-circle btn-ghost">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="p-4 space-y-2 ">
+                        <button onclick="confirm_reservation_{{$reserveroom->reservationID}}.showModal()"
+                            class="btn btn-sm btn-block btn-primary justify-start gap-2 @if(in_array($reserveroom->reservation_bookingstatus, ['Confirmed', 'Checked in', 'Checked out'])) hidden @endif">
+                            Confirm Reservation
+                        </button>
+
+                        @if($reserveroom->reservation_bookingstatus === 'Confirmed')
+                            <button onclick="checkin_reservation_{{$reserveroom->reservationID}}.showModal()"
+                                class="btn btn-sm btn-block btn-primary justify-start gap-2">
+                                Check-In Guest
+                            </button>
+                        @endif
+
+                        @if($reserveroom->reservation_bookingstatus === 'Checked in')
+                            <button onclick="checkout_reservation_{{$reserveroom->reservationID}}.showModal()"
+                                class="btn btn-sm btn-block btn-warning btn-info justify-start gap-2">
+                                Check-Out Guest
+                            </button>
+                        @endif
+
+                        @if($reserveroom->reservation_bookingstatus != 'Confirmed')
+                            <button onclick="cancel_reservation_{{$reserveroom->reservationID}}.showModal()"
+                                class="btn btn-sm btn-block btn-info justify-start gap-2 @if(in_array($reserveroom->reservation_bookingstatus, ['Confirmed', 'Checked in', 'Checked out'])) hidden @endif">
+                                Cancel Reservation
+                            </button>
+                        @endif
+
+                        <button onclick="delete_reservation_{{$reserveroom->reservationID}}.showModal()"
+                            class="btn btn-sm btn-block btn-error justify-start gap-2">
+                            Delete Reservation
+                        </button>
+                    </div>
+                </div>
     @endforeach
 </div>

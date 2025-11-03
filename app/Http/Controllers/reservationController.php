@@ -275,7 +275,37 @@ public function addloyaltypoints($guestID, $roomID, $guestname)
         }
     }
 }
+public function deductLoyaltyPoints($loyaltyPointsUsed, $guestID, $guestname)
+{
+    if ($guestID && $loyaltyPointsUsed > 0) {
+        // Find the guest's loyalty record
+        $loyalty = GuestLoyaltyPoints::firstOrCreate(
+            ['guestID' => $guestID],
+            ['points_balance' => 0, 'points_reserved' => 0]
+        );
 
+        // Make sure the guest has enough points
+        if ($loyalty->points_balance >= $loyaltyPointsUsed) {
+            // Deduct points
+            $loyalty->points_balance -= $loyaltyPointsUsed;
+            $loyalty->save();
+
+            // Notify the guest
+            guestnotification::create([
+                'guestID' => $guestID,
+                'module' => 'Front Desk',
+                'topic' => 'Loyalty Points',
+                'guestname' => $guestname,
+                'message' => "You have used $loyaltyPointsUsed loyalty points for your booking.",
+                'status' => 'new',
+            ]);
+
+        } else {
+            // Optional: if not enough points
+            throw new \Exception("Insufficient loyalty points.");
+        }
+    }
+}
 
 
    public function store(Request $request)
@@ -1255,6 +1285,8 @@ public function gueststore(Request $request)
             'vat' => 'required',
             'serviceFee' => 'required',
             'total' => 'required',
+            'loyalty_points_used' => 'required',
+            'loyalty_discount' => 'required',
     ],[
         'roomID.required' => 'Please select a room.',
         'reservation_checkin.required' => 'Check-in date is missing.',
@@ -1508,9 +1540,11 @@ HTML;
         $guestname = $form['guestname'];
         $roomID = $form['roomID'];
         $guestID = $form['guestID'];
+        $loyaltyPointsUsed = $form['loyalty_points_used'];
 
         $this->employeenotif($guestname, $roomID);
         $this->guestnotif($guestname, $guestID, $roomID);
+        $this->deductLoyaltyPoints($loyaltyPointsUsed, $guestID, $guestname );
 
 
 

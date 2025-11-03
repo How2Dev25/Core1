@@ -485,8 +485,9 @@
                                         <div
                                             class="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-orange-500/5 to-amber-500/5 border border-orange-500/20">
                                             <span class="flex items-center gap-2 text-sm font-medium">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round">
                                                     <line x1="19" y1="5" x2="5" y2="19"></line>
                                                     <circle cx="6.5" cy="6.5" r="2.5"></circle>
                                                     <circle cx="17.5" cy="17.5" r="2.5"></circle>
@@ -499,8 +500,9 @@
                                         <div
                                             class="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-blue-500/5 to-cyan-500/5 border border-blue-500/20">
                                             <span class="flex items-center gap-2 text-sm font-medium">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round">
                                                     <path d="M6 20V4h7a5 5 0 0 1 0 10H6" />
                                                     <line x1="6" y1="10" x2="13" y2="10" />
                                                     <line x1="6" y1="14" x2="12" y2="14" />
@@ -587,6 +589,11 @@
                                         </div>
                                     </div>
 
+                                    <!-- Loyalty Discount Row -->
+                                    @include('guest.components.dashboard.rooms.loyaltydiscount')
+
+                                    
+
                                     <!-- Action Buttons -->
                                     <div class="flex flex-col sm:flex-row gap-4">
                                         <button type="reset" class="btn btn-ghosts rounded-md btn-sm">
@@ -616,6 +623,7 @@
                                 </div>
                             </div>
                         </form>
+
 
                         <style>
                             .input:focus,

@@ -39,6 +39,8 @@ class Reservation extends Model
             'subtotal',
             'vat',
             'serviceFee',
-            'total'
+            'total',
+            'loyalty_points_used',
+            'loyalty_discount',
         ];
 }

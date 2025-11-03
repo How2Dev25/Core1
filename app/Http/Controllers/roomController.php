@@ -12,6 +12,8 @@ use Carbon\Carbon;
 use App\Models\AuditTrails;
 use App\Models\roomtypes;
 use App\Models\dynamicBilling;
+use App\Models\guestloyaltypoints;
+use App\Models\loyaltyrules;
 
 class roomController extends Controller
 {
@@ -354,8 +356,14 @@ if ($form['roomstatus'] === 'Maintenance') {
             $taxrate = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
             $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person Fee')->value('dynamic_price');
 
+             $myloyaltypoints = guestloyaltypoints::where('guestID', Auth::guard('guest')->user()->guestID)
+            ->value('points_balance');
+
+            $loyaltyrules = loyaltyrules::all();
+
           return view('guest.components.dashboard.rooms.reserveroom', ['room' => $room, 'servicefee' => $servicefee
-        , 'taxrate' => $taxrate, 'additionalpersonfee' => $additionalpersonfee]);
+        , 'taxrate' => $taxrate, 'additionalpersonfee' => $additionalpersonfee,
+        'myloyaltypoints' => $myloyaltypoints, 'loyaltyrules' => $loyaltyrules]);
     }
 
 
