@@ -63,7 +63,7 @@
                             <span
                                 class="px-4 py-1.5 bg-white/20 backdrop-blur-sm text-white rounded-full text-sm font-semibold border border-white/30">
                                 <i class="fas fa-coins mr-1"></i>
-                                {{ Auth::guard('guest')->user()->loyalty_points ?? 0 }} Points
+                                {{ $myloyaltypoints ?? 0 }} Points
                             </span>
                         </div>
 

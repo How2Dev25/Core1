@@ -8,6 +8,7 @@ use App\Models\Glar;
 use App\Models\AuditTrails;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\loyaltyrules;
 class larController extends Controller
 {
     public function store(Request $request){
@@ -129,5 +130,34 @@ class larController extends Controller
         session()->flash('Expired', 'Loyalty Status Has Been Set to Expired');
 
         return redirect()->back();
+    }
+
+    public function rulesInsert(Request $request){
+        $form = $request->validate([
+            'points_required' => 'required',
+            'discount_percent' => 'required',
+        ]);
+        $form['loyalty_rule_status'] = 'Active';
+
+        loyaltyrules::create($form);
+
+        return redirect()->back()->with('Added', 'Loyalty Rule Has Been Added');
+    }
+
+    public function rulesModify(Request $request, loyaltyrules $loyaltyrulesID){
+         $form = $request->validate([
+            'points_required' => 'required',
+            'discount_percent' => 'required',
+        ]);
+
+        $loyaltyrulesID->update($form);
+
+        return redirect()->back()->with('Added', 'Loyalty Rule Has Been Updated');
+    }
+
+    public function rulesRemoved(loyaltyrules $loyaltyrulesID){
+        
+        $loyaltyrulesID->delete();
+        return redirect()->back()->with('Added', 'Loyalty Rule Has Removed');
     }
 }

@@ -11,14 +11,17 @@
       Confirm Deletion
     </h3>
 
-    <p class="mb-6 text-sm text-gray-700">Are you sure you want to remove this Loyaty Reward  <span class="font-bold">{{$points->loyaltyID}} for Room {{$points->roomID}} {{$points->roomtype}}</span> This action cannot be undone.</p>
+    <p class="mb-6 text-sm text-gray-700">Are you sure you want to remove this Loyalty Reward <span
+        class="font-bold">{{$points->loyaltyID}} for Room {{$points->roomID}} {{$points->roomtype}}</span> This action
+      cannot be undone.</p>
 
-    <form  method="POST" action="/deletelar/{{$points->loyaltyID}}">
+    <form method="POST" action="/deletelar/{{$points->loyaltyID}}">
       @csrf
       @method('DELETE')
       <div class="modal-action">
-        <button  type="button" onclick="delete_reward_{{$points->loyaltyID}}.close()" class="btn btn-ghost">Cancel</button>
-        <button  type="submit" class="btn btn-error">
+        <button type="button" onclick="delete_reward_{{$points->loyaltyID}}.close()"
+          class="btn btn-ghost">Cancel</button>
+        <button type="submit" class="btn btn-error">
           <i data-lucide="trash" class="w-4 h-4 mr-1"></i>
           Delete
         </button>

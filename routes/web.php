@@ -27,9 +27,11 @@ use App\Models\Ecm;
 use App\Models\ecmtype;
 use App\Models\facility;
 use App\Models\Guest;
+use App\Models\guestloyaltypoints;
 use App\Models\guestRatings;
 use App\Models\Hmp;
 use App\Models\Inventory;
+use App\Models\loyaltyrules;
 use App\Models\ordersfromresto;
 use App\Models\restointegration;
 use App\Models\room;
@@ -968,7 +970,7 @@ Route::put('/reservationconfirm/{reservationID}', [reservationController::class,
 
 // loyalty and rewards
 
-Route::get('lar', function(){
+Route::get('/lar', function(){
      employeeAuthCheck();
      verifyloyaltyandrewards();
     $rooms = room::whereNotIn('roomID', function ($query) {
@@ -982,7 +984,18 @@ Route::get('lar', function(){
     $totalpoints = Lar::sum('loyalty_value');
     $totalreward = Lar::count();
 
-    return view('admin.lar', ['rooms' => $rooms, 'roompoints' => $roompoints, 'totalpoints' => $totalpoints, 'totalreward' => $totalreward]);
+    $rules = loyaltyrules::all();
+
+    $activemembers = Guest::count();
+
+    $totalrules = loyaltyrules::count();
+
+    return view('admin.lar', 
+    ['rooms' => $rooms, 'roompoints' => $roompoints, 'totalpoints' => $totalpoints, 
+    'totalreward' => $totalreward,
+    'rules'=> $rules,
+    'activemembers' => $activemembers,
+    'totalrules' => $totalrules]);
 });
 Route::post('/createlar', [larController::class, 'store']);
 Route::put('/editlar/{loyaltyID}', [larController::class, 'modify']);
@@ -990,6 +1003,10 @@ Route::put('/expirelar/{loyaltyID}', [larController::class, 'expired']);
 Route::delete('/deletelar/{loyaltyID}', [larController::class, 'delete']);
 Route::post('/guestadd/{loyaltyID}', [larController::class, 'addtoguest']);
 
+// loyalty and rewards rule
+Route::post('/createlarrules', [larController::class, 'rulesInsert']);
+Route::put('/modifylarrules/{loyaltyrulesID}', [larController::class, 'rulesModify']);
+Route::delete('/removelarrules/{loyaltyrulesID}', [larController::class, 'rulesRemoved']);
 
 
 
@@ -1072,7 +1089,8 @@ Route::get('/guestdashboard', function() {
 
     $favoriteroom = $favoriteroomID ? Room::find($favoriteroomID) : null;
 
-    
+    $myloyaltypoints = guestloyaltypoints::where('guestID', Auth::guard('guest')->user()->guestID)
+    ->value('points_balance');
 
     $events = ecmtype::all();
 
@@ -1090,12 +1108,18 @@ Route::get('/guestdashboard', function() {
  $reservations = Reservation::where('guestID', $guestID)->get();
 
     // ✅ Example: count reservations per month for the chart
-    $monthlyReservations = Reservation::where('guestID', $guestID)
-        ->selectRaw('MONTH(reservation_checkin) as month, COUNT(*) as total')
-        ->groupBy('month')
-        ->orderBy('month')
-        ->pluck('total', 'month')
-        ->toArray(); // ✅ Convert Collection to plain array
+   $rawData = Reservation::where('guestID', $guestID)
+    ->selectRaw('MONTH(reservation_checkin) as month, COUNT(*) as total')
+    ->groupBy('month')
+    ->orderBy('month')
+    ->pluck('total', 'month')
+    ->toArray();
+
+// Build an array of 12 months (index 0=Jan, 11=Dec)
+$monthlyReservations = [];
+for ($m = 1; $m <= 12; $m++) {
+    $monthlyReservations[] = $rawData[$m] ?? 0;
+}
 
     // ✅ Total reservations
     $guestTotalReservation = $reservations->count();
@@ -1111,6 +1135,7 @@ Route::get('/guestdashboard', function() {
         'facility',
         'guestTotalReservation',
         'monthlyReservations',
+        'myloyaltypoints',
     ));
 });
 

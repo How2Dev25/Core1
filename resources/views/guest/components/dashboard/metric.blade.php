@@ -76,7 +76,7 @@
         </div>
         <h3 class="text-gray-600 text-sm font-medium mb-1">Loyalty Points</h3>
         <p class="text-3xl font-bold text-gray-900">
-            {{ Auth::guard('guest')->user()->loyalty_points ?? 0 }}
+            {{ $myloyaltypoints ?? 0 }}
         </p>
         <p class="text-xs text-gray-500 mt-2">Ready to redeem</p>
     </div>

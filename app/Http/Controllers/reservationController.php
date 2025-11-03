@@ -24,7 +24,8 @@ use App\Models\employeenotification;
 use Illuminate\Support\Facades\DB;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
-
+use App\Models\guestloyaltypoints;
+use App\Models\Lar;
 
 class reservationController extends Controller
 {
@@ -125,7 +126,8 @@ public function employeenotif($guestname, $roomID)
 }
 
 public function confirmnotif($guestname, $roomID, $guestID){
- guestnotification::create([
+    if($guestID){
+        guestnotification::create([
         'guestID' => $guestID,
         'module' => 'Front Desk',
         'guestname' => $guestname,
@@ -133,10 +135,13 @@ public function confirmnotif($guestname, $roomID, $guestID){
         'message' => "Your Reservation For Room $roomID Has Been Confirmed",
         'status' => 'new',
     ]);
+    }
+ 
 }
 
 public function cancelnotif($guestname, $roomID, $guestID){
-    guestnotification::create([
+    if($guestID){
+        guestnotification::create([
         'guestID' => $guestID,
         'module' => 'Front Desk',
         'guestname' => $guestname,
@@ -144,7 +149,8 @@ public function cancelnotif($guestname, $roomID, $guestID){
         'message' => "Your Reservation For Room $roomID Has Been Cancelled",
         'status' => 'new',
     ]);
-
+    }
+    
      employeenotification::create([
         'module' => 'Front Desk',
         'message' => ($guestname ? $guestname . ' Cancelled Reservation for Room ' . $roomID : 'A guest cancelled reservation for room ' . $roomID),
@@ -155,6 +161,7 @@ public function cancelnotif($guestname, $roomID, $guestID){
 }
 
 public function checkinnotif($guestname, $roomID, $guestID){
+    if($guestID){
         guestnotification::create([
         'guestID' => $guestID,
         'module' => 'Front Desk',
@@ -164,6 +171,9 @@ public function checkinnotif($guestname, $roomID, $guestID){
         'status' => 'new',
     ]);
 
+
+    }
+        
      employeenotification::create([
         'module' => 'Front Desk',
         'message' => ($guestname ? $guestname . ' Check In  ' . $roomID : 'A guest Check in on room ' . $roomID),
@@ -174,7 +184,8 @@ public function checkinnotif($guestname, $roomID, $guestID){
 }
 
 public function deletenotif($guestname, $roomID, $guestID){
-        guestnotification::create([
+    if($guestID){
+          guestnotification::create([
         'guestID' => $guestID,
         'module' => 'Front Desk',
         'guestname' => $guestname,
@@ -183,11 +194,14 @@ public function deletenotif($guestname, $roomID, $guestID){
         'status' => 'new',
     ]);
 
+    }
+      
 }
 
 
 public function checkoutnotif($guestname, $roomID, $guestID){
-        guestnotification::create([
+    if($guestID){
+            guestnotification::create([
         'guestID' => $guestID,
         'module' => 'Front Desk',
         'guestname' => $guestname,
@@ -195,7 +209,8 @@ public function checkoutnotif($guestname, $roomID, $guestID){
         'message' => "You Have Check out on room $roomID",
         'status' => 'new',
     ]);
-
+    }
+    
      employeenotification::create([
         'module' => 'Front Desk',
         'message' => ($guestname ? $guestname . ' Check Out on  ' . $roomID : 'A guest Check out on room ' . $roomID),
@@ -216,7 +231,8 @@ public function receiptnotif($guestname, $roomID, $guestID){
         'guestname' => !empty($guestname) ? $guestname : null,
     ]);
 
-       guestnotification::create([
+    if($guestID){
+        guestnotification::create([
         'guestID' => $guestID,
         'module' => 'Front Desk',
         'guestname' => $guestname,
@@ -224,6 +240,40 @@ public function receiptnotif($guestname, $roomID, $guestID){
         'message' => "Your Receipt for Reservation Room $roomID is Email to your Email Address",
         'status' => 'new',
     ]);
+
+    }
+       
+}
+
+public function addloyaltypoints($guestID, $roomID, $guestname)
+{
+    if ($guestID) {
+        // Get the loyalty value from the room
+        $pointsValue = Lar::where('roomID', $roomID)->value('loyalty_value');
+
+        // If the room has no defined loyalty points, default to 0
+        $pointsToAdd = $pointsValue ?? 0;
+
+        if ($pointsToAdd > 0) {
+            $loyalty = GuestLoyaltyPoints::firstOrCreate(
+                ['guestID' => $guestID],
+                ['points_balance' => 0, 'points_reserved' => 0]
+            );
+
+            // Add new points
+            $loyalty->points_balance += $pointsToAdd;
+            $loyalty->save();
+
+            guestnotification::create([
+                'guestID' => $guestID,
+                'module' => 'Front Desk',
+                'topic' => 'Reservation',
+                'guestname' => $guestname,
+                'message' => "You have earned $pointsToAdd loyalty points from your recent booking.",
+                'status' => 'new',
+            ]);
+        }
+    }
 }
 
 
@@ -677,6 +727,8 @@ HTML;
               $guestID = $reservationID->guestID ?? null;
 
             $this->confirmnotif($guestname, $roomID, $guestID);
+
+            $this->addloyaltypoints($guestID, $roomID, $guestname);
 
     session()->flash('confirm', 'Reservation Status Has Been Confirmed');
     return redirect()->back();
