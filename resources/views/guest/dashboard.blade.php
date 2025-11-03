@@ -67,7 +67,7 @@
                     @include('guest.components.dashboard.navbar')
 
                     <!-- Dashboard Content -->
-                    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-gray-50 to-blue-50">
+                    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 ">
 
                         <!-- Welcome Banner -->
                         @include('guest.components.dashboard.welcomeguest')
@@ -84,9 +84,9 @@
                                 {{-- room showcase --}}
                                 @include('guest.components.dashboard.roomshowcase')
 
-                                  <!-- Facilities Grid -->
+                                <!-- Facilities Grid -->
                                 @include('guest.components.dashboard.facilitysection')
-                                    <!-- Reservation Trends Chart -->
+                                <!-- Reservation Trends Chart -->
                                 @include('guest.components.dashboard.reservationtrend')
 
                             </div>
@@ -97,25 +97,25 @@
                                 @include('guest.components.dashboard.eventsection')
                                 <!-- Current Promotion -->
                                 @include('guest.components.dashboard.promotionsection')
-                                    <!-- Points Breakdown -->
-                                    @include('guest.components.dashboard.pointschart')
+                                <!-- Points Breakdown -->
+                                @include('guest.components.dashboard.pointschart')
                                 <!-- Featured Room -->
 
 
-                                </div>
+                            </div>
                         </div>
-                        </main>
+                    </main>
                 </div>
-                </div>
+            </div>
             <!-- Chart.js Scripts -->
             <script>
                 function dismissWelcome() {
-                        document.getElementById('welcomeCard').style.display = 'none';
+                    document.getElementById('welcomeCard').style.display = 'none';
                 }
             </script>
-                @livewireScripts
-                @include('javascriptfix.soliera_js')
-            </section>
+            @livewireScripts
+            @include('javascriptfix.soliera_js')
+        </section>
 
 
 
