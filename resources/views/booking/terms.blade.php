@@ -177,18 +177,23 @@
 </div>
 
 <script>
-    // Show modal on page load
     document.addEventListener('DOMContentLoaded', function () {
         const modal = document.getElementById('terms_modal');
+        const checkbox = document.getElementById('agree_terms');
+        const acceptBtn = document.getElementById('accept_btn');
 
-        // Show modal after a brief delay
-        setTimeout(() => {
-            modal.showModal();
-            modal.dispatchEvent(new Event('show'));
-        }, 500);
+        // Check if terms were already accepted this session
+        const accepted = sessionStorage.getItem('termsAccepted');
+        if (!accepted) {
+            // Show modal after a brief delay if not accepted
+            setTimeout(() => {
+                modal.showModal();
+                modal.dispatchEvent(new Event('show'));
+            }, 500);
+        }
 
+        // Animate cards when modal shows
         modal.addEventListener('show', function () {
-            // Add entrance animation to cards
             const cards = modal.querySelectorAll('.card');
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
@@ -200,46 +205,41 @@
                 }, index * 100);
             });
         });
+
+        // Toggle accept button
+        checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                acceptBtn.disabled = false;
+                acceptBtn.className = 'btn bg-blue-900 hover:bg-blue-800 text-white btn-sm';
+                acceptBtn.innerHTML = '<i class="fas fa-check mr-2 text-yellow-400"></i>I Accept';
+            } else {
+                acceptBtn.disabled = true;
+                acceptBtn.className = 'btn bg-gray-400 text-gray-200 btn-sm cursor-not-allowed';
+                acceptBtn.innerHTML = '<i class="fas fa-check mr-2"></i>I Accept';
+            }
+        });
+
+        // Accept button logic
+        window.acceptTerms = function () {
+            modal.close();
+            sessionStorage.setItem('termsAccepted', 'true'); // ✅ Save acceptance for this tab session
+            console.log('Terms accepted!');
+        };
+
+        // Prevent closing modal by clicking outside
+        document.addEventListener('click', function (event) {
+            const modalBox = modal.querySelector('.modal-box');
+            if (modal.open && !modalBox.contains(event.target)) {
+                event.stopPropagation();
+                modal.showModal(); // Keep it open
+            }
+        });
     });
 
-    // Toggle accept button based on checkbox
-    function toggleAcceptButton() {
-        const checkbox = document.getElementById('agree_terms');
-        const acceptBtn = document.getElementById('accept_btn');
-
-        if (checkbox.checked) {
-            acceptBtn.disabled = false;
-            acceptBtn.className = 'btn bg-blue-900 hover:bg-blue-800 text-white btn-sm';
-            acceptBtn.innerHTML = '<i class="fas fa-check mr-2 text-yellow-400"></i>I Accept';
-        } else {
-            acceptBtn.disabled = true;
-            acceptBtn.className = 'btn bg-gray-400 text-gray-200 btn-sm cursor-not-allowed';
-            acceptBtn.innerHTML = '<i class="fas fa-check mr-2"></i>I Accept';
-        }
-    }
-
-    // Handle accept button click
-    function acceptTerms() {
-        const modal = document.getElementById('terms_modal');
-        modal.close();
-        // Add your logic here for when terms are accepted
-        console.log('Terms accepted!');
-    }
-
-    // Enhanced modal show function
+    // Manually open modal (for testing)
     function showTermsModal() {
         const modal = document.getElementById('terms_modal');
         modal.showModal();
         modal.dispatchEvent(new Event('show'));
     }
-    document.addEventListener('click', function (event) {
-        const modal = document.getElementById('terms_modal');
-        const modalBox = modal.querySelector('.modal-box');
-
-        if (modal.open && !modalBox.contains(event.target)) {
-            event.stopPropagation();
-            modal.showModal(); // keep open
-        }
-    });
-
 </script>

@@ -64,11 +64,16 @@ public function searchRooms(Request $request)
     $allowedTypes = ['Standard', 'Deluxe', 'Suite', 'Executive'];
 
     // Step 1: Try to get rooms based on requested type
-    $rooms = Room::query()
-        ->whereIn('roomtype', $allowedTypes)
-        ->when($roomtype, fn($q) => $q->where('roomtype', $roomtype))
-        ->where('roomstatus', 'Available')
-        ->get();
+$rooms = Room::leftJoin('core1_loyaltyandrewards', 'core1_loyaltyandrewards.roomID', '=', 'core1_room.roomID')
+    ->whereIn('core1_room.roomtype', $allowedTypes)
+    ->when($roomtype, fn($q) => $q->where('core1_room.roomtype', $roomtype))
+    ->where('core1_room.roomstatus', 'Available')
+    ->select(
+        'core1_room.*',
+        DB::raw('COALESCE(core1_loyaltyandrewards.loyalty_value, 0) as loyalty_value'),
+        'core1_loyaltyandrewards.roomID as loyaltyroomID'
+    )
+    ->get();
 
     // Step 2: If no rooms found, get all available rooms and flash a message
     if ($rooms->isEmpty()) {

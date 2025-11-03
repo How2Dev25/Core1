@@ -57,7 +57,13 @@ class RoomDisplay extends Component
 
     public function render()
     {
-        $query = room::query()->where('roomstatus', 'Available');
+      $query = room::leftJoin('core1_loyaltyandrewards', 'core1_loyaltyandrewards.roomID', '=', 'core1_room.roomID')
+    ->where('core1_room.roomstatus', 'Available')
+     ->select(
+        'core1_room.*',
+        DB::raw('COALESCE(core1_loyaltyandrewards.loyalty_value, 0) as loyalty_value'),
+        'core1_loyaltyandrewards.roomID as loyaltyroomID'
+    );
 
         // Category filter
         if ($this->category) {
@@ -97,7 +103,7 @@ class RoomDisplay extends Component
         }
 
         // Sorting
-        $query->orderBy($this->sortBy, $this->sortDirection);
+       $query->orderBy('core1_room.' . $this->sortBy, $this->sortDirection);
 
         $rooms = $query->paginate(6);
 
