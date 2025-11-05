@@ -27,6 +27,7 @@ use Stripe\Checkout\Session as StripeSession;
 use App\Models\guestloyaltypoints;
 use App\Models\Lar;
 use App\Models\loyaltyrules;
+use App\Models\hotelBilling;
 
 class reservationController extends Controller
 {
@@ -314,6 +315,19 @@ public function deductLoyaltyPoints($loyaltyPointsUsed, $guestID, $guestname)
             throw new \Exception("Insufficient loyalty points.");
         }
     }
+}
+
+public function billingHistory ($bookingID, $guestID, $guestname, $amount_paid, $payment_method){
+  hotelBilling::firstOrCreate(
+    ['transaction_reference' => $bookingID],
+    [
+        'guestID' => $guestID ?? null,
+        'guestname' => $guestname,
+        'payment_date' => Carbon::now(),
+        'amount_paid' => $amount_paid,
+        'payment_method' => $payment_method,
+    ]
+);
 }
 
 
@@ -931,6 +945,15 @@ HTML;
 
                     $guestID = $reservationID->guestID ?? null;
                     $guestname = $reservationID->guestname;
+
+                    $amount_paid = 
+                    Reservation::where('reservationID', $reservationID->reservationID)
+                    ->value('total');
+
+                    $payment_method = Reservation::where('reservationID', $reservationID->reservationID)
+                    ->value('payment_method');
+
+                    $this->billingHistory($bookingID, $guestID, $guestname, $amount_paid, $payment_method);
 
                     $this->checkoutnotif($guestname, $roomID, $guestID);
 
@@ -2004,6 +2027,17 @@ HTML;
         $guestname = $form['guestname'];
         $roomID = $form['roomID'];
 
+       $guestID = $reservationID->guestID ?? null;
+
+         $amount_paid = 
+         Reservation::where('reservationID', $reservation->reservationID)
+         ->value('total');
+
+        $payment_method = Reservation::where('reservationID', $reservation->reservationID)
+        ->value('payment_method');
+
+         $this->billingHistory($bookingID, $guestID, $guestname, $amount_paid, $payment_method);
+
         $this->employeenotif($guestname, $roomID);
        
 
@@ -2184,6 +2218,15 @@ HTML;
         $guestID = $form['guestID'];
         $loyaltyPointsUsed = $form['loyalty_points_used'];
 
+         $amount_paid = 
+         Reservation::where('reservationID', $reservation->reservationID)
+         ->value('total');
+
+        $payment_method = Reservation::where('reservationID', $reservation->reservationID)
+        ->value('payment_method');
+
+         $this->billingHistory($bookingID, $guestID, $guestname, $amount_paid, $payment_method);
+
         $this->employeenotif($guestname, $roomID);
         $this->guestnotif($guestname, $guestID, $roomID);
         $this->deductLoyaltyPoints($loyaltyPointsUsed, $guestID, $guestname );
@@ -2358,6 +2401,16 @@ HTML;
         $roomID = $form['roomID'];
         $guestID = $form['guestID'];
         $loyaltyPointsUsed = $form['loyalty_points_used'];
+
+
+         $amount_paid = 
+         Reservation::where('reservationID', $reservation->reservationID)
+         ->value('total');
+
+        $payment_method = Reservation::where('reservationID', $reservation->reservationID)
+        ->value('payment_method');
+
+         $this->billingHistory($bookingID, $guestID, $guestname, $amount_paid, $payment_method);
 
         $this->employeenotif($guestname, $roomID);
         $this->guestnotif($guestname, $guestID, $roomID);
