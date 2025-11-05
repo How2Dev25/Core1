@@ -101,6 +101,8 @@
         </div>
       </div>
 
+
+
       <!-- Restaurant -->
       <div class="collapse group">
         <input type="checkbox" class="peer" />
@@ -137,16 +139,16 @@
         </div>
       </div>
 
-      <!-- Rewards -->
-      <a href="#" class="block">
+      <a href="/paymenthistoryguest" class="block">
         <div
           class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
           <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-            <i class="fa-solid fa-award text-[#F7B32B] group-hover:text-white"></i>
+            <i class="fas fa-file-alt text-[#F7B32B] group-hover:text-white"></i>
           </div>
-          <span class="ml-3 sidebar-text">Loyalty And Rewards</span>
+          <span class="ml-3 sidebar-text">Payment History</span>
         </div>
       </a>
+
 
       <!-- Events -->
       <a href="#" class="block">

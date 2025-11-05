@@ -163,14 +163,7 @@
           </div>
 
           <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
-            <a href="/guestpayments"
-              class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
-              <span class="flex items-center gap-2">
-                <i class="fas fa-wallet w-4 h-4 text-[#F7B32B]"></i>
-                Guest Payments
-              </span>
-            </a>
-
+            
             <a href="/managefees"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
@@ -179,7 +172,7 @@
               </span>
             </a>
 
-            <a href="/transactionhistory"
+            <a href="/transactionhistoryadmin"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
                 <i class="fas fa-file-alt w-4 h-4 text-[#F7B32B]"></i>

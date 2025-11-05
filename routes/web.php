@@ -30,6 +30,7 @@ use App\Models\Guest;
 use App\Models\guestloyaltypoints;
 use App\Models\guestRatings;
 use App\Models\Hmp;
+use App\Models\hotelBilling;
 use App\Models\Inventory;
 use App\Models\loyaltyrules;
 use App\Models\ordersfromresto;
@@ -283,6 +284,8 @@ Route::get('/restrictedemployee', function(){
 // Admins
 
 // dashboard
+
+
 Route::get('/adminprofile', function(){
      employeeAuthCheck();
     return view('admin.profile');
@@ -1154,6 +1157,45 @@ $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person 
 Route::post('/createfee', [billingController::class, 'store']);
 Route::put('/updatefee/{dynamic_billingID}', [billingController::class, 'modify']);
 
+// Transaction History
+Route::get('/transactionhistoryadmin', function(Request $request){
+    employeeAuthCheck();
+    verifyfrontdesk();
+
+    // Stats
+    $totalRevenue = hotelBilling::sum('amount_paid');
+    $totalTransaction = hotelBilling::count();
+    $historyWithAccount = hotelBilling::whereNotNull('guestID')->count();
+    $historyWithoutAccount = hotelBilling::whereNull('guestID')->count();
+
+    // Transactions query
+    $query = hotelBilling::query();
+
+    // Filter by date
+    if ($request->filter ?? false) {
+        switch ($request->filter) {
+            case 'week':
+                $query->where('payment_date', '>=', now()->subWeek());
+                break;
+            case 'month':
+                $query->where('payment_date', '>=', now()->subMonth());
+                break;
+        }
+    }
+
+    // Pagination
+    $billingHistory = $query->orderBy('payment_date', 'desc')->paginate(10);
+
+    // Pass all to view
+    return view('admin.transactionhistory', compact(
+        'totalRevenue',
+        'totalTransaction',
+        'historyWithAccount',
+        'historyWithoutAccount',
+        'billingHistory'
+    ));
+});
+
 // Guest
 Route::get('/showrooms', function(){
      guestAuthCheck();
@@ -1285,3 +1327,46 @@ Route::get('/payment/success', [ReservationController::class, 'paymentSuccess'])
 Route::get('/payment/success/landing', [ReservationController::class, 'paymentSuccessLanding'])->name('payment.success.landing');
 Route::get('/payment/success/ai', [ReservationController::class, 'paymentSuccessAI'])->name('payment.success.ai');
 Route::get('/payment/cancel', [ReservationController::class, 'paymentCancel'])->name('payment.cancel');
+
+// billing history guest
+Route::get('/paymenthistoryguest', function(Request $request){
+
+    $guestID = Auth::guard('guest')->user()->guestID;
+
+    // Stats
+    $totalRevenue = hotelBilling::where('guestID', $guestID)->sum('amount_paid');
+    $totalTransaction = hotelBilling::where('guestID', $guestID)->count();
+
+    // Last Payment
+    $lastPayment = hotelBilling::where('guestID', $guestID)
+                               ->latest('payment_date')
+                               ->first();
+    $lastPaymentAmount = $lastPayment->amount_paid ?? 0;
+    $lastPaymentDate = $lastPayment ? Carbon::parse($lastPayment->payment_date)->format('M d, Y h:i A') : null;
+
+    // Transactions query
+    $query = hotelBilling::where('guestID', $guestID);
+
+    // Filter by date
+    if ($request->filter ?? false) {
+        switch ($request->filter) {
+            case 'week':
+                $query->where('payment_date', '>=', now()->subWeek());
+                break;
+            case 'month':
+                $query->where('payment_date', '>=', now()->subMonth());
+                break;
+        }
+    }
+
+    // Pagination (10 per page)
+    $billingHistory = $query->orderBy('payment_date', 'desc')->paginate(10);
+
+    return view('guest.paymenthistory', compact(
+        'totalRevenue',
+        'totalTransaction',
+        'lastPaymentAmount',
+        'lastPaymentDate',
+        'billingHistory'
+    ));
+});
