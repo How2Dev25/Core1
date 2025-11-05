@@ -296,7 +296,6 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/employeedashboard', function() {
     employeeAuthCheck();
-
     verifydashboard();
 
     // === Reservations ===
@@ -337,9 +336,8 @@ Route::get('/employeedashboard', function() {
     $loyaltyandrewards = Lar::count();
     $totalevents = Ecm::count();
 
-    // Revenu 
-
-      $today = now();
+    // === Revenue using hotelBilling ===
+    $today = now();
     $currentMonth = $today->month;
     $currentYear  = $today->year;
 
@@ -348,105 +346,64 @@ Route::get('/employeedashboard', function() {
     $lastMonthYear = $lastMonthDate->year;
 
     $calculateRevenue = function($month, $year) {
-        return Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
-            ->where('core1_reservation.payment_status', 'Paid')
-            ->whereMonth('core1_reservation.reservation_checkin', $month)
-            ->whereYear('core1_reservation.reservation_checkin', $year)
-            ->get()
-            ->sum(function ($reservation) {
-                $nights = Carbon::parse($reservation->reservation_checkin)
-                    ->diffInDays(Carbon::parse($reservation->reservation_checkout));
-                $base = $reservation->roomprice * $nights;
-                return $base + ($base * 0.12) + ($base * 0.02);
-            });
+        return hotelBilling::whereMonth('payment_date', $month)
+            ->whereYear('payment_date', $year)
+            ->sum('amount_paid');
     };
-
-     
 
     $revenueCurrent = $calculateRevenue($currentMonth, $currentYear);
     $revenueLast    = $calculateRevenue($lastMonth, $lastMonthYear);
     $revenueChange  = $revenueLast > 0 ? (($revenueCurrent - $revenueLast) / $revenueLast) * 100 : 0;
 
+    $nightsCurrent = hotelBilling::whereMonth('payment_date', $currentMonth)
+        ->whereYear('payment_date', $currentYear)
+        ->count();
 
-     $calculateNights = function($month, $year) {
-        return Reservation::where('payment_status', 'Paid')
-            ->whereMonth('reservation_checkin', $month)
-            ->whereYear('reservation_checkin', $year)
-            ->get()
-            ->sum(function ($r) {
-                return Carbon::parse($r->reservation_checkin)
-                    ->diffInDays(Carbon::parse($r->reservation_checkout));
-            });
-    };
-
-    $nightsCurrent = $calculateNights($currentMonth, $currentYear);
-    $nightsLast    = $calculateNights($lastMonth, $lastMonthYear);
+    $nightsLast = hotelBilling::whereMonth('payment_date', $lastMonth)
+        ->whereYear('payment_date', $lastMonthYear)
+        ->count();
 
     // Avg Daily Rate
     $avgDailyRateCurrent = $nightsCurrent > 0 ? $revenueCurrent / $nightsCurrent : 0;
-    $avgDailyRateLast    = $nightsLast > 0 ? $calculateRevenue($lastMonth, $lastMonthYear) / $nightsLast : 0;
+    $avgDailyRateLast    = $nightsLast > 0 ? $revenueLast / $nightsLast : 0;
     $avgDailyRateChange  = $avgDailyRateLast > 0 ? (($avgDailyRateCurrent - $avgDailyRateLast) / $avgDailyRateLast) * 100 : 0;
 
     // RevPAR
     $totalRooms = Room::count();
-    $daysCurrent = Carbon::now()->daysInMonth;
-    $daysLast = $lastMonthDate->daysInMonth;
-    $availableRoomNightsCurrent = $totalRooms * $daysCurrent;
-    $availableRoomNightsLast    = $totalRooms * $daysLast;
-
-    $revPARCurrent = $availableRoomNightsCurrent > 0 ? $revenueCurrent / $availableRoomNightsCurrent : 0;
-    $revPARLast    = $availableRoomNightsLast > 0 ? $revenueLast / $availableRoomNightsLast : 0;
+    $revPARCurrent = $totalRooms > 0 ? $revenueCurrent / $totalRooms : 0;
+    $revPARLast    = $totalRooms > 0 ? $revenueLast / $totalRooms : 0;
     $revPARChange  = $revPARLast > 0 ? (($revPARCurrent - $revPARLast) / $revPARLast) * 100 : 0;
 
     // Occupancy Rate
-    $occupancyCurrent = $availableRoomNightsCurrent > 0 ? ($nightsCurrent / $availableRoomNightsCurrent) * 100 : 0;
-    $occupancyLast    = $availableRoomNightsLast > 0 ? ($nightsLast / $availableRoomNightsLast) * 100 : 0;
+    $occupancyCurrent = $totalRooms > 0 ? ($nightsCurrent / $totalRooms) * 100 : 0;
+    $occupancyLast    = $totalRooms > 0 ? ($nightsLast / $totalRooms) * 100 : 0;
     $occupancyChange  = $occupancyLast > 0 ? ($occupancyCurrent - $occupancyLast) / $occupancyLast * 100 : 0;
 
-       $last30DaysLabels = [];
+    // === Last 30 Days Graph using hotelBilling ===
+    $last30DaysLabels = [];
     $revenueLast30Days = [];
     $avgDailyRateLast30Days = [];
     $revPARLast30Days = [];
     $occupancyLast30Days = [];
 
-    $totalRooms = Room::count();
-
     for ($i = 29; $i >= 0; $i--) {
         $date = Carbon::now()->subDays($i);
-        $last30DaysLabels[] = $date->format('M d'); // e.g. "Aug 28"
+        $last30DaysLabels[] = $date->format('M d'); // e.g. "Nov 05"
 
         // Revenue for this day
-        $dailyRevenue = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
-            ->where('core1_reservation.payment_status', 'Paid')
-            ->whereDate('core1_reservation.reservation_checkin', $date)
-            ->get()
-            ->sum(function ($reservation) {
-                $nights = Carbon::parse($reservation->reservation_checkin)
-                    ->diffInDays(Carbon::parse($reservation->reservation_checkout));
-                $base = $reservation->roomprice * $nights;
-                return $base + ($base * 0.12) + ($base * 0.02);
-            });
-
+        $dailyRevenue = hotelBilling::whereDate('payment_date', $date)->sum('amount_paid');
         $revenueLast30Days[] = $dailyRevenue;
 
-        // Avg Daily Rate
-        $dailyNights = Reservation::where('payment_status', 'Paid')
-            ->whereDate('reservation_checkin', $date)
-            ->get()
-            ->sum(function ($r) {
-                return Carbon::parse($r->reservation_checkin)
-                    ->diffInDays(Carbon::parse($r->reservation_checkout));
-            });
-        $avgDailyRateLast30Days[] = $dailyNights > 0 ? $dailyRevenue / $dailyNights : 0;
+        // Count of payments for ADR
+        $dailyPayments = hotelBilling::whereDate('payment_date', $date)->count();
+        $avgDailyRateLast30Days[] = $dailyPayments > 0 ? $dailyRevenue / $dailyPayments : 0;
 
         // RevPAR
         $revPARLast30Days[] = $totalRooms > 0 ? $dailyRevenue / $totalRooms : 0;
 
-        // Occupancy Rate
-        $occupancyLast30Days[] = $totalRooms > 0 ? ($dailyNights / $totalRooms) * 100 : 0;
+        // Occupancy
+        $occupancyLast30Days[] = $totalRooms > 0 ? ($dailyPayments / $totalRooms) * 100 : 0;
     }
-
-
 
     // === Calculations for comparisons ===
     $reservationGrowthMonth = $reservationLastMonth > 0
@@ -485,34 +442,33 @@ Route::get('/employeedashboard', function() {
     ->orderBy('month')
     ->get();
 
-     $rooms = Room::inRandomOrder()->get(); // Get 6 rooms
+    $rooms = Room::inRandomOrder()->get(); // Get 6 rooms
         
- $sessions = DB::table('sessions')
-    ->join('department_accounts', 'sessions.user_id', '=', 'department_accounts.Dept_no')
-    ->leftJoin('additionalinfoadmin', 'department_accounts.Dept_no', '=', 'additionalinfoadmin.Dept_no')
-    ->whereBetween('sessions.last_activity', [
-        Carbon::today()->timestamp,
-        Carbon::tomorrow()->timestamp - 1
-    ])
-    ->orderBy('sessions.last_activity', 'desc')
-    ->select(
-        'sessions.*',
-        'department_accounts.employee_name',
-        'department_accounts.role',
-        'department_accounts.dept_name',
-        'department_accounts.employee_id',
-        'department_accounts.status',
-        'department_accounts.email',
-        'adminphoto',
-    )
-    ->take(5)
-    ->get();
+    $sessions = DB::table('sessions')
+        ->join('department_accounts', 'sessions.user_id', '=', 'department_accounts.Dept_no')
+        ->leftJoin('additionalinfoadmin', 'department_accounts.Dept_no', '=', 'additionalinfoadmin.Dept_no')
+        ->whereBetween('sessions.last_activity', [
+            Carbon::today()->timestamp,
+            Carbon::tomorrow()->timestamp - 1
+        ])
+        ->orderBy('sessions.last_activity', 'desc')
+        ->select(
+            'sessions.*',
+            'department_accounts.employee_name',
+            'department_accounts.role',
+            'department_accounts.dept_name',
+            'department_accounts.employee_id',
+            'department_accounts.status',
+            'department_accounts.email',
+            'adminphoto',
+        )
+        ->take(5)
+        ->get();
 
     $events = ecmtype::all();
-
     $promos = Hmp::all();
-
     $facility = facility::all();
+
     return view('admin.dashboard', compact(
         'totalreservation',
         'reservationThisWeek',
@@ -532,15 +488,15 @@ Route::get('/employeedashboard', function() {
         'totalevents',
         'reservationsLast7Days',
         'eventsByMonth',
-          'revenueCurrent', 
-          'revenueChange',
+        'revenueCurrent', 
+        'revenueChange',
         'avgDailyRateCurrent', 
         'avgDailyRateChange',
         'revPARCurrent',
-         'revPARChange',
+        'revPARChange',
         'occupancyCurrent', 
         'occupancyChange',
-          'last30DaysLabels',
+        'last30DaysLabels',
         'revenueLast30Days',
         'avgDailyRateLast30Days',
         'revPARLast30Days',
@@ -552,6 +508,7 @@ Route::get('/employeedashboard', function() {
         'promos',
     ));
 });
+
 
 Route::get('/departmentaccount', function(){
      employeeAuthCheck();
@@ -1292,6 +1249,7 @@ Route::get('/menuorder', function () {
 });
 
 Route::get('/myorder', function(){
+     guestAuthCheck();
     $mycart = restoCart::join('resto_integration', 'resto_integration.menuID', '=', 'resto_cart.menuID')
     ->where('resto_cart.guestID', Auth::guard('guest')->user()->guestID)
     ->latest('resto_cart.created_at')
@@ -1305,6 +1263,7 @@ Route::delete('/deletecart/{cartID}', [orderController::class, 'deletefromcart']
 Route::get('/ordercart', [orderController::class, 'confirmorder']);
 
 Route::get('/recentorders', function(){
+     guestAuthCheck();
       $mycart = ordersfromresto::join('resto_integration', 'resto_integration.menuID', '=', 'orderfromresto.menuID')
     ->where('orderfromresto.guestID', Auth::guard('guest')->user()->guestID)
     ->latest('orderfromresto.created_at')
@@ -1316,6 +1275,7 @@ Route::delete('/cancelorder/{orderID}', [orderController::class, 'cancelorder'])
 Route::put('/deliverorder/{orderID}', [orderController::class, 'delivered']);
 
 Route::get('/profileguest', function(){
+     guestAuthCheck();
     return view('guest.profile');
 });
 
@@ -1330,7 +1290,7 @@ Route::get('/payment/cancel', [ReservationController::class, 'paymentCancel'])->
 
 // billing history guest
 Route::get('/paymenthistoryguest', function(Request $request){
-
+     guestAuthCheck();
     $guestID = Auth::guard('guest')->user()->guestID;
 
     // Stats
