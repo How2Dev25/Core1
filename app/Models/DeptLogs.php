@@ -31,4 +31,9 @@ class DeptLogs extends Model
      public $timestamps = false;
 
 
+ public function deptAccount()
+{
+    return $this->belongsTo(DeptAccount::class, 'employee_id', 'employee_id');
+}
+
 }

@@ -125,39 +125,55 @@
                 </thead>
                 <tbody>
                   @foreach ($employee as $employees)
-                        <tr class="hover:bg-gray-50 transition">
-                          <td class="font-medium">{{$employees->employee_id}}</td>
-                          <td>{{$employees->dept_name}}</td>
-                          <td>
-                            <div class="flex items-center gap-3">
-                              <div class="avatar">
-                                <div class="h-12 w-12 rounded-full bg-blue-900 relative">
-                                  <span class="absolute inset-0 flex items-center justify-center text-white font-bold text-lg">
-                                    {{ strtoupper(substr($employees->employee_name, 0, 2)) }}
-                                  </span>
-                                </div>
+                    @php
+                      // Fetch the employee photo (from additionalInfo relation)
+                      $photo = $employees->additionalInfo->adminphoto ?? null;
+                      $initials = strtoupper(substr($employees->employee_name, 0, 2));
+                    @endphp
+                    <tr class="hover:bg-gray-50 transition">
+                      <td class="font-medium">{{ $employees->employee_id }}</td>
+                      <td>{{ $employees->dept_name }}</td>
+                      <td>
+                        <div class="flex items-center gap-3">
+                          <div class="avatar flex-shrink-0">
+                            @if ($photo)
+                              <div class="h-12 w-12 rounded-full overflow-hidden shadow-md">
+                                <img src="{{ asset($photo) }}" alt="Employee Photo" class="object-cover w-full h-full">
                               </div>
-                              <div>
-                                <div class="font-bold">{{$employees->employee_name}}</div>
+                            @else
+                              <div class="h-12 w-12 rounded-full bg-blue-900 flex items-center justify-center shadow-md">
+                                <span
+                                  class="text-white font-bold text-lg select-none flex items-center justify-center w-full h-full">
+                                  {{ strtoupper($initials) }}
+                                </span>
                               </div>
+                            @endif
+                          </div>
+
+                          <div class="flex flex-col justify-center">
+                            <div class="font-bold text-gray-800 leading-tight">
+                              {{ $employees->employee_name }}
                             </div>
-                          </td>
-                          <td>
-                            <div class="text-sm opacity-80">{{$employees->email}}</div>
-                            <span class="badge badge-ghost badge-sm">{{$employees->role}}</span>
-                          </td>
-                          <td>
-                            <span id="deptspan" class="px-2 py-1 rounded-full text-white text-xs 
-                    {{ $employees->status == 'Active' ? 'bg-green-500' : 'bg-red-500' }}">
-                              {{$employees->status}}
-                            </span>
-                          </td>
-                        </tr>
+                          </div>
+                        </div>
+
+                      </td>
+                      <td>
+                        <div class="text-sm opacity-80">{{ $employees->email }}</div>
+                        <span class="badge badge-ghost badge-sm">{{ $employees->role }}</span>
+                      </td>
+                      <td>
+                        <span id="deptspan"
+                          class="px-2 py-1 rounded-full text-white text-xs 
+                                                                                      {{ $employees->status == 'Active' ? 'bg-green-500' : 'bg-red-500' }}">
+                          {{ $employees->status }}
+                        </span>
+                      </td>
+                    </tr>
                   @endforeach
                 </tbody>
               </table>
             </div>
-
 
 
           </section>
