@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Models\employeenotification;
 use App\Models\additionalinfoadmin;
-
+use App\Models\guestnotification;
+use App\Models\guestloyaltypoints;
+use App\Models\Lar;
 class userController extends Controller
 {
 
@@ -41,6 +43,34 @@ class userController extends Controller
     return redirect('/loginguest');
 }
 
+public function addloyaltypoints($guestID, $guestname)
+{
+    if ($guestID) {
+    
+       
+        $pointsToAdd = 250;
+
+        if ($pointsToAdd > 0) {
+            $loyalty = GuestLoyaltyPoints::firstOrCreate(
+                ['guestID' => $guestID],
+                ['points_balance' => 0, 'points_reserved' => 0]
+            );
+
+            // Add new points
+            $loyalty->points_balance += $pointsToAdd;
+            $loyalty->save();
+
+            guestnotification::create([
+                'guestID' => $guestID,
+                'module' => 'Front Desk',
+                'topic' => 'Reservation',
+                'guestname' => $guestname,
+                'message' => "You have earned $pointsToAdd loyalty points from your first login.",
+                'status' => 'new',
+            ]);
+        }
+    }
+}
 
     
 public function login(Request $request)
@@ -381,6 +411,13 @@ public function profilesetup(Request $request, Guest $guestID){
 
     $guestID->update($form);
 
+    // Extract guest ID and name correctly
+    $guest_id = $guestID->guestID;
+    $guest_name = $guestID->guest_name;
+
+    // Add loyalty points for completing profile setup
+    $this->addLoyaltyPoints($guest_id, $guest_name);
+
      session()->flash('showwelcome');
 
     return redirect('/guestdashboard');
@@ -566,6 +603,8 @@ public function resendGuestOtp(Request $request)
                 'guest_photo' => $googleUser->getAvatar(),
                 'guest_password' => Hash::make(str()->random(16)), // random password
             ]);
+
+            $this->addLoyaltyPoints($guest->guestID, $guest->guest_name);
         }
 
         Auth::guard('guest')->login($guest);
