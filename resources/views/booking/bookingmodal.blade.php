@@ -74,21 +74,23 @@
 
           <!-- Content -->
           <div class="absolute inset-0 flex flex-col items-center justify-center text-white p-6">
-            <div class="text-center transform group-hover:scale-110 transition-all duration-400">
-              <div
-                class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
-                <i class="fas fa-glass-cheers text-4xl text-blue-900"></i>
+            <a href="/eventselectionlanding">
+              <div class="text-center transform group-hover:scale-110 transition-all duration-400">
+                <div
+                  class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
+                  <i class="fas fa-glass-cheers text-4xl text-blue-900"></i>
+                </div>
+                <h4 class="text-2xl font-bold mb-3">Events & Conference</h4>
+                <p class="text-white/90 mb-6 max-w-sm">
+                  Host memorable events in our elegant venues and celebration spaces
+                </p>
+                <div
+                  class="bg-blue-900 text-yellow-400 px-6 py-3 rounded-full font-bold text-lg shadow-lg transform group-hover:bg-blue-800 transition-all duration-300">
+                  <i class="fa-solid fa-calendar-days mr-2"></i>
+                  Book Event
+                </div>
               </div>
-              <h4 class="text-2xl font-bold mb-3">Events & Functions</h4>
-              <p class="text-white/90 mb-6 max-w-sm">
-                Host memorable events in our elegant venues and celebration spaces
-              </p>
-              <div
-                class="bg-blue-900 text-yellow-400 px-6 py-3 rounded-full font-bold text-lg shadow-lg transform group-hover:bg-blue-800 transition-all duration-300">
-                <i class="fa-solid fa-calendar-days mr-2"></i>
-                Book Event
-              </div>
-            </div>
+            </a>
           </div>
 
           <!-- Corner Icon -->

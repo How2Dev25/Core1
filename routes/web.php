@@ -251,6 +251,18 @@ Route::get('/booking/success/{id}', function($id) {
     ));
 })->name('booking.success');
 
+
+Route::get('/eventselectionlanding', function(){
+    
+
+     $eventtypes = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')
+     ->where('core1_eventtype.eventtype_name', '!=', 'Conference' )
+     ->latest('core1_eventtype.created_at')->get();
+
+    return view('events.eventspage', compact('eventtypes'));
+});
+
+Route::get('/eventbookinglanding/{eventtype_ID}', [ecmController::class, 'eventbookinglanding']);
 // Login 
 Route::get('/employeelogin', function(){
     return view('employeelogin.login');

@@ -392,4 +392,14 @@ public function notifyguestandemployee ($guestID, $guestname, $event_bookingrece
      
      }
 
+     public function eventbookinglanding($eventtype_ID){
+         $eventtype = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')
+    ->where('core1_eventtype.eventtype_ID', $eventtype_ID)
+    ->first();
+
+     $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person Fee')->value('dynamic_price');
+
+     return view('events.eventselected', compact('eventtype', 'additionalpersonfee'));
+     }
+
 }
