@@ -30,39 +30,31 @@
   }
 
   // ---------------- Dropdown Logic ----------------
-
-  // Setup dropdown behavior (accordion + memory)
   function initDropdownBehavior() {
     const checkboxes = document.querySelectorAll('.collapse input[type="checkbox"]');
-
     checkboxes.forEach(checkbox => {
       checkbox.addEventListener('change', function () {
-
         if (this.checked) {
           closeOtherDropdowns(this);
           saveDropdownState(this.id); // Save if open
         } else {
           localStorage.removeItem('activeDropdown'); // Allow close ✅
         }
-
         updateDropdownIndicators();
       });
     });
   }
 
-  // Close other dropdowns
   function closeOtherDropdowns(activeCheck) {
     document.querySelectorAll('.collapse input[type="checkbox"]').forEach(cb => {
       if (cb !== activeCheck) cb.checked = false;
     });
   }
 
-  // Save active dropdown
   function saveDropdownState(id) {
     localStorage.setItem('activeDropdown', id);
   }
 
-  // Load saved dropdown after refresh
   function applySavedDropdown() {
     const savedId = localStorage.getItem('activeDropdown');
     if (!savedId) return;
@@ -70,7 +62,6 @@
     if (savedCheck) savedCheck.checked = true;
   }
 
-  // Update icon rotation & style dynamically
   function updateDropdownIndicators() {
     const sidebar = document.getElementById('sidebar');
     const isCollapsed = sidebar.classList.contains('w-25') && !isMobileView();
@@ -119,12 +110,22 @@
   // ---------------- Initialization ----------------
   function initSidebar() {
     const sidebar = document.getElementById('sidebar');
+    const sidebarLogo = document.getElementById('sidebar-logo');
+    const sonlyLogo = document.getElementById('sonly');
 
     if (isMobileView()) {
       sidebar.classList.add('-translate-x-full');
     } else {
       const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
       sidebar.classList.add(isCollapsed ? 'w-25' : 'w-64');
+
+      // ✅ FIX: ensure text/icons visibility matches saved state
+      document.querySelectorAll('.sidebar-text').forEach(text => {
+        text.classList.toggle('hidden', isCollapsed);
+      });
+
+      sidebarLogo.classList.toggle('hidden', isCollapsed);
+      sonlyLogo.classList.toggle('hidden', !isCollapsed);
     }
 
     setTimeout(() => sidebar.classList.add('loaded'), 50);
@@ -135,7 +136,7 @@
     window.addEventListener('resize', handleResize);
   }
 
-  // Philippine Time
+  // ---------------- Philippine Time ----------------
   function displayPhilippineTime() {
     const options = {
       timeZone: 'Asia/Manila',
