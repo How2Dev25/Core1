@@ -11,7 +11,7 @@
 
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <title>{{$title}} - Select Event</title>
+    <title>{{$title}} - Select Event And Conference</title>
 </head>
 
 <body>
