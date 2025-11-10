@@ -1342,3 +1342,14 @@ Route::get('/paymenthistoryguest', function(Request $request){
         'billingHistory'
     ));
 });
+
+Route::get('/bookeventguest', function(){
+        guestAuthCheck();
+     $eventtypes = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')
+     ->where('core1_eventtype.eventtype_name', '!=', 'Conference' )
+     ->latest('core1_eventtype.created_at')->get();
+
+    return view('guest.bookevent', compact('eventtypes'));
+});
+
+Route::get('/eventbookingguest/{eventtype_ID}', [ecmController::class, 'eventbookingguest']);

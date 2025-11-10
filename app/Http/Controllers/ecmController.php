@@ -21,7 +21,8 @@ class ecmController extends Controller
 {
 
 public function sendEventReservationEmail($eventData)
-{
+{   
+    $eventtype = ecmtype::where('eventtype_ID', $eventData['eventtype_ID'])->value('eventtype_name');
     $mail = new PHPMailer(true);
 
     try {
@@ -98,8 +99,8 @@ public function sendEventReservationEmail($eventData)
                 <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . $eventData['event_name'] . '</td>
             </tr>
             <tr>
-                <td style="padding:10px 0; color:#666; font-size:14px;">Event Type ID:</td>
-                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . $eventData['eventtype_ID'] . '</td>
+                <td style="padding:10px 0; color:#666; font-size:14px;">Event Type:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . $eventtype . '</td>
             </tr>
             <tr>
                 <td style="padding:10px 0; color:#666; font-size:14px;">Check-in Date:</td>
@@ -244,6 +245,7 @@ public function notifyguestandemployee ($guestID, $guestname, $event_bookingrece
     $ecm = Ecm::create($form);
 
     // ✅ Audit trail
+    if (Auth::check()) {
     AuditTrails::create([
         'dept_id'       => Auth::user()->Dept_id,
         'dept_name'     => Auth::user()->dept_name,
@@ -255,6 +257,8 @@ public function notifyguestandemployee ($guestID, $guestname, $event_bookingrece
         'role'          => Auth::user()->role,
         'date'          => Carbon::now()->toDateTimeString(),
     ]);
+    }
+   
 
 
      $this->sendEventReservationEmail($form);
@@ -402,4 +406,15 @@ public function notifyguestandemployee ($guestID, $guestname, $event_bookingrece
      return view('events.eventselected', compact('eventtype', 'additionalpersonfee'));
      }
 
+     public function eventbookingguest($eventtype_ID){
+         $eventtype = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')
+    ->where('core1_eventtype.eventtype_ID', $eventtype_ID)
+    ->first();
+
+     $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person Fee')->value('dynamic_price');
+
+     return view('guest.components.events.eventselected', compact('eventtype', 'additionalpersonfee'));
+     }
+
 }
+

@@ -71,6 +71,37 @@
         </div>
       </div>
 
+      {{-- Events --}}
+
+      <div class="collapse group">
+        <input type="checkbox" class="peer" />
+        <div
+          class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
+          <div class="flex items-center">
+            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
+              <i class="fa-solid fa-calendar-days text-[#F7B32B] group-hover:text-white"></i>
+            </div>
+            <span class="ml-3 sidebar-text">Events And Conference Reservations</span>
+          </div>
+          <i
+            class="fa-solid fa-chevron-down text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"></i>
+        </div>
+        <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
+          <a href="/bookeventguest"
+            class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-handshake-angle text-[#F7B32B]"></i> Book An Event
+            </span>
+          </a>
+          <a href="/myeventreservationguest"
+            class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-ticket text-[#F7B32B]"></i> My Reservations
+            </span>
+          </a>
+        </div>
+      </div>
+
       <!-- Provide Feedback -->
       <div class="collapse group">
         <input type="checkbox" class="peer" />
@@ -150,16 +181,8 @@
       </a>
 
 
-      <!-- Events -->
-      <a href="#" class="block">
-        <div
-          class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
-          <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors">
-            <i class="fa-solid fa-calendar-days text-[#F7B32B] group-hover:text-white"></i>
-          </div>
-          <span class="ml-3 sidebar-text">View Events</span>
-        </div>
-      </a>
+
+
 
     </nav>
   </div>
