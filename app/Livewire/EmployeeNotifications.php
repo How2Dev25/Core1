@@ -29,7 +29,7 @@ class EmployeeNotifications extends Component
             'Billing' => ['Hotel Admin', 'Receptionist'],
             'Stocks Management' => ['Hotel Admin', 'Material Custodian', 'Hotel Inventory Manager'],
             'Marketing' => ['Hotel Admin', 'Hotel Marketing Officer', 'Receptionist'],
-            'Event & Conference' => ['Hotel Admin'],
+            'Event And Conference' => ['Hotel Admin', 'Receptionist'],
             'Integration' => ['Hotel Admin'],
             'Security' => ['Hotel Admin'],
         ];

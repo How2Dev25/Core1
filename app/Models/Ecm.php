@@ -33,6 +33,7 @@ class Ecm extends Model
             'event_eventreceipt',
             'event_bookingreceiptID',
             'event_numguest',
+            'event_total_price'
         ];
 
 }
