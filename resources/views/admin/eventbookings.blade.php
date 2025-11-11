@@ -33,6 +33,66 @@
                         <h1 class="text-2xl font-bold text-[#191970] bg-clip-text ">Event And Conference Bookings</h1>
                     </div>
                     {{-- Subsystem Name --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 mt-5">
+
+                        <!-- Total Reservations -->
+                        <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total
+                                        Reservations</h3>
+                                    <p class="text-3xl font-bold text-gray-800 mt-2"></p>
+
+                                </div>
+                                <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                                    <i class="fa-solid fa-bed text-yellow-400 text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Confirmed -->
+                        <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Confirmed</h3>
+                                    <p class="text-3xl font-bold text-gray-800 mt-2"></p>
+
+                                </div>
+                                <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                                    <i class="fa-solid fa-circle-check text-yellow-400 text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pending -->
+                        <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Pending</h3>
+                                    <p class="text-3xl font-bold text-gray-800 mt-2"></p>
+
+                                </div>
+                                <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                                    <i class="fa-solid fa-clock text-yellow-400 text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cancelled -->
+                        <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Cancelled</h3>
+                                    <p class="text-3xl font-bold text-gray-800 mt-2"></p>
+
+                                </div>
+                                <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                                    <i class="fa-solid fa-circle-xmark text-yellow-400 text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
 
 
                     <!-- content -->

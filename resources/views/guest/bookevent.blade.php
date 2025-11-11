@@ -117,18 +117,8 @@
                                             </div>
                                         </div>
 
-                                        <!-- Category Badge -->
-                                        <div class="mb-5">
-                                            <span
-                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-100">
-                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd"
-                                                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                                Event Package
-                                            </span>
-                                        </div>
+
+
 
                                         <!-- Action Button -->
                                         <a href="/eventbookingguest/{{ $eventtype->eventtype_ID }}"
@@ -138,7 +128,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                             </svg>
-                                            <span>Book This Event</span>
+                                            <span>Book Now!</span>
                                             <svg class="w-4 h-4 transition-transform group-hover/btn:translate-x-1" fill="none"
                                                 stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
