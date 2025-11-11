@@ -680,6 +680,12 @@ Route::get('/eventbookings', function(){
     return view('admin.eventbookings');
 });
 
+Route::put('/confirmeventbooking/{eventbookingID}', [ecmController::class, 'confirmReservation']);
+Route::put('/doneeventbooking/{eventbookingID}', [ecmController::class, 'doneReservation']);
+Route::put('/cancelbookingevent/{eventbookingID}',[ecmController::class, 'cancelReservation']);
+Route::delete('/deletebookingevent/{eventbookingID}',[ecmController::class, 'deleteReservation']);
+Route::get('/printeventreceipt/{eventbookingID}', [ecmController::class, 'printReceipt']);
+
 // facilities ecm
 
 Route::get('/facilities', function(){
