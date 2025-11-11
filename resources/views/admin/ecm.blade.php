@@ -33,7 +33,7 @@
           </div>
           {{-- Subsystem Name --}}
 
-         
+
           <!-- content -->
           <section class="p-4 md:p-8 mt-5 max-w-7xl mx-auto">
 
@@ -50,7 +50,7 @@
                       <i class="fa-solid fa-calendar"></i>
                     </div>
                     <div>
-                      <h3 class="text-base font-semibold text-gray-800">Total Events</h3>
+                      <h3 class="text-base font-semibold text-gray-800">Total Events And Conference</h3>
                       <p class="text-xs text-gray-500">All events</p>
                     </div>
                   </div>
@@ -69,7 +69,7 @@
                       <i class="fa-solid fa-check-to-slot"></i>
                     </div>
                     <div>
-                      <h3 class="text-base font-semibold text-gray-800">Approved Events</h3>
+                      <h3 class="text-base font-semibold text-gray-800">Approved Events And Conference</h3>
                       <p class="text-xs text-gray-500">Confirmed bookings</p>
                     </div>
                   </div>
@@ -88,7 +88,7 @@
                       <i class="fa-solid fa-ban"></i>
                     </div>
                     <div>
-                      <h3 class="text-base font-semibold text-gray-800">Cancelled Events</h3>
+                      <h3 class="text-base font-semibold text-gray-800">Cancelled Events And Conference</h3>
                       <p class="text-xs text-gray-500">Cancelled bookings</p>
                     </div>
                   </div>
@@ -116,8 +116,8 @@
                 <div
                   class="bg-gradient-to-r from-blue-900 to-blue-700 px-6 py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                   <div>
-                    <h3 class="text-xl font-bold text-white">Event Types</h3>
-                    <p class="text-blue-100 text-sm mt-1">Manage your event packages</p>
+                    <h3 class="text-xl font-bold text-white">Event And Conference </h3>
+                    <p class="text-blue-100 text-sm mt-1">Manage your event and conference packages</p>
                   </div>
                   <button onclick="document.getElementById('create_eventtype_modal').showModal()"
                     class="flex items-center gap-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-300 text-blue-900 rounded-lg font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg">
@@ -126,7 +126,7 @@
                         d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                         clip-rule="evenodd" />
                     </svg>
-                    Add Event Type
+                    Add Event And Conference Type
                   </button>
                 </div>
 

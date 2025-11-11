@@ -93,7 +93,7 @@
               <i class="fa-solid fa-handshake-angle text-[#F7B32B]"></i> Book An Event
             </span>
           </a>
-          <a href="/myeventreservationguest"
+          <a href="/myeventbookings"
             class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
             <span class="flex items-center gap-2">
               <i class="fa-solid fa-ticket text-[#F7B32B]"></i> My Reservations

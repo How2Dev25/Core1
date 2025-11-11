@@ -256,7 +256,6 @@ Route::get('/eventselectionlanding', function(){
     
 
      $eventtypes = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')
-     ->where('core1_eventtype.eventtype_name', '!=', 'Conference' )
      ->latest('core1_eventtype.created_at')->get();
 
     return view('events.eventspage', compact('eventtypes'));
@@ -658,7 +657,6 @@ Route::get('/ecm', function(){
      verifyevent();
 
      $eventtypes = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')
-     ->where('core1_eventtype.eventtype_name', '!=', 'Conference' )
      ->latest('core1_eventtype.created_at')->get();
     $facilities = facility::latest()->get();
    
@@ -673,6 +671,14 @@ Route::put('/cancelecm/{eventID}', [ecmController::class, 'cancel']);
 // booking event and conference
 Route::get('/eventbooking/{eventtype_ID}', [ecmController::class, 'bookevent']);
 Route::post('/bookthisevent', [ecmController::class, 'store']);
+
+// Event Booking Management
+Route::get('/eventbookings', function(){
+    employeeAuthCheck();
+     verifyevent();
+
+    return view('admin.eventbookings');
+});
 
 // facilities ecm
 
@@ -1359,11 +1365,22 @@ Route::get('/paymenthistoryguest', function(Request $request){
 Route::get('/bookeventguest', function(){
         guestAuthCheck();
      $eventtypes = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')
-     ->where('core1_eventtype.eventtype_name', '!=', 'Conference' )
      ->latest('core1_eventtype.created_at')->get();
 
     return view('guest.bookevent', compact('eventtypes'));
 });
 
 Route::get('/eventbookingguest/{eventtype_ID}', [ecmController::class, 'eventbookingguest']);
+
+Route::get('/myeventbookings', function(){
+      guestAuthCheck();
+
+$reservations = Ecm::join('core1_eventtype', 'core1_eventtype.eventtype_ID', '=', 'core1_ecm.eventtype_ID')
+        ->where('core1_ecm.guestID', Auth::guard('guest')->user()->guestID)
+        ->latest('core1_ecm.created_at')
+        ->get();
+
+        return view('guest.myeventreservation', compact('reservations'));
+
+});
 

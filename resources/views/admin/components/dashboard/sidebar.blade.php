@@ -371,18 +371,18 @@
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
                 <i class="fas fa-calendar-day w-4 h-4 text-[#F7B32B]"></i>
-                Events
+                Events And Conference
               </span>
             </a>
 
-            <!-- Conference -->
-            <a href="/conference"
+            <a href="/eventbookings"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
               <span class="flex items-center gap-2">
-                <i class="fas fa-users w-4 h-4 text-[#F7B32B]"></i>
-                Conference
+                <i class="fas fa-calendar-check w-4 h-4 text-[#F7B32B]"></i>
+                Manage Bookings
               </span>
             </a>
+
 
             <!-- Facilities -->
             <a href="/facilities"
