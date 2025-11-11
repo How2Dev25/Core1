@@ -28,13 +28,19 @@ public function store(Request $request){
     ]);
 
     // Handle photo upload
-    if($request->hasFile('eventtype_photo')){
-        $filename = time() . '_' . $request->file('eventtype_photo')->getClientOriginalName();
-        $filepath = 'images/eventphotos/' . $filename;
-        $request->file('eventtype_photo')->move(public_path('images/eventphotos/'), $filename);
-        $form['eventtype_photo'] = $filepath;
-    }
+ if ($request->hasFile('eventtype_photo')) {
+    $originalName = $request->file('eventtype_photo')->getClientOriginalName();
 
+    // Replace spaces and other unsafe characters with underscore
+    $safeName = preg_replace('/[^A-Za-z0-9\-_\.]/', '_', $originalName);
+
+    $filename = time() . '_' . $safeName;
+    $filepath = 'images/eventphotos/' . $filename;
+
+    $request->file('eventtype_photo')->move(public_path('images/eventphotos/'), $filename);
+
+    $form['eventtype_photo'] = $filepath;
+}
     // Clean dynamic array inputs (remove empty values)
     $arrayFields = ['eventtype_amenities','eventtype_catering_options','eventtype_theme_options','eventtype_extra_services'];
 
@@ -84,10 +90,17 @@ public function store(Request $request){
 
     // Handle photo upload
     if($request->hasFile('eventtype_photo')){
-        $filename = time() . '_' . $request->file('eventtype_photo')->getClientOriginalName();
-        $filepath = 'images/eventphotos/' . $filename;
-        $request->file('eventtype_photo')->move(public_path('images/eventphotos/'), $filename);
-        $form['eventtype_photo'] = $filepath;
+         $originalName = $request->file('eventtype_photo')->getClientOriginalName();
+
+    // Replace spaces and other unsafe characters with underscore
+    $safeName = preg_replace('/[^A-Za-z0-9\-_\.]/', '_', $originalName);
+
+    $filename = time() . '_' . $safeName;
+    $filepath = 'images/eventphotos/' . $filename;
+
+    $request->file('eventtype_photo')->move(public_path('images/eventphotos/'), $filename);
+
+    $form['eventtype_photo'] = $filepath;
     } else {
         // keep old photo if none uploaded
         $form['eventtype_photo'] = $eventtype_ID->eventtype_photo;

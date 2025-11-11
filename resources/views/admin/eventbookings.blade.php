@@ -41,7 +41,7 @@
                                 <div>
                                     <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total
                                         Reservations</h3>
-                                    <p class="text-3xl font-bold text-gray-800 mt-2"></p>
+                                    <p class="text-3xl font-bold text-gray-800 mt-2">{{ $totaleventreservation }}</p>
 
                                 </div>
                                 <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
@@ -55,7 +55,7 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Confirmed</h3>
-                                    <p class="text-3xl font-bold text-gray-800 mt-2"></p>
+                                    <p class="text-3xl font-bold text-gray-800 mt-2">{{ $confirmedeventreservation }}</p>
 
                                 </div>
                                 <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
@@ -69,7 +69,7 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Pending</h3>
-                                    <p class="text-3xl font-bold text-gray-800 mt-2"></p>
+                                    <p class="text-3xl font-bold text-gray-800 mt-2">{{ $pendingeventreservation }}</p>
 
                                 </div>
                                 <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
@@ -83,7 +83,7 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Cancelled</h3>
-                                    <p class="text-3xl font-bold text-gray-800 mt-2"></p>
+                                    <p class="text-3xl font-bold text-gray-800 mt-2">{{  $cancelledeventreservation }}</p>
 
                                 </div>
                                 <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">

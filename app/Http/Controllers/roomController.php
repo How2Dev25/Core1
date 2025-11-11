@@ -142,10 +142,15 @@ class roomController extends Controller
         $form['roomfeatures'] = implode(',', $form['roomfeatures']);
         
 
-        $filename = time(). '_' . $request->file('roomphoto')->getClientOriginalName();
-        $filepath = 'images/rooms/' .$filename;
-        $request->file('roomphoto')->move(public_path('images/rooms/'), $filename);
-        $form['roomphoto'] = $filepath;
+       $originalName = $request->file('roomphoto')->getClientOriginalName();
+
+// Replace spaces and unsafe characters
+$safeName = preg_replace('/[^A-Za-z0-9\-_\.]/', '_', $originalName);
+
+$filename = time() . '_' . $safeName;
+$filepath = 'images/rooms/' . $filename;
+$request->file('roomphoto')->move(public_path('images/rooms/'), $filename);
+$form['roomphoto'] = $filepath;
 
         
 
@@ -214,8 +219,10 @@ if ($form['roomstatus'] === 'Maintenance') {
         ]);
 
         if($request->hasFile('roomphoto')){
-            $filename = time(). '_' . $request->file('roomphoto')->getClientOriginalName();
-            $filepath = 'images/rooms/' .$filename;
+           $originalName = $request->file('roomphoto')->getClientOriginalName();
+            $safeName = preg_replace('/[^A-Za-z0-9\-_\.]/', '_', $originalName);
+            $filename = time() . '_' . $safeName;
+            $filepath = 'images/rooms/' . $filename;
             $request->file('roomphoto')->move(public_path('images/rooms/'), $filename);
             $form['roomphoto'] = $filepath;
         }

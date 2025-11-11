@@ -46,7 +46,7 @@
                                     <div>
                                         <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total
                                             Reservations</h3>
-                                        <p class="text-3xl font-bold text-gray-800 mt-2"></p>
+                                        <p class="text-3xl font-bold text-gray-800 mt-2">{{ $totaleventreservation }}</p>
 
                                     </div>
                                     <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
@@ -60,7 +60,7 @@
                                 <div class="flex items-center justify-between">
                                     <div>
                                         <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Confirmed</h3>
-                                        <p class="text-3xl font-bold text-gray-800 mt-2"></p>
+                                        <p class="text-3xl font-bold text-gray-800 mt-2">{{ $confirmedeventreservation }}</p>
 
                                     </div>
                                     <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
@@ -74,7 +74,7 @@
                                 <div class="flex items-center justify-between">
                                     <div>
                                         <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Pending</h3>
-                                        <p class="text-3xl font-bold text-gray-800 mt-2"></p>
+                                        <p class="text-3xl font-bold text-gray-800 mt-2">{{  $pendingeventreservation }}</p>
 
                                     </div>
                                     <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
@@ -88,7 +88,7 @@
                                 <div class="flex items-center justify-between">
                                     <div>
                                         <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Cancelled</h3>
-                                        <p class="text-3xl font-bold text-gray-800 mt-2"></p>
+                                        <p class="text-3xl font-bold text-gray-800 mt-2">{{  $cancelledeventreservation }}</p>
 
                                     </div>
                                     <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
@@ -123,8 +123,8 @@
                                                     <div class="absolute top-5 left-5">
                                                         <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold shadow-xl backdrop-blur-sm
                                                                                                                                                                                                     {{ $reservation->eventstatus == 'Approved' ? 'bg-emerald-500 text-white' :
-                                ($reservation->eventstatus == 'Pending' ? 'bg-amber-500 text-white' :
-                                    'bg-rose-500 text-white') }}">
+            ($reservation->eventstatus == 'Pending' ? 'bg-amber-500 text-white' :
+                'bg-rose-500 text-white') }}">
                                                             <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
                                                             {{ $reservation->eventstatus }}
                                                         </span>
@@ -226,7 +226,7 @@
                                                             </div>
                                                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-lg mt-1
                                                                                                                                                                                                         {{ $reservation->event_paymentstatus == 'Paid' ? 'bg-emerald-100 text-emerald-700' :
-                                'bg-amber-100 text-amber-700' }}">
+            'bg-amber-100 text-amber-700' }}">
                                                                 {{ $reservation->event_paymentstatus }}
                                                             </span>
                                                         </div>

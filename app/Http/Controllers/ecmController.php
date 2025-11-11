@@ -16,6 +16,7 @@ use App\Models\guestnotification;
 use App\Models\employeenotification;
 use App\Models\hotelBilling;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Stripe\Stripe;
 
 
 
@@ -856,73 +857,108 @@ public function billingHistory ($bookingID, $guestID, $guestname, $amount_paid, 
 );
 }
 
-    public function store(Request $request)
+   public function store(Request $request)
 {
-   
-    // ✅ Validate & store into $form
+    // ✅ Validate request
     $form = $request->validate([
-        'eventtype_ID'        => 'required',
-        'eventorganizer_email'=> 'required',
-        'eventorganizer_name' => 'required',
-        'eventorganizer_phone'=> 'required',
-        'event_name'          => 'required',
-        'event_specialrequest'=> 'nullable',
-        'event_equipment'     => 'nullable',
-        'event_paymentmethod' => 'required',
-        'event_checkin'       => 'required',
-        'event_checkout'      => 'required',
-        'event_numguest' => 'required',
-        'event_total_price' => 'required',
+        'eventtype_ID'         => 'required',
+        'eventorganizer_email' => 'required',
+        'eventorganizer_name'  => 'required',
+        'eventorganizer_phone' => 'required',
+        'event_name'           => 'required',
+        'event_specialrequest' => 'nullable',
+        'event_equipment'      => 'nullable',
+        'event_paymentmethod'  => 'required', // must be 'online' or 'onsite'
+        'event_checkin'        => 'required|date',
+        'event_checkout'       => 'required|date',
+        'event_numguest'       => 'required|integer',
+        'event_total_price'    => 'required|numeric',
     ]);
 
-    // ✅ Add extra fields not from form
-    $form['eventstatus']            = 'Pending';
-    $form['event_bookedate']        = Carbon::now()->toDateString();
-            if (Auth::guard('guest')->check()) {
-            $form['guestID'] = Auth::guard('guest')->user()->guestID;
-        } else {
-    $form['guestID'] = null;
-        }
-    $form['event_eventreceipt']     = null;
-    $form['event_bookingreceiptID'] = strtoupper(uniqid("ECM-"));
-    $form['event_paymentstatus'] = 'Unpaid';
+    // ✅ Default fields
+    $form['eventstatus']             = 'Pending';
+    $form['event_bookedate']         = Carbon::now()->toDateString();
+    $form['event_eventreceipt']      = null;
+    $form['event_bookingreceiptID']  = strtoupper(uniqid("ECM-"));
+    $form['event_paymentstatus']     = 'Unpaid';
+    $form['guestID'] = Auth::guard('guest')->check()
+        ? Auth::guard('guest')->user()->guestID
+        : null;
 
-    // ✅ Create ECM record
+    // ✅ If online payment
+    if ($form['event_paymentmethod'] === 'Online Payment') {
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        // 💰 Compute totals dynamically
+        $grandTotal = $form['event_total_price']; // ensure already computed
+
+        // Optional: add an image from your environment (or null-safe)
+        $roomImageEndpoint = env('ROOM_IMAGE_ENDPOINT');
+        $eventtypephoto = ecmtype::where('eventtype_ID', $form['eventtype_ID'])->value('eventtype_photo');
+        $roomImage = $roomImageEndpoint .$eventtypephoto;
+
+        // ✅ Save form temporarily in session (to finalize after payment)
+        session(['reservation_form' => $form]);
+
+        // ✅ Create Stripe Checkout Session
+        $checkout_session = \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'php',
+                    'product_data' => [
+                        'name' => $form['event_name'],
+                        'description' => 'Event booking payment',
+                        'images' => [$roomImage],
+                    ],
+                    'unit_amount' => intval($grandTotal * 100),
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => route('onlinepayment.success') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('onlinepayment.cancel'),
+        ]);
+
+        // 🚀 Redirect to Stripe checkout
+        return redirect($checkout_session->url);
+    }
+
+    // ✅ If onsite payment — create ECM record immediately
     $ecm = Ecm::create($form);
 
-    // ✅ Audit trail
+    // ✅ Audit Trail (for logged-in employees/admin)
     if (Auth::check()) {
-    AuditTrails::create([
-        'dept_id'       => Auth::user()->Dept_id,
-        'dept_name'     => Auth::user()->dept_name,
-        'modules_cover' => 'Event And Conference',
-        'action'        => 'Create ECM Booking',
-        'activity'      => 'Created ECM for ' . $ecm->event_name,
-        'employee_name' => Auth::user()->employee_name,
-        'employee_id'   => Auth::user()->employee_id,
-        'role'          => Auth::user()->role,
-        'date'          => Carbon::now()->toDateTimeString(),
-    ]);
+        AuditTrails::create([
+            'dept_id'       => Auth::user()->Dept_id,
+            'dept_name'     => Auth::user()->dept_name,
+            'modules_cover' => 'Event And Conference',
+            'action'        => 'Create ECM Booking',
+            'activity'      => 'Created ECM for ' . $ecm->event_name,
+            'employee_name' => Auth::user()->employee_name,
+            'employee_id'   => Auth::user()->employee_id,
+            'role'          => Auth::user()->role,
+            'date'          => Carbon::now()->toDateTimeString(),
+        ]);
     }
-   
 
+    // ✅ Notify guest and employees
+    $this->sendEventReservationEmail($form);
+    $this->notifyguestandemployee(
+        $form['guestID'],
+        $form['eventorganizer_name'],
+        $form['event_bookingreceiptID']
+    );
 
-     $this->sendEventReservationEmail($form);
-     $this->notifyguestandemployee($form['guestID'], $form['eventorganizer_name'],  $form['event_bookingreceiptID']);
+    // ✅ Success redirect
+    if (Auth::check() || Auth::guard('guest')->check()) {
+        session()->flash('success', 'ECM booking has been successfully created.');
+        return redirect()->back();
+    }
 
-
-
-    // ✅ Flash success message
-if (Auth::check() || Auth::guard('guest')->check()) {
-    // Either admin/user OR guest is logged in
-    session()->flash('success', 'ECM booking has been successfully created.');
-    return redirect()->back();
-} else {
-    // No one is logged in (from landing page)
     return redirect()->route('eventbooking.success', $ecm->eventbookingID);
 }
-   
-}
+
 
   
      public function bookevent($eventtype_ID){
@@ -962,12 +998,21 @@ if (Auth::check() || Auth::guard('guest')->check()) {
         
 
      public function confirmReservation(Ecm $eventbookingID){
-      $bookingreceiptadd = $eventbookingID->event_bookingreceiptID . '-R' . date('ymd') . rand(100, 999);
-        $eventbookingID->update([
-            'event_eventreceipt' => $bookingreceiptadd,
-            'event_paymentstatus' => 'Paid',
-            'eventstatus' => 'Confirmed',
-        ]);
+     if (empty($eventbookingID->event_eventreceipt)) {
+    $bookingreceiptadd = $eventbookingID->event_bookingreceiptID . '-R' . date('ymd') . rand(100, 999);
+
+    $eventbookingID->update([
+        'event_eventreceipt' => $bookingreceiptadd,
+        'event_paymentstatus' => 'Paid',
+        'eventstatus' => 'Confirmed',
+    ]);
+} else {
+    // Already has a receipt, just update payment/status
+    $eventbookingID->update([
+        'event_paymentstatus' => 'Paid',
+        'eventstatus' => 'Confirmed',
+    ]);
+}
 
         $this->billingHistory($eventbookingID->event_bookingreceiptID,
         $eventbookingID->guestID,
@@ -1017,6 +1062,57 @@ if (Auth::check() || Auth::guard('guest')->check()) {
 
          return redirect()->back()->with('success', 'Reservation Has Been Marked As Done');
     }
+
+    public function onlinepaymentcancel(){
+    session()->forget('reservation_form');
+    return redirect()->back()->with('error', 'Payment was cancelled.');
+    }
+
+public function onlinepaymentsuccess()
+{
+    \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    // ✅ Safety check
+    if (!session()->has('reservation_form')) {
+        return redirect()->route('eventbooking')->with('error', 'Session expired. Please rebook.');
+    }
+
+    // ✅ Retrieve form from session
+    $form = session('reservation_form');
+    $form['event_paymentstatus'] = 'Paid';
+    $form['eventstatus'] = 'Pending';
+
+    // ✅ Create ECM record first
+    $ecm = Ecm::create($form);
+
+    // ✅ Generate receipt number (after saving)
+    $bookingreceiptadd = $ecm->event_bookingreceiptID . '-R' . date('ymd') . rand(100, 999);
+
+    // ✅ Update ECM with receipt
+    $ecm->update([
+        'event_eventreceipt' => $bookingreceiptadd,
+    ]);
+
+    // ✅ Notify guest and employees
+    $this->sendEventReservationEmail($ecm);
+    $this->notifyguestandemployee(
+        $ecm->guestID,
+        $ecm->eventorganizer_name,
+        $ecm->event_bookingreceiptID
+    );
+
+    // ✅ Clean up session
+    session()->forget('reservation_form');
+
+    // ✅ Redirect with message
+    if (Auth::check() || Auth::guard('guest')->check()) {
+        session()->flash('success', 'ECM booking has been successfully created and paid.');
+        return redirect()->back();
+    }
+
+    return redirect()->route('eventbooking.success', $ecm->eventbookingID);
+}
+
 
 }
 

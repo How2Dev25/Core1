@@ -677,14 +677,29 @@ Route::get('/eventbookings', function(){
     employeeAuthCheck();
      verifyevent();
 
-    return view('admin.eventbookings');
-});
+       $totaleventreservation = Ecm::count();
+      $pendingeventreservation = Ecm::
+        where('eventstatus', 'Pending')
+      ->count();
+       $confirmedeventreservation = Ecm::where('eventstatus', 'Confirmed')
+      ->count();
+
+        $cancelledeventreservation = Ecm::where('eventstatus', 'Cancelled')
+      ->count();
+
+    return view('admin.eventbookings', compact('totaleventreservation', 'pendingeventreservation', 'cancelledeventreservation',
+        'confirmedeventreservation'));
+    });
 
 Route::put('/confirmeventbooking/{eventbookingID}', [ecmController::class, 'confirmReservation']);
 Route::put('/doneeventbooking/{eventbookingID}', [ecmController::class, 'doneReservation']);
 Route::put('/cancelbookingevent/{eventbookingID}',[ecmController::class, 'cancelReservation']);
 Route::delete('/deletebookingevent/{eventbookingID}',[ecmController::class, 'deleteReservation']);
 Route::get('/printeventreceipt/{eventbookingID}', [ecmController::class, 'printReceipt']);
+
+
+Route::get('/payment/success/event', [ecmController::class, 'onlinepaymentsuccess'])->name('onlinepayment.success');
+Route::get('/payment/cancel/event', [ecmController::class, 'onlinepaymentcancel'])->name('onlinepayment.cancel');
 
 // facilities ecm
 
@@ -1121,6 +1136,8 @@ for ($m = 1; $m <= 12; $m++) {
     // ✅ Total reservations
     $guestTotalReservation = $reservations->count();
 
+    $totaleventreservation = Ecm::where('guestID', Auth::guard('guest')->user()->guestID)->count();
+
     return view('guest.dashboard', compact(
         'guesttotalreservation',
         'previousReservations',
@@ -1133,6 +1150,7 @@ for ($m = 1; $m <= 12; $m++) {
         'guestTotalReservation',
         'monthlyReservations',
         'myloyaltypoints',
+        'totaleventreservation',
     ));
 });
 
@@ -1381,12 +1399,26 @@ Route::get('/eventbookingguest/{eventtype_ID}', [ecmController::class, 'eventboo
 Route::get('/myeventbookings', function(){
       guestAuthCheck();
 
+      $totaleventreservation = Ecm::where('guestID', Auth::guard('guest')->user()->guestID)->count();
+      $pendingeventreservation = Ecm::where('guestID', Auth::guard('guest')->user()->guestID)
+      ->where('eventstatus', 'Pending')
+      ->count();
+       $confirmedeventreservation = Ecm::where('guestID', Auth::guard('guest')->user()->guestID)
+      ->where('eventstatus', 'Confirmed')
+      ->count();
+
+        $cancelledeventreservation = Ecm::where('guestID', Auth::guard('guest')->user()->guestID)
+      ->where('eventstatus', 'Cancelled')
+      ->count();
+
+
 $reservations = Ecm::join('core1_eventtype', 'core1_eventtype.eventtype_ID', '=', 'core1_ecm.eventtype_ID')
         ->where('core1_ecm.guestID', Auth::guard('guest')->user()->guestID)
         ->latest('core1_ecm.created_at')
         ->get();
 
-        return view('guest.myeventreservation', compact('reservations'));
+        return view('guest.myeventreservation', compact('reservations', 'totaleventreservation',
+    'pendingeventreservation', 'confirmedeventreservation', 'cancelledeventreservation'));
 
 });
 

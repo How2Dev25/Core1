@@ -33,8 +33,8 @@
             </span>
         </div>
         <h3 class="text-gray-600 text-sm font-medium mb-1">Events</h3>
-        <p class="text-3xl font-bold text-gray-900">{{ $events->count() }}</p>
-        <p class="text-xs text-gray-500 mt-2">Available Events</p>
+        <p class="text-3xl font-bold text-gray-900">{{ $totaleventreservation }}</p>
+        <p class="text-xs text-gray-500 mt-2">Events Booked</p>
     </div>
 
     <!-- Recent Stay -->

@@ -106,11 +106,11 @@
                         <td class="py-4 px-4">
                             <span
                                 class="badge py-1.5 px-3
-                                                                                                                                            @if(strtolower($reservation->eventstatus) == 'approved') badge-success
-                                                                                                                                            @elseif(strtolower($reservation->eventstatus) == 'pending') badge-neutral
-                                                                                                                                            @elseif(strtolower($reservation->eventstatus) == 'cancelled') badge-error
-                                                                                                                                            @endif
-                                                                                                                                        ">
+                                                                                                                                                @if(strtolower($reservation->eventstatus) == 'approved') badge-success
+                                                                                                                                                @elseif(strtolower($reservation->eventstatus) == 'pending') badge-neutral
+                                                                                                                                                @elseif(strtolower($reservation->eventstatus) == 'cancelled') badge-error
+                                                                                                                                                @endif
+                                                                                                                                            ">
                                 {{ ucfirst($reservation->eventstatus) }}
                             </span>
                         </td>
@@ -118,11 +118,11 @@
                             <div class="flex flex-col gap-1">
                                 <span
                                     class="
-                                                                                                                                                @if(strtolower($reservation->event_paymentstatus) == 'paid') text-green-600 font-semibold
-                                                                                                                                                @elseif(strtolower($reservation->event_paymentstatus) == 'pending') text-yellow-600 font-semibold
-                                                                                                                                                @else text-gray-600
-                                                                                                                                                @endif
-                                                                                                                                            ">
+                                                                                                                                                    @if(strtolower($reservation->event_paymentstatus) == 'paid') text-green-600 font-semibold
+                                                                                                                                                    @elseif(strtolower($reservation->event_paymentstatus) == 'pending') text-yellow-600 font-semibold
+                                                                                                                                                    @else text-gray-600
+                                                                                                                                                    @endif
+                                                                                                                                                ">
                                     {{ ucfirst($reservation->event_paymentstatus) }}
                                 </span>
                                 <span class="text-xs font-bold text-gray-800">
@@ -239,13 +239,13 @@
                 @endif
 
                 <!-- Delete Event Button -->
-                @if(in_array($reservation->eventstatus, ['Cancelled', 'Done']))
-                    <button onclick="delete_event_{{$reservation->eventbookingID}}.showModal()"
-                        class="btn btn-sm btn-block bg-blue-900 text-white justify-start gap-2 shadow-md">
-                        <i class="fa-solid fa-trash text-yellow-400 h-4 w-4"></i>
-                        Delete Event
-                    </button>
-                @endif
+
+                <button onclick="delete_event_{{$reservation->eventbookingID}}.showModal()"
+                    class="btn btn-sm btn-block bg-blue-900 text-white justify-start gap-2 shadow-md">
+                    <i class="fa-solid fa-trash text-yellow-400 h-4 w-4"></i>
+                    Delete Event
+                </button>
+
 
             </div>
 

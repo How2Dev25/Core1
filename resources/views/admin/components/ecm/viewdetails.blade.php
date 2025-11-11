@@ -18,7 +18,7 @@
                 </h4>
                 <div class="space-y-2">
                     <p><span class="font-medium">Event Type:</span> {{ $reservation->eventtype_name }}</p>
-                    <p><span class="font-medium">Booking ID:</span> {{ $reservation->eventbookingID }}</p>
+                    <p><span class="font-medium">Booking ID:</span> {{ $reservation->event_bookingreceiptID }}</p>
                     <p><span class="font-medium">Booked Date:</span>
                         {{ \Carbon\Carbon::parse($reservation->event_bookedate)->format('M d, Y') }}</p>
                     <p><span class="font-medium">Number of Guests:</span> {{ $reservation->event_numguest }}</p>
