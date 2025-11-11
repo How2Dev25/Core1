@@ -263,6 +263,19 @@ Route::get('/eventselectionlanding', function(){
 });
 
 Route::get('/eventbookinglanding/{eventtype_ID}', [ecmController::class, 'eventbookinglanding']);
+
+
+
+Route::get('/eventbooking/success/{eventbookingID}', function ($eventbookingID) {
+    $reservationevent = Ecm::join('core1_eventtype', 'core1_eventtype.eventtype_ID', '=', 'core1_ecm.eventtype_ID')
+        ->where('core1_ecm.eventbookingID', $eventbookingID)
+        ->select('core1_ecm.*', 'core1_eventtype.eventtype_name') // optional: pick columns
+        ->firstOrFail();
+
+         
+
+    return view('events.success', compact('reservationevent'));
+})->name('eventbooking.success');
 // Login 
 Route::get('/employeelogin', function(){
     return view('employeelogin.login');
@@ -1353,3 +1366,4 @@ Route::get('/bookeventguest', function(){
 });
 
 Route::get('/eventbookingguest/{eventtype_ID}', [ecmController::class, 'eventbookingguest']);
+

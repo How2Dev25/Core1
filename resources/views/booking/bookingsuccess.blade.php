@@ -96,51 +96,67 @@
 
   @include('booking.component.nav')
   <div id="confirmation-section" class="">
-    <section class="bg-gray-50 min-h-screen flex items-center justify-center p-4 mt-10">
-      <div
-        class="max-w-6xl w-full mt-10 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden border border-white/20">
+    <section class="bg-white min-h-screen flex items-center justify-center p-4 py-8 mt-20">
+      <div class="max-w-4xl w-full bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
 
         <!-- Header -->
-        <div class="bg-gradient-to-r from-[#001f54] to-[#1a3470] p-6 text-white text-center relative">
-          <h1 class="text-2xl md:text-3xl font-bold">Booking Success!</h1>
-          <p class="text-white/80 text-sm md:text-lg">Thank you for choosing us for your stay</p>
+        <div class="bg-blue-900 p-6 text-center relative">
+          <div class="inline-block mb-2">
+            <div
+              class="bg-white border-2 border-yellow-400 rounded-full w-14 h-14 flex items-center justify-center mx-auto shadow-md p-1">
+              <img src="{{ asset('images/logo/sonly.png') }}" alt="Soliera Hotel Logo"
+                class="w-full h-full object-contain">
+            </div>
+          </div>
+          <h1 class="text-2xl font-bold text-white mb-1">Booking Success!</h1>
+          <p class="text-yellow-400 text-sm font-medium">Soliera Hotel And Restaurant</p>
+          <i class="text-gray-200 text-xs mt-1">Savor The Stay, Dine With Elegance</i>
         </div>
 
         <!-- Grid Content -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
 
           <!-- Left Column: Booking Details -->
-          <div class="space-y-6">
-            <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-6 border shadow">
-              <h2 class="text-xl font-bold text-[#001f54] mb-4">Booking Details</h2>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div class="bg-white p-4 rounded-lg border shadow-sm">
-                  <p class="text-sm text-gray-500">Booking ID</p>
-                  <p class="font-bold text-[#001f54]">#{{ $reservation->bookingID }}</p>
+          <div class="space-y-4">
+            <div class="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="bg-blue-900 text-yellow-400 rounded-md w-7 h-7 flex items-center justify-center">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                    </path>
+                  </svg>
                 </div>
-                <div class="bg-white p-4 rounded-lg border shadow-sm">
-                  <p class="text-sm text-gray-500">Room</p>
-                  <p class="font-bold text-[#001f54]">#{{ $reservation->roomID }}</p>
+                <h2 class="text-lg font-bold text-gray-900">Booking Details</h2>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+                  <p class="text-xs text-gray-600 mb-1">Booking ID</p>
+                  <p class="font-bold text-sm text-gray-900">#{{ $reservation->bookingID }}</p>
                 </div>
-                <div class="bg-white p-4 rounded-lg border shadow-sm">
-                  <p class="text-sm text-gray-500">Check-in</p>
-                  <p class="font-bold text-green-600">
+                <div class="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+                  <p class="text-xs text-gray-600 mb-1">Room Number</p>
+                  <p class="font-bold text-sm text-gray-900">#{{ $reservation->roomID }}</p>
+                </div>
+                <div class="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+                  <p class="text-xs text-gray-600 mb-1">Check-in Date</p>
+                  <p class="font-bold text-sm text-green-600">
                     {{ \Carbon\Carbon::parse($reservation->reservation_checkin)->format('M d, Y') }}
                   </p>
                 </div>
-                <div class="bg-white p-4 rounded-lg border shadow-sm">
-                  <p class="text-sm text-gray-500">Check-out</p>
-                  <p class="font-bold text-orange-600">
+                <div class="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+                  <p class="text-xs text-gray-600 mb-1">Check-out Date</p>
+                  <p class="font-bold text-sm text-orange-600">
                     {{ \Carbon\Carbon::parse($reservation->reservation_checkout)->format('M d, Y') }}
                   </p>
                 </div>
-                <div class="bg-white p-4 rounded-lg border shadow-sm sm:col-span-2">
-                  <p class="text-sm text-gray-500">Guest Name</p>
-                  <p class="font-bold text-blue-600">{{ $reservation->guestname }}</p>
+                <div class="bg-white p-3 rounded-lg border border-gray-200 shadow-sm sm:col-span-2">
+                  <p class="text-xs text-gray-600 mb-1">Guest Name</p>
+                  <p class="font-bold text-sm text-gray-900">{{ $reservation->guestname }}</p>
                 </div>
-                <div class="bg-white p-4 rounded-lg border shadow-sm sm:col-span-2">
-                  <p class="text-sm text-gray-500">Booked Date</p>
-                  <p class="font-bold text-[#001f54]">
+                <div class="bg-white p-3 rounded-lg border border-gray-200 shadow-sm sm:col-span-2">
+                  <p class="text-xs text-gray-600 mb-1">Booked On</p>
+                  <p class="font-bold text-sm text-gray-900">
                     {{ \Carbon\Carbon::parse($reservation->created_at)->format('M d, Y') }}
                   </p>
                 </div>
@@ -148,18 +164,35 @@
             </div>
 
             <!-- Next Steps -->
-            <div class="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-xl p-6 border shadow">
-              <h2 class="text-xl font-bold text-amber-800 mb-4">What's Next?</h2>
-              <ul class="space-y-3 text-sm text-gray-700">
-                <li>✅ Check your email for details</li>
-                <li>✅ Present your Booking ID at check-in</li>
-                <li>✅ Contact us if you need help</li>
+            <div class="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="bg-blue-900 text-yellow-400 rounded-md w-7 h-7 flex items-center justify-center">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <h2 class="text-lg font-bold text-gray-900">What's Next?</h2>
+              </div>
+              <ul class="space-y-2 text-xs text-gray-700">
+                <li class="flex items-start gap-2 bg-gray-50 p-2 rounded-md border border-gray-100">
+                  <span class="text-green-600 font-bold flex-shrink-0">✓</span>
+                  <span>A confirmation email has been sent to your inbox with all booking details</span>
+                </li>
+                <li class="flex items-start gap-2 bg-gray-50 p-2 rounded-md border border-gray-100">
+                  <span class="text-green-600 font-bold flex-shrink-0">✓</span>
+                  <span>Please present your Booking ID at the front desk during check-in</span>
+                </li>
+                <li class="flex items-start gap-2 bg-gray-50 p-2 rounded-md border border-gray-100">
+                  <span class="text-green-600 font-bold flex-shrink-0">✓</span>
+                  <span>Need assistance? Our support team is available 24/7 to help you</span>
+                </li>
               </ul>
             </div>
           </div>
 
           <!-- Right Column: Payment Summary -->
-          <div class="space-y-6">
+          <div class="space-y-4">
             @php
               $checkin = \Carbon\Carbon::parse($reservation->reservation_checkin);
               $checkout = \Carbon\Carbon::parse($reservation->reservation_checkout);
@@ -177,40 +210,80 @@
               $total = $reservation->total;
             @endphp
 
-            <div class="bg-white rounded-xl p-6 shadow border">
-              <h2 class="text-xl font-bold text-[#001f54] mb-4">Payment Summary</h2>
-              <div class="space-y-3 text-sm">
-                <div class="flex justify-between">
-                  <p>Subtotal ({{ $nights }} night{{ $nights > 1 ? 's' : '' }})</p>
-                  <p class="font-bold">₱{{ number_format($subtotal, 2) }}</p>
+            <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+              <div class="flex items-center gap-2 mb-4">
+                <div class="bg-blue-900 text-yellow-400 rounded-md w-7 h-7 flex items-center justify-center">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                    </path>
+                  </svg>
                 </div>
-                <div class="flex justify-between text-orange-600">
-                  <p>VAT ({{$taxRatedynamic}})</p>
-                  <p class="font-bold">₱{{ number_format($vat, 2) }}</p>
+                <h2 class="text-lg font-bold text-gray-900">Payment Summary</h2>
+              </div>
+              <div class="space-y-2 text-xs">
+                <div class="flex justify-between items-center pb-2 border-b border-gray-200">
+                  <p class="text-gray-700">Subtotal <span class="text-gray-500">({{ $nights }}
+                      night{{ $nights > 1 ? 's' : '' }})</span></p>
+                  <p class="font-bold text-gray-900">₱{{ number_format($subtotal, 2) }}</p>
                 </div>
-                <div class="flex justify-between text-blue-600">
-                  <p>Service Fee ({{$serviceFeedynamic}})</p>
-                  <p class="font-bold">₱{{ number_format($serviceFee, 2) }}</p>
+                <div class="flex justify-between items-center pb-2 border-b border-gray-200">
+                  <p class="text-gray-700">VAT <span class="text-gray-500">({{$taxRatedynamic}})</span></p>
+                  <p class="font-bold text-gray-900">₱{{ number_format($vat, 2) }}</p>
                 </div>
-                <hr>
-                <div class="flex justify-between text-lg font-bold text-[#001f54]">
-                  <p>Total</p>
-                  <p>₱{{ number_format($total, 2) }}</p>
+                <div class="flex justify-between items-center pb-2 border-b border-gray-200">
+                  <p class="text-gray-700">Service Fee <span class="text-gray-500">({{$serviceFeedynamic}})</span></p>
+                  <p class="font-bold text-gray-900">₱{{ number_format($serviceFee, 2) }}</p>
+                </div>
+                <div class="bg-blue-900 rounded-lg p-3 mt-3">
+                  <div class="flex justify-between items-center">
+                    <p class="text-white font-bold text-sm">Total Amount</p>
+                    <p class="font-bold text-yellow-400 text-lg">₱{{ number_format($total, 2) }}</p>
+                  </div>
                 </div>
               </div>
             </div>
 
+            <!-- Contact Information -->
+            <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="bg-blue-900 text-yellow-400 rounded-md w-7 h-7 flex items-center justify-center">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z">
+                    </path>
+                  </svg>
+                </div>
+                <h2 class="text-sm font-bold text-gray-900">Need Help?</h2>
+              </div>
+              <p class="text-xs text-gray-600 mb-3">Our team is here to assist you with any questions or special
+                requests.
+              </p>
+              <div class="space-y-1 text-xs">
+                <p class="text-gray-700">📞 Phone: <span class="text-gray-600">Available 24/7</span></p>
+                <p class="text-gray-700">✉️ Email: <span class="text-gray-600">Contact support</span></p>
+              </div>
+            </div>
+
             <!-- Actions -->
-            <div class="flex flex-col sm:flex-row gap-4">
-              <a href="/" class="btn btn-primary w-full">Back to Home</a>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <a href="/"
+                class="bg-blue-900 hover:bg-blue-800 text-white font-semibold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-center text-sm border border-blue-900">
+                ← Back to Home
+              </a>
             </div>
           </div>
 
         </div>
+
+        <!-- Footer -->
+        <div class="bg-blue-900 p-4 text-center border-t border-blue-800">
+          <p class="text-white font-semibold text-sm mb-1">Thank You for Choosing Soliera!</p>
+          <p class="text-gray-200 text-xs">We look forward to making your stay memorable</p>
+        </div>
+
       </div>
     </section>
-
-
   </div>
 
   @include('landing.footer')

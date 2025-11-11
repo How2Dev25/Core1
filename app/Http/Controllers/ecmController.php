@@ -267,9 +267,15 @@ public function notifyguestandemployee ($guestID, $guestname, $event_bookingrece
 
 
     // ✅ Flash success message
+if (Auth::check() || Auth::guard('guest')->check()) {
+    // Either admin/user OR guest is logged in
     session()->flash('success', 'ECM booking has been successfully created.');
-
     return redirect()->back();
+} else {
+    // No one is logged in (from landing page)
+    return redirect()->route('eventbooking.success', $ecm->eventbookingID);
+}
+   
 }
 
     public function update(Request $request, Ecm $eventID){
