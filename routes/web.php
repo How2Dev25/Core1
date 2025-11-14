@@ -354,7 +354,7 @@ Route::get('/employeedashboard', function() {
 
     // === Markets / Channels ===
     $roommarkets = Hmp::count();
-    $channellisting = Channel::where('channelStatus', 'Approved')->count();
+    $channellisting = channelListings::where('channelStatus', 'Connected')->count();
 
     // === Marketing / Loyalty / Events ===
     $activecampaigns = Hmp::count();

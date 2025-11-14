@@ -31,6 +31,11 @@
       </a>
 
       <!-- My Reservations -->
+
+      <div class="px-4 py-2">
+        <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">Bookings</span>
+      </div>
+
       <a href="/myreservation" class="block">
         <div
           class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
@@ -103,6 +108,10 @@
       </div>
 
       <!-- Provide Feedback -->
+      <div class="px-4 py-2">
+        <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">Feedbacks</span>
+      </div>
+
       <div class="collapse group">
         <input type="checkbox" class="peer" />
         <div
@@ -133,6 +142,9 @@
       </div>
 
 
+      <div class="px-4 py-2">
+        <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">Restaurant</span>
+      </div>
 
       <!-- Restaurant -->
       <div class="collapse group">
@@ -169,6 +181,11 @@
           </a>
         </div>
       </div>
+
+      <div class="px-4 py-2">
+        <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">History</span>
+      </div>
+
 
       <a href="/paymenthistoryguest" class="block">
         <div
