@@ -11,11 +11,11 @@
         </button>
       </form>
     </div>
-    
+
     <form action="/createlisting" method="POST">
       @csrf
       <input type="hidden" name="roomID" id="selectedRoomID">
-      
+
       <div class="bg-base-200 rounded-box p-5 mb-6">
         <h1 class="text-lg font-bold flex items-center gap-2 mb-3">
           <i data-lucide="list" class="w-5 h-5"></i>
@@ -23,11 +23,12 @@
         </h1>
         <div class="grid grid-cols-2 gap-5">
           @forelse ($rooms as $room)
-            <div class="card bg-base-100 shadow-md hover:shadow-xl transition-all cursor-pointer group relative border-2 border-transparent hover:border-primary"
-                 onclick="selectRoom(this, {{$room->roomID}})">
+            <div
+              class="card bg-base-100 shadow-md hover:shadow-xl transition-all cursor-pointer group relative border-2 border-transparent hover:border-primary"
+              onclick="selectRoom(this, {{$room->roomID}})">
               <figure class="relative h-40 overflow-hidden rounded-t-box">
-                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform" 
-                     src="{{ asset($room->roomphoto) }}" alt="Room image">
+                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  src="{{ asset($room->roomphoto) }}" alt="Room image">
               </figure>
               <div class="card-body p-4">
                 <div class="flex justify-between items-center">
@@ -43,7 +44,8 @@
               </div>
 
               <!-- Selection Indicator -->
-              <div class="absolute top-2 right-2 hidden z-10 bg-primary text-white rounded-full p-1 shadow-md selection-indicator">
+              <div
+                class="absolute top-2 right-2 hidden z-10 bg-primary text-white rounded-full p-1 shadow-md selection-indicator">
                 <i data-lucide="check" class="w-4 h-4"></i>
               </div>
             </div>
@@ -70,11 +72,11 @@
               <span class="text-error">*</span>
             </span>
           </label>
-          <select name="channelName" class="select select-bordered w-full" required>
+          <select name="channelListingID" class="select select-bordered w-full" required>
             <option disabled selected>Pick a Channel</option>
-            <option value="Tarastay">Tarastay</option>
-            <option value="Nestscape">Nestscape</option>
-            <option value="Habistay">Habistay</option>
+            @foreach ($channelListing as $listings)
+              <option value="{{ $listings->channelListingID }}">{{ $listings->channelName }}</option>
+            @endforeach
           </select>
         </div>
       </div>

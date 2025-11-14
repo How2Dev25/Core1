@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AuditTrails;
 use App\Models\Channel;
+use App\Models\channelListings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -13,10 +14,9 @@ class channelController extends Controller
     public function store(Request $request){
         $form = $request->validate([
             'roomID' => 'required',
-            'channelName' => 'required',
+            'channelListingID' => 'required',
         ]);
 
-        $form['channelStatus'] = 'Pending';
 
         Channel::create($form);
 
@@ -40,9 +40,7 @@ class channelController extends Controller
 
     public function modify(Request $request, Channel $channelID){
          $form = $request->validate([
-            'roomID' => 'nullable',
-            'channelName' => 'nullable',
-            
+            'channelListingID' => 'required',
         ]);
 
         $channelID->update($form);
@@ -84,4 +82,61 @@ class channelController extends Controller
 
         return redirect()->back();
     }
+
+
+
+    public function createChannel(Request $request){
+        $form = $request->validate([
+            'channelName' => 'required',
+            'channelPhoto' => 'required',
+            'channelDescription' => 'required',
+        ]);
+
+        $form['channelStatus'] = 'Pending';
+
+        $filename = time() . '_' . $request->file('channelPhoto')->getClientOriginalName();
+        $filepath = 'images/channels/' .$filename;
+        $request->file('channelPhoto')->move(public_path('images/channels/'), $filename);
+
+        $form['channelPhoto'] = $filepath;
+
+        channelListings::create($form);
+
+        return redirect()->back()->with('RoomAdded', 'Channel Has Been Added');
+
+
+    }
+    
+
+
+    public function modifyChannel(Request $request, channelListings $channelListingID){
+        $form = $request->validate([
+            'channelName' => 'required',
+            'channelPhoto' => 'nullable',
+            'channelDescription' => 'required',
+        ]);
+
+        if($request->has('channelPhoto')){  
+         $filename = time() . '_' . $request->file('channelPhoto')->getClientOriginalName();
+        $filepath = 'images/channels/' .$filename;
+        $request->file('channelPhoto')->move(public_path('images/channels/'), $filename);
+        $form['channelPhoto'] = $filepath;
+        }
+        else{
+             $form['channelPhoto'] = $channelListingID->channelPhoto;
+        }
+
+       
+
+       $channelListingID->update($form);
+
+        return redirect()->back()->with('RoomAdded', 'Channel Has Been Modified');
+    }
+
+    public function deleteChannel(channelListings $channelListingID){
+            $channelListingID->delete();
+
+             return redirect()->back()->with('RoomAdded', 'Channel Has Been Removed');
+        
+    }   
 }

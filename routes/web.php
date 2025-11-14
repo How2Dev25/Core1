@@ -20,6 +20,7 @@ use App\Http\Controllers\stockController;
 use App\Http\Controllers\userController;
 use App\Models\AuditTrails;
 use App\Models\Channel;
+use App\Models\channelListings;
 use App\Models\DeptAccount;
 use App\Models\DeptLogs;
 use App\Models\dynamicBilling;
@@ -894,22 +895,26 @@ Route::get('/channel', function(){
      verifychannel();
     $rooms = room::where('roomstatus', 'Available')->latest()->get();
    $channels = Channel::join('core1_room', 'core1_room.roomID', '=', 'channel_table.roomID')
-    ->select('channel_table.*', 'core1_room.*', 'channel_table.created_at as createdchannel')
+    ->join('channel_listing', 'channel_listing.channelListingID', 'channel_table.channelListingID')
+    ->select('channel_table.*', 'core1_room.*', 'channel_listing.*', 'channel_table.created_at as createdchannel')
     ->orderBy('channel_table.created_at', 'desc')
     ->get();
 
-    $tarastaylisting = Channel::where('channelName', 'Tarastay')->where('channelStatus', 'Approved')->count();
-    $habistaylisting = Channel::where('channelName', 'Habistay')->where('channelStatus', 'Approved')->count();
-    $nestscapelisting = Channel::where('channelName', 'Nestscape')->where('channelStatus', 'Approved')->count();
-    return view('admin.channel', ['rooms' => $rooms, 
-    'channels' => $channels, 'tarastaylisting' => $tarastaylisting,
-    'habistaylisting' => $habistaylisting,
-    'nestscapelisting' => $nestscapelisting ]);
+    $channelListing = channelListings::withCount('listings')->get();
+
+   
+    return view('admin.channel', compact('rooms','channelListing', 'channels'));
 }); 
 
 Route::post('/createlisting', [channelController::class, 'store']);
 Route::put('/updatelisting/{channelID}', [channelController::class, 'modify']);
 Route::delete('/deletelisting/{channelID}', [channelController::class, 'delete']);
+
+// creates channel
+
+Route::post('/createChannel', [channelController::class, 'createChannel']);
+Route::put('/modifyChannel/{channelListingID}', [channelController::class, 'modifyChannel']);
+Route::delete('/deleteChannel/{channelListingID}', [channelController::class, 'deleteChannel']);
 
 // booking and reservation
 Route::get('/bas', function(){

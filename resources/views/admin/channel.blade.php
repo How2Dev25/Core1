@@ -29,7 +29,7 @@
         <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 transition-slow ">
           {{-- Subsystem Name --}}
           <div class="pb-5 border-b border-base-300 animate-fadeIn">
-            <h1 class="text-2xl font-bold bg-white bg-clip-text text-[#191970]">Channel Management Module</h1>
+            <h1 class="text-2xl font-bold bg-white bg-clip-text text-[#191970]">Channel Management</h1>
           </div>
           {{-- Subsystem Name --}}
 
@@ -39,184 +39,116 @@
             <!-- Header Section -->
 
             <!-- Channel Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              <!-- TaraStay Card -->
-              <div class="card bg-white border-2 border-blue-900/20
-                      transition-all duration-300 ease-in-out
-                      hover:shadow-2xl hover:-translate-y-2 hover:border-yellow-400
-                      hover:bg-gradient-to-br hover:from-yellow-50 hover:to-white
-                      group">
-                <div class="card-body p-6">
-                  <div class="flex items-center gap-3 mb-4">
-                    <div class="avatar placeholder">
-                      <img
-                        class="w-12 h-12 rounded-lg shadow-md group-hover:shadow-xl transition-all border-2 border-blue-900/20"
-                        src="{{asset('images/rbnb/tarastay.png')}}" alt="TaraStay">
-                    </div>
-                    <h3
-                      class="card-title text-blue-900 font-bold group-hover:text-blue-900 transition-colors flex items-center gap-2">
-                      <i data-lucide="home" class="w-5 h-5 text-blue-900"></i>
-                      TaraStay
-                    </h3>
-                    <div class="ml-auto">
-                      <span
-                        class="px-3 py-1 rounded-full bg-yellow-400 text-blue-900 text-xs font-bold inline-flex items-center gap-1">
-                        <i class="w-3 h-3" data-lucide="check"></i>
-                        Connected
-                      </span>
-                    </div>
-                  </div>
-                  <p
-                    class="text-sm text-blue-900/60 mb-4 group-hover:text-blue-900/80 transition-colors flex items-center gap-2">
-                    <i data-lucide="clock" class="w-4 h-4"></i>
-                    Last sync: 15 minutes ago
-                  </p>
-                  <div class="card-actions justify-between items-center">
-                    <div class="flex gap-4">
-                      <div class="bg-blue-900/5 group-hover:bg-yellow-400/20 transition-colors rounded-lg p-3">
-                        <div class="text-xs text-blue-900/60 font-semibold flex items-center gap-1 mb-1">
-                          <i data-lucide="list" class="w-3 h-3"></i>
-                          Listings
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+              @forelse ($channelListing as $listings)
+                <div class="card bg-white border-2 border-blue-900/20 rounded-xl
+                                            transition-all duration-300 ease-in-out
+                                            hover:shadow-xl hover:-translate-y-1 hover:border-yellow-400
+                                            hover:bg-gradient-to-br hover:from-yellow-50 hover:to-white
+                                            group h-fit">
+                  <div class="card-body p-5">
+                    <!-- Header -->
+                    <div class="flex items-start gap-3 mb-4">
+                      <div class="avatar flex-shrink-0">
+                        <div class="w-12 h-12 rounded-xl border-2 border-blue-900/10 overflow-hidden">
+                          <img src="{{  asset($listings->channelPhoto) }}" alt="{{ $listings->channelName }}"
+                            class="w-full h-full object-cover">
                         </div>
-                        <div class="text-xl font-bold text-blue-900">{{$tarastaylisting}}</div>
                       </div>
-                      <div class="bg-blue-900/5 group-hover:bg-yellow-400/20 transition-colors rounded-lg p-3">
-                        <div class="text-xs text-blue-900/60 font-semibold flex items-center gap-1 mb-1">
-                          <i data-lucide="calendar-check" class="w-3 h-3"></i>
-                          Bookings
-                        </div>
-                        <div class="text-xl font-bold text-blue-900">12</div>
+                      <div class="flex-1 min-w-0">
+                        <h3 class="card-title text-blue-900 font-bold text-base truncate flex items-center gap-2 mb-1">
+                          <i data-lucide="radio" class="w-4 h-4 text-blue-700 flex-shrink-0"></i>
+                          <span class="truncate">{{ $listings->channelName }}</span>
+                        </h3>
+                        <span
+                          class="px-2 py-1 rounded-full bg-yellow-400 text-blue-900 text-xs font-semibold inline-flex items-center gap-1">
+                          <i class="w-3 h-3" data-lucide="check"></i>
+                          {{ ucfirst($listings->channelStatus) }}
+                        </span>
                       </div>
                     </div>
-                    <button
-                      class="btn btn-sm btn-circle bg-blue-900 text-yellow-400 border-none hover:bg-yellow-400 hover:text-blue-900 transition-all hover:scale-110">
-                      <i class="w-4 h-4" data-lucide="chevron-right"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
 
-              <!-- HabiStay Card -->
-              <div class="card bg-white border-2 border-blue-900/20
-                      transition-all duration-300 ease-in-out
-                      hover:shadow-2xl hover:-translate-y-2 hover:border-yellow-400
-                      hover:bg-gradient-to-br hover:from-yellow-50 hover:to-white
-                      group">
-                <div class="card-body p-6">
-                  <div class="flex items-center gap-3 mb-4">
-                    <div class="avatar placeholder">
-                      <img
-                        class="w-12 h-12 rounded-lg shadow-md group-hover:shadow-xl transition-all border-2 border-blue-900/20"
-                        src="{{asset('images/rbnb/habistay.png')}}" alt="HabiStay">
-                    </div>
-                    <h3
-                      class="card-title text-blue-900 font-bold group-hover:text-blue-900 transition-colors flex items-center gap-2">
-                      <i data-lucide="building-2" class="w-5 h-5 text-blue-900"></i>
-                      HabiStay
-                    </h3>
-                    <div class="ml-auto">
-                      <span
-                        class="px-3 py-1 rounded-full bg-yellow-400 text-blue-900 text-xs font-bold inline-flex items-center gap-1">
-                        <i class="w-3 h-3" data-lucide="check"></i>
-                        Connected
-                      </span>
-                    </div>
-                  </div>
-                  <p
-                    class="text-sm text-blue-900/60 mb-4 group-hover:text-blue-900/80 transition-colors flex items-center gap-2">
-                    <i data-lucide="clock" class="w-4 h-4"></i>
-                    Last sync: 1 hour ago
-                  </p>
-                  <div class="card-actions justify-between items-center">
-                    <div class="flex gap-4">
-                      <div class="bg-blue-900/5 group-hover:bg-yellow-400/20 transition-colors rounded-lg p-3">
-                        <div class="text-xs text-blue-900/60 font-semibold flex items-center gap-1 mb-1">
-                          <i data-lucide="list" class="w-3 h-3"></i>
-                          Listings
-                        </div>
-                        <div class="text-xl font-bold text-blue-900">{{$habistaylisting}}</div>
-                      </div>
-                      <div class="bg-blue-900/5 group-hover:bg-yellow-400/20 transition-colors rounded-lg p-3">
-                        <div class="text-xs text-blue-900/60 font-semibold flex items-center gap-1 mb-1">
-                          <i data-lucide="calendar-check" class="w-3 h-3"></i>
-                          Bookings
-                        </div>
-                        <div class="text-xl font-bold text-blue-900">8</div>
-                      </div>
-                    </div>
-                    <button
-                      class="btn btn-sm btn-circle bg-blue-900 text-yellow-400 border-none hover:bg-yellow-400 hover:text-blue-900 transition-all hover:scale-110">
-                      <i class="w-4 h-4" data-lucide="chevron-right"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
+                    <!-- Description -->
+                    <p class="text-sm text-blue-900/70 mb-4 line-clamp-2 leading-relaxed">
+                      <i data-lucide="file-text" class="w-4 h-4 inline-block mr-2 align-text-bottom"></i>
+                      {{ Str::limit($listings->channelDescription, 80) }}
+                    </p>
 
-              <!-- nestscape Card -->
-              <div class="card bg-white border-2 border-blue-900/20
-                      transition-all duration-300 ease-in-out
-                      hover:shadow-2xl hover:-translate-y-2 hover:border-yellow-400
-                      hover:bg-gradient-to-br hover:from-yellow-50 hover:to-white
-                      group">
-                <div class="card-body p-6">
-                  <div class="flex items-center gap-3 mb-4">
-                    <div class="avatar placeholder">
-                      <img
-                        class="w-12 h-12 rounded-lg shadow-md group-hover:shadow-xl transition-all border-2 border-blue-900/20"
-                        src="{{asset('images/rbnb/nestscape.png')}}" alt="nestscape">
-                    </div>
-                    <h3
-                      class="card-title text-blue-900 font-bold group-hover:text-blue-900 transition-colors flex items-center gap-2">
-                      <i data-lucide="tree-pine" class="w-5 h-5 text-blue-900"></i>
-                      nestscape
-                    </h3>
-                    <div class="ml-auto">
-                      <span
-                        class="px-3 py-1 rounded-full bg-yellow-400 text-blue-900 text-xs font-bold inline-flex items-center gap-1">
-                        <i class="w-3 h-3" data-lucide="check"></i>
-                        Connected
-                      </span>
-                    </div>
-                  </div>
-                  <p
-                    class="text-sm text-blue-900/60 mb-4 group-hover:text-blue-900/80 transition-colors flex items-center gap-2">
-                    <i data-lucide="clock" class="w-4 h-4"></i>
-                    Last sync: 3 days ago
-                  </p>
-                  <div class="card-actions justify-between items-center">
-                    <div class="flex gap-4">
-                      <div class="bg-blue-900/5 group-hover:bg-yellow-400/20 transition-colors rounded-lg p-3">
-                        <div class="text-xs text-blue-900/60 font-semibold flex items-center gap-1 mb-1">
+                    <!-- Stats -->
+                    <div class="flex gap-3 mb-4">
+                      <div
+                        class="flex-1 bg-blue-900/5 group-hover:bg-yellow-400/20 transition-colors rounded-lg p-3 text-center">
+                        <div class="text-xs text-blue-900/60 font-semibold flex items-center justify-center gap-1 mb-1">
                           <i data-lucide="list" class="w-3 h-3"></i>
                           Listings
                         </div>
-                        <div class="text-xl font-bold text-blue-900">{{$nestscapelisting}}</div>
+                        <div class="text-lg font-bold text-blue-900">{{ $listings->listings_count ?? 0 }}</div>
                       </div>
-                      <div class="bg-blue-900/5 group-hover:bg-yellow-400/20 transition-colors rounded-lg p-3">
-                        <div class="text-xs text-blue-900/60 font-semibold flex items-center gap-1 mb-1">
+                      <div
+                        class="flex-1 bg-blue-900/5 group-hover:bg-yellow-400/20 transition-colors rounded-lg p-3 text-center">
+                        <div class="text-xs text-blue-900/60 font-semibold flex items-center justify-center gap-1 mb-1">
                           <i data-lucide="calendar-check" class="w-3 h-3"></i>
                           Bookings
                         </div>
-                        <div class="text-xl font-bold text-blue-900">0</div>
+                        <div class="text-lg font-bold text-blue-900">{{ $listings->bookings_count ?? 0 }}</div>
                       </div>
                     </div>
-                    <button
-                      class="btn btn-sm btn-circle bg-blue-900 text-yellow-400 border-none hover:bg-yellow-400 hover:text-blue-900 transition-all hover:scale-110">
-                      <i class="w-4 h-4" data-lucide="chevron-right"></i>
-                    </button>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-2 pt-3 border-t border-blue-900/10">
+                      <button onclick="edit_channel_modal_{{ $listings->channelListingID }}.showModal()"
+                        class="btn btn-sm flex-1 bg-blue-900 text-yellow-400 border-none hover:bg-blue-800 transition-all duration-200 font-medium">
+                        <i data-lucide="edit" class="w-4 h-4"></i>
+                        Edit
+                      </button>
+                      <button type="button" onclick="delete_channel_modal_{{ $listings->channelListingID }}.showModal()"
+                        class="btn btn-sm flex-1 bg-red-500 text-white border-none hover:bg-red-600 transition-all duration-200 font-medium">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        Remove
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              @empty
+                <!-- Empty State -->
+                <div class="col-span-full">
+                  <div class="text-center py-16">
+                    <div class="max-w-md mx-auto">
+                      <div
+                        class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-50 to-yellow-50 flex items-center justify-center shadow-lg">
+                        <i data-lucide="radio" class="w-12 h-12 text-blue-900/50"></i>
+                      </div>
+                      <h3 class="text-2xl font-bold text-blue-900 mb-3">No Channels Yet</h3>
+                      <p class="text-blue-900/60 mb-8 text-lg leading-relaxed">
+                        Get started by creating your first channel to manage your listings and reach more guests.
+                      </p>
+                      <button onclick="create_channel_modal.showModal()"
+                        class="btn bg-gradient-to-r from-blue-500 to-purple-600 text-white border-none hover:from-blue-600 hover:to-purple-700 transition-all font-bold shadow-lg px-8 py-4 rounded-xl inline-flex items-center gap-3 text-base hover:scale-105 duration-300">
+                        <i data-lucide="plus" class="w-5 h-5"></i>
+                        Create Your First Channel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              @endforelse
             </div>
-
             <!-- Add New Channel Section -->
-            <div class="mt-6 mb-6">
+            <div class="mt-6 mb-6 flex flex-wrap gap-4">
+              <!-- Add Room Listing Button -->
               <button onclick="add_listing.showModal()"
-                class="btn bg-yellow-400 text-blue-900 border-none hover:bg-yellow-500 hover:scale-105 transition-all font-bold shadow-lg">
-                <i data-lucide="circle-plus"></i>
+                class="btn bg-gradient-to-r from-yellow-400 to-yellow-500 text-blue-900 border-none hover:from-yellow-500 hover:to-yellow-600 hover:scale-105 transition-all duration-300 font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center gap-2 px-6 py-3 rounded-xl">
+                <i data-lucide="circle-plus" class="w-5 h-5"></i>
                 Add Room Listing
               </button>
+
+              <!-- Create Channel Button -->
+              <button onclick="create_channel_modal.showModal()"
+                class="btn bg-gradient-to-r from-blue-500 to-purple-600 text-white border-none hover:from-blue-600 hover:to-purple-700 hover:scale-105 transition-all duration-300 font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center gap-2 px-6 py-3 rounded-xl">
+                <i data-lucide="radio" class="w-5 h-5"></i>
+                Create Channel
+              </button>
             </div>
+
 
             <!-- Channel Sync Status Section -->
             <div class="overflow-x-auto bg-white rounded-xl shadow-lg border-2 border-blue-900/20 p-6">
@@ -254,7 +186,6 @@
                 <!-- head -->
                 <thead class="bg-blue-900 text-yellow-400">
                   <tr>
-                    <th class="font-bold">Listing ID</th>
                     <th class="font-bold">Channel Name</th>
                     <th class="font-bold">Room Name</th>
                     <th class="font-bold">Listing Status</th>
@@ -266,14 +197,12 @@
                   <!-- row 1 -->
                   @forelse ($channels as $channel)
                     <tr class="hover:bg-yellow-50 transition-colors border-b border-blue-900/10">
-                      <td class="font-bold text-blue-900">{{$channel->channelID}}</td>
+
                       <td>
                         <div class="flex items-center gap-3">
                           <div class="avatar">
                             <div class="mask mask-squircle w-12 h-12 border-2 border-blue-900/20">
-                              <img src="@if($channel->channelName == 'Tarastay') {{asset('images/rbnb/tarastay.png')}} 
-                              @elseif($channel->channelName == 'Habistay') {{asset('images/rbnb/habistay.png')}}
-                                  @else {{asset('images/rbnb/nestscape.png')}} @endif" alt="Channel Logo" />
+                              <img src="{{ asset($channel->channelPhoto) }}" alt="Channel Logo" />
                             </div>
                           </div>
                           <div>
@@ -290,7 +219,7 @@
                       </td>
 
                       <td>
-                        @if($channel->channelStatus === 'Approved')
+                        @if($channel->channelStatus === 'Connected')
                           <span class="px-3 py-1 rounded-full bg-yellow-400 text-blue-900 text-xs font-bold">Approved</span>
                         @elseif($channel->channelStatus === 'Pending')
                           <span class="px-3 py-1 rounded-full bg-blue-900/20 text-blue-900 text-xs font-bold">Pending</span>
@@ -363,6 +292,12 @@
 
     {{-- modals --}}
     @include('admin.components.channel.create')
+    @include('admin.components.channel.createChannel')
+
+    @foreach ($channelListing as $listings)
+      @include('admin.components.channel.editChannel')
+      @include('admin.components.channel.deleteChannel')
+    @endforeach
 
     @foreach ($channels as $channel)
       @include('admin.components.channel.delete')

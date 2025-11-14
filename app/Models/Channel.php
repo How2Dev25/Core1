@@ -16,7 +16,11 @@ class Channel extends Model
     protected $fillable = [
         'channelID',
         'roomID',
-        'channelName',
-        'channelStatus',
+        'channelListingID',
     ];
+
+    public function channel()
+{
+    return $this->belongsTo(channelListings::class, 'channelListingID', 'channelListingID');
+}
 }

@@ -15,7 +15,7 @@
     <form action="/updatelisting/{{$channel->channelID}}" method="POST">
       @csrf
       @method('PUT')
-     
+
 
       <div class="card bg-base-100 shadow-md mb-6">
         <figure class="relative h-48 overflow-hidden rounded-t-box">
@@ -49,11 +49,14 @@
               <span class="text-error">*</span>
             </span>
           </label>
-          <select name="channelName" class="select select-bordered w-full" required>
+          <select name="channelListingID" class="select select-bordered w-full" required>
             <option disabled>Select a Channel</option>
-            <option value="Tarastay" {{ $channel->channelName === 'Tarastay' ? 'selected' : '' }}>Tarastay</option>
-            <option value="Nestscape" {{ $channel->channelName === 'Nestscape' ? 'selected' : '' }}>Nestscape</option>
-            <option value="Habistay" {{ $channel->channelName === 'Habistay' ? 'selected' : '' }}>Habistay</option>
+            @foreach ($channelListing as $listings)
+              <option value="{{ $listings->channelListingID }}" {{ $listings->channelListingID == $channel->channelListingID ? 'selected' : '' }}>
+                {{ $listings->channelName }}
+              </option>
+            @endforeach
+
           </select>
         </div>
       </div>
