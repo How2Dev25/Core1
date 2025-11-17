@@ -1,3 +1,5 @@
+{{-- this default --}}
+
 <section id="about" class="hero min-h-screen p-5  flex items-center justify-center text-white relative overflow-hidden">
     <!-- Enhanced Background Layers -->
     <div class="absolute inset-0 bg-black/50 z-10"></div>
