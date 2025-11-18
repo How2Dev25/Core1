@@ -239,7 +239,7 @@
             hover:bg-gray-100 transition duration-200 group">
 
                   <!-- Google Icon with hover effect -->
-                  <img src="https://www.svgrepo.com/show/475656/google-color.svg"
+                  <img src="{{ asset('images/defaults/google.png') }}"
                     class="h-5 w-5 mr-3 transition-transform duration-200 group-hover:scale-110" alt="Google logo">
 
                   <span class="font-medium transition-colors duration-200 group-hover:text-blue-600">
