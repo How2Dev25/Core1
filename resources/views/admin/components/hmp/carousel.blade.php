@@ -1,152 +1,92 @@
-<div class="bg-white p-6 rounded-lg shadow-md relative overflow-hidden">
-    <h2 class="text-xl font-bold text-gray-800 mb-4">Current Promotions</h2>
-    
+<div class="relative rounded-2xl shadow-lg overflow-hidden mt-5">
     <!-- Carousel Container -->
-    <div class="relative group">
-        <!-- Carousel Items -->
-        <div class="carousel-container flex overflow-x-auto snap-x snap-mandatory scroll-smooth space-x-4 pb-4"
-             style="scrollbar-width: none; -ms-overflow-style: none;">
-            @forelse ($hmpdata as $hmp)
-            <div class="carousel-item snap-start flex-shrink-0 w-64 transition-opacity duration-300">
-                <div class="card bg-white shadow-sm hover:shadow-md transition-shadow h-full">
-                    <figure class="relative aspect-video">
-                        <img src="{{asset($hmp->hotelpromophoto)}}" 
-                             alt="{{$hmp->hotelpromoname}}" 
-                             class="w-full h-full object-cover rounded-t-lg">
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                            <h3 class="text-white font-semibold">{{$hmp->hotelpromoname}}</h3>
-                            <p class="text-white/80 text-sm">{{$hmp->hotelpromotag}}</p>
+    <div class="carousel-container relative h-80">
+        @foreach($promos as $index => $promo)
+            <div
+                class="carousel-slide absolute inset-0 transition-opacity duration-700 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}">
+                <!-- Background Image -->
+                <img src="{{ $promo->hotelpromophoto ?? 'default-promo.jpg' }}"
+                    alt="{{ $promo->hotelpromoname ?? 'Promo' }}" class="w-full h-64 object-cover">
+
+                <!-- Overlay -->
+                <div
+                    class="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/60 to-transparent p-6 flex flex-col justify-end text-white">
+                    <div class="mb-3">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-gift text-yellow-400 text-2xl"></i>
+                            <h3 class="text-xl font-bold">Special Offer</h3>
                         </div>
-                    </figure>
-                    <div class="card-body p-4">
-                        <p class="text-gray-600 text-sm line-clamp-2 mb-3">{{$hmp->hotelpromodescription}}</p>
-                        <div class="flex justify-between items-center">
-                            <span class="badge {{$hmp->hotelpromostatus == 'Active' ? 'badge-success' : 'badge-error'}}">
-                                {{$hmp->hotelpromostatus}}
-                            </span>
-                            <span class="text-xs text-gray-500">
-                                <i class='bx bx-calendar mr-1'></i> {{$hmp->hotelpromodaterange}}
-                            </span>
+
+                        <h4 class="text-2xl font-bold mb-1">{{ $promo->hotelpromoname }}</h4>
+                        <p class="text-sm text-white/90 mb-3">
+                            {{ Str::limit($promo->hotelpromodescription, 80) }}
+                        </p>
+                        <div class="flex items-center gap-2 text-xs text-yellow-300 mb-4">
+                            <i class="fas fa-clock"></i>
+                            <span>{{ $promo->hotelpromodaterange }}</span>
                         </div>
+
+                        <button
+                            class="w-full py-2 bg-yellow-400 text-blue-900 font-semibold rounded-xl hover:bg-yellow-300 transition-all">
+                            View Details
+                        </button>
                     </div>
                 </div>
             </div>
-            @empty
-            <div class="flex items-center justify-center w-full h-48 text-gray-400">
-                <div class="text-center">
-                    <i class='bx bx-image-alt text-4xl mb-2'></i>
-                    <p>No promotions available</p>
-                </div>
-            </div>
-            @endforelse
-        </div>
-        
-        <!-- Navigation Buttons -->
-        <button class="carousel-prev absolute left-2 top-1/2 -translate-y-1/2 btn btn-circle btn-sm btn-ghost bg-white/90 shadow opacity-0 group-hover:opacity-100 transition-opacity">
-            <i class='bx bx-chevron-left'></i>
-        </button>
-        <button class="carousel-next absolute right-2 top-1/2 -translate-y-1/2 btn btn-circle btn-sm btn-ghost bg-white/90 shadow opacity-0 group-hover:opacity-100 transition-opacity">
-            <i class='bx bx-chevron-right'></i>
-        </button>
-    </div>
-    
-    <!-- Indicator Dots -->
-    @if(count($hmpdata) > 1)
-    <div class="flex justify-center mt-4 space-x-2">
-        @foreach($hmpdata as $index => $hmp)
-        <button class="indicator-dot w-2 h-2 rounded-full bg-gray-300 transition-all duration-300 {{$index === 0 ? 'w-4 bg-primary' : ''}}"
-                data-index="{{$index}}"></button>
         @endforeach
     </div>
-    @endif
+
+    <!-- Dot Indicators -->
+    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+        @foreach($promos as $index => $promo)
+            <button
+                class="carousel-dot w-2 h-2 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-yellow-400 w-6' : 'bg-white/50 hover:bg-white/75' }}"
+                data-index="{{ $index }}">
+            </button>
+        @endforeach
+    </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const carousel = document.querySelector('.carousel-container');
-    const items = document.querySelectorAll('.carousel-item');
-    const prevBtn = document.querySelector('.carousel-prev');
-    const nextBtn = document.querySelector('.carousel-next');
-    const dots = document.querySelectorAll('.indicator-dot');
-    let currentIndex = 0;
-    let intervalId;
-    const itemWidth = items[0]?.offsetWidth + 16; // 16px for gap
-    
-    if (items.length > 0) {
-        // Auto-rotate function
-        function startAutoRotate() {
-            intervalId = setInterval(() => {
-                currentIndex = (currentIndex + 1) % items.length;
-                updateCarousel();
-            }, 5000); // Change slide every 5 seconds
-        }
-        
-        // Update carousel position
-        function updateCarousel() {
-            carousel.scrollTo({
-                left: currentIndex * itemWidth,
-                behavior: 'smooth'
-            });
-            updateDots();
-        }
-        
-        // Update indicator dots
-        function updateDots() {
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('w-4', index === currentIndex);
-                dot.classList.toggle('bg-primary', index === currentIndex);
-                dot.classList.toggle('bg-gray-300', index !== currentIndex);
-            });
-        }
-        
-        // Navigation controls
-        nextBtn?.addEventListener('click', () => {
-            currentIndex = (currentIndex + 1) % items.length;
-            updateCarousel();
-            resetInterval();
-        });
-        
-        prevBtn?.addEventListener('click', () => {
-            currentIndex = (currentIndex - 1 + items.length) % items.length;
-            updateCarousel();
-            resetInterval();
-        });
-        
-        // Dot navigation
-        dots.forEach(dot => {
-            dot.addEventListener('click', () => {
-                currentIndex = parseInt(dot.dataset.index);
-                updateCarousel();
-                resetInterval();
-            });
-        });
-        
-        // Reset interval when user interacts
-        function resetInterval() {
-            clearInterval(intervalId);
-            startAutoRotate();
-        }
-        
-        // Pause on hover
-        carousel.addEventListener('mouseenter', () => {
-            clearInterval(intervalId);
-        });
-        
-        carousel.addEventListener('mouseleave', () => {
-            startAutoRotate();
-        });
-        
-        // Start the auto-rotation
-        startAutoRotate();
-    }
-});
-</script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.carousel-dot');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
 
-<style>
-.carousel-container::-webkit-scrollbar {
-    display: none;
-}
-.indicator-dot {
-    transition: width 0.3s ease, background-color 0.3s ease;
-}
-</style>
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('opacity-100', i === index);
+                slide.classList.toggle('opacity-0', i !== index);
+            });
+
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.add('bg-yellow-400', 'w-6');
+                    dot.classList.remove('bg-white/50', 'w-2');
+                } else {
+                    dot.classList.remove('bg-yellow-400', 'w-6');
+                    dot.classList.add('bg-white/50', 'w-2');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            showSlide(currentSlide);
+        }
+
+        // Auto-advance every 5 seconds
+        let autoSlide = setInterval(nextSlide, 5000);
+
+        // Manual dot navigation
+        dots.forEach(dot => {
+            dot.addEventListener('click', function () {
+                clearInterval(autoSlide);
+                currentSlide = parseInt(this.getAttribute('data-index'));
+                showSlide(currentSlide);
+                autoSlide = setInterval(nextSlide, 5000);
+            });
+        });
+    });
+</script>

@@ -39,94 +39,92 @@
             @include('admin.components.dashboard.welcome')
 
             {{-- cards --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              <!-- Card 1: Active Promotions -->
-              <div class="card border-2 border-blue-900/20 bg-white
-                  transition-all duration-300 ease-in-out
-                  hover:shadow-xl hover:-translate-y-2 hover:border-yellow-400
-                  hover:bg-gradient-to-br hover:from-yellow-50 hover:to-white
-                  group">
-                <div class="card-body p-6">
-                  <div class="flex items-center gap-4 mb-4">
-                    <div class="p-4 rounded-xl bg-blue-900 text-yellow-400
-                       group-hover:bg-yellow-400 group-hover:text-blue-900
-                       transition-all duration-300 shadow-lg">
-                      <i class='bx bx-badge-check text-3xl'></i>
-                    </div>
-                    <div>
-                      <h3 class="text-lg font-bold text-blue-900 group-hover:text-blue-900 transition-colors">Active
-                        Promotions</h3>
-                      <p class="text-sm text-blue-900/60 group-hover:text-blue-900/80 transition-colors">Ongoing campaigns
-                      </p>
-                    </div>
-                  </div>
-                  <p class="text-4xl font-bold text-blue-900 mb-2 group-hover:text-blue-900 transition-colors">12</p>
-                  <div class="mt-2">
-                    <span
-                      class="px-3 py-1.5 rounded-full bg-yellow-400 text-blue-900 text-sm font-bold inline-flex items-center gap-1">
-                      <i class='bx bx-up-arrow-alt'></i> 5 new this week
-                    </span>
-                  </div>
-                </div>
-              </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
 
-              <!-- Card 2: Total Bookings -->
-              <div class="card border-2 border-blue-900/20 bg-white
-                  transition-all duration-300 ease-in-out
-                  hover:shadow-xl hover:-translate-y-2 hover:border-yellow-400
-                  hover:bg-gradient-to-br hover:from-yellow-50 hover:to-white
-                  group">
-                <div class="card-body p-6">
-                  <div class="flex items-center gap-4 mb-4">
-                    <div class="p-4 rounded-xl bg-blue-900 text-yellow-400
-                       group-hover:bg-yellow-400 group-hover:text-blue-900
-                       transition-all duration-300 shadow-lg">
-                      <i class='bx bx-calendar-check text-3xl'></i>
-                    </div>
-                    <div>
-                      <h3 class="text-lg font-bold text-blue-900 group-hover:text-blue-900 transition-colors">Total
-                        Bookings</h3>
-                      <p class="text-sm text-blue-900/60 group-hover:text-blue-900/80 transition-colors">This month</p>
-                    </div>
+            <!-- Card 1: Active Promotions -->
+            <div class="card border-2 border-blue-900/20 bg-white
+                transition-all duration-300 ease-in-out
+                hover:shadow-xl hover:-translate-y-2 hover:border-yellow-400
+                hover:bg-gradient-to-br hover:from-yellow-50 hover:to-white
+                group">
+              <div class="card-body p-4">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="p-3 rounded-xl bg-blue-900 text-yellow-400
+                     group-hover:bg-yellow-400 group-hover:text-blue-900
+                     transition-all duration-300 shadow-lg">
+                    <i class='bx bx-badge-check text-2xl'></i>
                   </div>
-                  <p class="text-4xl font-bold text-blue-900 mb-2 group-hover:text-blue-900 transition-colors">342</p>
-                  <div class="radial-progress text-yellow-400 group-hover:text-yellow-500 transition-colors font-bold"
-                    style="--value:75; --size:3rem; --thickness:5px;">75%</div>
-                </div>
-              </div>
-
-              <!-- Card 3: Customer Engagement -->
-              <div class="card border-2 border-blue-900/20 bg-white
-                  transition-all duration-300 ease-in-out
-                  hover:shadow-xl hover:-translate-y-2 hover:border-yellow-400
-                  hover:bg-gradient-to-br hover:from-yellow-50 hover:to-white
-                  group">
-                <div class="card-body p-6">
-                  <div class="flex items-center gap-4 mb-4">
-                    <div class="p-4 rounded-xl bg-blue-900 text-yellow-400
-                       group-hover:bg-yellow-400 group-hover:text-blue-900
-                       transition-all duration-300 shadow-lg">
-                      <i class='bx bx-chat text-3xl'></i>
-                    </div>
-                    <div>
-                      <h3 class="text-lg font-bold text-blue-900 group-hover:text-blue-900 transition-colors">
-                        Engagement Rate</h3>
-                      <p class="text-sm text-blue-900/60 group-hover:text-blue-900/80 transition-colors">Promo
-                        interactions</p>
-                    </div>
-                  </div>
-                  <p class="text-4xl font-bold text-blue-900 mb-3 group-hover:text-blue-900 transition-colors">78%</p>
-                  <div class="w-full bg-blue-900/10 rounded-full h-3 overflow-hidden">
-                    <div class="bg-yellow-400 h-full rounded-full transition-all duration-500" style="width: 78%"></div>
+                  <div>
+                    <h3 class="text-base font-bold text-blue-900">Active Promotions</h3>
+                    <p class="text-xs text-blue-900/60">Ongoing campaigns</p>
                   </div>
                 </div>
+                <p class="text-3xl font-bold text-blue-900 mb-2">{{$totalpromotions ?? 0}}</p>
+                
               </div>
             </div>
-            {{-- cards --}}
 
-            <div class="mt-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Card 2: Total Bookings -->
+            <div class="card border-2 border-blue-900/20 bg-white
+                transition-all duration-300 ease-in-out
+                hover:shadow-xl hover:-translate-y-2 hover:border-yellow-400
+                hover:bg-gradient-to-br hover:from-yellow-50 hover:to-white
+                group">
+              <div class="card-body p-4">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="p-3 rounded-xl bg-blue-900 text-yellow-400
+                     group-hover:bg-yellow-400 group-hover:text-blue-900 transition-all duration-300 shadow-lg">
+                    <i class='bx bx-calendar-check text-2xl'></i>
+                  </div>
+                  <div>
+                    <h3 class="text-base font-bold text-blue-900">Total Bookings</h3>
+                   
+                  </div>
+                </div>
+                <p class="text-3xl font-bold text-blue-900 mb-2">{{$totalreservations ?? 0}}</p>
+                
+              </div>
+            </div>
+
+            <!-- Card 3: Customer Engagement -->
+           
+
+            <!-- Card 4: Total Revenue (Rooms) -->
+            <div class="card border-2 border-blue-900/20 bg-white
+                transition-all duration-300 ease-in-out
+                hover:shadow-xl hover:-translate-y-2 hover:border-yellow-400
+                hover:bg-gradient-to-br hover:from-yellow-50 hover:to-white
+                group">
+              <div class="card-body p-4">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="p-3 rounded-xl bg-blue-900 text-yellow-400
+                     group-hover:bg-yellow-400 group-hover:text-blue-900 shadow-lg transition-all">
+                    <i class='bx bx-hotel text-2xl'></i>
+                  </div>
+                  <div>
+                    <h3 class="text-base font-bold text-blue-900">Total Revenue</h3>
+                    <p class="text-xs text-blue-900/60">Total earnings</p>
+                  </div>
+                </div>
+                <p class="text-3xl font-bold text-blue-900 mb-2">₱ {{$totalRevenue ?? 0}}</p>
+             
+              </div>
+            </div>
+
+      
+
+          </div>
+
+
+
+                @include('admin.components.hmp.carousel')
+
+
+
+
+            <div class="mt-10 w-full">
               {{-- table section --}}
-              <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg border-2 border-blue-900/20">
+              <div class="lg:col-span-2 bg-white p-6 rounded-xl  ">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                   <h2 class="text-2xl font-bold text-blue-900">Marketing And Promotions Management</h2>
                   <div class="flex gap-3 w-full sm:w-auto">
@@ -235,7 +233,7 @@
               {{-- table section --}}
 
               {{-- recent promotions sidebar --}}
-              @include('admin.components.hmp.carousel')
+
               {{-- end recent promotions sidebar --}}
             </div>
 

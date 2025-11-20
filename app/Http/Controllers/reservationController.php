@@ -326,6 +326,7 @@ public function billingHistory ($bookingID, $guestID, $guestname, $amount_paid, 
         'payment_date' => Carbon::now(),
         'amount_paid' => $amount_paid,
         'payment_method' => $payment_method,
+        'remarks' => 'Room Booking',
     ]
 );
 }

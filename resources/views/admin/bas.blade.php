@@ -38,19 +38,18 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 mt-5">
 
               <!-- Card 1 - Total Reservation -->
-              <div class="card border border-blue-200 bg-gradient-to-br from-blue-50 to-orange-50
-                                  transition-all duration-300 ease-in-out
-                                  hover:shadow-2xl hover:-translate-y-1 hover:from-blue-100 hover:to-orange-100
-                                  group rounded-2xl">
+              <div class="card shadow-md 
+                         transition-all duration-300 ease-in-out
+                       hover:shadow-2xl hover:-translate-y-1
+                        group rounded-2xl">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-xl bg-blue-100 text-blue-600
-                                        group-hover:bg-blue-600 group-hover:text-white
-                                        transition-colors duration-300 shadow-md">
+                    <div class="p-3 rounded-xl bg-blue-900 text-yellow-400 group-hover:text-white
+                                                        transition-colors duration-300 shadow-md">
                       <i class="fa-solid fa-book text-xl"></i>
                     </div>
                     <div>
-                      <h3 class="text-lg font-semibold text-gray-800 group-hover:text-blue-700 transition-colors">
+                      <h3 class="text-lg font-semibold text-gray-800 ">
                         Total Reservation
                       </h3>
                     </div>
@@ -60,19 +59,19 @@
               </div>
 
               <!-- Card 2 - Available Rooms -->
-              <div class="card border border-orange-200 bg-gradient-to-br from-orange-50 to-blue-50
-                                  transition-all duration-300 ease-in-out
-                                  hover:shadow-2xl hover:-translate-y-1 hover:from-orange-100 hover:to-blue-100
-                                  group rounded-2xl">
+              <div class="card shadow-md
+                                                            transition-all duration-300 ease-in-out
+                                                             hover:shadow-2xl hover:-translate-y-1 hover:from-orange-100 hover:to-blue-100
+                                                               group rounded-2xl">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-xl bg-orange-100 text-orange-600
-                                        group-hover:bg-orange-600 group-hover:text-white
-                                        transition-colors duration-300 shadow-md">
+                    <div class="p-3 rounded-xl bg-blue-900 text-yellow-400
+                                                                        group-hover:text-white
+                                                                        transition-colors duration-300 shadow-md">
                       <i class="fa-solid fa-bed text-xl"></i>
                     </div>
                     <div>
-                      <h3 class="text-lg font-semibold text-gray-800 group-hover:text-orange-700 transition-colors">
+                      <h3 class="text-lg font-semibold text-gray-800 ">
                         Available Rooms
                       </h3>
                     </div>
@@ -82,19 +81,19 @@
               </div>
 
               <!-- Card 3 - Occupied Rooms -->
-              <div class="card border border-blue-200 bg-gradient-to-br from-blue-50 to-orange-50
-                                  transition-all duration-300 ease-in-out
-                                  hover:shadow-2xl hover:-translate-y-1 hover:from-blue-100 hover:to-orange-100
-                                  group rounded-2xl">
+              <div class="card shadow-md
+                                                                  transition-all duration-300 ease-in-out
+                                                                   hover:shadow-2xl hover:-translate-y-1 hover:from-blue-100 hover:to-orange-100
+                                                                 group rounded-2xl">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-xl bg-blue-100 text-blue-600
-                                        group-hover:bg-blue-600 group-hover:text-white
-                                        transition-colors duration-300 shadow-md">
+                    <div class="p-3 rounded-xl bg-blue-900 text-yellow-400
+                                                                          group-hover:text-white
+                                                                          transition-colors duration-300 shadow-md">
                       <i class="fa-solid fa-door-closed text-xl"></i>
                     </div>
                     <div>
-                      <h3 class="text-lg font-semibold text-gray-800 group-hover:text-blue-700 transition-colors">
+                      <h3 class="text-lg font-semibold text-gray-800 ">
                         Occupied Rooms
                       </h3>
                     </div>
@@ -104,19 +103,19 @@
               </div>
 
               <!-- Card 4 - Channels Booking -->
-              <div class="card border border-orange-200 bg-gradient-to-br from-orange-50 to-blue-50
-                                  transition-all duration-300 ease-in-out
-                                  hover:shadow-2xl hover:-translate-y-1 hover:from-orange-100 hover:to-blue-100
-                                  group rounded-2xl">
+              <div class="card shadow-md
+                                             transition-all duration-300 ease-in-out
+                                             hover:shadow-2xl hover:-translate-y-1 hover:from-orange-100 hover:to-blue-100
+                                           group rounded-2xl">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-xl bg-orange-100 text-orange-600
-                                        group-hover:bg-orange-600 group-hover:text-white
-                                        transition-colors duration-300 shadow-md">
+                    <div class="p-3 rounded-xl bg-blue-900 text-yellow-400
+                                                group-hover:text-white
+                                               transition-colors duration-300 shadow-md">
                       <i class="fa-solid fa-arrow-up-right-from-square text-xl"></i>
                     </div>
                     <div>
-                      <h3 class="text-lg font-semibold text-gray-800 group-hover:text-orange-700 transition-colors">
+                      <h3 class="text-lg font-semibold text-gray-800 ">
                         Channels Booking
                       </h3>
                     </div>

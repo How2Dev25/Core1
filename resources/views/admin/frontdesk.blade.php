@@ -43,19 +43,18 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 mt-5">
 
               <!-- Card 1 - Total Reservation -->
-              <div class="card border border-blue-200 bg-gradient-to-br from-blue-50 to-orange-50
-                    transition-all duration-300 ease-in-out
-                    hover:shadow-2xl hover:-translate-y-1 hover:from-blue-100 hover:to-orange-100
-                    group rounded-2xl">
+              <div class="card shadow-md 
+                                               transition-all duration-300 ease-in-out
+                                           hover:shadow-2xl hover:-translate-y-1
+                                                group rounded-2xl">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-xl bg-blue-100 text-blue-600
-                          group-hover:bg-blue-600 group-hover:text-white
-                          transition-colors duration-300 shadow-md">
+                    <div class="p-3 rounded-xl bg-blue-900 text-yellow-400 group-hover:text-white
+                                            transition-colors duration-300 shadow-md">
                       <i class="fa-solid fa-book text-xl"></i>
                     </div>
                     <div>
-                      <h3 class="text-lg font-semibold text-gray-800 group-hover:text-blue-700 transition-colors">
+                      <h3 class="text-lg font-semibold text-gray-800 ">
                         Total Reservation
                       </h3>
                     </div>
@@ -65,19 +64,19 @@
               </div>
 
               <!-- Card 2 - Available Rooms -->
-              <div class="card border border-orange-200 bg-gradient-to-br from-orange-50 to-blue-50
-                    transition-all duration-300 ease-in-out
-                    hover:shadow-2xl hover:-translate-y-1 hover:from-orange-100 hover:to-blue-100
-                    group rounded-2xl">
+              <div class="card shadow-md
+                                                transition-all duration-300 ease-in-out
+                                                 hover:shadow-2xl hover:-translate-y-1 hover:from-orange-100 hover:to-blue-100
+                                                   group rounded-2xl">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-xl bg-orange-100 text-orange-600
-                          group-hover:bg-orange-600 group-hover:text-white
-                          transition-colors duration-300 shadow-md">
+                    <div class="p-3 rounded-xl bg-blue-900 text-yellow-400
+                                                            group-hover:text-white
+                                                            transition-colors duration-300 shadow-md">
                       <i class="fa-solid fa-bed text-xl"></i>
                     </div>
                     <div>
-                      <h3 class="text-lg font-semibold text-gray-800 group-hover:text-orange-700 transition-colors">
+                      <h3 class="text-lg font-semibold text-gray-800 ">
                         Available Rooms
                       </h3>
                     </div>
@@ -87,19 +86,19 @@
               </div>
 
               <!-- Card 3 - Occupied Rooms -->
-              <div class="card border border-blue-200 bg-gradient-to-br from-blue-50 to-orange-50
-                    transition-all duration-300 ease-in-out
-                    hover:shadow-2xl hover:-translate-y-1 hover:from-blue-100 hover:to-orange-100
-                    group rounded-2xl">
+              <div class="card shadow-md
+                                                      transition-all duration-300 ease-in-out
+                                                       hover:shadow-2xl hover:-translate-y-1 hover:from-blue-100 hover:to-orange-100
+                                                     group rounded-2xl">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-xl bg-blue-100 text-blue-600
-                          group-hover:bg-blue-600 group-hover:text-white
-                          transition-colors duration-300 shadow-md">
+                    <div class="p-3 rounded-xl bg-blue-900 text-yellow-400
+                                                              group-hover:text-white
+                                                              transition-colors duration-300 shadow-md">
                       <i class="fa-solid fa-door-closed text-xl"></i>
                     </div>
                     <div>
-                      <h3 class="text-lg font-semibold text-gray-800 group-hover:text-blue-700 transition-colors">
+                      <h3 class="text-lg font-semibold text-gray-800 ">
                         Occupied Rooms
                       </h3>
                     </div>
@@ -109,19 +108,19 @@
               </div>
 
               <!-- Card 4 - Channels Booking -->
-              <div class="card border border-orange-200 bg-gradient-to-br from-orange-50 to-blue-50
-                    transition-all duration-300 ease-in-out
-                    hover:shadow-2xl hover:-translate-y-1 hover:from-orange-100 hover:to-blue-100
-                    group rounded-2xl">
+              <div class="card shadow-md
+                                 transition-all duration-300 ease-in-out
+                                 hover:shadow-2xl hover:-translate-y-1 hover:from-orange-100 hover:to-blue-100
+                               group rounded-2xl">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-xl bg-orange-100 text-orange-600
-                          group-hover:bg-orange-600 group-hover:text-white
-                          transition-colors duration-300 shadow-md">
+                    <div class="p-3 rounded-xl bg-blue-900 text-yellow-400
+                                    group-hover:text-white
+                                   transition-colors duration-300 shadow-md">
                       <i class="fa-solid fa-arrow-up-right-from-square text-xl"></i>
                     </div>
                     <div>
-                      <h3 class="text-lg font-semibold text-gray-800 group-hover:text-orange-700 transition-colors">
+                      <h3 class="text-lg font-semibold text-gray-800 ">
                         Channels Booking
                       </h3>
                     </div>
@@ -133,14 +132,95 @@
             </div>
 
 
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 mt-5">
+
+              <!-- Total Reservations -->
+              <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Event
+                      Reservations</h3>
+                    <p class="text-3xl font-bold text-gray-800 mt-2">{{ $totaleventreservation }}</p>
+
+                  </div>
+                  <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                    <i class="fa-solid fa-bed text-yellow-400 text-2xl"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Confirmed -->
+              <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Events Confirmed</h3>
+                    <p class="text-3xl font-bold text-gray-800 mt-2">{{ $confirmedeventreservation }}</p>
+
+                  </div>
+                  <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                    <i class="fa-solid fa-circle-check text-yellow-400 text-2xl"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pending -->
+              <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Events Pending</h3>
+                    <p class="text-3xl font-bold text-gray-800 mt-2">{{ $pendingeventreservation }}</p>
+
+                  </div>
+                  <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                    <i class="fa-solid fa-clock text-yellow-400 text-2xl"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cancelled -->
+              <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Events Cancelled</h3>
+                    <p class="text-3xl font-bold text-gray-800 mt-2">{{  $cancelledeventreservation }}</p>
+
+                  </div>
+                  <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                    <i class="fa-solid fa-circle-xmark text-yellow-400 text-2xl"></i>
+                  </div>
+                </div>
+              </div>
+
+            </div>
 
 
-            <div class="">
-              <button onclick="view_room.showModal()" class="btn btn-primary btn-sm">
-                <i class="fa-solid fa-plus"></i>
-                View Available Rooms
+
+            <div class="grid grid-cols-4 max-md:grid-cols-2 gap-5 items-center">
+              <button onclick="view_room.showModal()"
+                class="flex items-center gap-2 px-4 py-2.5 bg-[#F7B32B]  text-white rounded-lg shadow-md transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                <i class="fa-solid fa-door-open text-sm"></i>
+                <span class="font-medium">Available Rooms</span>
+              </button>
+
+              <button onclick="view_bookingcalendar.showModal()"
+                class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950 text-white rounded-lg shadow-md transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50">
+                <i class="fa-solid fa-calendar-alt text-sm"></i>
+                <span class="font-medium">Booking Calendar</span>
+              </button>
+
+              <button onclick="view_eventbookingcalendar.showModal()"
+                class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950 text-white rounded-lg shadow-md transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50">
+                <i class="fa-solid fa-calendar-alt text-sm"></i>
+                <span class="font-medium">Event Calendar</span>
+              </button>
+
+              <button onclick="view_inventory.showModal()"
+                class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-violet-800 to-violet-900 hover:from-violet-900 hover:to-violet-950 text-white rounded-lg shadow-md transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50">
+              <i class="fa-solid fa-boxes-stacked text-sm"></i>
+                <span class="font-medium">Inventory</span>
               </button>
             </div>
+
 
 
             @if(session('removed'))
@@ -191,12 +271,18 @@
 
             @endif
 
+            <div class="flex max-md:flex-col gap-5 w-full">
+              <div class="w-1/2 max-md:w-full">
+                <livewire:approve-reserve />
+              </div>
+              <div class="w-1/2 max-md:max-w-full">
+                  <livewire:event-reservations />
+              </div>
 
-            <livewire:approve-reserve />
+            </div>
 
 
-
-
+           
 
 
 
@@ -215,8 +301,10 @@
             @include('admin.components.frontdesk.cancel')
           @endforeach
 
-
-
+           @include('admin.components.frontdesk.viewroom')
+          @include('admin.components.frontdesk.viewinventory')
+          @include('admin.components.frontdesk.viewbookingcalendar')
+          @include('admin.components.frontdesk.vieweventcalendar')
 
 
 
@@ -229,7 +317,7 @@
 
     {{-- modals --}}
 
-    @include('admin.components.frontdesk.viewroom')
+   
 
 
     @livewireScripts

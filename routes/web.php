@@ -309,7 +309,21 @@ Route::get('/restrictedemployee', function(){
 // Admins
 
 // dashboard
+Route::get('/pointofsale', function(){
+      employeeAuthCheck();
+      verifyfrontdesk();
 
+      $servicefee = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+      $taxrate = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+      $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person Fee')->value('dynamic_price');
+      $products = room::where('roomstatus', 'Available')->latest()->get();
+    return view('admin.pos', compact(
+    'servicefee',
+    'taxrate',
+    'additionalpersonfee',
+    'products'
+));
+});
 
 Route::get('/adminprofile', function(){
      employeeAuthCheck();
@@ -642,10 +656,21 @@ Route::get('/hmp', function(){
     employeeAuthCheck();
     verifyhotelmarketing();
     $hmpdata = Hmp::latest()->get();
+
+     $promos = Hmp::all();
    
       $rooms = room::where('roomstatus', 'Available')->latest()->get();
 
-    return view('admin.hmp', ['hmpdata' => $hmpdata, 'rooms' => $rooms,]);
+       $totalRevenue = hotelBilling::sum('amount_paid');
+
+       $roomreservations = Reservation::count();
+       $eventreservations = Ecm::count();
+
+       $totalreservations = $roomreservations + $eventreservations;
+        $totalpromotions = Hmp::count();
+
+    return view('admin.hmp', compact('hmpdata', 
+    'promos', 'rooms', 'totalRevenue', 'totalreservations', 'totalpromotions'));
 });
 Route::post('/createhmp', [hmpController::class, 'createhmp']);
 Route::get('/searchhmp', [hmpController::class, 'index']);
@@ -678,7 +703,7 @@ Route::get('/eventbookings', function(){
     employeeAuthCheck();
      verifyevent();
 
-       $totaleventreservation = Ecm::count();
+     $totaleventreservation = Ecm::count();
       $pendingeventreservation = Ecm::
         where('eventstatus', 'Pending')
       ->count();
@@ -976,8 +1001,29 @@ Route::get('/frontdesk', function(){
        $reserverooms =  Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
         ->latest('core1_reservation.created_at')
         ->get();
+
+          $totaleventreservation = Ecm::count();
+      $pendingeventreservation = Ecm::
+        where('eventstatus', 'Pending')
+      ->count();
+       $confirmedeventreservation = Ecm::where('eventstatus', 'Confirmed')
+      ->count();
+
+        $cancelledeventreservation = Ecm::where('eventstatus', 'Cancelled')
+      ->count();
+
+    //   stocks
+
+     $totalItems = Inventory::count();
+     $stock = stockRequest::latest()->get();
+    $instock = Inventory::sum('core1_inventory_stocks');
+    $lowstock = Inventory::whereColumn('core1_inventory_stocks', '<', 'core1_inventory_threshold')->count();
+    $nostock = Inventory::where('core1_inventory_stocks', 0)->count();
+
+    $inventory = Inventory::latest()->get();
     
-    return view('admin.frontdesk', ['reserverooms' => $reserverooms]);
+    return view('admin.frontdesk', compact('reserverooms', 'totaleventreservation', 'pendingeventreservation', 
+    'confirmedeventreservation', 'cancelledeventreservation', 'totalItems', 'instock', 'lowstock', 'nostock', 'inventory', ));
 });
 
 Route::put('/reservationcheckin/{reservationID}', [reservationController::class, 'checkin']);
@@ -1116,6 +1162,8 @@ Route::get('/guestdashboard', function() {
     $facility = facility::all();
 
     $rooms = Room::leftjoin('core1_loyaltyandrewards', 'core1_loyaltyandrewards.roomID', '=', 'core1_room.roomID')->
+    where('core1_room.roomstatus', 'Available')
+    ->
      select(
         'core1_room.*',
         DB::raw('COALESCE(core1_loyaltyandrewards.loyalty_value, 0) as loyalty_value'),

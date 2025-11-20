@@ -43,42 +43,35 @@
     <!-- Stats Cards -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
     <!-- Total Rooms Card (Blue) -->
-    <div class="card bg-gradient-to-br from-blue-50 to-white border border-blue-100
+    <div class="card bg-white shadow-md
                 transition-all duration-300 ease-in-out
-                hover:shadow-lg hover:-translate-y-1 hover:border-blue-200
-                hover:bg-gradient-to-br hover:from-blue-500 hover:to-white
+                hover:shadow-lg hover:-translate-y-1  hover:to-white
                 group">
       <div class="card-body">
         <div class="flex items-center">
-          <div class="p-3 rounded-full bg-blue-100 text-blue-600
-                     group-hover:bg-blue-600 group-hover:text-white
-                     transition-colors duration-300">
-            <i data-lucide="home" class="w-6 h-6"></i>
-          </div>
+        <div
+          class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-900 text-yellow-400 group-hover:bg-blue-700 group-hover:text-white transition-all duration-300 ease-in-out">
+          <i class="fa-solid fa-door-closed text-lg"></i>
+        </div>
           <div class="ml-4">
             <h3 class="text-sm font-medium text-gray-500 group-hover:text-blue-600">Total Rooms</h3>
             <p class="text-2xl font-semibold group-hover:text-blue-800">{{$totalrooms}}</p>
           </div>
         </div>
-        <div class="mt-2 text-sm text-green-600 flex items-center group-hover:text-green-700">
-          <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
-          <span>5% from last month</span>
-        </div>
+
       </div>
     </div>
 
     <!-- Maintenance Rooms Card (Orange) -->
-    <div class="card bg-gradient-to-br from-orange-50 to-white border border-orange-100
+    <div class="card bg-white shadow-md
                 transition-all duration-300 ease-in-out
-                hover:shadow-lg hover:-translate-y-1 hover:border-orange-200
-                hover:bg-gradient-to-br hover:from-orange-500 hover:to-white
+                hover:shadow-lg hover:-translate-y-1  hover:to-white
                 group">
       <div class="card-body">
         <div class="flex items-center">
-          <div class="p-3 rounded-full bg-orange-100 text-orange-600
-                     group-hover:bg-orange-600 group-hover:text-white
-                     transition-colors duration-300">
-            <i data-lucide="tool-case" class="w-6 h-6"></i>
+          <div
+            class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-900 text-yellow-400 group-hover:bg-blue-700 group-hover:text-white transition-all duration-300 ease-in-out">
+          <i class="fa-solid fa-hammer text-lg"></i>
           </div>
           <div class="ml-4">
             <h3 class="text-sm font-medium text-gray-500 group-hover:text-orange-600">Maintenance Rooms</h3>
@@ -93,17 +86,15 @@
     </div>
 
     <!-- Inventory Card (Green) -->
-    <div class="card bg-gradient-to-br from-green-50 to-white border border-green-100
+    <div class="card bg-white shadow-md
                 transition-all duration-300 ease-in-out
-                hover:shadow-lg hover:-translate-y-1 hover:border-green-200
-                hover:bg-gradient-to-br hover:from-green-500 hover:to-white
+                hover:shadow-lg hover:-translate-y-1  hover:to-white
                 group">
       <div class="card-body">
         <div class="flex items-center">
-          <div class="p-3 rounded-full bg-green-100 text-green-600
-                     group-hover:bg-green-600 group-hover:text-white
-                     transition-colors duration-300">
-            <i data-lucide="box" class="w-6 h-6"></i>
+          <div
+            class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-900 text-yellow-400 group-hover:bg-blue-700 group-hover:text-white transition-all duration-300 ease-in-out">
+            <i class="fa-solid fa-boxes-stacked text-lg"></i>
           </div>
           <div class="ml-4">
             <h3 class="text-sm font-medium text-gray-500 group-hover:text-green-600">Total Inventory</h3>
@@ -181,16 +172,16 @@
             </td>
            <td>
                   @php
-      $badgeClasses = [
-        'Linens' => 'badge-info',
-        'Bath Amenities' => 'badge-primary',
-        'Cleaning Supplies' => 'badge-warning',
-        'Room Equipment' => 'badge-success',
-        // Add more categories as needed
-      ];
+    $badgeClasses = [
+      'Linens' => 'badge-info',
+      'Bath Amenities' => 'badge-primary',
+      'Cleaning Supplies' => 'badge-warning',
+      'Room Equipment' => 'badge-success',
+      // Add more categories as needed
+    ];
 
-      $defaultClass = 'badge-secondary';
-      $badgeClass = $badgeClasses[$inv->core1_inventory_category] ?? $defaultClass;
+    $defaultClass = 'badge-secondary';
+    $badgeClass = $badgeClasses[$inv->core1_inventory_category] ?? $defaultClass;
                   @endphp
 
                   <span class="badge badge-sm {{ $badgeClass }}">
