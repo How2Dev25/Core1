@@ -255,9 +255,9 @@
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input value="" type="tel" name="guestphonenumber"
-                                class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
-                                required />
+                        <input type="tel" name="guestphonenumber" class="input input-bordered w-full rounded-xl border-2 border-gray-200 
+                                   focus:border-[#001f54] focus:outline-none transition-colors" minlength="11" maxlength="11"
+                            pattern="[0-9]{11}" placeholder="e.g. 09123456789" required />
                         </div>
 
                         <div class="form-control">
@@ -335,7 +335,8 @@
                             </label>
                             <input type="tel" name="guestcontactpersonnumber"
                                 class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
-                                required />
+                               minlength="11" maxlength="11"
+                            pattern="[0-9]{11}" placeholder="e.g. 09123456789" required />
                         </div>
 
                         <input type="hidden" name="subtotal" id="hiddenSubtotal">

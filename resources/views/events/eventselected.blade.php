@@ -158,7 +158,7 @@
 
                     <!-- Facility Amenities -->
                     @php
-                        $amenities = json_decode($eventtype->facility_amenities, true);
+$amenities = json_decode($eventtype->facility_amenities, true);
                     @endphp
 
                     @if(!empty($amenities))
@@ -176,7 +176,7 @@
 
                 <!-- Event Details Card -->
                 <div @php
-                    $today = \Carbon\Carbon::today()->format('Y-m-d');
+$today = \Carbon\Carbon::today()->format('Y-m-d');
                 @endphp
                     class="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
                     <div class="flex items-center gap-4 mb-6">
@@ -374,7 +374,9 @@
                                 </span>
                             </label>
                             <input type="tel" name="eventorganizer_phone" class="input input-bordered w-full rounded-xl border-2 border-gray-200 
-                                               focus:border-[#001f54] focus:outline-none transition-colors" required />
+                                               focus:border-[#001f54] focus:outline-none transition-colors" 
+                                                minlength="11" maxlength="11"
+                            pattern="[0-9]{11}" placeholder="e.g. 09123456789" required />
                         </div>
 
                         <div class="form-control md:col-span-2">

@@ -271,11 +271,11 @@
 
             @endif
 
-            <div class="flex max-md:flex-col gap-5 w-full">
-              <div class="w-1/2 max-md:w-full">
+            <div class="flex flex-col gap-5 w-full">
+              <div class="w-full">
                 <livewire:approve-reserve />
               </div>
-              <div class="w-1/2 max-md:max-w-full">
+              <div class="w-full">
                   <livewire:event-reservations />
               </div>
 
