@@ -621,7 +621,7 @@
                                     </div>
 
                                     <p class="text-xs text-gray-500 text-center mt-4">
-                                        By confirming, you agree to our terms and conditions
+                                        By submitting, you agree to our terms and conditions
                                     </p>
                                 </div>
                             </div>
