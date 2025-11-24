@@ -78,14 +78,13 @@
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
               <!-- Total Rooms -->
-              <div class="card border border-blue-100 bg-gradient-to-br from-blue-50 to-white
+              <div class="card bg-white shadow-md
                   transition-all duration-300 ease-in-out
                   hover:shadow-lg hover:-translate-y-1 hover:border-blue-500
-                  hover:bg-gradient-to-br hover:from-blue-100 hover:to-white
-                  group">
+                   ">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-lg bg-blue-100 text-blue-600
+                    <div class="p-3 rounded-lg bg-blue-900 text-yellow-400
                        group-hover:bg-blue-600 group-hover:text-white
                        transition-colors duration-300">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -105,15 +104,14 @@
               </div>
 
               <!-- Occupied -->
-              <div class="card border border-red-100 bg-gradient-to-br from-red-50 to-white
+              <div class="card bg-white shadow-md
                   transition-all duration-300 ease-in-out
-                  hover:shadow-lg hover:-translate-y-1 hover:border-red-500
-                  hover:bg-gradient-to-br hover:from-red-100 hover:to-white
-                  group">
+                  hover:shadow-lg hover:-translate-y-1 hover:border-blue-500
+                   ">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-lg bg-red-100 text-red-600
-                       group-hover:bg-red-600 group-hover:text-white
+                    <div class="p-3 rounded-lg bg-blue-900 text-yellow-400
+                       group-hover:bg-blue-600 group-hover:text-white
                        transition-colors duration-300">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
@@ -132,15 +130,14 @@
               </div>
 
               <!-- Available -->
-              <div class="card border border-green-100 bg-gradient-to-br from-green-50 to-white
+              <div class="card bg-white shadow-md
                   transition-all duration-300 ease-in-out
-                  hover:shadow-lg hover:-translate-y-1 hover:border-green-500
-                  hover:bg-gradient-to-br hover:from-green-100 hover:to-white
-                  group">
+                  hover:shadow-lg hover:-translate-y-1 hover:border-blue-500
+                   ">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-lg bg-green-100 text-green-600
-                       group-hover:bg-green-600 group-hover:text-white
+                    <div class="p-3 rounded-lg bg-blue-900 text-yellow-400
+                       group-hover:bg-blue-600 group-hover:text-white
                        transition-colors duration-300">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
@@ -159,15 +156,14 @@
               </div>
 
               <!-- Maintenance -->
-              <div class="card border border-amber-100 bg-gradient-to-br from-amber-50 to-white
+              <div class="card bg-white shadow-md
                   transition-all duration-300 ease-in-out
-                  hover:shadow-lg hover:-translate-y-1 hover:border-amber-500
-                  hover:bg-gradient-to-br hover:from-amber-100 hover:to-white
-                  group">
+                  hover:shadow-lg hover:-translate-y-1 hover:border-blue-500
+                   ">
                 <div class="card-body p-5">
                   <div class="flex items-center gap-4">
-                    <div class="p-3 rounded-lg bg-amber-100 text-amber-600
-                       group-hover:bg-amber-600 group-hover:text-white
+                    <div class="p-3 rounded-lg bg-blue-900 text-yellow-400
+                       group-hover:bg-blue-600 group-hover:text-white
                        transition-colors duration-300">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
