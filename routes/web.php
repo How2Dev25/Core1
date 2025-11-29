@@ -10,6 +10,7 @@ use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\landingController;
 use App\Http\Controllers\larController;
 use App\Http\Controllers\orderController;
+use App\Http\Controllers\posController;
 use App\Http\Controllers\ratingController;
 use App\Http\Controllers\reservationController;
 use App\Http\Controllers\restoController;
@@ -329,6 +330,9 @@ Route::get('/pointofsale', function(){
     'rooms',
 ));
 });
+
+
+Route::post('/submitroompos', [posController::class, 'submitRoom']);
 
 Route::get('/adminprofile', function(){
      employeeAuthCheck();

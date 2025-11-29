@@ -1,6 +1,6 @@
 <!-- Order Modal -->
 <dialog id="bookeventtye_{{ $eventtype->eventtype_ID}}" class="modal">
-    <div class="modal-box max-w-7xl bg-white rounded-2xl shadow-xl">
+    <div class="modal-box max-w-4xl bg-white rounded-2xl shadow-xl">
         <!-- Header -->
         <form method="dialog" class="absolute right-4 top-4 z-10">
             <button class="btn btn-sm btn-circle btn-ghost">✕</button>

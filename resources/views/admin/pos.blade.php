@@ -30,7 +30,7 @@
                     <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 transition-slow">
       <!-- Subsystem Name -->
       <div class="pb-5 border-b border-base-300 animate-fadeIn">
-        <h1 class="text-2xl font-bold bg-white bg-clip-text text-[#191970]">Events & Rooms</h1>
+        <h1 class="text-2xl font-bold bg-white bg-clip-text text-[#191970]">Point Of Sale</h1>
       </div>
       <!-- Subsystem Name -->
 
@@ -44,6 +44,9 @@
         </div>
 
         <!-- Right: Sticky POS / Booking Summary -->
+        @php
+    $reservation = Session::get('reservation_data');
+        @endphp
         <div class="w-1/3 max-md:hidden">
           <div class="sticky top-6">
             <!-- Booking Summary Card -->
@@ -67,22 +70,45 @@
                 </div>
 
                 <!-- Booking Items -->
+              @if($reservation)
                 <div class="space-y-4 mb-8" id="booking-items">
-                  <!-- Items will be added dynamically -->
-                  <div id="empty-cart" class="flex flex-col items-center justify-center gap-2 p-8 border-2 border-dashed border-gray-300 rounded-xl text-gray-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18v18H3V3z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8M8 12h8" />
-                    </svg>
-                    <p class="text-center font-semibold text-gray-500">
-                      Your cart is empty. Add some rooms to get started!
-                    </p>
-                  </div>
+                    <div class="flex items-center gap-4 p-4 bg-gray-100 rounded-xl">
+                        <img src="{{ asset( $reservation['roomphoto']) }}" class="w-20 h-20 rounded-xl object-cover">
+
+                        <div class="flex-1">
+                            
+                            <p class="text-sm text-gray-500">{{ $reservation['roomtype'] }}</p>
+                        </div>
+
+                        <div class="font-bold text-primary">₱{{ number_format($reservation['subtotal'], 2) }}</div>
+                    </div>
                 </div>
+
+                <script>
+                    // Hide the empty cart
+                    document.getElementById('empty-cart')?.classList.add('hidden');
+                    // Show booking summary
+                    document.getElementById('booking-summary').classList.remove('hidden');
+                    document.getElementById('confirm-btn').classList.remove('hidden');
+                </script>
+
+                @else
+                        <div id="empty-cart"
+                            class="flex flex-col items-center justify-center gap-2 p-8 border-2 border-dashed border-gray-300 rounded-xl text-gray-400">
+                            <!-- your empty cart icon here -->
+                            <p>Your cart is empty. Add some rooms to get started!</p>
+                        </div>
+                    
+                @endif
 
                 <!-- Booking Summary -->
                 <div class="space-y-3 mb-8 hidden" id="booking-summary">
+                    @if($reservation)
+                        <script>
+                            document.getElementById('subtotal').innerText = "₱{{ number_format($reservation['subtotal'], 2) }}";
+                            document.getElementById('total').innerText = "₱{{ number_format($reservation['total'], 2) }}";
+                        </script>
+                    @endif
                   <div
                     class="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/10">
                     <span class="flex items-center gap-2 text-sm font-medium">
@@ -98,6 +124,7 @@
                     <span class="text-2xl text-yellow-400 font-bold" id="total">₱0.00</span>
                   </div>
                 </div>
+
 
                 <!-- Action Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4">
@@ -155,7 +182,7 @@
             @livewireScripts
             @include('javascriptfix.soliera_js')
 
-           
+
 
 
         </body>
