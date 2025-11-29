@@ -2,14 +2,14 @@
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\roomController;
+use App\Http\Controllers\userController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 
 
 // integration with Admin 
-// rooms 
-Route::get('/core1rooms', [ApiController::class, 'rooms'] );
+
 // events
 Route::get('/core1events', [ApiController::class, 'events'] );
 // User Management
@@ -29,6 +29,9 @@ Route::get('/restobillingandpayments', [ApiController::class, 'fetchrestobilling
 
 
 
+// rooms 
+Route::get('/core1rooms', [ApiController::class, 'rooms'] );
 
-
+// Events
+Route::get('/facilities', [ApiController::class, 'facility']);
 

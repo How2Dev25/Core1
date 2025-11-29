@@ -6,6 +6,8 @@ use App\Models\AuditTrails;
 use App\Models\DeptAccount;
 use App\Models\DeptLogs;
 use App\Models\Ecm;
+use App\Models\facility;
+use App\Models\hotelBilling;
 use App\Models\Reservation;
 use App\Models\restobillingandpayments;
 use App\Models\room;
@@ -18,6 +20,7 @@ class ApiController extends Controller
 {
 
     // for admin
+    
     public function rooms(Request $request){
 
       $token = $request->header('Authorization');
@@ -62,7 +65,7 @@ class ApiController extends Controller
     }
 
     try{
-        $getEvents = Ecm::where('eventstatus', 'Approved')->get();
+        $getEvents = Ecm::where('eventstatus', 'Confirmed')->get();
 
         return response()->json([
             'success' => true,
@@ -188,41 +191,13 @@ public function hotelincome(Request $request)
     }
 
     try {
-        $reservations = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
-            ->where('payment_status', 'Paid')
-            ->select('core1_reservation.*', 'core1_room.roomprice', 'core1_room.roomtype')
-            ->get();
+        $reservations = hotelBilling::all();
 
-        $data = $reservations->map(function ($res) {
-            $checkin  = Carbon::parse($res->reservation_checkin);
-            $checkout = Carbon::parse($res->reservation_checkout);
-            $nights   = max(1, $checkin->diffInDays($checkout));
-
-            $subtotal   = $res->roomprice * $nights;
-            $vat        = $subtotal * 0.12;
-            $serviceFee = $subtotal * 0.02;
-            $total      = $subtotal + $vat + $serviceFee;
-
-            return [
-                'reservationID'   => $res->reservationID,
-                'bookingID'       => $res->bookingID,
-                'receiptID'       => $res->reservation_receipt,
-                'payment_method'  => $res->payment_method,
-                'guestname'       => $res->guestname,
-                'roomtype'        => $res->roomtype,
-                'nights'          => $nights,
-                'roomprice'       => $res->roomprice,
-                'subtotal'        => $subtotal,
-                'vat_12'          => $vat,
-                'service_fee_2'   => $serviceFee,
-                'total'           => $total,
-            ];
-        });
 
         return response()->json([
             'success' => true,
             'message' => 'Hotel Income Successfully Retrieved',
-            'data'    => $data,
+            'data'    => $reservations,
         ], 200);
 
     } catch (\Exception $e) {
@@ -294,6 +269,37 @@ public function hotelincome(Request $request)
         }
     }
 
+
+    public function facility(Request $request){
+          $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        try {
+            $facilities = facility::all();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Events fetched Successfully',
+                'data' => $facilities,
+            ], 200);
+
+        }
+        catch (\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'Cant fetch data',
+                'data' => $e->getMessage(),
+            ], 401);
+        }
+
+        
+    }
 
 
 }
