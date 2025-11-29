@@ -317,11 +317,16 @@ Route::get('/pointofsale', function(){
       $taxrate = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
       $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person Fee')->value('dynamic_price');
       $products = room::where('roomstatus', 'Available')->latest()->get();
+
+      $ecmtype = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')->get();
+      $rooms = room::where('roomstatus', 'Available')->latest()->get();
     return view('admin.pos', compact(
     'servicefee',
     'taxrate',
     'additionalpersonfee',
-    'products'
+    'products',
+    'ecmtype',
+    'rooms',
 ));
 });
 
