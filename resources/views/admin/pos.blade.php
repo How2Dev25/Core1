@@ -16,46 +16,63 @@
 @auth
 
 
-        <body class="bg-base-100">
-            <div class="flex h-screen overflow-hidden">
-                <!-- Sidebar -->
-                @include('admin.components.dashboard.sidebar')
+      <body class="bg-base-100">
+          <div class="flex h-screen overflow-hidden">
+              <!-- Sidebar -->
+              @include('admin.components.dashboard.sidebar')
 
-                <!-- Main content -->
-                <div class="flex flex-col flex-1 overflow-hidden">
-                    <!-- Navbar -->
-                    @include('admin.components.dashboard.navbar')
+              <!-- Main content -->
+              <div class="flex flex-col flex-1 overflow-hidden">
+                  <!-- Navbar -->
+                  @include('admin.components.dashboard.navbar')
 
-                    <!-- Dashboard Content -->
-                    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 transition-slow">
-      <!-- Subsystem Name -->
-      <div class="pb-5 border-b border-base-300 animate-fadeIn">
-        <h1 class="text-2xl font-bold bg-white bg-clip-text text-[#191970]">Point Of Sale</h1>
+                  <!-- Dashboard Content -->
+                  <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 transition-slow">
+    <!-- Subsystem Name -->
+    <div class="pb-5 border-b border-base-300 animate-fadeIn">
+      <h1 class="text-2xl font-bold bg-white bg-clip-text text-[#191970]">Point Of Sale</h1>
+    </div>
+    <!-- Subsystem Name -->
+
+    <section class="flex max-md:flex-col gap-6 p-6">
+      <!-- Left: Events & Rooms -->
+      <div class="flex-1 overflow-y-auto">
+        <!-- Events Section -->
+              @if(session('success'))
+                <div id="success-alert" class="alert alert-success shadow-lg mb-4 transition-all duration-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 12l2 2l4 -4m6 2a10 10 0 1 1 -20 0a10 10 0 0 1 20 0" />
+                  </svg>
+                  <span>{{ session('success') }}</span>
+                </div>
+
+                <script>
+                  setTimeout(() => {
+                    document.getElementById('success-alert')?.classList.add('opacity-0');
+                  }, 3000);
+                </script>
+              @endif
+
+        @include('admin.components.pos.events')
+
+        @include('admin.components.pos.rooms')
       </div>
-      <!-- Subsystem Name -->
 
-      <section class="flex gap-6 p-6">
-        <!-- Left: Events & Rooms -->
-        <div class="flex-1 overflow-y-auto">
-          <!-- Events Section -->
-          @include('admin.components.pos.events')
+      <!-- Right: Sticky POS / Booking Summary -->
 
-          @include('admin.components.pos.rooms')
-        </div>
+      <div class="w-1/3 max-md:w-full">
 
-        <!-- Right: Sticky POS / Booking Summary -->
-        @php
-    $reservation = Session::get('reservation_data');
-        @endphp
-        <div class="w-1/3 max-md:hidden">
-          <div class="sticky top-6">
-            <!-- Booking Summary Card -->
-            <div class="bg-white/95">
-              <div class="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
-                <div class="flex items-center gap-4 mb-8">
-                  <div class="p-3 bg-blue-900 rounded-2xl shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                      stroke="#F7B32B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+            <div class="sticky top-6">
+              <!-- Booking Summary Card -->
+              <div class="bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20 max-w-sm mx-auto">
+
+                <!-- Header -->
+                <div class="flex items-center gap-3 mb-6">
+                  <div class="p-2 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FBBF24"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M3 2v6h6"></path>
                       <path d="M21 12A9 9 0 0 0 6 2.3"></path>
                       <path d="M21 22v-6h-6"></path>
@@ -63,131 +80,171 @@
                     </svg>
                   </div>
                   <div>
-                    <h2 class="text-xl font-bold text-black">
+                    <h2 class="text-xl font-bold text-gray-900">
                       Booking Summary
                     </h2>
+                    <p class="text-xs text-gray-500">Review your selection</p>
                   </div>
                 </div>
 
                 <!-- Booking Items -->
-              @if($reservation)
-                <div class="space-y-4 mb-8" id="booking-items">
-                    <div class="flex items-center gap-4 p-4 bg-gray-100 rounded-xl">
-                        <img src="{{ asset( $reservation['roomphoto']) }}" class="w-20 h-20 rounded-xl object-cover">
+                {{-- room --}}
+                @foreach ($reservationroom as $reserveroom)
+                  <div class="space-y-3 mb-6">
+                    <div class="relative group">
+                      <div
+                        class="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 hover:shadow-sm transition-shadow">
+                        <img src="{{ asset($reserveroom->roomphoto) }}"
+                          class="w-16 h-16 rounded-lg object-cover shadow-sm" alt="Deluxe Suite">
 
                         <div class="flex-1">
-                            
-                            <p class="text-sm text-gray-500">{{ $reservation['roomtype'] }}</p>
+                          <h3 class="font-semibold text-gray-900 text-sm mb-1">{{$reserveroom->roomtype}}</h3>
+                          <p class="text-xs text-gray-500">{{$reserveroom->reservation_numguest}} Guest • {{$reserveroom->reservation_specialrequest}}</p>
                         </div>
 
-                        <div class="font-bold text-primary">₱{{ number_format($reservation['subtotal'], 2) }}</div>
+                        <div class="flex flex-col items-end gap-1">
+                          <div class="font-bold text-blue-600 text-base">₱{{$reserveroom->total}}</div>
+                          <button type="button" class="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 rounded-md transition-all"
+                            onclick="document.getElementById('removeroom_{{ $reserveroom->reservationposID }}').showModal()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <polyline points="3 6 5 6 21 6"></polyline>
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                              <line x1="10" y1="11" x2="10" y2="17"></line>
+                              <line x1="14" y1="11" x2="14" y2="17"></line>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
                     </div>
+                  </div>
+                @endforeach
+
+
+                <div class="space-y-3 mb-6">
+                  <div class="relative group">
+                    <div
+                      class="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 hover:shadow-sm transition-shadow">
+                      <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=200&h=200&fit=crop"
+                        class="w-16 h-16 rounded-lg object-cover shadow-sm" alt="Deluxe Suite">
+
+                      <div class="flex-1">
+                        <h3 class="font-semibold text-gray-900 text-sm mb-1">Deluxe Suite</h3>
+                        <p class="text-xs text-gray-500">2 Guests • King Bed</p>
+                      </div>
+
+                      <div class="flex flex-col items-end gap-1">
+                        <div class="font-bold text-blue-600 text-base">₱5,500.00</div>
+                        <button type="button" class="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 rounded-md transition-all"
+                          onclick="this.closest('.relative').remove()">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <script>
-                    // Hide the empty cart
-                    document.getElementById('empty-cart')?.classList.add('hidden');
-                    // Show booking summary
-                    document.getElementById('booking-summary').classList.remove('hidden');
-                    document.getElementById('confirm-btn').classList.remove('hidden');
-                </script>
-
-                @else
-                        <div id="empty-cart"
-                            class="flex flex-col items-center justify-center gap-2 p-8 border-2 border-dashed border-gray-300 rounded-xl text-gray-400">
-                            <!-- your empty cart icon here -->
-                            <p>Your cart is empty. Add some rooms to get started!</p>
-                        </div>
-                    
-                @endif
-
-                <!-- Booking Summary -->
-                <div class="space-y-3 mb-8 hidden" id="booking-summary">
-                    @if($reservation)
-                        <script>
-                            document.getElementById('subtotal').innerText = "₱{{ number_format($reservation['subtotal'], 2) }}";
-                            document.getElementById('total').innerText = "₱{{ number_format($reservation['total'], 2) }}";
-                        </script>
-                    @endif
+                <!-- Booking Summary Totals -->
+                <div class="space-y-2 mb-6">
                   <div
-                    class="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/10">
-                    <span class="flex items-center gap-2 text-sm font-medium">
+                    class="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100">
+                    <span class="flex items-center gap-2 text-xs font-medium text-gray-700">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                      </svg>
                       Subtotal
                     </span>
-                    <span class="font-bold text-primary" id="subtotal">₱0.00</span>
+                    <span class="font-bold text-blue-600 text-sm">₱5,500.00</span>
                   </div>
 
-                  <div class="flex items-center justify-between p-4 rounded-xl bg-blue-900 text-white">
-                    <span class="flex items-center gap-2 text-lg font-bold">
+                  <div
+                    class="flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-md">
+                    <span class="flex items-center gap-2 text-base font-bold">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
+                        <path d="M12 18V6"></path>
+                      </svg>
                       Total Amount
                     </span>
-                    <span class="text-2xl text-yellow-400 font-bold" id="total">₱0.00</span>
+                    <span class="text-xl text-yellow-400 font-bold">₱5,500.00</span>
                   </div>
                 </div>
 
-
-                <!-- Action Buttons -->
-                <div class="flex flex-col sm:flex-row gap-4">
-                  <button onclick="document.getElementById('confirm-booking').showModal()" type="button"
-                    class="flex bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl font-medium transition w-full justify-center items-center hidden" id="confirm-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                <!-- Action Button -->
+                <div class="mb-4">
+                  <button type="button"
+                    class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-3 rounded-lg font-semibold transition-all transform hover:scale-[1.01] active:scale-[0.99] shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M20 6L9 17l-5-5"></path>
                     </svg>
-
                   </button>
                 </div>
 
-                <p class="text-xs text-gray-500 text-center mt-4">
-                  Free cancellation up to 48 hours before check-in
-                </p>
+
+
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      <!-- Confirm Booking Modal -->
-      <dialog id="confirm-booking" class="modal">
-        <div class="modal-box bg-white rounded-2xl p-0 max-w-md">
-          <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-          </form>
-          <div class="p-6">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="p-2 bg-green-100 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+      </div>
+    </section>
+
+
+
+  </main>
               </div>
-              <h3 class="text-lg font-bold">Confirm Your Booking</h3>
+          </div>
+
+          {{-- modal --}}
+          @include('admin.components.bas.confirmation')
+          @livewireScripts
+          @include('javascriptfix.soliera_js')
+
+          @foreach ($reservationroom as $reserveroom)
+              @include('admin.components.pos.removeroom')
+          @endforeach
+
+
+             <!-- Confirm Booking Modal -->
+    <dialog id="confirm-booking" class="modal">
+      <div class="modal-box bg-white rounded-2xl p-0 max-w-md">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+        <div class="p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="p-2 bg-green-100 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
             </div>
-            <p class="py-4 text-gray-600">Are you sure you want to proceed with this booking?</p>
-            <div class="modal-action">
-              <form method="dialog" class="flex gap-3 w-full">
-                <button class="btn btn-outline flex-1">Cancel</button>
-                <button class="btn btn-primary flex-1 bg-blue-600 border-blue-600 text-white">Confirm</button>
-              </form>
-            </div>
+            <h3 class="text-lg font-bold">Confirm Your Booking</h3>
+          </div>
+          <p class="py-4 text-gray-600">Are you sure you want to proceed with this booking?</p>
+          <div class="modal-action">
+            <form method="dialog" class="flex gap-3 w-full">
+              <button class="btn btn-outline flex-1">Cancel</button>
+              <button class="btn btn-primary flex-1 bg-blue-600 border-blue-600 text-white">Confirm</button>
+            </form>
           </div>
         </div>
-      </dialog>
-
-    </main>
-                </div>
-            </div>
-
-            {{-- modal --}}
-            @include('admin.components.bas.confirmation')
-            @livewireScripts
-            @include('javascriptfix.soliera_js')
-
-
-
-
-        </body>
+      </div>
+    </dialog>
+      </body>
 
 @endauth
+
+
 
 <script>
     // Add this function to open the modal and initialize calculations

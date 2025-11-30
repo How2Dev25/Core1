@@ -44,6 +44,7 @@ use App\Models\roomfeedbacks;
 use App\Models\roomtypes;
 use App\Models\stockRequest;
 use App\Models\Reservation;
+use App\Models\ReservationPOS;
 use App\Models\restoCart;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -314,6 +315,11 @@ Route::get('/pointofsale', function(){
       employeeAuthCheck();
       verifyfrontdesk();
 
+      $reservationroom = ReservationPOS::join('core1_room', 'core1_room.roomID', '=', 'reservationPOS.roomID')
+      ->where('reservationPOS.employeeID', Auth::user()->Dept_no)
+      ->latest('reservationPOS.created_at')
+      ->get(); 
+
       $servicefee = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
       $taxrate = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
       $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person Fee')->value('dynamic_price');
@@ -328,11 +334,14 @@ Route::get('/pointofsale', function(){
     'products',
     'ecmtype',
     'rooms',
+    'reservationroom',
 ));
 });
 
-
+Route::delete('/removeroompos/{reservationposID}', [posController::class, 'removeroom']);
 Route::post('/submitroompos', [posController::class, 'submitRoom']);
+
+
 
 Route::get('/adminprofile', function(){
      employeeAuthCheck();

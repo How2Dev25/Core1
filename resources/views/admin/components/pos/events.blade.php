@@ -53,66 +53,79 @@
 @foreach  ($ecmtype as $eventtype)
     @include('admin.components.pos.eventmodal')
 @endforeach
+
 <script>
+    // Optimized drag handler with throttling
+        class EventSlider {
+            constructor(sliderId) {
+                this.slider = document.getElementById(sliderId);
+                this.isDown = false;
+                this.startX = 0;
+                this.scrollLeft = 0;
+                this.moved = false;
 
-    
+                this.init();
+            }
 
-    const slider = document.getElementById('eventSlider');
+            init() {
+                // Single event listener using delegation
+                this.slider.addEventListener('mousedown', this.handleMouseDown.bind(this));
+                this.slider.addEventListener('touchstart', this.handleTouchStart.bind(this));
 
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-    let moved = false;
+                // Use passive listeners for better performance
+                document.addEventListener('mousemove', this.handleMouseMove.bind(this), { passive: false });
+                document.addEventListener('mouseup', this.handleMouseUp.bind(this));
+                document.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
+                document.addEventListener('touchend', this.handleTouchEnd.bind(this));
+            }
 
-    slider.addEventListener('mousedown', (e) => {
-        isDown = true;
-        slider.classList.add('dragging');
-        startX = e.pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;
-    });
+            handleMouseDown(e) {
+                this.isDown = true;
+                this.slider.classList.add('dragging');
+                this.startX = e.pageX - this.slider.offsetLeft;
+                this.scrollLeft = this.slider.scrollLeft;
+            }
 
-    slider.addEventListener('mouseleave', () => {
-        isDown = false;
-        slider.classList.remove('dragging');
-    });
+            handleMouseMove(e) {
+                if (!this.isDown) return;
 
-    slider.addEventListener('mouseup', () => {
-        isDown = false;
-        slider.classList.remove('dragging');
-        setTimeout(() => moved = false, 50);
-    });
+                e.preventDefault();
+                this.moved = true;
 
-    slider.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        moved = true;
-        const x = e.pageX - slider.offsetLeft;
-        const walk = (x - startX) * 1.2; // speed factor
-        slider.scrollLeft = scrollLeft - walk;
-    });
+                const x = e.pageX - this.slider.offsetLeft;
+                const walk = (x - this.startX) * 1.2;
+                this.slider.scrollLeft = this.scrollLeft - walk;
+            }
 
-    // Prevent clicking when dragging
-    slider.addEventListener('click', (e) => {
-        if (moved) e.preventDefault();
-    });
+            handleMouseUp() {
+                this.isDown = false;
+                this.slider.classList.remove('dragging');
+                setTimeout(() => this.moved = false, 50);
+            }
 
-    /* TOUCH SUPPORT */
-    slider.addEventListener('touchstart', (e) => {
-        isDown = true;
-        startX = e.touches[0].clientX;
-        scrollLeft = slider.scrollLeft;
-    });
+            handleTouchStart(e) {
+                this.isDown = true;
+                this.startX = e.touches[0].clientX;
+                this.scrollLeft = this.slider.scrollLeft;
+            }
 
-    slider.addEventListener('touchmove', (e) => {
-        if (!isDown) return;
-        moved = true;
-        const x = e.touches[0].clientX;
-        const walk = (x - startX) * 1.2;
-        slider.scrollLeft = scrollLeft - walk;
-    });
+            handleTouchMove(e) {
+                if (!this.isDown) return;
 
-    slider.addEventListener('touchend', () => {
-        isDown = false;
-        setTimeout(() => moved = false, 50);
-    });
+                this.moved = true;
+                const x = e.touches[0].clientX;
+                const walk = (x - this.startX) * 1.2;
+                this.slider.scrollLeft = this.scrollLeft - walk;
+            }
+
+            handleTouchEnd() {
+                this.isDown = false;
+                setTimeout(() => this.moved = false, 50);
+            }
+        }
+
+        // Initialize slider
+        document.addEventListener('DOMContentLoaded', () => {
+            new EventSlider('eventSlider');
+        });
 </script>

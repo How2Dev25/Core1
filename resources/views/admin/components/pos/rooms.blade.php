@@ -27,22 +27,7 @@
             /* Consistent image ratio */
         }
     </style>
-    @if(session('success'))
-        <div id="success-alert" class="alert alert-success shadow-lg mb-4 transition-all duration-500">
-            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 12l2 2l4 -4m6 2a10 10 0 1 1 -20 0a10 10 0 0 1 20 0" />
-            </svg>
-            <span>{{ session('success') }}</span>
-        </div>
-
-        <script>
-            setTimeout(() => {
-                document.getElementById('success-alert')?.classList.add('opacity-0');
-            }, 3000);
-        </script>
-    @endif
-
+ 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse ($rooms as $room)
             <button onclick="document.getElementById('bookroom_{{ $room->roomID }}').showModal()"
@@ -104,3 +89,32 @@
 @foreach ($rooms as $room)
     @include('admin.components.pos.roommodal')
 @endforeach
+
+<script>
+    // Dynamic modal loading for rooms
+    async function openRoomModal(roomId) {
+        // Close any existing modal first
+        document.querySelectorAll('dialog[open]').forEach(dialog => dialog.close());
+
+        try {
+            const response = await fetch(`/get-room-modal/${roomId}`);
+            const modalHtml = await response.text();
+            document.getElementById('modal-container').innerHTML = modalHtml;
+
+            // Show the modal
+            const modal = document.getElementById(`bookroom_${roomId}`);
+            if (modal) modal.showModal();
+        } catch (error) {
+            console.error('Error loading modal:', error);
+        }
+    }
+
+    // Update your room buttons
+    document.addEventListener('click', (e) => {
+        const roomBtn = e.target.closest('[data-room-id]');
+        if (roomBtn) {
+            const roomId = roomBtn.dataset.roomId;
+            openRoomModal(roomId);
+        }
+    });
+</script>
