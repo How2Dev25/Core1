@@ -52,7 +52,7 @@
                     @forelse ($reservationroom as $reserveroom)
                         <option value="{{ $reserveroom->reservationposID }}"
                             data-image="{{ asset($reserveroom->roomphoto) }}" data-name="{{ $reserveroom->roomtype }}">
-                            {{ $reserveroom->roomtype }} - ₱{{ number_format($reserveroom->total, 2) }}</option>
+                            Room #{{ $reserveroom->roomID }} - {{ $reserveroom->roomtype }} </option>
                     @empty
                         <option disabled>No Rooms Selected</option>
                     @endforelse
