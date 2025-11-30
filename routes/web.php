@@ -316,11 +316,21 @@ Route::get('/pointofsale', function(){
       employeeAuthCheck();
       verifyfrontdesk();
 
-      $reservationroom = ReservationPOS::join('core1_room', 'core1_room.roomID', '=', 'reservationPOS.roomID')
-      ->where('reservationPOS.employeeID', Auth::user()->Dept_no)
-      ->latest('reservationPOS.created_at')
-      ->get(); 
-
+    $reservationroom = ReservationPOS::join('core1_room', 'core1_room.roomID', '=', 'reservationPOS.roomID')
+    ->leftJoin('inventorypos', 'inventorypos.reservationposID', '=', 'reservationPOS.reservationposID')
+    ->leftJoin('core1_inventory', 'core1_inventory.core1_inventoryID', '=', 'inventorypos.core1_inventoryID')
+    ->where('reservationPOS.employeeID', Auth::user()->Dept_no)
+    ->orderBy('reservationPOS.created_at', 'desc')
+    ->get([
+        'reservationPOS.*',
+        'core1_room.roomtype',
+        'core1_room.roomphoto',
+        'core1_inventory.core1_inventory_name',
+        'inventorypos.inventorypos_quantity',
+        'inventorypos.inventorypos_total',
+        'core1_inventory_image',
+        'inventorypos.inventoryposID',
+    ]);
       $reservationevent = eventPOS::join('core1_eventtype', 'core1_eventtype.eventtype_ID', '=', 
       'eventpos.eventtype_ID')->where('employeeID', Auth::user()->Dept_no)
       ->latest('eventpos.created_at')
@@ -333,6 +343,7 @@ Route::get('/pointofsale', function(){
 
       $ecmtype = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')->get();
       $rooms = room::where('roomstatus', 'Available')->latest()->get();
+      $inventories = Inventory::all();
     return view('admin.pos', compact(
     'servicefee',
     'taxrate',
@@ -342,13 +353,18 @@ Route::get('/pointofsale', function(){
     'rooms',
     'reservationroom',
     'reservationevent',
+    'inventories',
 ));
 });
+
 
 Route::delete('/removeroompos/{reservationposID}', [posController::class, 'removeroom']);
 Route::delete('/removeeventpos/{eventposID}', [posController::class, 'removeEvent' ]);
 Route::post('/submitroompos', [posController::class, 'submitRoom']);
 Route::post('/submitEvent', [posController::class, 'submitEvent']);
+Route::post('/submitInventory', [posController::class, 'submitInventory']);
+Route::delete('/removeadditional/{inventoryposID}', [posController::class, 'removeInventory']);
+
 
 
 Route::get('/adminprofile', function(){

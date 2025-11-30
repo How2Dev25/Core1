@@ -65,6 +65,8 @@
 
         @include('admin.components.pos.events')
 
+        @include('admin.components.pos.inventory')
+
 
       </div>
 
@@ -103,42 +105,68 @@
                   Rooms
                 </h3>
                 <div class="w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mb-4"></div>
-                @forelse ($reservationroom as $reserveroom)
-                  <div class="space-y-3 mb-4">
-                    <div class="relative group">
-                      <div
-                        class="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 hover:shadow-sm transition-shadow">
-                        <img src="{{ asset($reserveroom->roomphoto) }}" class="w-16 h-16 rounded-lg object-cover shadow-sm"
-                          alt="Room">
+          @forelse ($reservationroom as $reserve)
+            @php
+              // Only display each reservation once
+              static $displayedRooms = [];
+            @endphp
 
-                        <div class="flex-1">
-                          <h3 class="font-semibold text-gray-900 text-sm mb-1">{{ $reserveroom->roomtype }}</h3>
-                          <p class="text-xs text-gray-500">{{ $reserveroom->reservation_numguest }} Guests</p>
-                        </div>
+            @if(!in_array($reserve->reservationposID, $displayedRooms))
+              <div class="space-y-3 mb-4 p-4 bg-white rounded-xl shadow-sm border border-gray-200">
 
-                        <div class="flex flex-col items-end gap-1">
-                          <div class="font-bold text-blue-600 text-base">₱{{ number_format($reserveroom->total, 2) }}</div>
-                          <button type="button"
-                            class="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 rounded-md transition-all"
-                            onclick="document.getElementById('removeroom_{{ $reserveroom->reservationposID }}').showModal()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                              <polyline points="3 6 5 6 21 6"></polyline>
-                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                              <line x1="10" y1="11" x2="10" y2="17"></line>
-                              <line x1="14" y1="11" x2="14" y2="17"></line>
-                            </svg>
-                          </button>
-                        </div>
+                <!-- Room Info -->
+                <div class="flex items-center gap-3 mb-3">
+                  <img src="{{ asset($reserve->roomphoto) }}" class="w-16 h-16 rounded-lg object-cover shadow-sm"
+                    alt="{{ $reserve->roomtype }}">
+
+                  <div class="flex-1">
+                    <h3 class="font-semibold text-gray-900 text-sm mb-1">{{ $reserve->roomtype }}</h3>
+                    <p class="text-xs text-gray-500">Total: ₱{{ number_format($reserve->total, 2) }}</p>
+                  </div>
+
+                  <!-- Delete Room -->
+                  <button type="button" class="text-red-500 hover:text-red-700 p-1 rounded-md"
+                    onclick="document.getElementById('removeroom_{{ $reserve->reservationposID }}').showModal()">
+                    <!-- Trash Icon -->
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+
+                <!-- Additional Inventory Items -->
+                @foreach ($reservationroom as $additional)
+                  @if($additional->reservationposID == $reserve->reservationposID && $additional->core1_inventory_name)
+                    <div class="flex items-center gap-3 mb-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
+                      <img src="{{ asset($additional->core1_inventory_image) }}" class="w-10 h-10 rounded object-cover shadow-sm"
+                        alt="{{ $additional->core1_inventory_name }}">
+
+                      <div class="flex-1">
+                        <h4 class="font-semibold text-gray-800 text-sm">{{ $additional->core1_inventory_name }}</h4>
+                        <p class="text-xs text-gray-500">Quantity: {{ $additional->inventorypos_quantity }}</p>
+                        <p class="text-xs text-gray-500">Total: ₱{{ number_format($additional->inventorypos_total, 2) }}</p>
                       </div>
+
+                      <!-- Delete Additional -->
+                      <button type="button" class="text-red-500 hover:text-red-700 p-1 rounded-md"
+                        onclick="document.getElementById('removeinventory_{{ $additional->inventoryposID }}').showModal()">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
                     </div>
-                  </div>
-                @empty
-                  <div class="flex flex-col items-center justify-center py-6 text-gray-400">
-                    <i class="fas fa-bed text-3xl mb-2"></i>
-                    <p class="text-sm">No rooms selected</p>
-                  </div>
-                @endforelse
+                  @endif
+                @endforeach
+
+              </div>
+
+              @php
+                $displayedRooms[] = $reserve->reservationposID;
+              @endphp
+            @endif
+          @empty
+            <div class="flex flex-col items-center justify-center py-6 text-gray-400">
+              <i class="fas fa-calendar text-3xl mb-2"></i>
+              <p class="text-sm">No rooms or additional items selected</p>
+            </div>
+          @endforelse
+
               </div>
 
               <!-- Events Section -->
@@ -152,7 +180,7 @@
                   <div class="space-y-3 mb-4">
                     <div class="relative group">
                       <div
-                        class="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 hover:shadow-sm transition-shadow">
+                        class="flex items-center gap-3 p-3 bg-gradient-to-r rounded-xl border border-blue-100 hover:shadow-sm transition-shadow">
                         <img src="{{ $reserveevent->eventtype_photo }}" class="w-16 h-16 rounded-lg object-cover shadow-sm"
                           alt="Event">
 
@@ -256,7 +284,7 @@
           </div>
 
           {{-- modal --}}
-          @include('admin.components.bas.confirmation')
+          
           @livewireScripts
           @include('javascriptfix.soliera_js')
 
@@ -268,6 +296,13 @@
             @include('admin.components.pos.removeevent')
           @endforeach
 
+          @foreach ($inventories as $inventory)
+            @include('admin.components.pos.inventorymodal')
+          @endforeach
+
+            @foreach ($reservationroom as $additional)
+              @include('admin.components.pos.removeadditional')
+            @endforeach
              <!-- Confirm Booking Modal -->
    @include('admin.components.pos.posconfirm')
       </body>

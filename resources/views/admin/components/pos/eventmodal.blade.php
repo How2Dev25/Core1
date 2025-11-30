@@ -172,7 +172,7 @@ $today = \Carbon\Carbon::today()->format('Y-m-d');
                                 </span>
                             </label>
                             <input type="number" name="event_numguest" id="eventNumGuest_{{ $eventtype->eventtype_ID }}"
-                                min="1" max="{{ $eventtype->eventtype_capacity }}"
+                                min="1" max=""
                                 class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
                                 required />
                         </div>
