@@ -529,24 +529,7 @@
                             </label>
 
                             <!-- Online Payment -->
-                            <label
-                                class="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:border-[#001f54] hover:bg-[#001f54]/5 transition-all duration-300">
-                                <input type="radio" name="payment_method" value="online" class="radio radio-primary">
-                                <div class="p-2 bg-green-500 rounded-xl">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                        fill="none" stroke="white" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <rect x="1" y="3" width="15" height="13"></rect>
-                                        <path d="m16 8 2-2 2 2"></path>
-                                        <path d="M21 14V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h11"></path>
-                                        <path d="M5 12V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-[#001f54]">Online Payment</span>
-                                    <p class="text-sm text-gray-600">Secure online payment</p>
-                                </div>
-                            </label>
+                          
                         </div>
                     </div>
 

@@ -27,6 +27,7 @@ use App\Models\DeptLogs;
 use App\Models\dynamicBilling;
 use App\Models\Ecm;
 use App\Models\ecmtype;
+use App\Models\eventPOS;
 use App\Models\facility;
 use App\Models\Guest;
 use App\Models\guestloyaltypoints;
@@ -320,6 +321,11 @@ Route::get('/pointofsale', function(){
       ->latest('reservationPOS.created_at')
       ->get(); 
 
+      $reservationevent = eventPOS::join('core1_eventtype', 'core1_eventtype.eventtype_ID', '=', 
+      'eventpos.eventtype_ID')->where('employeeID', Auth::user()->Dept_no)
+      ->latest('eventpos.created_at')
+      ->get();
+
       $servicefee = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
       $taxrate = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
       $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person Fee')->value('dynamic_price');
@@ -335,12 +341,14 @@ Route::get('/pointofsale', function(){
     'ecmtype',
     'rooms',
     'reservationroom',
+    'reservationevent',
 ));
 });
 
 Route::delete('/removeroompos/{reservationposID}', [posController::class, 'removeroom']);
+Route::delete('/removeeventpos/{eventposID}', [posController::class, 'removeEvent' ]);
 Route::post('/submitroompos', [posController::class, 'submitRoom']);
-
+Route::post('/submitEvent', [posController::class, 'submitEvent']);
 
 
 Route::get('/adminprofile', function(){

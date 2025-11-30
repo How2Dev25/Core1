@@ -6,7 +6,7 @@
             <button class="btn btn-sm btn-circle btn-ghost">✕</button>
         </form>
 
-        <form autocomplete="off" action="/bookthisevent" method="POST"
+        <form autocomplete="off" action="/submitEvent" method="POST"
             id="eventBookingForm_{{ $eventtype->eventtype_ID }}" class="flex flex-col gap-8 max-w-7xl mx-auto">
             @csrf
             <input value="{{$eventtype->eventtype_ID}}" type="hidden" name="eventtype_ID"
