@@ -1,4 +1,15 @@
-<div class="events-slider-container relative select-none">
+<div class="events-slider-container relative select-none mt-5">
+    <div class="flex items-center justify-between mb-8">
+        <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#001f54"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 2v3M16 2v3M3 10h18M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10M7 14h.01M12 14h.01M17 14h.01" />
+            </svg>
+            Events
+        </h2>
+        <p class="text-gray-600 text-sm">Book your ideal event</p>
+    </div>
+
     <div id="eventSlider" class="events-slider flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-2 pb-2"
         style="scrollbar-width: none; -ms-overflow-style: none;">
 

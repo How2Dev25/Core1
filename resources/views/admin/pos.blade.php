@@ -60,9 +60,12 @@
                 </script>
               @endif
 
-        @include('admin.components.pos.events')
 
         @include('admin.components.pos.rooms')
+
+        @include('admin.components.pos.events')
+
+
       </div>
 
       <!-- Right: Sticky POS / Booking Summary -->
