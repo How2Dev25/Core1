@@ -188,6 +188,9 @@ public function removeInventory($inventoryposID)
             'additional_quantity' => 'required',
         ]);
 
+          $form['employeeID'] = Auth::user()->Dept_no;
+
+          
     $inventory = Inventory::find($form['core1_inventoryID']);
     if (!$inventory) {
         return back()->with('error', 'Inventory item not found.');

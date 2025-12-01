@@ -20,5 +20,6 @@ class additionalBookingCart extends Model
         'core1_inventoryID',
         'additional_total',
         'additional_quantity',
+        'employeeID',
        ];
 }

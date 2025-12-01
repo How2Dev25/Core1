@@ -176,11 +176,11 @@
                         <option value="">No Reservation Selected</option>
                         @forelse ($bookedreservations as $booked)
                             <option value="{{ $booked->reservationID }}" data-image="{{ asset($booked->roomphoto) }}">
-                                {{ $booked->bookingID }} - {{ $booked->guestname }} - Room {{ $booked->roomID }} -
+                                {{ $booked->bookingID }}  - Room {{ $booked->roomID }} -
                                 {{ $booked->roomtype }}
                             </option>
                         @empty
-                            <option value="" disabled>No Booked Guests</option>
+                            <option value="" disabled>No Booked Room</option>
                         @endforelse
                     </select>
                 </div>
@@ -242,7 +242,7 @@
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
-                    Add to Guest Folio
+                    Add to POS
                 </button>
             </form>
         </div>

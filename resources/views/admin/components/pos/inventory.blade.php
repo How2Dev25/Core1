@@ -37,10 +37,9 @@
                         alt="Photo of {{ $inventory->core1_inventory_name }}"
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:brightness-90">
 
-                    <!-- Overlay on hover -->
+                    <!-- Overlay on hover (optional: you can remove this if you want no hover effects) -->
                     <div
                         class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-400 transform translate-y-4 group-hover:translate-y-0">
-                        <h3 class="text-lg font-bold">{{ $inventory->core1_inventory_name }}</h3>
                         <p class="text-sm text-gray-200">Code: {{ $inventory->core1_inventory_code }}</p>
                     </div>
                 </div>
@@ -48,6 +47,9 @@
                 <!-- Cost and Details -->
                 <div
                     class="p-4 bg-gradient-to-b from-white to-gray-50 group-hover:from-blue-50 group-hover:to-blue-100 transition-colors duration-300">
+                    <!-- Added inventory name here, displayed always -->
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">{{ $inventory->core1_inventory_name }}</h3>
+
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <span class="text-sm text-gray-600">Cost</span>
@@ -81,4 +83,5 @@
             </div>
         @endforelse
     </div>
+
 </div>

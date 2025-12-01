@@ -351,6 +351,7 @@ Route::get('/pointofsale', function(){
         ->get();
       $bookedreservationCart = additionalBookingCart::join('core1_inventory', 'core1_inventory.core1_inventoryID', '=', 'additionalsbookingcart.core1_inventoryID')
       ->join('core1_reservation', 'core1_reservation.reservationID', '=', 'additionalsbookingcart.reservationID')
+      ->where('additionalsbookingcart.employeeID', Auth::user()->Dept_no)
       ->get();
       
     return view('admin.pos', compact(
