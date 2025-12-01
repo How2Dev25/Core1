@@ -19,6 +19,7 @@ use App\Http\Controllers\roomfeedbackController;
 use App\Http\Controllers\roommantenanceController;
 use App\Http\Controllers\stockController;
 use App\Http\Controllers\userController;
+use App\Models\additionalBookingCart;
 use App\Models\AuditTrails;
 use App\Models\Channel;
 use App\Models\channelListings;
@@ -344,6 +345,14 @@ Route::get('/pointofsale', function(){
       $ecmtype = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')->get();
       $rooms = room::where('roomstatus', 'Available')->latest()->get();
       $inventories = Inventory::all();
+
+      $bookedreservations = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+      ->where('core1_reservation.reservation_bookingstatus', 'Checked In')
+        ->get();
+      $bookedreservationCart = additionalBookingCart::join('core1_inventory', 'core1_inventory.core1_inventoryID', '=', 'additionalsbookingcart.core1_inventoryID')
+      ->join('core1_reservation', 'core1_reservation.reservationID', '=', 'additionalsbookingcart.reservationID')
+      ->get();
+      
     return view('admin.pos', compact(
     'servicefee',
     'taxrate',
@@ -354,6 +363,8 @@ Route::get('/pointofsale', function(){
     'reservationroom',
     'reservationevent',
     'inventories',
+    'bookedreservations',
+    'bookedreservationCart',
 ));
 });
 
@@ -364,6 +375,8 @@ Route::post('/submitroompos', [posController::class, 'submitRoom']);
 Route::post('/submitEvent', [posController::class, 'submitEvent']);
 Route::post('/submitInventory', [posController::class, 'submitInventory']);
 Route::delete('/removeadditional/{inventoryposID}', [posController::class, 'removeInventory']);
+Route::post('/submitadditionalbooked', [posController::class, 'additionalBooking']);
+Route::delete('/deleteadditionalbooked/{additionalsID}', [posController::class, 'deleteAdditionalBooking']);
 
 
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\additionalBookingCart;
+use App\Models\additionalsBooking;
 use App\Models\eventPOS;
 use App\Models\Inventory;
 use App\Models\inventoryPOS;
@@ -178,5 +180,52 @@ public function removeInventory($inventoryposID)
 // Undo removal
 
 
-    
+    public function additionalBooking(Request $request){
+        $form = $request->validate([
+            'reservationID' => 'required',
+            'core1_inventoryID' => 'required',
+            'additional_total' => 'required',
+            'additional_quantity' => 'required',
+        ]);
+
+    $inventory = Inventory::find($form['core1_inventoryID']);
+    if (!$inventory) {
+        return back()->with('error', 'Inventory item not found.');
+    }
+
+    // Check stock
+    if ($inventory->core1_inventory_stocks < $form['additional_quantity']) {
+        return back()->with('error', 'Not enough stock available.');
+    }
+
+     $inventory->decrement('core1_inventory_stocks', $form['additional_quantity']);
+
+
+
+        additionalBookingCart::create($form);
+
+        return redirect()->back()->with('success', 'Additional Has been Added');
+    }
+
+
+    public function deleteAdditionalBooking($additionalsID)
+{
+    // Find the additional booking record
+    $additionalBooking = additionalBookingCart::find($additionalsID);
+
+    if (!$additionalBooking) {
+        return back()->with('error', 'Additional booking not found.');
+    }
+
+    // Restore the stock to the inventory
+    $inventory = Inventory::find($additionalBooking->core1_inventoryID);
+    if ($inventory) {
+        $inventory->increment('core1_inventory_stocks', $additionalBooking->additional_quantity);
+    }
+
+    // Delete the additional booking record
+    $additionalBooking->delete();
+
+    return redirect()->back()->with('success', 'Additional booking has been removed and stock restored.');
+}
 }
