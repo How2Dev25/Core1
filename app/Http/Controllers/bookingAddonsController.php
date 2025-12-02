@@ -49,7 +49,7 @@ class bookingAddonsController extends Controller
 
     // 3. Record in billingHistory
     $this->billingHistory(
-        "addon - $additionalbookingID->bookingID",                   
+        "addon - $additionalbookingID->reservationID",                   
         $reservation->guestID ?? null,          
         $reservation->guestname ?? 'Unknown',   
         $additionalbookingID->additional_total,            
