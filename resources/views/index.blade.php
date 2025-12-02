@@ -70,7 +70,7 @@
 
 
     <!-- Testimonials -->
-    @include('landing.testimonials')
+    {{-- @include('landing.testimonials') --}}
 
 
     {{-- Contacts --}}

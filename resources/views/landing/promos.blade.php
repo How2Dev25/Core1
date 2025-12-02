@@ -11,33 +11,7 @@
                 </div>
 
                 <!-- Overlay with improved visibility -->
-                <div
-                    class="absolute inset-0 bg-gradient-to-t from-blue-900/95 via-blue-900/70 to-blue-900/30 flex items-end">
-                    <div class="w-full p-8 pb-20">
-                        <div class="max-w-4xl mx-auto w-full">
-                            <div class="flex items-center gap-3 mb-4 animate-fadeInUp">
-                                <i class="fas fa-gift text-yellow-400 text-3xl drop-shadow-lg"></i>
-                                <h3 class="text-2xl font-bold text-white drop-shadow-lg">Special Offer</h3>
-                            </div>
-
-                            <h4 class="text-5xl font-bold mb-4 text-white drop-shadow-lg animate-fadeInUp"
-                                style="animation-delay: 0.1s;">
-                                {{ $promo->hotelpromoname }}
-                            </h4>
-
-                            <p class="text-lg text-white mb-6 max-w-3xl leading-relaxed drop-shadow animate-fadeInUp"
-                                style="animation-delay: 0.2s;">
-                                {{ $promo->hotelpromodescription }}
-                            </p>
-
-                            <div class="flex items-center gap-3 text-base text-yellow-300 mb-8 animate-fadeInUp"
-                                style="animation-delay: 0.3s;">
-                                <i class="fas fa-clock drop-shadow"></i>
-                                <span class="font-semibold drop-shadow">{{ $promo->hotelpromodaterange }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          
             </div>
         @endforeach
     </div>

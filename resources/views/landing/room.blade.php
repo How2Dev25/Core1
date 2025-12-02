@@ -37,10 +37,7 @@
             </div>
 
             <!-- Favorite Icon -->
-            <button
-              class="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/30">
-              <i class="far fa-heart text-white"></i>
-            </button>
+
           </div>
 
           <!-- Content Section -->
@@ -80,10 +77,10 @@
                   <span class="text-sm text-gray-500 font-normal">/night</span>
                 </p>
               </div>
-              <button
-                class="px-6 py-3 bg-blue-900 hover:bg-blue-800 text-white font-semibold rounded-xl transition-all duration-300 transform group-hover:scale-105 shadow-md hover:shadow-lg">
+              <a href="/selectedroom/{{ $room->roomID }}"
+                class="px-6 py-3 btn btn-primary text-white font-semibold rounded-xl transition-all duration-300 transform group-hover:scale-105 shadow-md hover:shadow-lg">
                 Book Now
-              </button>
+              </a>
             </div>
           </div>
 
@@ -115,11 +112,11 @@
     <!-- Optional: View All Rooms Button -->
     @if($rooms->count() > 6)
       <div class="text-center mt-12" data-aos="fade-up">
-        <button
+        <a href="/roomselectionlanding"
           class="px-10 py-4 bg-[#F7B32B] hover:bg-[#e5a526] text-blue-900 font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
           View All Rooms
           <i class="fas fa-arrow-right ml-2"></i>
-        </button>
+        </a>
       </div>
     @endif
   </div>
