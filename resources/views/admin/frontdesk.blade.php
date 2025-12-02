@@ -279,6 +279,10 @@
                   <livewire:event-reservations />
               </div>
 
+              <div class="w-full">
+                @include('admin.components.frontdesk.additionalstable')
+              </div>
+
             </div>
 
 
@@ -307,7 +311,10 @@
           @include('admin.components.frontdesk.vieweventcalendar')
 
 
-
+          @foreach ($additionalBooking as $booking)
+              @include('admin.components.frontdesk.addonremove')
+              @include('admin.components.frontdesk.addonpaid')
+          @endforeach
 
 
         </main>

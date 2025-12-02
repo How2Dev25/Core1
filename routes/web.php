@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\billingController;
+use App\Http\Controllers\bookingAddonsController;
 use App\Http\Controllers\channelController;
 use App\Http\Controllers\ecmController;
 use App\Http\Controllers\eventtypeController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\roomfeedbackController;
 use App\Http\Controllers\roommantenanceController;
 use App\Http\Controllers\stockController;
 use App\Http\Controllers\userController;
+use App\Models\additionalBooking;
 use App\Models\additionalBookingCart;
 use App\Models\AuditTrails;
 use App\Models\Channel;
@@ -378,6 +380,7 @@ Route::post('/submitInventory', [posController::class, 'submitInventory']);
 Route::delete('/removeadditional/{inventoryposID}', [posController::class, 'removeInventory']);
 Route::post('/submitadditionalbooked', [posController::class, 'additionalBooking']);
 Route::delete('/deleteadditionalbooked/{additionalsID}', [posController::class, 'deleteAdditionalBooking']);
+Route::post('/posDone', [posController::class, 'POSButton']);
 
 
 
@@ -1077,15 +1080,23 @@ Route::get('/frontdesk', function(){
     $nostock = Inventory::where('core1_inventory_stocks', 0)->count();
 
     $inventory = Inventory::latest()->get();
+
+    $additionalBooking = additionalBooking::join('core1_reservation', 'core1_reservation.reservationID', '=', 'additional_booking.reservationID')
+    ->join('core1_inventory', 'core1_inventory.core1_inventoryID', '=', 'additional_booking.core1_inventoryID')
+    ->latest('additional_booking.created_at')
+    ->get();
     
     return view('admin.frontdesk', compact('reserverooms', 'totaleventreservation', 'pendingeventreservation', 
-    'confirmedeventreservation', 'cancelledeventreservation', 'totalItems', 'instock', 'lowstock', 'nostock', 'inventory', ));
+    'confirmedeventreservation', 'cancelledeventreservation', 'totalItems', 'instock', 'lowstock', 'nostock', 'inventory', 'additionalBooking', ));
 });
 
 Route::put('/reservationcheckin/{reservationID}', [reservationController::class, 'checkin']);
 Route::put('/reservationcheckout/{reservationID}', [reservationController::class, 'checkout']);
 Route::put('/reservationcancelled/{reservationID}', [reservationController::class, 'cancel']);
 Route::put('/reservationconfirm/{reservationID}', [reservationController::class, 'confirm']);
+
+Route::put('/addonPaid/{additionalbookingID}', [bookingAddonsController::class, 'markAsPaid']);
+Route::delete('/addonRemove/{additionalbookingID}', [bookingAddonsController::class, 'removeAddon']);
 
 // loyalty and rewards
 

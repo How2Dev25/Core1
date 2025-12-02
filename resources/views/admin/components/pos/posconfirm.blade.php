@@ -1,9 +1,13 @@
 <dialog id="confirm-booking" class="modal">
     <div class="modal-box bg-white rounded-2xl p-0 max-w-md">
+
+        <!-- Close Button -->
         <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
         </form>
+
         <div class="p-6">
+
             <div class="flex items-center gap-3 mb-4">
                 <div class="p-2 bg-green-100 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none"
@@ -14,12 +18,23 @@
                 </div>
                 <h3 class="text-lg font-bold">Submit Bookings</h3>
             </div>
-            <p class="py-4 text-gray-600">Are you sure you want to proceed with these bookings?</p>
-            <div class="modal-action">
-                <form method="dialog" class="flex gap-3 w-full">
-                    <button class="btn btn-outline flex-1">Cancel</button>
-                    <button class="btn btn-primary flex-1 bg-blue-900 text-white">Proceed</button>
+
+            <p class="py-4 text-gray-600">Are you sure you want to proceed with these bookings and Additionals?</p>
+
+            <!-- REAL FORM SUBMIT -->
+            <div class="modal-action w-full">
+
+                <form action="/posDone" method="POST" class="flex gap-3 w-full">
+                    @csrf
+                    <button type="button" class="btn btn-outline flex-1"
+                        onclick="confirm-booking.close()">Cancel</button>
+
+                    <!-- This button SUBMITS the form -->
+                    <button type="submit" class="btn btn-primary flex-1 bg-blue-900 text-white">
+                        Proceed
+                    </button>
                 </form>
+
             </div>
         </div>
     </div>
