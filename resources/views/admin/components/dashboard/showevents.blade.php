@@ -30,39 +30,17 @@
                                         <div class="absolute bottom-0 left-0 right-0 p-6">
                                             <div class="flex items-start justify-between mb-3">
                                                 <div class="flex-1">
-                                                    <span
-                                                        class="inline-block px-3 py-1 bg-yellow-400 text-blue-900 rounded-full text-xs font-bold mb-3">
-                                                        FEATURED EVENT
-                                                    </span>
+                                                   
                                                     <h4
                                                         class="text-2xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">
                                                         {{ $event->eventtype_name }}
                                                     </h4>
-                                                    @if(isset($event->eventtype_description))
-                                                        <p class="text-white/90 text-sm mb-3 line-clamp-2">
-                                                            {{ Str::limit($event->eventtype_description, 100) }}
-                                                        </p>
-                                                    @endif
+                                                  
                                                 </div>
                                             </div>
 
                                             <!-- Event Details -->
-                                            <div class="flex flex-wrap gap-2 mb-4">
-                                                @if(isset($event->eventtype_capacity))
-                                                    <span
-                                                        class="flex items-center gap-1 px-3 py-1.5 bg-white/20 backdrop-blur-sm text-white rounded-lg text-xs">
-                                                        <i class="fas fa-users"></i>
-                                                        <span>{{ $event->eventtype_capacity }} Guests</span>
-                                                    </span>
-                                                @endif
-                                                @if(isset($event->eventtype_price))
-                                                    <span
-                                                        class="flex items-center gap-1 px-3 py-1.5 bg-white/20 backdrop-blur-sm text-white rounded-lg text-xs">
-                                                        <i class="fas fa-tag"></i>
-                                                        <span>₱{{ number_format($event->eventtype_price, 2) }}</span>
-                                                    </span>
-                                                @endif
-                                            </div>
+                                           
 
                                             <!-- CTA Button -->
                                             <button

@@ -19,7 +19,7 @@
             </button>
         </div>
 
-        <div id="roomsSlider"    class="rooms-slider flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-2 pb-4 cursor-grab active:cursor-grabbing
+        <div id="roomsSlider"   class="rooms-slider flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-2 pb-4 cursor-grab active:cursor-grabbing
             scrollbar-hide md:scrollbar-none"
      style="scrollbar-width: none; -ms-overflow-style: none;">
             @forelse($rooms as $room)

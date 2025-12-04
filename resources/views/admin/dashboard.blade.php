@@ -56,17 +56,16 @@
                         @include('admin.components.dashboard.roomsandevents')
 
                         {{-- facilities and events and promotioes --}}
-                        @include('admin.components.dashboard.showmarketing')
+                        @include('admin.components.dashboard.showfacility')
 
-                        <div class="grid grid-cols-2 max-md:grid-cols-1">
-                            @include('admin.components.dashboard.showfacility')
-                            <div class="flex-1">
-                                @include('admin.components.dashboard.showevents')
-                                <div class="flex-1 max-md:w-full">
-                                    @include('admin.components.dashboard.recentactivities')
-                                </div>
-                            </div>
 
+                        <div class="grid grid-cols-2 gap-5 max-md:grid-cols-1">
+                            @include('admin.components.dashboard.recentactivities')
+                            @include('admin.components.dashboard.showmarketing')
+                        </div>
+
+                        <div>
+                            @include('admin.components.dashboard.showevents')
                         </div>
 
                         <!-- Revenue Metrics Section -->

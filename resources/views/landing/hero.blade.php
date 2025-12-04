@@ -137,7 +137,7 @@
             <div class="w-1/2 max-md:w-full gap-5 flex flex-col justify-center items-center text-center px-6 py-8">
             
                 <!-- Tagline - Subtly larger with emphasis -->
-                <div class="opacity-0 animate-slide-in-left" style="animation-delay: 0.4s;">
+                <div data-aos = "zoom-in-right" >
                     <h3 class="text-3xl sm:text-4xl md:text-5xl font-medium text-white/95 tracking-wide italic drop-shadow-lg">
                         Savor The <span class="font-semibold text-amber-200">Stay</span>,
                         <br class="block sm:hidden">
@@ -164,9 +164,9 @@
                 </div>
 
 
-                <div class="flex flex-wrap justify-center items-center gap-6 pt-4 opacity-0 animate-fade-in-up w-full"
-                    style="animation-delay: 1.1s;">
-                    <div class="flex items-center gap-2">
+                <div class="flex flex-wrap justify-center items-center gap-6 pt-4  w-full"
+                   >
+                    <div data-aos="zoom-in-left" data-aos-delay="100" class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
                                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -174,7 +174,7 @@
                         </svg>
                         <span class="text-sm text-gray-300">Monitor Loyalty Points</span>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div data-aos="zoom-in-left"  data-aos-delay="200" class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
                                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -182,7 +182,7 @@
                         </svg>
                         <span class="text-sm text-gray-300">Best Price Guarantee</span>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div data-aos="zoom-in-left" data-aos-delay="300" class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
                                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -197,10 +197,10 @@
 
                 <div class="w-1/2 max-md:w-full">
 
-                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
+                         <div  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
 
                     <!-- Feature Card 1 - Book Rooms -->
-                    <div class="group relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden hover:bg-white/15 transition-all duration-500 cursor-pointer opacity-0 animate-fade-in-up hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20"
+                    <div  class="group relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden hover:bg-white/15 transition-all duration-500 cursor-pointer opacity-0 animate-fade-in-up hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20"
                         style="animation-delay: 0.2s;">
                         <div class="h-40 bg-cover bg-center relative overflow-hidden"
                             style="background-image: url('{{asset('images/defaults/rooms/1 standard/room1.png')}}');">

@@ -87,14 +87,13 @@
                                 <!-- Facilities Grid -->
                                 @include('guest.components.dashboard.facilitysection')
                                 <!-- Reservation Trends Chart -->
-                                @include('guest.components.dashboard.reservationtrend')
 
                             </div>
 
                             <!-- Right Column: Events, Rooms & Promos -->
                             <div class="lg:col-span-4 space-y-6">
                                  <!-- Current Promotion -->
-                             @include('guest.components.dashboard.promotionsection')
+                                 @include('guest.components.dashboard.promotionsection')
                                 <!-- Upcoming Events -->
                                 @include('guest.components.dashboard.eventsection')
 
@@ -105,6 +104,11 @@
 
                             </div>
                         </div>
+
+                        <div class="w-full">
+                            @include('guest.components.dashboard.reservationtrend')
+                        </div>
+
                     </main>
                 </div>
             </div>

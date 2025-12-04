@@ -78,3 +78,12 @@
   .sidebar-item:hover {
     transform: translateX(4px);
   }
+
+  #sidebar {
+  /* If using width transitions, ensure they're smooth */
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* This easing function is less jittery */
+}
+main{
+  transition: none !important;
+}
