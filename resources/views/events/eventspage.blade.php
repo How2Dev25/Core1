@@ -33,14 +33,6 @@
                         </div>
 
                         <!-- Price Tag - Modern & Elegant -->
-                        <div
-                            class="absolute top-4 right-4 backdrop-blur-md bg-white/95 px-4 py-2 rounded-full shadow-xl border border-indigo-100 transform group-hover:scale-105 transition-all duration-300">
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-xs text-gray-500 font-medium">From</span>
-                                <span
-                                    class="text-lg font-bold text-indigo-600">₱{{ number_format($eventtype->eventtype_price, 2) }}</span>
-                            </div>
-                        </div>
 
                         <!-- Professional Badge -->
                         <div
@@ -52,7 +44,7 @@
                                         d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
                                         clip-rule="evenodd" />
                                 </svg>
-                                <span class="text-xs font-semibold text-gray-700">Professional Package</span>
+                                <span class="text-xs font-semibold text-gray-700"> Package</span>
                             </div>
                         </div>
 
@@ -64,6 +56,15 @@
 
                     <!-- Card Content -->
                     <div class="p-6">
+
+                        <div
+                            class="">
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-xs text-gray-500 font-medium">From</span>
+                                <span class="text-lg font-bold text-indigo-600">₱{{ number_format($eventtype->eventtype_price, 2) }}</span>
+                            </div>
+                        </div>
+
                         <!-- Title -->
                         <h3
                             class="text-xl font-bold text-gray-900 mb-3 line-clamp-1 group-hover:text-indigo-600 transition-colors duration-300">
@@ -107,8 +108,8 @@
                         </div>
 
                         <!-- Action Button -->
-                        <a href="/eventbookinglanding/{{ $eventtype->eventtype_ID }}"
-                            class="flex items-center justify-center gap-2 w-full px-4 py-3.5 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white rounded-xl transition-all duration-300 font-semibold text-sm shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40 hover:-translate-y-0.5 group/btn">
+                        <a  href="/eventbookinglanding/{{ $eventtype->eventtype_ID }}"
+                            class="flex btn btn-primary items-center justify-center gap-2 w-full px-4 py-3.5  text-white rounded-xl transition-all duration-300 font-semibold text-sm shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40 hover:-translate-y-0.5 group/btn">
                             <svg class="w-5 h-5 transition-transform group-hover/btn:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
