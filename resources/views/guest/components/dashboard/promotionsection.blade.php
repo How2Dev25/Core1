@@ -12,24 +12,16 @@
                 <div
                     class="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/60 to-transparent p-6 flex flex-col justify-end text-white">
                     <div class="mb-3">
-                        <div class="flex items-center gap-2 mb-2">
+                        <div class="flex items-center gap-2 mb-2 top-5 absolute ">
                             <i class="fas fa-gift text-yellow-400 text-2xl"></i>
-                            <h3 class="text-xl font-bold">Special Offer</h3>
+                            <h3 class="text-xl font-bold">Special Offers</h3>
                         </div>
 
-                        <h4 class="text-2xl font-bold mb-1">{{ $promo->hotelpromoname }}</h4>
-                        <p class="text-sm text-white/90 mb-3">
-                            {{ Str::limit($promo->hotelpromodescription, 80) }}
-                        </p>
-                        <div class="flex items-center gap-2 text-xs text-yellow-300 mb-4">
-                            <i class="fas fa-clock"></i>
-                            <span>{{ $promo->hotelpromodaterange }}</span>
-                        </div>
+                        
+                      
+                       
 
-                        <button
-                            class="w-full py-2 bg-yellow-400 text-blue-900 font-semibold rounded-xl hover:bg-yellow-300 transition-all">
-                            View Details
-                        </button>
+                      
                     </div>
                 </div>
             </div>

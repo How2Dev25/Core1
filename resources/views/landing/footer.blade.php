@@ -113,4 +113,12 @@
 </div>
 
   </div>
+
+  <div class="w-full text-center mt-3 border-t border-[#ffffff22] pt-4">
+    <p class="text-neutral-300 text-sm">
+      © 2025 Soliera Hotel & Restaurant. All Rights Reserved. |
+      <a href="/termsandconditions" class="hover:text-amber-400 transition underline">Terms & Conditions</a> |
+      <a href="#" class="hover:text-amber-400 transition underline">Privacy Policy</a>
+    </p>
+  </div>
 </footer>

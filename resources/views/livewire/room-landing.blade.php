@@ -17,27 +17,19 @@
       <!-- Enhanced Filters Section -->
       <div class="flex flex-col md:flex-row gap-4 w-full lg:w-auto">
         <!-- Status Filter -->
-        <div class="relative">
-          <select wire:model.live="statusFilter"
-            class="select select-bordered select-md w-full md:w-48 bg-white shadow-sm hover:shadow-md transition-shadow">
-            <option value="Available">✅ Available</option>
-          </select>
-          <i
-            class="fas fa-check-circle absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500 pointer-events-none"></i>
-        </div>
+     
 
         <!-- Room Type Filter -->
         <div class="relative">
           <select wire:model.live="typeFilter"
             class="select select-bordered select-md w-full md:w-48 bg-white shadow-sm hover:shadow-md transition-shadow">
-            <option value="">🏠 All Types</option>
-            <option value="Standard">🛏️ Standard</option>
-            <option value="Deluxe">✨ Deluxe</option>
-            <option value="Suite">👑 Suite</option>
-            <option value="Executive">💼 Executive</option>
+            <option value=""> All Types</option>
+            <option value="Standard"> Standard</option>
+            <option value="Deluxe"> Deluxe</option>
+            <option value="Suite"> Suite</option>
+            <option value="Executive"> Executive</option>
           </select>
-          <i
-            class="fas fa-building absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500 pointer-events-none"></i>
+         
         </div>
 
         <!-- Enhanced Search Input -->
@@ -71,35 +63,10 @@
             </div>
 
             <!-- Floating Status Badge -->
-            <div class="absolute top-4 left-4">
-              <span class="badge 
-                    @if($room->roomstatus == 'Available') badge-success
-                    @elseif($room->roomstatus == 'Maintenance') badge-warning
-                    @elseif($room->roomstatus == 'Reserved') badge-info
-                    @elseif($room->roomstatus == 'Occupied') badge-error
-                    @endif
-                    shadow-lg backdrop-blur-sm bg-white/90 text-gray-800 font-medium px-3 py-2 text-sm">
-                @if($room->roomstatus == 'Available')
-                  <i class="fas fa-check-circle mr-1"></i>
-                @elseif($room->roomstatus == 'Maintenance')
-                  <i class="fas fa-tools mr-1"></i>
-                @elseif($room->roomstatus == 'Reserved')
-                  <i class="fas fa-clock mr-1"></i>
-                @elseif($room->roomstatus == 'Occupied')
-                  <i class="fas fa-user mr-1"></i>
-                @endif
-                {{$room->roomstatus}}
-              </span>
-            </div>
+
 
             <!-- Price Tag -->
-            <div class="absolute top-4 right-4">
-              <div
-                class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 px-4 py-2 rounded-full shadow-lg font-bold text-sm">
-                ₱{{number_format($room->roomprice, 2)}}
-                <span class="text-xs opacity-80">/night</span>
-              </div>
-            </div>
+
 
             <!-- Room Title Overlay -->
             <div class="absolute bottom-0 left-0 right-0 p-6">
@@ -114,6 +81,13 @@
 
           <!-- Enhanced Card Body -->
           <div class="card-body p-6 space-y-4">
+            <div class="">
+              <div
+                class=" text-gray-900 px-4 py-2 rounded-full font-bold text-lg">
+                ₱{{number_format($room->roomprice, 2)}}
+                <span class="text-xs opacity-80">/night</span>
+              </div>
+            </div>
             <!-- Room Features Grid -->
             <div class="grid grid-cols-2 gap-4">
               <div class="flex items-center gap-2 text-gray-600">
@@ -156,7 +130,7 @@
             <!-- Book Now Button -->
             <div class="pt-2">
               <div
-                class="w-full bg-gradient-to-r from-blue-900 to-blue-700 hover:from-blue-800 hover:to-blue-600 text-white py-3 px-4 rounded-xl font-semibold text-center transition-all duration-300 group-hover:shadow-lg">
+                class="w-full btn btn-primary text-white py-3 px-4 rounded-xl font-semibold text-center transition-all duration-300 group-hover:shadow-lg">
                 <i class="fas fa-calendar-check mr-2"></i>
                 Book Now
                 <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>

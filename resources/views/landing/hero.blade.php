@@ -26,7 +26,7 @@
         <div class="flex flex-col items-center min-h-[calc(100vh-6rem)]">
 
             <!-- Left Column - Main Content -->
-        <div class="w-full mt-20 flex flex-col justify-center items-center text-center px-4">
+        <div class="w-full mt-20 max-md:mt-45 flex flex-col justify-center items-center text-center px-4">
         
             <!-- Star Rating Section -->
             <div class="opacity-0 animate-slide-in-left w-full flex justify-center" style="animation-delay: 0.1s;">
@@ -125,42 +125,16 @@
             </div>
         
             <!-- Trust Indicators -->
-            <div class="flex flex-wrap justify-center items-center gap-6 pt-4 opacity-0 animate-fade-in-up w-full"
-                style="animation-delay: 1.1s;">
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clip-rule="evenodd" />
-                    </svg>
-                    <span class="text-sm text-gray-300">Monitor Loyalty Points</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clip-rule="evenodd" />
-                    </svg>
-                    <span class="text-sm text-gray-300">Best Price Guarantee</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clip-rule="evenodd" />
-                    </svg>
-                    <span class="text-sm text-gray-300">24/7 Support</span>
-                </div>
-            </div>
+           
         
         </div>
 
 
             <!-- Right Column - Enhanced Features Grid -->
-            <div class="mt-50">
-                <div class="flex gap-5">
+            <div class="mt-50 ">
+                <div class="flex gap-5 max-md:flex-col">
                     {{-- right column --}}
-            <div class="w-1/2 gap-5 flex flex-col justify-center items-center text-center px-6 py-8">
+            <div class="w-1/2 max-md:w-full gap-5 flex flex-col justify-center items-center text-center px-6 py-8">
             
                 <!-- Tagline - Subtly larger with emphasis -->
                 <div class="opacity-0 animate-slide-in-left" style="animation-delay: 0.4s;">
@@ -188,11 +162,40 @@
                         <span class="inline-block w-0.5 h-7 sm:h-8 md:h-9 bg-amber-400 ml-1.5 animate-pulse" id="cursor"></span>
                     </p>
                 </div>
+
+
+                <div class="flex flex-wrap justify-center items-center gap-6 pt-4 opacity-0 animate-fade-in-up w-full"
+                    style="animation-delay: 1.1s;">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-sm text-gray-300">Monitor Loyalty Points</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-sm text-gray-300">Best Price Guarantee</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-sm text-gray-300">24/7 Support</span>
+                    </div>
+                </div>
             
             </div>
 
 
-                    <div class="w-1/2">
+                <div class="w-1/2 max-md:w-full">
 
                          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
 
@@ -344,7 +347,7 @@
                         </div>
                     </div>
                 </div>
-                    </div>
+                </div>
                 </div>
                
             </div>
@@ -353,288 +356,262 @@
 
 
 
-    <style>
-        /* Enhanced Animations */
-        @keyframes slide-in-left {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fade-in-up {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes star-pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.7;
-                transform: scale(0.95);
-            }
-        }
-
-        @keyframes expand-line {
-            from {
-                width: 0;
-            }
-
-            to {
-                width: 5rem;
-            }
-        }
-
-        @keyframes expand-full {
-            from {
-                width: 0;
-            }
-
-            to {
-                width: 100%;
-            }
-        }
-
-        @keyframes text-shimmer {
-            0% {
-                background-position: 200% center;
-            }
-
-            100% {
-                background-position: -200% center;
-            }
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0) translateX(0);
-            }
-
-            50% {
-                transform: translateY(-20px) translateX(10px);
-            }
-        }
-
-        @keyframes float-slow {
-
-            0%,
-            100% {
-                transform: translateY(0) translateX(0) scale(1);
-            }
-
-            50% {
-                transform: translateY(-30px) translateX(-15px) scale(1.1);
-            }
-        }
-
-        @keyframes float-delayed {
-
-            0%,
-            100% {
-                transform: translateY(0) translateX(0) rotate(0deg);
-            }
-
-            50% {
-                transform: translateY(-25px) translateX(15px) rotate(5deg);
-            }
-        }
-
-        @keyframes scroll-indicator {
-            0% {
-                transform: translateY(0);
-                opacity: 0;
-            }
-
-            50% {
-                opacity: 1;
-            }
-
-            100% {
-                transform: translateY(12px);
-                opacity: 0;
-            }
-        }
-
-        .animate-slide-in-left {
-            animation: slide-in-left 0.8s ease-out forwards;
-        }
-
-        .animate-fade-in-up {
-            animation: fade-in-up 0.8s ease-out forwards;
-        }
-
-        .animate-star-pulse {
-            animation: star-pulse 2s ease-in-out infinite;
-        }
-
-        .animate-expand-line {
-            animation: expand-line 1s ease-out forwards;
-            animation-delay: 0.3s;
-        }
-
-        .animate-expand-full {
-            animation: expand-full 1s ease-out forwards;
-            animation-delay: 0.5s;
-        }
-
-        .animate-text-shimmer {
-            animation: text-shimmer 3s linear infinite;
-        }
-
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .animate-float-slow {
-            animation: float-slow 8s ease-in-out infinite;
-        }
-
-        .animate-float-delayed {
-            animation: float-delayed 7s ease-in-out infinite;
-            animation-delay: 1s;
-        }
-
-        .animate-scroll-indicator {
-            animation: scroll-indicator 2s ease-in-out infinite;
-        }
-
-        /* Parallax Effect */
-        .parallax-bg {
-            will-change: transform;
-        }
-
-        /* Responsive Typography */
-        @media (max-width: 640px) {
-            h1 {
-                font-size: 3rem;
-            }
-        }
-
-        /* Smooth Scroll */
-        html {
-            scroll-behavior: smooth;
-        }
-    </style>
-
-    <script>
-        // Typewriter Effect with Multiple Phrases
-        const phrases = [
-            'Welcome to <span class="text-amber-400 font-semibold">Soliera</span> — where luxury meets comfort. Experience world-class hospitality and unforgettable stays.',
-            'Discover <span class="text-amber-400 font-semibold">elegance reimagined</span>. Indulge in exquisite dining, premium accommodations, and exceptional service.',
-            'Your <span class="text-amber-400 font-semibold">perfect escape</span> awaits. From sunrise to sunset, every moment is crafted for your ultimate comfort.',
-            'Experience <span class="text-amber-400 font-semibold">unparalleled luxury</span>. Where modern amenities meet timeless sophistication in the heart of the city.',
-            'At <span class="text-amber-400 font-semibold">Soliera</span>, we don\'t just offer rooms — we create memories that last a lifetime.'
-        ];
-
-        let phraseIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let typeSpeed = 50;
-        const deleteSpeed = 30;
-        const pauseDelay = 3000;
-        const deleteDelay = 1500;
-
-        function typeWriter() {
-            const typewriterEl = document.getElementById('typewriter');
-            const cursor = document.getElementById('cursor');
-
-            if (!typewriterEl || !cursor) return;
-
-            const currentPhrase = phrases[phraseIndex];
-
-            if (!isDeleting && charIndex <= currentPhrase.length) {
-                // Typing
-                typewriterEl.innerHTML = currentPhrase.substring(0, charIndex);
-                charIndex++;
-                typeSpeed = 50;
-
-                if (charIndex === currentPhrase.length + 1) {
-                    // Finished typing, pause before deleting
-                    setTimeout(() => {
-                        isDeleting = true;
-                        typeWriter();
-                    }, pauseDelay);
-                    return;
-                }
-            } else if (isDeleting && charIndex > 0) {
-                // Deleting
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = currentPhrase;
-                const textContent = tempDiv.textContent || tempDiv.innerText;
-
-                let currentText = currentPhrase.substring(0, charIndex);
-                typewriterEl.innerHTML = currentText;
-                charIndex--;
-                typeSpeed = deleteSpeed;
-
-                if (charIndex === 0) {
-                    // Finished deleting
-                    isDeleting = false;
-                    phraseIndex = (phraseIndex + 1) % phrases.length;
-                    setTimeout(() => {
-                        typeWriter();
-                    }, 500);
-                    return;
-                }
-            }
-
-            setTimeout(typeWriter, typeSpeed);
-        }
-
-        // Start typewriter effect after initial animation
-        setTimeout(() => {
-            typeWriter();
-        }, 1500);
-
-        // Enhanced Parallax Effect
-        let lastScrollY = window.scrollY;
-        let ticking = false;
-
-        function updateParallax() {
-            const parallaxBg = document.querySelector('.parallax-bg');
-            if (parallaxBg) {
-                const scrolled = window.scrollY;
-                parallaxBg.style.transform = `translateY(${scrolled * 0.5}px) scale(1.1)`;
-            }
-            ticking = false;
-        }
-
-        window.addEventListener('scroll', () => {
-            lastScrollY = window.scrollY;
-            if (!ticking) {
-                window.requestAnimationFrame(updateParallax);
-                ticking = true;
-            }
-        });
-
-        // Add hover effect for feature cards
-        document.querySelectorAll('.group').forEach(card => {
-            card.addEventListener('mouseenter', function () {
-                this.style.transform = 'translateY(-8px) scale(1.02)';
-            });
-            card.addEventListener('mouseleave', function () {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-    </script>
 </section>
+
+
+
+<style>
+    /* Enhanced Animations */
+    @keyframes slide-in-left {
+        from {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes fade-in-up {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes star-pulse {
+
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+    }
+
+    @keyframes expand-line {
+        from {
+            width: 0;
+        }
+
+        to {
+            width: 5rem;
+        }
+    }
+
+    @keyframes expand-full {
+        from {
+            width: 0;
+        }
+
+        to {
+            width: 100%;
+        }
+    }
+
+    @keyframes text-shimmer {
+        0% {
+            background-position: 200% center;
+        }
+
+        100% {
+            background-position: -200% center;
+        }
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0) translateX(0);
+        }
+
+        50% {
+            transform: translateY(-20px) translateX(10px);
+        }
+    }
+
+    @keyframes float-slow {
+
+        0%,
+        100% {
+            transform: translateY(0) translateX(0) scale(1);
+        }
+
+        50% {
+            transform: translateY(-30px) translateX(-15px) scale(1.1);
+        }
+    }
+
+    @keyframes float-delayed {
+
+        0%,
+        100% {
+            transform: translateY(0) translateX(0) rotate(0deg);
+        }
+
+        50% {
+            transform: translateY(-25px) translateX(15px) rotate(5deg);
+        }
+    }
+
+    .animate-slide-in-left {
+        animation: slide-in-left 0.8s ease-out forwards;
+    }
+
+    .animate-fade-in-up {
+        animation: fade-in-up 0.8s ease-out forwards;
+    }
+
+    .animate-star-pulse {
+        animation: star-pulse 2s ease-in-out infinite;
+    }
+
+    .animate-expand-line {
+        animation: expand-line 1s ease-out forwards;
+        animation-delay: 0.3s;
+    }
+
+    .animate-expand-full {
+        animation: expand-full 1s ease-out forwards;
+        animation-delay: 0.5s;
+    }
+
+    .animate-text-shimmer {
+        animation: text-shimmer 3s linear infinite;
+    }
+
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .animate-float-slow {
+        animation: float-slow 8s ease-in-out infinite;
+    }
+
+    .animate-float-delayed {
+        animation: float-delayed 7s ease-in-out infinite;
+        animation-delay: 1s;
+    }
+
+    /* Parallax Effect */
+    .parallax-bg {
+        will-change: transform;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
+<script>
+    // Typewriter Effect with Multiple Phrases
+    const phrases = [
+        'Welcome to <span class="text-amber-400 font-semibold">Soliera</span> — where luxury meets comfort. Experience world-class hospitality and unforgettable stays.',
+        'Discover <span class="text-amber-400 font-semibold">elegance reimagined</span>. Indulge in exquisite dining, premium accommodations, and exceptional service.',
+        'Your <span class="text-amber-400 font-semibold">perfect escape</span> awaits. From sunrise to sunset, every moment is crafted for your ultimate comfort.',
+        'Experience <span class="text-amber-400 font-semibold">unparalleled luxury</span>. Where modern amenities meet timeless sophistication in the heart of the city.',
+        'At <span class="text-amber-400 font-semibold">Soliera</span>, we don\'t just offer rooms — we create memories that last a lifetime.'
+    ];
+
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let typeSpeed = 50;
+    const deleteSpeed = 30;
+    const pauseDelay = 3000;
+    const deleteDelay = 1500;
+
+    function typeWriter() {
+        const typewriterEl = document.getElementById('typewriter');
+        const cursor = document.getElementById('cursor');
+
+        if (!typewriterEl || !cursor) return;
+
+        const currentPhrase = phrases[phraseIndex];
+
+        if (!isDeleting && charIndex <= currentPhrase.length) {
+            // Typing
+            typewriterEl.innerHTML = currentPhrase.substring(0, charIndex);
+            charIndex++;
+            typeSpeed = 50;
+
+            if (charIndex === currentPhrase.length + 1) {
+                // Finished typing, pause before deleting
+                setTimeout(() => {
+                    isDeleting = true;
+                    typeWriter();
+                }, pauseDelay);
+                return;
+            }
+        } else if (isDeleting && charIndex > 0) {
+            // Deleting
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = currentPhrase;
+            const textContent = tempDiv.textContent || tempDiv.innerText;
+
+            let currentText = currentPhrase.substring(0, charIndex);
+            typewriterEl.innerHTML = currentText;
+            charIndex--;
+            typeSpeed = deleteSpeed;
+
+            if (charIndex === 0) {
+                // Finished deleting
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                setTimeout(() => {
+                    typeWriter();
+                }, 500);
+                return;
+            }
+        }
+
+        setTimeout(typeWriter, typeSpeed);
+    }
+
+    // Start typewriter effect after initial animation
+    setTimeout(() => {
+        typeWriter();
+    }, 1500);
+
+    // Enhanced Parallax Effect
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    function updateParallax() {
+        const parallaxBg = document.querySelector('.parallax-bg');
+        if (parallaxBg) {
+            const scrolled = window.scrollY;
+            parallaxBg.style.transform = `translateY(${scrolled * 0.5}px) scale(1.1)`;
+        }
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+        lastScrollY = window.scrollY;
+        if (!ticking) {
+            window.requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    });
+
+    // Add hover effect for feature cards
+    document.querySelectorAll('.group').forEach(card => {
+        card.addEventListener('mouseenter', function () {
+            this.style.transform = 'translateY(-8px) scale(1.02)';
+        });
+        card.addEventListener('mouseleave', function () {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+</script>

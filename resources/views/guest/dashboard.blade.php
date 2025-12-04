@@ -93,10 +93,11 @@
 
                             <!-- Right Column: Events, Rooms & Promos -->
                             <div class="lg:col-span-4 space-y-6">
+                                 <!-- Current Promotion -->
+                             @include('guest.components.dashboard.promotionsection')
                                 <!-- Upcoming Events -->
                                 @include('guest.components.dashboard.eventsection')
-                                <!-- Current Promotion -->
-                                @include('guest.components.dashboard.promotionsection')
+
                                 <!-- Points Breakdown -->
                                 @include('guest.components.dashboard.pointschart')
                                 <!-- Featured Room -->

@@ -202,6 +202,13 @@ Route::get('/', function () {
     ));
 });
 
+// terms and conditions
+
+Route::get('/termsandconditions', function(){
+    return view('landing.termsandcondition');
+});
+
+
 // resto integ
 
 Route::get('/restoadmin', function () {

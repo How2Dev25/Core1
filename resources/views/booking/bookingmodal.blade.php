@@ -34,17 +34,9 @@
           </div>
 
           <!-- Content -->
-          <div class="absolute inset-0 flex flex-col items-center justify-center text-white p-6">
+          <div class="absolute bottom-0 left-0 right-0 flex flex-col items-center justify-center text-white p-6">
             <a href="/roomselectionlanding"
               class="text-center transform group-hover:scale-110 transition-all duration-400">
-              <div
-                class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
-                <i class="fas fa-bed text-4xl text-yellow-400"></i>
-              </div>
-              <h4 class="text-2xl font-bold mb-3">Hotel Rooms</h4>
-              <p class="text-white/90 mb-6 max-w-sm">
-                Book comfortable and luxurious rooms for your perfect stay experience
-              </p>
               <div
                 class="bg-yellow-400 text-blue-900 px-6 py-3 rounded-full font-bold text-lg shadow-lg transform group-hover:bg-yellow-300 transition-all duration-300">
                 <i class="fas fa-calendar-plus mr-2"></i>
@@ -54,10 +46,7 @@
           </div>
 
           <!-- Corner Icon -->
-          <div
-            class="absolute top-4 right-4 w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-            <i class="fas fa-door-open text-yellow-400 text-xl"></i>
-          </div>
+         
         </div>
       </div>
 
@@ -73,17 +62,9 @@
           </div>
 
           <!-- Content -->
-          <div class="absolute inset-0 flex flex-col items-center justify-center text-white p-6">
+          <div class="absolute bottom-0 left-0 right-0 flex flex-col items-center justify-center text-white p-6">
             <a href="/eventselectionlanding">
               <div class="text-center transform group-hover:scale-110 transition-all duration-400">
-                <div
-                  class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
-                  <i class="fas fa-glass-cheers text-4xl text-blue-900"></i>
-                </div>
-                <h4 class="text-2xl font-bold mb-3">Events & Conference</h4>
-                <p class="text-white/90 mb-6 max-w-sm">
-                  Host memorable events in our elegant venues and celebration spaces
-                </p>
                 <div
                   class="bg-blue-900 text-yellow-400 px-6 py-3 rounded-full font-bold text-lg shadow-lg transform group-hover:bg-blue-800 transition-all duration-300">
                   <i class="fa-solid fa-calendar-days mr-2"></i>
@@ -94,10 +75,7 @@
           </div>
 
           <!-- Corner Icon -->
-          <div
-            class="absolute top-4 right-4 w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-            <i class="fas fa-champagne-glasses text-blue-900 text-xl"></i>
-          </div>
+         
         </div>
       </div>
     </div>

@@ -48,30 +48,10 @@
 
                                         <!-- Content Overlay -->
                                         <div class="absolute bottom-0 left-0 right-0 p-4">
-                                            <h4 class="text-lg font-bold text-white mb-3 line-clamp-1">
-                                                {{ $event->eventtype_name }}
-                                            </h4>
+                                           
 
                                             <!-- Event Details -->
-                                            <div class="flex justify-between items-center mb-4">
-                                                @if(isset($event->eventtype_capacity))
-                                                    <div class="flex items-center gap-2">
-                                                        <i class="fas fa-users text-yellow-400 text-sm"></i>
-                                                        <span
-                                                            class="text-white text-sm font-medium">{{ $event->eventtype_capacity }}
-                                                            Guests</span>
-                                                    </div>
-                                                @endif
-
-                                                @if(isset($event->eventtype_price))
-                                                    <div class="flex items-center gap-2">
-                                                        <i class="fas fa-tag text-yellow-400 text-sm"></i>
-                                                        <span
-                                                            class="text-white text-sm font-bold">₱{{ number_format($event->eventtype_price, 2) }}</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-
+                                         
                                             <!-- CTA Button - Colored -->
                                             <a href="/eventbookingguest/{{ $event->eventtype_ID }}"
                                                 class="block w-full py-3 bg-yellow-400 text-blue-900  hover:bg-yellow-300  font-bold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-105 shadow-lg">

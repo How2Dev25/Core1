@@ -5,9 +5,23 @@
         <!-- Gradient fade edges for visual polish -->
 
 
-        <div class="rooms-slider flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-2 pb-4 cursor-grab active:cursor-grabbing"
-            style="scrollbar-width: none; -ms-overflow-style: none;" onmousedown="this.classList.add('dragging')"
-            onmouseup="this.classList.remove('dragging')" onmouseleave="this.classList.remove('dragging')">
+        <div class="hidden md:flex justify-between items-center mb-3 px-2">
+            <button onclick="slideRooms(-1)" class="p-3 bg-white shadow rounded-full hover:bg-gray-100 transition border">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+        
+            <button onclick="slideRooms(1)" class="p-3 bg-white shadow rounded-full hover:bg-gray-100 transition border">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="roomsSlider"    class="rooms-slider flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-2 pb-4 cursor-grab active:cursor-grabbing
+            scrollbar-hide md:scrollbar-none"
+     style="scrollbar-width: none; -ms-overflow-style: none;">
             @forelse($rooms as $room)
                 <div class="group cursor-pointer flex-shrink-0 w-64 snap-start transition-all duration-300">
                     <a target="_blank" href="/roomdetails/{{ $room->roomID }}">
@@ -122,4 +136,13 @@
         }
 
     });
+
+      function slideRooms(direction) {
+            const slider = document.getElementById("roomsSlider");
+            const cardWidth = 300; // Adjust based on your card width
+            slider.scrollBy({
+                left: direction * cardWidth,
+                behavior: "smooth"
+            });
+        }
 </script>
