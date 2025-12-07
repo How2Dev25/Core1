@@ -629,7 +629,7 @@ Route::get('/departmentaccount', function(){
 Route::get('/guestaccount', function(){
      employeeAuthCheck();
      verifyusermanagement();
-    $guest = Guest::paginate(5); // 10 guests per page
+    $guest = Guest::latest('created_at')->paginate(5); // 10 guests per page
     $totalguest = Guest::count();
     $checkinguest = Reservation::where('reservation_bookingstatus', 'Checked in')->count();
     $pendingguest = Reservation::where('reservation_bookingstatus', 'Pending')->count();

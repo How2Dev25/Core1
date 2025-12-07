@@ -35,7 +35,7 @@
                         </div>
 
                     <button type="button" onclick="openEventModal({{ $eventtype->eventtype_ID }})"
-                        class="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">
+                        class="w-full btn btn-primary text-white px-4 py-2 rounded-lg text-sm font-semibold">
                         Book Event
                     </button>
                     </div>

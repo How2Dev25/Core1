@@ -29,5 +29,6 @@ class ReservationPOS extends Model
         'serviceFee',
         'total',
         'employeeID',
+        'reservation_validID',
     ];
 }

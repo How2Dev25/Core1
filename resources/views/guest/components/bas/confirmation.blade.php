@@ -8,6 +8,8 @@
       <button class="btn btn-sm btn-circle btn-ghost">&times;</button>
     </form>
 
+    @include('booking.roombookingterms')
+
     <div class="text-center p-6">
       <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 mb-4">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
@@ -63,6 +65,8 @@
       toast.classList.add('translate-x-24', 'opacity-0');
       toast.addEventListener('transitionend', () => toast.remove());
     }, 4000);
+
+    
   }
 
   async function submitReservation() {
@@ -95,8 +99,13 @@
           return;
         }
 
+
+
         // ✅ Pay at Hotel
-        showToast(`Booking successful! Booking ID: ${data.bookingID || 'N/A'}`, 'success');
+          if (data.redirect) {
+          window.location.href = data.redirect;
+          return;
+        }
       } else {
         throw new Error(data.message || 'Failed to book room');
       }

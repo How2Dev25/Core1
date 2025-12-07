@@ -107,7 +107,8 @@
                             <span
                                 class="badge py-1.5 px-3
                                                                                                                                                 @if(strtolower($reservation->eventstatus) == 'approved') badge-success
-                                                                                                                                                @elseif(strtolower($reservation->eventstatus) == 'pending') badge-neutral
+                                                                                                                                                @elseif(strtolower($reservation->eventstatus) == 'done') badge-success
+                                                                                                                                                @elseif(strtolower($reservation->eventstatus) == 'pending') badge-accent
                                                                                                                                                 @elseif(strtolower($reservation->eventstatus) == 'cancelled') badge-error
                                                                                                                                                 @endif
                                                                                                                                             ">

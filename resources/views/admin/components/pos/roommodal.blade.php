@@ -1,4 +1,4 @@
-<!-- Order Modal -->
+  <!-- Order Modal -->
 <dialog id="bookroom_{{ $room->roomID }}" class="modal">
     <div class="modal-box max-w-4xl bg-white rounded-2xl shadow-xl">
         <!-- Header -->
@@ -7,7 +7,7 @@
         </form>
 
 
-   <form autocomplete="off" action="submitroompos" method="POST" id="reservationForm"
+   <form autocomplete="off" action="submitroompos" method="POST" id="reservationForm" enctype="multipart/form-data"
             class="flex flex-col gap-8 max-w-7xl mx-auto">
             @csrf
             <input value="{{$room->roomID}}" type="hidden" name="roomID" data-price="{{$room->roomprice}}" />
@@ -140,9 +140,11 @@
                                     Number of Guests (Max {{ $room->roommaxguest }})
                                     <span class="text-red-500">*</span>
                                 </span>
+
+                                <p id="roomMaxGuest" class="hidden">{{ $room->roommaxguest }}</p>
                             </label>
 
-                            <input type="number" name="reservation_numguest" min="1"
+                            <input type="number" name="reservation_numguest" min="1" 
                                 class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
                                 required />
 
@@ -335,43 +337,223 @@
                         <input type="hidden" name="total" id="hiddenTotal">
                     </div>
                 </div>
+
+                    <div class="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="p-3 bg-gradient-to-br from-[#001f54] to-[#1a3470] rounded-2xl shadow-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="#F7B32B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold bg-gradient-to-r from-[#001f54] to-[#1a3470] bg-clip-text text-transparent">
+                                    Valid ID Upload
+                                </h2>
+                                <p class="text-gray-600">Please upload a clear photo of your valid ID</p>
+                            </div>
+                        </div>
+                    
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- File Input Section -->
+                            <div class="form-control">
+                                <label class="label font-semibold text-[#001f54] mb-2">
+                                    <span class="flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="17 8 12 3 7 8"></polyline>
+                                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                                        </svg>
+                                        Upload Valid ID
+                                        <span class="text-red-500">*</span>
+                                    </span>
+                                </label>
+                            <input type="file" name="reservation_validID" id="validIdInput_{{ $room->roomID }}"
+                                class="file-input file-input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
+                                accept="image/*" required />
+
+                                <p class="text-sm text-gray-500 mt-2">Accepted: JPG, PNG, PDF (Max 5MB)</p>
+                            </div>
+                    
+                            <!-- Image Preview Section -->
+                            <div id="imagePreviewContainer_{{ $room->roomID }}" class="form-control">
+                                <label class="label font-semibold text-[#001f54] mb-2">
+                                    <span class="flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                            <polyline points="21 15 16 10 5 21"></polyline>
+                                        </svg>
+                                        ID Preview
+                                    </span>
+                                </label>
+                                <div id="imagePreviewContainer"
+                                    class="border-2 border-dashed border-gray-300 rounded-xl p-4 h-48 flex items-center justify-center bg-gray-50">
+                                    <div class="text-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                                            stroke="#9CA3AF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                                            class="mx-auto mb-2">
+                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                            <polyline points="21 15 16 10 5 21"></polyline>
+                                        </svg>
+                                        <p class="text-gray-500">Preview will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- JavaScript for image preview -->
+                  <script>
+// Image Preview Handler for Multiple Modals
+const ModalImagePreview = {
+    // Initialize image preview for all modals
+    init() {
+        // Set up event listeners for file inputs in all modals
+        document.querySelectorAll('dialog[id^="bookroom_"]').forEach(modal => {
+            this.setupImagePreviewForModal(modal);
+        });
+        
+        // Also set up for dynamically opened modals
+        this.setupModalObserver();
+    },
+    
+    // Set up image preview for a specific modal
+    setupImagePreviewForModal(modal) {
+        const fileInput = modal.querySelector('input[name="reservation_validID"]');
+        const previewContainer = modal.querySelector('#imagePreviewContainer');
+        
+        if (!fileInput || !previewContainer) return;
+        
+        // Store references on the input for cleanup
+        fileInput._previewHandler = (e) => this.handleImagePreview(e, modal);
+        fileInput.addEventListener('change', fileInput._previewHandler);
+        
+        // Store modal reference
+        modal._fileInput = fileInput;
+    },
+    
+    // Handle image preview for a specific modal
+    handleImagePreview(e, modal) {
+        const fileInput = e.target;
+        const previewContainer = modal.querySelector('#imagePreviewContainer');
+        const file = fileInput.files[0];
+
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                alert('File size exceeds 5MB limit');
+                fileInput.value = '';
+                this.resetPreview(previewContainer);
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                previewContainer.innerHTML = `
+                    <img src="${event.target.result}" 
+                         alt="ID Preview" 
+                         class="w-full h-full object-contain rounded-lg">
+                `;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            this.resetPreview(previewContainer);
+        }
+    },
+    
+    // Reset preview to default state
+    resetPreview(previewContainer) {
+        if (!previewContainer) return;
+        
+        previewContainer.innerHTML = `
+            <div class="text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+                    fill="none" stroke="#9CA3AF" stroke-width="1" stroke-linecap="round"
+                    stroke-linejoin="round" class="mx-auto mb-2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <p class="text-gray-500">Preview will appear here</p>
+            </div>
+        `;
+    },
+    
+    // Set up observer for dynamically created modals
+    setupModalObserver() {
+        // Watch for modal open events
+        document.addEventListener('show', (e) => {
+            const modal = e.target;
+            if (modal.tagName === 'DIALOG' && modal.id.startsWith('bookroom_')) {
+                this.setupImagePreviewForModal(modal);
+            }
+        });
+        
+        // Clean up when modal closes
+        document.addEventListener('close', (e) => {
+            const modal = e.target;
+            if (modal.tagName === 'DIALOG' && modal._fileInput) {
+                // Remove event listener
+                if (modal._fileInput._previewHandler) {
+                    modal._fileInput.removeEventListener('change', modal._fileInput._previewHandler);
+                    delete modal._fileInput._previewHandler;
+                }
+                delete modal._fileInput;
+                
+                // Reset preview
+                const previewContainer = modal.querySelector('#imagePreviewContainer');
+                this.resetPreview(previewContainer);
+            }
+        });
+    },
+    
+    // Clean up all event listeners
+    cleanup() {
+        document.querySelectorAll('dialog[id^="bookroom_"]').forEach(modal => {
+            const fileInput = modal.querySelector('input[name="reservation_validID"]');
+            if (fileInput && fileInput._previewHandler) {
+                fileInput.removeEventListener('change', fileInput._previewHandler);
+                delete fileInput._previewHandler;
+            }
+        });
+    }
+};
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    ModalImagePreview.init();
+});
+
+// Also re-initialize if modals are added dynamically
+if (typeof MutationObserver !== 'undefined') {
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'childList') {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === 1 && node.tagName === 'DIALOG' && node.id.startsWith('bookroom_')) {
+                        ModalImagePreview.setupImagePreviewForModal(node);
+                    }
+                });
+            }
+        });
+    });
+    
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+</script>
+
             </div>
 
             <!-- RIGHT SIDE (Enhanced Billing Summary) -->
             <div class="w-full ">
 
-                <!-- Session Messages -->
-                @if(session('success'))
-                    <div role="alert"
-                        class="alert alert-success mb-6 rounded-2xl shadow-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>{{session('success')}}</span>
-                    </div>
-                @elseif(session('modified'))
-                    <div role="alert"
-                        class="alert alert-success mb-6 rounded-2xl shadow-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>{{session('modified')}}</span>
-                    </div>
-                @elseif(session('removed'))
-                    <div role="alert"
-                        class="alert alert-success mb-6 rounded-2xl shadow-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>{{session('removed')}}</span>
-                    </div>
-                @endif
+          
+         
 
                 <!-- Billing Summary Card -->
                 <div
@@ -535,7 +717,7 @@
 
                     <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <button type="reset" class="btn btn-ghosts rounded-md">
+                        <button onclick="document.getElementById('bookroom_{{ $room->roomID }}').close()" type="button" class="btn btn-ghosts rounded-md">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -579,6 +761,22 @@
                 backdrop-filter: blur(10px);
                 border: 1px solid rgba(255, 255, 255, 0.2);
             }
+             .border-red-500 {
+        border-color: #ef4444 !important;
+    }
+    
+    .focus\:border-red-500:focus {
+        border-color: #ef4444 !important;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+    }
+    
+    .field-error {
+        animation: fadeIn 0.2s ease-in;
+    }
+       @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-2px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
         </style>
 
 
@@ -586,7 +784,525 @@
     </div>
 </dialog>
 
+<script>
+    // Validation Module for Modal POS Booking Form
+    const ModalFormValidator = {
+        // Store validators per modal
+        modalValidators: new Map(),
 
+        // Validation rules for each field
+        rules: {
+            reservation_checkin: {
+                required: true,
+                validate: (value, form) => {
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    const checkin = new Date(value);
+                    return checkin >= today;
+                },
+                message: "Check-in date cannot be in the past"
+            },
+            reservation_checkout: {
+                required: true,
+                validate: (value, form) => {
+                    const checkin = form.querySelector('[name="reservation_checkin"]')?.value;
+                    if (!checkin) return false;
+                    const checkinDate = new Date(checkin);
+                    const checkoutDate = new Date(value);
+                    return checkoutDate > checkinDate;
+                },
+                message: "Check-out date must be after check-in date"
+            },
+            reservation_numguest: {
+                required: true,
+                validate: (value) => {
+                    const guestCount = parseInt(value);
+                    // Just check it's a number and >= 1
+                    return !isNaN(guestCount) && guestCount >= 1;
+                },
+                message: (value) => {
+                    const guestCount = parseInt(value);
+                    if (!value) return "Please enter number of guests";
+                    if (isNaN(guestCount) || guestCount < 1) return "Enter a valid number of guests";
+                    return "";
+                }
+            },
+            guestname: {
+                required: true,
+                validate: (value) => value.trim().length >= 2,
+                message: "Full name must be at least 2 characters"
+            },
+            guestbirthday: {
+                required: true,
+                validate: (value) => {
+                    const birthDate = new Date(value);
+                    const today = new Date();
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const m = today.getMonth() - birthDate.getMonth();
+                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+                    return age >= 18;
+                },
+                message: "You must be at least 18 years old"
+            },
+            guestphonenumber: {
+                required: true,
+                validate: (value) => {
+                    // Accept formats: 09XXXXXXXXX (11 digits starting with 09)
+                    const cleaned = value.replace(/\D/g, '');
+                    return cleaned.length === 11 && cleaned.startsWith('09');
+                },
+                message: "Enter valid PH mobile (09XXXXXXXXX - 11 digits)"
+            },
+            guestemailaddress: {
+                required: true,
+                validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+                message: "Enter a valid email address"
+            },
+            guestaddress: {
+                required: true,
+                validate: (value) => value.trim().length >= 5,
+                message: "Address must be at least 5 characters"
+            },
+            guestcontactperson: {
+                required: true,
+                validate: (value) => value.trim().length >= 2,
+                message: "Contact person name is required"
+            },
+            guestcontactpersonnumber: {
+                required: true,
+                validate: (value) => {
+                    const cleaned = value.replace(/\D/g, '');
+                    return cleaned.length === 11 && cleaned.startsWith('09');
+                },
+                message: "Enter valid PH mobile (09XXXXXXXXX - 11 digits)"
+            },
+            reservation_validID: {
+                required: true,
+                validate: (input) => {
+                    if (!input.files || input.files.length === 0) return false;
+                    const file = input.files[0];
+                    const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+                    const maxSize = 5 * 1024 * 1024; // 5MB
+                    return validTypes.includes(file.type) && file.size <= maxSize;
+                },
+                message: (input) => {
+                    if (!input.files || input.files.length === 0) return "Valid ID is required";
+                    const file = input.files[0];
+                    const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+                    const maxSize = 5 * 1024 * 1024;
+
+                    if (!validTypes.includes(file.type)) return "Only JPG, PNG, PDF files allowed";
+                    if (file.size > maxSize) return "File size must be less than 5MB";
+                    return "";
+                }
+            },
+            reservation_specialrequest: {
+                required: false,
+                validate: () => true,
+                message: ""
+            }
+        },
+
+        // Initialize validation for a specific modal
+        initForModal(modal) {
+            const form = modal.querySelector('#reservationForm');
+            if (!form) return;
+
+            // Check if already initialized
+            if (this.modalValidators.has(modal.id)) {
+                return this.modalValidators.get(modal.id);
+            }
+
+            // Create validator instance for this modal
+            const validator = {
+                modal: modal,
+                form: form,
+                initialized: false
+            };
+
+            // Store the validator
+            this.modalValidators.set(modal.id, validator);
+
+            // Set up event listeners for this modal's form
+            this.setupEventListeners(validator);
+
+            // Set up mobile number formatting
+            this.setupMobileNumberFormatting(validator);
+
+            // Initial validation
+            this.validateAllFields(validator);
+            this.updateSubmitButton(validator);
+
+            validator.initialized = true;
+
+            return validator;
+        },
+
+        // Set up event listeners for validation
+        setupEventListeners(validator) {
+            if (!validator.form) return;
+
+            // Listen to all input changes in this form
+            validator.form.querySelectorAll('input, textarea, select').forEach(field => {
+                // Skip hidden inputs
+                if (field.type === 'hidden') return;
+
+                const handleValidation = () => {
+                    this.validateField(field, validator);
+                    this.updateSubmitButton(validator);
+                };
+
+                field.addEventListener('input', handleValidation);
+                field.addEventListener('change', handleValidation);
+                field.addEventListener('blur', () => {
+                    field.dataset.touched = "true";   // <-- Mark field as touched
+                    this.validateField(field, validator);
+                    this.updateSubmitButton(validator);
+                });
+
+                // Store reference for cleanup
+                field._validationHandler = handleValidation;
+            });
+
+            // Add form submit handler
+            validator.form.addEventListener('submit', (e) => {
+                if (!this.isValid(validator)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // Scroll to first error
+                    const firstError = validator.form.querySelector('.field-error:not(.hidden)');
+                    if (firstError) {
+                        firstError.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center',
+                            inline: 'nearest'
+                        });
+                    }
+
+                    return false;
+                }
+            }, { capture: true });
+        },
+
+        // Set up mobile number formatting
+        setupMobileNumberFormatting(validator) {
+            if (!validator.form) return;
+
+            // Format mobile number inputs on blur
+            const formatMobileNumber = (field) => {
+                let value = field.value.replace(/\D/g, '');
+
+                // If starts with 9 and has 10 digits, add 0
+                if (value.startsWith('9') && value.length === 10) {
+                    field.value = '0' + value;
+                }
+                // If starts with 63 and has 11 digits, convert to 09
+                else if (value.startsWith('63') && value.length === 11) {
+                    field.value = '0' + value.substring(2);
+                }
+                // If starts with +63, remove + and convert to 09
+                else if (value.startsWith('63') && value.length === 12) {
+                    field.value = '0' + value.substring(2);
+                }
+
+                // Trim to 11 characters max
+                if (field.value.length > 11) {
+                    field.value = field.value.substring(0, 11);
+                }
+            };
+
+            // Apply formatting to mobile number fields in this form
+            validator.form.querySelectorAll('[name="guestphonenumber"], [name="guestcontactpersonnumber"]').forEach(field => {
+                field.addEventListener('blur', () => {
+                    formatMobileNumber(field);
+                    this.validateField(field, validator);
+                    this.updateSubmitButton(validator);
+                });
+
+                // Real-time validation while typing
+                field.addEventListener('input', () => {
+                    // Only allow numbers
+                    field.value = field.value.replace(/\D/g, '');
+
+                    // Limit to 11 characters
+                    if (field.value.length > 11) {
+                        field.value = field.value.substring(0, 11);
+                    }
+
+                    this.validateField(field, validator);
+                    this.updateSubmitButton(validator);
+                });
+            });
+        },
+
+        // Validate a single field
+        validateField(field, validator) {
+            const rule = this.rules[field.name];
+            if (!rule) return true;
+
+            let isValid = true;
+            let message = "";
+
+            // Check if field is required and empty
+            if (rule.required && !field.value.trim() && field.type !== 'file') {
+                isValid = false;
+                message = "This field is required";
+            } else if (field.type === 'file') {
+                // Special handling for file inputs
+                isValid = rule.validate(field);
+                message = typeof rule.message === 'function' ? rule.message(field) : rule.message;
+            } else {
+                // Validate based on rule
+                isValid = rule.validate(field.value, validator.form);
+                message = typeof rule.message === 'function' ? rule.message(field.value, validator.form) : rule.message;
+            }
+
+            // Show/hide error
+            this.showError(field, isValid, message);
+
+            return isValid;
+        },
+
+        // Show or hide error message
+        showError(field, isValid, message) {
+            if (!field || !field.parentNode) return;
+
+            // Find or create error element
+            let errorElement = field.parentNode.querySelector('.field-error');
+
+            if (!errorElement) {
+                errorElement = document.createElement('div');
+                errorElement.className = 'field-error text-red-500 text-sm mt-1 flex items-center gap-1';
+                field.parentNode.appendChild(errorElement);
+            }
+
+            // Update error element
+            if (!isValid && message) {
+                errorElement.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span>${message}</span>
+            `;
+                errorElement.classList.remove('hidden');
+                field.classList.remove('border-gray-200', 'focus:border-[#001f54]');
+            } else {
+                errorElement.classList.add('hidden');
+                field.classList.remove('border-red-500', 'focus:border-red-500');
+                field.classList.add('border-gray-200', 'focus:border-[#001f54]');
+            }
+        },
+
+        // Validate all fields in the current form
+        validateAllFields(validator) {
+            if (!validator.form) return false;
+
+            let allValid = true;
+
+            // Validate each field
+            Object.keys(this.rules).forEach(fieldName => {
+                const field = validator.form.querySelector(`[name="${fieldName}"]`);
+                if (field) {
+                    const isValid = this.validateField(field, validator);
+                    if (!isValid) allValid = false;
+                }
+            });
+
+            return allValid;
+        },
+
+        // Update submit button state
+        updateSubmitButton(validator) {
+            if (!validator.form) return;
+
+            const submitButton = validator.form.querySelector('button[type="submit"]');
+            const isValid = this.validateAllFields(validator);
+
+            if (submitButton) {
+                if (isValid) {
+                    // Enable button
+                    submitButton.disabled = false;
+                    submitButton.classList.remove('btn-disabled', 'opacity-50', 'cursor-not-allowed');
+                    submitButton.classList.add('btn-primary');
+                    submitButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    Submit
+                `;
+                } else {
+                    // Disable button
+                    submitButton.disabled = true;
+                    submitButton.classList.add('btn-disabled', 'opacity-50', 'cursor-not-allowed');
+                    submitButton.classList.remove('btn-primary');
+                    submitButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    Complete All Required Fields
+                `;
+                }
+            }
+        },
+
+        // Get form validation status
+        isValid(validator) {
+            return this.validateAllFields(validator);
+        },
+
+        // Clear all validation errors for the current form
+        clearAllErrors(validator) {
+            if (!validator.form) return;
+
+            validator.form.querySelectorAll('.field-error').forEach(error => {
+                error.classList.add('hidden');
+            });
+
+            validator.form.querySelectorAll('input, textarea').forEach(field => {
+                field.classList.remove('border-red-500', 'focus:border-red-500');
+                field.classList.add('border-gray-200', 'focus:border-[#001f54]');
+            });
+        },
+
+        // Reset the form (for when modal closes)
+        resetForm(modalId) {
+            const validator = this.modalValidators.get(modalId);
+            if (!validator || !validator.form) return;
+
+            // Clear all errors
+            this.clearAllErrors(validator);
+
+            // Reset submit button to disabled state
+            const submitButton = validator.form.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.classList.add('btn-disabled', 'opacity-50', 'cursor-not-allowed');
+                submitButton.classList.remove('btn-primary');
+                submitButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                Complete All Required Fields
+            `;
+            }
+
+            // Reset form values
+            validator.form.reset();
+
+            // Reset file input and preview
+            const fileInput = validator.form.querySelector('input[name="reservation_validID"]');
+            const previewContainer = validator.modal.querySelector('#imagePreviewContainer');
+            if (fileInput) fileInput.value = '';
+            if (previewContainer) {
+                previewContainer.innerHTML = `
+                <div class="text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                        stroke="#9CA3AF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                        class="mx-auto mb-2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p class="text-gray-500">Preview will appear here</p>
+                </div>
+            `;
+            }
+        },
+
+        // Clean up event listeners
+        cleanup(modalId) {
+            const validator = this.modalValidators.get(modalId);
+            if (!validator || !validator.form) return;
+
+            // Clear event listeners to prevent memory leaks
+            validator.form.querySelectorAll('input, textarea, select').forEach(field => {
+                if (field._validationHandler) {
+                    field.removeEventListener('input', field._validationHandler);
+                    field.removeEventListener('change', field._validationHandler);
+                    field.removeEventListener('blur', field._validationHandler);
+                    delete field._validationHandler;
+                }
+            });
+
+            // Remove from map
+            this.modalValidators.delete(modalId);
+        }
+    };
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initialize all modals that are already in the DOM
+        document.querySelectorAll('dialog[id^="bookroom_"]').forEach(modal => {
+            ModalFormValidator.initForModal(modal);
+        });
+
+        // Watch for modal openings (using MutationObserver for <dialog> elements)
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'open') {
+                    const modal = mutation.target;
+                    if (modal.open && modal.id.startsWith('bookroom_')) {
+                        // Initialize validation for this modal
+                        setTimeout(() => {
+                            ModalFormValidator.initForModal(modal);
+                        }, 50);
+                    }
+                }
+            });
+        });
+
+        // Observe all modal dialogs
+        document.querySelectorAll('dialog[id^="bookroom_"]').forEach(modal => {
+            observer.observe(modal, { attributes: true });
+        });
+
+        // Handle modal close via cancel button
+        document.addEventListener('click', (e) => {
+            // Check if it's a cancel button (closes modal)
+            const cancelButton = e.target.closest('button[onclick*="close"]');
+            if (cancelButton) {
+                const modalIdMatch = cancelButton.getAttribute('onclick')?.match(/bookroom_(\d+)/);
+                if (modalIdMatch) {
+                    const modalId = `bookroom_${modalIdMatch[1]}`;
+                    ModalFormValidator.resetForm(modalId);
+                }
+            }
+
+            // Check if it's a modal open button
+            const openButton = e.target.closest('button[onclick*="showModal"]');
+            if (openButton) {
+                const modalIdMatch = openButton.getAttribute('onclick')?.match(/bookroom_(\d+)/);
+                if (modalIdMatch) {
+                    const modalId = `bookroom_${modalIdMatch[1]}`;
+                    const modal = document.getElementById(modalId);
+                    if (modal) {
+                        // Initialize validation when modal opens
+                        setTimeout(() => {
+                            ModalFormValidator.initForModal(modal);
+                        }, 100);
+                    }
+                }
+            }
+        });
+
+        // Also handle form reset when modal closes via backdrop click or ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const openModal = document.querySelector('dialog[open][id^="bookroom_"]');
+                if (openModal) {
+                    ModalFormValidator.resetForm(openModal.id);
+                }
+            }
+        });
+    });
+</script>
 <script>
     // Global variables
     let taxRate = {{ $taxrate }};
@@ -596,7 +1312,8 @@
     // Function to initialize modal calculations
     function initializeModalCalculations(modal) {
         const roomPrice = parseFloat(modal.querySelector('[name="roomID"]')?.dataset.price || 0);
-        const maxGuests = parseInt(modal.querySelector('[name="reservation_numguest"]')?.max || 1);
+       const capacityText = modal.querySelector('#roomMaxGuest')?.textContent || '0';
+        const maxGuests = parseInt(capacityText.replace(/\D/g, '')) || 1;
 
         // Set room price in a data attribute for this modal
         modal.dataset.roomPrice = roomPrice;
@@ -762,3 +1479,5 @@
         });
     });
 </script>
+
+

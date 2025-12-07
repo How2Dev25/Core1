@@ -197,7 +197,7 @@
 
             <div class="grid grid-cols-4 max-md:grid-cols-2 gap-5 items-center">
               <button onclick="view_room.showModal()"
-                class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-violet-800 to-violet-900 hover:from-violet-900 hover:to-violet-950 text-white rounded-lg shadow-md transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50">
+                class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950 text-white rounded-lg shadow-md transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50">
                 <i class="fa-solid fa-door-open text-sm"></i>
                 <span class="font-medium">Available Rooms</span>
               </button>
@@ -215,7 +215,7 @@
               </button>
 
               <button onclick="view_inventory.showModal()"
-                class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-violet-800 to-violet-900 hover:from-violet-900 hover:to-violet-950 text-white rounded-lg shadow-md transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50">
+                class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950 text-white rounded-lg shadow-md transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50">
               <i class="fa-solid fa-boxes-stacked text-sm"></i>
                 <span class="font-medium">Inventory</span>
               </button>

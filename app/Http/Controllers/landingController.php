@@ -82,6 +82,7 @@ public function storereservation(Request $request)
         'serviceFee' => 'required',
         'total' => 'required',
         'payment_method' => 'required',
+        'reservation_validID' => 'required',
     ],[
         'roomID.required' => 'Please select a room.',
     'reservation_checkin.required' => 'Check-in date is missing.',
@@ -96,10 +97,15 @@ public function storereservation(Request $request)
     'guestcontactperson.required' => 'Emergency contact person is required.',
     'guestcontactpersonnumber.required' => 'Emergency contact number is required.',
     'payment_method.required' => 'Payment Method is required',
+    'reservation_validID.required' => 'Valid ID is required',
     ]
 );
 
-    
+    $filename =  time() . '_' .$request->file('reservation_validID')->getClientOriginalName();
+    $filepath = 'images/reservations/'.$filename;
+    $request->file('reservation_validID')->move(public_path('images/reservations/'), $filename);
+    $form['reservation_validID'] = $filepath;
+
     $form['bookedvia'] = 'Soliera';
             $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
             $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');

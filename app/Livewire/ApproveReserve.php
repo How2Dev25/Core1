@@ -40,7 +40,7 @@ class ApproveReserve extends Component
                       ->orWhere('core1_reservation.guestname', 'like', '%'.$this->searchTerm.'%');
                 })
             )
-            ->select('core1_reservation.*', 'core1_room.roomtype', 'core1_room.roomID', 'core1_room.roomprice')
+            ->select('core1_reservation.*', 'core1_room.roomtype', 'core1_room.roomID', 'core1_room.roomprice', 'core1_room.roomphoto')
             ->latest('core1_reservation.created_at')
             ->paginate(5);
 

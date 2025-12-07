@@ -384,7 +384,7 @@
                                             <input type="text" name="guestcontactperson"
                                                 class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
 
-                                             
+
                                                 required />
                                         </div>
 
@@ -414,6 +414,115 @@
                                         <input type="hidden" name="total" id="hiddenTotal">
                                     </div>
                                 </div>
+
+
+                                <div class="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
+                                    <div class="flex items-center gap-4 mb-6">
+                                        <div class="p-3 bg-gradient-to-br from-[#001f54] to-[#1a3470] rounded-2xl shadow-lg">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                stroke="#F7B32B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                                <polyline points="21 15 16 10 5 21"></polyline>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h2 class="text-2xl font-bold bg-gradient-to-r from-[#001f54] to-[#1a3470] bg-clip-text text-transparent">
+                                                Valid ID Upload
+                                            </h2>
+                                            <p class="text-gray-600">Please upload a clear photo of your valid ID</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <!-- File Input Section -->
+                                        <div class="form-control">
+                                            <label class="label font-semibold text-[#001f54] mb-2">
+                                                <span class="flex items-center gap-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                                        <polyline points="17 8 12 3 7 8"></polyline>
+                                                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                                                    </svg>
+                                                    Upload Valid ID
+                                                    <span class="text-red-500">*</span>
+                                                </span>
+                                            </label>
+                                            <input type="file" name="reservation_validID" id="validIdInput"
+                                                class="file-input file-input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
+                                                accept="image/*" required />
+                                            <p class="text-sm text-gray-500 mt-2">Accepted: JPG, PNG, PDF (Max 5MB)</p>
+                                        </div>
+
+                                        <!-- Image Preview Section -->
+                                        <div class="form-control">
+                                            <label class="label font-semibold text-[#001f54] mb-2">
+                                                <span class="flex items-center gap-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                                    </svg>
+                                                    ID Preview
+                                                </span>
+                                            </label>
+                                            <div id="imagePreviewContainer"
+                                                class="border-2 border-dashed border-gray-300 rounded-xl p-4 h-48 flex items-center justify-center bg-gray-50">
+                                                <div class="text-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                                                        stroke="#9CA3AF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="mx-auto mb-2">
+                                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                                    </svg>
+                                                    <p class="text-gray-500">Preview will appear here</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- JavaScript for image preview -->
+                                <script>
+                                    document.getElementById('validIdInput').addEventListener('change', function (e) {
+                                        const previewContainer = document.getElementById('imagePreviewContainer');
+                                        const file = e.target.files[0];
+
+                                        if (file) {
+                                            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                                                alert('File size exceeds 5MB limit');
+                                                e.target.value = '';
+                                                return;
+                                            }
+
+                                            const reader = new FileReader();
+                                            reader.onload = function (event) {
+                                                previewContainer.innerHTML = `
+                                                <img src="${event.target.result}" 
+                                                     alt="ID Preview" 
+                                                     class="w-full h-full object-contain rounded-lg">
+                                            `;
+                                            };
+                                            reader.readAsDataURL(file);
+                                        } else {
+                                            previewContainer.innerHTML = `
+                                            <div class="text-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+                                                    fill="none" stroke="#9CA3AF" stroke-width="1" stroke-linecap="round"
+                                                    stroke-linejoin="round" class="mx-auto mb-2">
+                                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                                </svg>
+                                                <p class="text-gray-500">Preview will appear here</p>
+                                            </div>
+                                        `;
+                                        }
+                                    });
+                                </script>
                             </div>
 
                             <!-- RIGHT SIDE (POS Summary) -->

@@ -17,7 +17,7 @@
 
     @include('booking.component.nav')
     <section class="p-6 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 min-h-screen mt-20">
-        <form autocomplete="off" action="/guestcreatereservationlanding" method="POST" id="reservationForm"
+        <form autocomplete="off" action="/guestcreatereservationlanding" method="POST" id="reservationForm" enctype="multipart/form-data"
             class="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
             @csrf
             <input value="{{$room->roomID}}" type="hidden" name="roomID" id="selectedRoomID" />
@@ -345,43 +345,122 @@
                         <input type="hidden" name="total" id="hiddenTotal">
                     </div>
                 </div>
+
+
+                <div class="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="p-3 bg-gradient-to-br from-[#001f54] to-[#1a3470] rounded-2xl shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                stroke="#F7B32B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold bg-gradient-to-r from-[#001f54] to-[#1a3470] bg-clip-text text-transparent">
+                                Valid ID Upload
+                            </h2>
+                            <p class="text-gray-600">Please upload a clear photo of your valid ID</p>
+                        </div>
+                    </div>
+                
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- File Input Section -->
+                        <div class="form-control">
+                            <label class="label font-semibold text-[#001f54] mb-2">
+                                <span class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="17 8 12 3 7 8"></polyline>
+                                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                                    </svg>
+                                    Upload Valid ID
+                                    <span class="text-red-500">*</span>
+                                </span>
+                            </label>
+                            <input type="file" name="reservation_validID" id="validIdInput"
+                                class="file-input file-input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
+                                accept="image/*" required />
+                            <p class="text-sm text-gray-500 mt-2">Accepted: JPG, PNG, PDF (Max 5MB)</p>
+                        </div>
+                
+                        <!-- Image Preview Section -->
+                        <div class="form-control">
+                            <label class="label font-semibold text-[#001f54] mb-2">
+                                <span class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                    </svg>
+                                    ID Preview
+                                </span>
+                            </label>
+                            <div id="imagePreviewContainer"
+                                class="border-2 border-dashed border-gray-300 rounded-xl p-4 h-48 flex items-center justify-center bg-gray-50">
+                                <div class="text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                                        stroke="#9CA3AF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                                        class="mx-auto mb-2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                    </svg>
+                                    <p class="text-gray-500">Preview will appear here</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- JavaScript for image preview -->
+                <script>
+                    document.getElementById('validIdInput').addEventListener('change', function (e) {
+                        const previewContainer = document.getElementById('imagePreviewContainer');
+                        const file = e.target.files[0];
+
+                        if (file) {
+                            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                                alert('File size exceeds 5MB limit');
+                                e.target.value = '';
+                                return;
+                            }
+
+                            const reader = new FileReader();
+                            reader.onload = function (event) {
+                                previewContainer.innerHTML = `
+                                <img src="${event.target.result}" 
+                                     alt="ID Preview" 
+                                     class="w-full h-full object-contain rounded-lg">
+                            `;
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            previewContainer.innerHTML = `
+                            <div class="text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+                                    fill="none" stroke="#9CA3AF" stroke-width="1" stroke-linecap="round"
+                                    stroke-linejoin="round" class="mx-auto mb-2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                                <p class="text-gray-500">Preview will appear here</p>
+                            </div>
+                        `;
+                        }
+                    });
+                </script>
             </div>
 
             <!-- RIGHT SIDE (Enhanced Billing Summary) -->
             <div class="w-full lg:w-1/3">
 
                 <!-- Session Messages -->
-                @if(session('success'))
-                    <div role="alert"
-                        class="alert alert-success mb-6 rounded-2xl shadow-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>{{session('success')}}</span>
-                    </div>
-                @elseif(session('modified'))
-                    <div role="alert"
-                        class="alert alert-success mb-6 rounded-2xl shadow-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>{{session('modified')}}</span>
-                    </div>
-                @elseif(session('removed'))
-                    <div role="alert"
-                        class="alert alert-success mb-6 rounded-2xl shadow-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>{{session('removed')}}</span>
-                    </div>
-                @endif
+           
 
                 <!-- Billing Summary Card -->
                 <div
@@ -572,15 +651,12 @@
                             Cancel
                         </button>
 
-                        <button type="button" onclick="confirm_modal_bas.showModal()"
-                            class="btn btn-primary rounded-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M20 6L9 17l-5-5"></path>
-                            </svg>
-                            Submit
-                        </button>
+                    <button type="button" id="confirmReservationBtn"
+                        onclick="if(FormValidator.validateAllFields()) { confirm_modal_bas.showModal(); }"
+                        class="btn btn-disabled opacity-50 cursor-not-allowed rounded-md btn-sm" disabled>
+                        <!-- Initial disabled state content -->
+                    </button>
+
                     </div>
 
                     <p class="text-xs text-gray-500 text-center mt-4">
@@ -616,6 +692,8 @@
     @include('admin.components.bas.confirmation')
     @livewireScripts
     @include('javascriptfix.soliera_js')
+
+    <script src="{{ asset('javascript/roombookingvalidation2.js') }}"></script>
 
     <script>
         lucide.createIcons();
@@ -720,6 +798,8 @@
             });
         });
     </script>
+
+  
 
 
 </body>

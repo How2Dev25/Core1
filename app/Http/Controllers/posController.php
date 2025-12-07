@@ -246,7 +246,14 @@ public function sendEventReservationEmail($eventData)
         'vat' => 'required',
         'serviceFee' => 'required',
         'total' => 'required',
+        'reservation_validID' => 'required',
     ]);
+
+
+    $filename =  time() . '_' .$request->file('reservation_validID')->getClientOriginalName();
+    $filepath = 'images/reservations/'.$filename;
+    $request->file('reservation_validID')->move(public_path('images/reservations/'), $filename);
+    $form['reservation_validID'] = $filepath;
 
     $form['employeeID'] = Auth::user()->Dept_no;
 
@@ -471,6 +478,7 @@ public function POSButton(){
     'vat' => $booking->vat,
     'serviceFee' => $booking->serviceFee,
     'total' => $booking->total,
+    'reservation_validID' => $booking->reservation_validID,
 
     // extra fields you want fixed
     'payment_method' => 'Pay On Site',

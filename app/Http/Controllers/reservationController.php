@@ -351,6 +351,7 @@ public function billingHistory ($bookingID, $guestID, $guestname, $amount_paid, 
     'vat' => 'required',
     'serviceFee' => 'required',
     'total' => 'required',
+    'reservation_validID' => 'required'
 ], [
     'roomID.required' => 'Please select a room.',
     'reservation_checkin.required' => 'Check-in date is missing.',
@@ -364,6 +365,7 @@ public function billingHistory ($bookingID, $guestID, $guestname, $amount_paid, 
     'guestaddress.required' => 'Address cannot be empty.',
     'guestcontactperson.required' => 'Emergency contact person is required.',
     'guestcontactpersonnumber.required' => 'Emergency contact number is required.',
+    'reservation_validID.required' => 'Valid ID is required',
 ]);
 
     $form['payment_method'] = "Pay at Hotel";
@@ -371,6 +373,12 @@ public function billingHistory ($bookingID, $guestID, $guestname, $amount_paid, 
     $form['bookedvia'] = 'Soliera';
     $form['payment_status'] = "Pending";
 
+
+    // photo valid ID
+    $filename =  time() . '_' .$request->file('reservation_validID')->getClientOriginalName();
+    $filepath = 'images/reservations/'.$filename;
+    $request->file('reservation_validID')->move(public_path('images/reservations/'), $filename);
+    $form['reservation_validID'] = $filepath;
     // Create reservation first to get the ID
     $reservation = Reservation::create($form);
 
@@ -558,7 +566,7 @@ HTML;
 
     session()->flash('success', 'Reservation Success. Receipt #: ' . $receiptNo . ' | Booking ID: ' . $bookingID);
 
-    return redirect()->back();
+    return redirect('/bas');
 }
 
 
@@ -1320,6 +1328,7 @@ public function gueststore(Request $request)
             'total' => 'required',
             'loyalty_points_used' => 'required',
             'loyalty_discount' => 'required',
+            'reservation_validID' => 'required',
     ],[
         'roomID.required' => 'Please select a room.',
         'reservation_checkin.required' => 'Check-in date is missing.',
@@ -1334,11 +1343,18 @@ public function gueststore(Request $request)
         'guestcontactperson.required' => 'Emergency contact person is required.',
         'guestcontactpersonnumber.required' => 'Emergency contact number is required.',
         'payment_method' => 'Payment Method is required',
+        'reservation_validID.required' => 'Valid ID is required',
     ]);
 
     $form['guestID'] = Auth::guard('guest')->user()->guestID;
     $form['reservation_bookingstatus'] = 'Pending';
     $form['bookedvia'] = 'Soliera';
+
+    $filename =  time() . '_' .$request->file('reservation_validID')->getClientOriginalName();
+    $filepath = 'images/reservations/'.$filename;
+    $request->file('reservation_validID')->move(public_path('images/reservations/'), $filename);
+    $form['reservation_validID'] = $filepath;
+
 
     
             $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
@@ -1583,7 +1599,7 @@ HTML;
 
      session()->flash('success', ' Booking ID: ' . $bookingID);
 
-    return redirect()->back();
+    return redirect('/myreservation');
 }
 
 
@@ -1610,7 +1626,15 @@ public function aisubmit(Request $request)
             'total' => 'required',
               'loyalty_points_used' => 'required',
             'loyalty_discount' => 'required',
+            'reservation_validID' => 'required',
     ]);
+
+
+    $filename =  time() . '_' .$request->file('reservation_validID')->getClientOriginalName();
+    $filepath = 'images/reservations/'.$filename;
+    $request->file('reservation_validID')->move(public_path('images/reservations/'), $filename);
+    $form['reservation_validID'] = $filepath;
+
 
     $form['guestID'] = Auth::guard('guest')->user()->guestID;
     $form['reservation_bookingstatus'] = 'Pending';
@@ -1859,7 +1883,15 @@ HTML;
 
      session()->flash('success', ' Booking ID: ' . $bookingID);
 
-   if ($request->expectsJson()) { return response()->json([ 'success' => true, 'bookingID' => $bookingID ]); }
+   if ($request->expectsJson()) {
+    return response()->json([
+        'success' => true,
+        'bookingID' => $bookingID,
+        'redirect' => '/myreservation'
+    ]);
+}
+
+return redirect('/myreservation');
 }
 
 
@@ -2233,7 +2265,7 @@ HTML;
         $this->deductLoyaltyPoints($loyaltyPointsUsed, $guestID, $guestname );
 
     session()->forget('reservation_form'); 
-    return redirect()->back()->with('success', 'Booking ID: ' . $bookingID);
+    return redirect('/myreservation')->with('success', 'Booking ID: ' . $bookingID);
     
 }
 

@@ -42,5 +42,6 @@ class Reservation extends Model
             'total',
             'loyalty_points_used',
             'loyalty_discount',
+            'reservation_validID',
         ];
 }

@@ -57,7 +57,7 @@
                         <div
                             class="bg-gradient-to-r from-[#001f54]/5 to-[#1a3470]/5 p-4 rounded-2xl text-center border border-[#001f54]/10">
                             <p class="text-sm text-gray-500">Capacity</p>
-                            <p class="text-lg font-semibold text-[#001f54]">{{ $eventtype->eventtype_capacity }} guests
+                            <p id="eventCapacity_{{ $eventtype->eventtype_ID }}" class="text-lg font-semibold text-[#001f54]">{{ $eventtype->eventtype_capacity }} guests
                             </p>
                         </div>
                         <div
@@ -453,35 +453,47 @@ $today = \Carbon\Carbon::today()->format('Y-m-d');
 </dialog>
 
 <script>
-    // Function to calculate billing
     function calculateSimpleBilling(eventId) {
         console.log('Calculating for event:', eventId);
 
         const checkin = document.getElementById('eventCheckin_' + eventId)?.value;
         const checkout = document.getElementById('eventCheckout_' + eventId)?.value;
-        const numGuests = parseInt(document.getElementById('eventNumGuest_' + eventId)?.value) || 0;
+        
 
         const eventPriceText = document.getElementById('eventPrice_' + eventId)?.textContent || '₱0';
         const eventPrice = parseFloat(eventPriceText.replace('₱', '').replace(/,/g, '')) || 0;
-        const capacity = parseInt(document.getElementById('eventNumGuest_' + eventId)?.getAttribute('max')) || 0;
 
-        // Improved days calculation: Inclusive of start and end dates
+        const capacityText = document.getElementById('eventCapacity_' + eventId)?.textContent || '0';
+        const capacity = parseInt(capacityText.replace(/\D/g, '')) || 0;
+
+        const numGuestsInput = document.getElementById('eventNumGuest_' + eventId);
+        const numGuests = numGuestsInput ? parseInt(numGuestsInput.value) || 0 : 0;
+
+        // Calculate number of days (inclusive)
         let days = 0;
         if (checkin && checkout) {
-            const start = new Date(checkin + 'T00:00:00'); // Force to start of day
-            const end = new Date(checkout + 'T00:00:00');   // Force to start of day
+            const start = new Date(checkin + 'T00:00:00');
+            const end = new Date(checkout + 'T00:00:00');
             if (end >= start) {
                 const diffTime = end - start;
-                days = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1; // Inclusive days
+                days = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
             }
         }
 
+        const additionalPersonFee = {{ $additionalpersonfee }}; // e.g., 100 per extra guest
         const basePrice = days * eventPrice;
-        const extraGuests = Math.max(0, numGuests - capacity);
-        const additionalFee = extraGuests * 100; // ₱100 per extra guest
+
+        // Calculate additional fee ONLY if numGuests exceeds capacity
+        let extraGuests = 0;
+        let additionalFee = 0;
+        if (numGuests > capacity) {
+            extraGuests = numGuests - capacity;
+            additionalFee = extraGuests * additionalPersonFee;
+        }
+
         const total = basePrice + additionalFee;
 
-        // Update display (with safety checks)
+        // Update DOM
         const numDaysSpan = document.getElementById('numDays_' + eventId);
         const additionalFeeSpan = document.getElementById('additionalPersonFee_' + eventId);
         const totalSpan = document.getElementById('totalAmount_' + eventId);
@@ -492,7 +504,7 @@ $today = \Carbon\Carbon::today()->format('Y-m-d');
         if (totalSpan) totalSpan.textContent = `₱${total.toFixed(2)}`;
         if (hiddenInput) hiddenInput.value = total.toFixed(2);
 
-        console.log('Result:', { days, basePrice, additionalFee, total });
+        console.log('Result:', { days, basePrice, extraGuests, additionalFee, total });
     }
 
     // Event listeners for input changes
@@ -512,15 +524,14 @@ $today = \Carbon\Carbon::today()->format('Y-m-d');
         }
     });
 
-    // Trigger calculation when modal opens (to handle pre-filled values)
-    // Use MutationObserver to watch for the dialog's 'open' attribute
+    // Trigger calculation when modal opens
     document.addEventListener('DOMContentLoaded', function () {
-        const dialogs = document.querySelectorAll('dialog[id^="bookeventtye_"]'); // Match your dialog IDs
+        const dialogs = document.querySelectorAll('dialog[id^="bookeventtye_"]');
         dialogs.forEach(dialog => {
             const observer = new MutationObserver(function (mutations) {
                 mutations.forEach(function (mutation) {
                     if (mutation.type === 'attributes' && mutation.attributeName === 'open' && dialog.open) {
-                        const eventId = dialog.id.split('_')[1]; // Extract eventId from dialog ID
+                        const eventId = dialog.id.split('_')[1];
                         calculateSimpleBilling(eventId);
                     }
                 });
@@ -529,3 +540,4 @@ $today = \Carbon\Carbon::today()->format('Y-m-d');
         });
     });
 </script>
+

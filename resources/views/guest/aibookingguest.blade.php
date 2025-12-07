@@ -204,17 +204,20 @@
               <div class="lg:col-span-1 space-y-6">
 
                 <!-- Sample Prompts Card -->
-                <div class="bg-blue-900 rounded-2xl shadow-lg border border-orange-200 p-6">
+            <div class="bg-blue-900 rounded-2xl shadow-lg border border-orange-200 p-6">
+              <div class="flex flex-col h-full">
+                <!-- Sample Prompts Section -->
+                <div class="mb-6">
                   <div class="flex items-center gap-3 mb-4">
                     <div class="p-2 bg-blue-900 rounded-lg">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                       </svg>
                     </div>
                     <h3 class="font-bold text-white text-lg">Sample Prompts</h3>
                   </div>
-                  <div class="space-y-3">
+                  <div class="space-y-3 overflow-y-auto max-h-48 pr-2">
                     <button type="button" onclick="document.getElementById('prompt').value = this.innerText"
                       class="w-full text-left p-3 bg-white rounded-lg border border-orange-200 hover:border-orange-500 hover:shadow-md transition-all duration-200 text-sm text-gray-700 hover:text-gray-900 cursor-pointer">
                       Standard room with WiFi for 2 nights from October 10 2025 to October 12 2025
@@ -234,21 +237,23 @@
                   </div>
                 </div>
 
-                <!-- Tips Card -->
-                <div
-                  class="bg-gradient-to-br from-blue-50 to-blue-900/10 rounded-2xl shadow-lg border border-blue-200 p-6">
+                <!-- Divider -->
+                <div class="border-t border-orange-200/30 my-4"></div>
+
+                <!-- Pro Tips Section -->
+                <div class="flex-1">
                   <div class="flex items-center gap-3 mb-4">
                     <div class="p-2 bg-blue-900 rounded-lg">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10" />
                         <path d="M12 16v-4" />
                         <path d="M12 8h.01" />
                       </svg>
                     </div>
-                    <h3 class="font-bold text-blue-900 text-lg">Pro Tips</h3>
+                    <h3 class="font-bold text-white text-lg">Pro Tips</h3>
                   </div>
-                  <ul class="space-y-3 text-sm text-blue-900">
+                  <ul class="space-y-3 text-sm text-white overflow-y-auto max-h-48 pr-2">
                     <li class="flex items-start gap-2">
                       <svg class="w-5 h-5 text-orange-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd"
@@ -283,6 +288,8 @@
                     </li>
                   </ul>
                 </div>
+              </div>
+            </div>
 
               </div>
             </div>

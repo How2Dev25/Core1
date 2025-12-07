@@ -18,6 +18,8 @@
         </svg>
       </div>
 
+      @include('booking.roombookingterms')
+
       <h3 class="text-lg font-medium text-gray-900 mb-2">Submit</h3>
       <p class="text-sm text-gray-500 mb-6">Are you sure you want book this room?</p>
 
