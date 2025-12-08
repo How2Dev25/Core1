@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\AuditTrails;
 use App\Models\DeptAccount;
 use App\Models\DeptLogs;
+use App\Models\doorlock;
+use App\Models\doorlockFrontdesk;
 use App\Models\Ecm;
 use App\Models\facility;
 use App\Models\hotelBilling;
@@ -299,6 +301,53 @@ public function hotelincome(Request $request)
         }
 
         
+    }
+
+    // door lock 
+
+     public function scanRfid(Request $request)
+    {
+        // Check API token
+        $token = $request->header('Authorization');
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        // Validate input
+        $request->validate([
+            'rfid' => 'required|string',
+        ]);
+
+        // Find the doorlock with the given RFID
+        $doorlock = doorlock::where('rfid', $request->rfid)->first();
+        if (!$doorlock) {
+            return response()->json([
+                'success' => false,
+                'message' => 'RFID not found.'
+            ], 404);
+        }
+
+        // Find corresponding doorlockFrontdesk record
+        $doorlockFrontdesk = doorlockFrontdesk::where('doorlockID', $doorlock->doorlockID)->first();
+        if (!$doorlockFrontdesk) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No frontdesk record found for this doorlock.'
+            ], 404);
+        }
+
+        // Toggle status: if 1 → 0, if 0 → 1
+        $doorlockFrontdesk->doorlockfrontdesk_status = $doorlockFrontdesk->doorlockfrontdesk_status ? 0 : 1;
+        $doorlockFrontdesk->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Doorlock frontdesk status toggled successfully.',
+            'data' => $doorlockFrontdesk
+        ]);
     }
 
 

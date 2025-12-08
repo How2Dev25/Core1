@@ -3,6 +3,7 @@
 use App\Http\Controllers\billingController;
 use App\Http\Controllers\bookingAddonsController;
 use App\Http\Controllers\channelController;
+use App\Http\Controllers\doorlockController;
 use App\Http\Controllers\ecmController;
 use App\Http\Controllers\eventtypeController;
 use App\Http\Controllers\facilityController;
@@ -27,6 +28,7 @@ use App\Models\Channel;
 use App\Models\channelListings;
 use App\Models\DeptAccount;
 use App\Models\DeptLogs;
+use App\Models\doorlock;
 use App\Models\dynamicBilling;
 use App\Models\Ecm;
 use App\Models\ecmtype;
@@ -869,6 +871,24 @@ Route::get('/gotoroom/{roomID}', [roomController::class, 'redirect']);
 Route::post('/additonalroom', [roomController::class, 'addphoto']);
 Route::delete('/deleteroomphoto/{roomphotoID}', [roomController::class, 'deleteroomphoto']);
 
+// Integration with door lock
+Route::get('/doorlockadmin', function(){
+    employeeAuthCheck();
+    verifydashboard();
+
+   $rooms = Room::all();
+
+    $doorlocks = doorlock::join('core1_room', 'core1_room.roomID', '=', 'doorlock.roomID')
+    ->latest('doorlock.created_at')
+    ->get();        
+    return view('admin.doorlock', compact('rooms', 'doorlocks'));
+});
+
+Route::post('/storedoorLock', [doorlockController::class, 'storedoorLock']);
+Route::put('/modifydoorLock/{doorlockID}', [doorlockController::class, 'modifydoorLock']);
+Route::delete('/removedoorLock/{doorlockID}', [doorlockController::class, 'removedoorLock']);
+
+Route::get('/assignkeycard/{reservationID}', [doorlockController::class, 'assignkeycard']);
 // Inventory And Stocks
 Route::get('/ias', function(){
      employeeAuthCheck();

@@ -1,9 +1,6 @@
 <div class=" ">
     <div class="flex items-center gap-3 mb-6">
-       
-        <div>
-            <h3 class="text-xl font-bold text-gray-900">Hotel Facilities</h3>
-        </div>
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Hotel Facilities</h2>
     </div>
 
     <!-- Desktop Left/Right Arrows -->

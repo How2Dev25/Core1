@@ -152,6 +152,42 @@
                                     </svg>
                                 </button>
 
+                                <button onclick="document.getElementById('assign_keycard_{{$reserveroom->reservationID}}').showModal()"
+                                    class="btn btn-sm" title="Assign Keycard" style="background-color: #001f54; color: white;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                                    </svg>
+                                </button>
+
+                                <dialog id="assign_keycard_{{$reserveroom->reservationID}}" class="modal">
+                                    <div class="modal-box">
+                                        <h3 class="text-lg font-bold">Assign Keycard</h3>
+                                        <p class="py-4">Assign a keycard to this reservation?</p>
+
+                                        <div class="modal-action">
+                                            <!-- No button - just a regular button that closes modal -->
+                                            <button type="button"
+                                                onclick="document.getElementById('assign_keycard_{{$reserveroom->reservationID}}').close()" class="btn">
+                                                No
+                                            </button>
+
+                                            <!-- Yes button - form POST -->
+
+
+                                                <a href="/assignkeycard/{{$reserveroom->reservationID}}"  class="btn" style="background-color: #001f54; color: white;">
+                                                    Yes, Assign
+                                                </a>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Click outside to close -->
+                                    <form method="dialog" class="modal-backdrop">
+                                        <button>close</button>
+                                    </form>
+                                </dialog>
+
                                 @if($reserveroom->payment_status === 'Paid')
                                     <!-- Trigger button -->
                                     <button
@@ -185,6 +221,8 @@
                                             </div>
                                         </div>
                                     </dialog>
+
+
                                 @endif
                             </div>
                         </td>
@@ -253,8 +291,8 @@
                                         </h4>
                                         <div class="space-y-2">
                                             @php
-        $nights = \Carbon\Carbon::parse($reserveroom->reservation_checkin)
-            ->diffInDays(\Carbon\Carbon::parse($reserveroom->reservation_checkout));
+    $nights = \Carbon\Carbon::parse($reserveroom->reservation_checkin)
+        ->diffInDays(\Carbon\Carbon::parse($reserveroom->reservation_checkout));
                                             @endphp
                                             <p><span class="font-medium">Check-in:</span>
                                                 {{ \Carbon\Carbon::parse($reserveroom->reservation_checkin)->format('M d, Y') }}</p>
@@ -274,21 +312,21 @@
                                     </h4>
 
                                     @php
-        $subtotal = $reserveroom->subtotal;
-        $vat = $reserveroom->vat;
-        $serviceFee = $reserveroom->serviceFee;
-        $total = $reserveroom->total;
+    $subtotal = $reserveroom->subtotal;
+    $vat = $reserveroom->vat;
+    $serviceFee = $reserveroom->serviceFee;
+    $total = $reserveroom->total;
 
-        // restaurant orders total
-        $restaurantTotal = 0;
-        if (isset($orders[$reserveroom->bookingID])) {
-            foreach ($orders[$reserveroom->bookingID] as $order) {
-                $restaurantTotal += $order->menu_price * $order->order_quantity;
-            }
+    // restaurant orders total
+    $restaurantTotal = 0;
+    if (isset($orders[$reserveroom->bookingID])) {
+        foreach ($orders[$reserveroom->bookingID] as $order) {
+            $restaurantTotal += $order->menu_price * $order->order_quantity;
         }
+    }
 
-        // final grand total
-        $grandTotal = $total + $restaurantTotal;
+    // final grand total
+    $grandTotal = $total + $restaurantTotal;
                                     @endphp
 
                                     <div class="bg-gray-50 p-4 rounded-lg">
@@ -369,7 +407,7 @@
                                         <div class="border rounded-lg divide-y">
                                             @foreach($orders[$reserveroom->bookingID] as $order)
                                                 @php
-                $lineTotal = $order->menu_price * $order->order_quantity;
+            $lineTotal = $order->menu_price * $order->order_quantity;
                                                 @endphp
                                                 <div class="p-3 flex items-center gap-4">
                                                     <img src="{{ asset($order->menu_photo) }}" class="w-16 h-16 object-cover rounded">
@@ -634,8 +672,8 @@
                                         <div id="imagePreviewContainer" class="mt-2">
                                             @if($reserveroom->reservation_validID)
                                                 @php
-                                                    $file = $reserveroom->reservation_validID;
-                                                    $isImage = preg_match('/\.(jpg|jpeg|png|gif)$/i', $file);
+        $file = $reserveroom->reservation_validID;
+        $isImage = preg_match('/\.(jpg|jpeg|png|gif)$/i', $file);
                                                 @endphp
                                                 @if($isImage)
                                                     <img src="{{ asset($file) }}" alt="Valid ID" class="max-h-96 w-full rounded-md" />

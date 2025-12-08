@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
+
+class doorlock extends Model
+{
+     use HasFactory, Notifiable;
+
+     protected $table = 'doorlock'; 
+
+     protected $primaryKey = 'doorlockID';
+
+
+     protected $fillable = [
+        'doorlockID',
+        'rfid',
+        'doorlock_status',
+        'roomID',
+     ];
+}

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\doorlockController;
 use App\Http\Controllers\roomController;
 use App\Http\Controllers\userController;
 use Illuminate\Support\Facades\Route;
@@ -34,4 +35,8 @@ Route::get('/core1rooms', [ApiController::class, 'rooms'] );
 
 // Events
 Route::get('/facilities', [ApiController::class, 'facility']);
+
+// door lock
+
+Route::post('/scan-rfid', [ApiController::class, 'scanRfid']);
 
