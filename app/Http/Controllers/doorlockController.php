@@ -64,7 +64,7 @@ public function assignkeycard($reservationID)
         doorlockFrontdesk::create([
             'guestID' => $reservation->guestID ?? null,
             'doorlockID' => $doorlock->doorlockID,
-            'guestName' => $reservation->guestName,
+            'guestname' => $reservation->guestname,
             'bookingID' => $reservation->bookingID,
         ]);
 
