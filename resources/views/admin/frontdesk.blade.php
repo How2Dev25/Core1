@@ -220,7 +220,7 @@
                 <span class="font-medium">Inventory</span>
               </button>
 
-              <button onclick=""
+              <button onclick="document.getElementById('view_doorlock').showModal()"
                 class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950 text-white rounded-lg shadow-md transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50">
                 <i class="fa-solid fa-boxes-stacked text-sm"></i>
                 <span class="font-medium">Door Locks</span>
@@ -320,6 +320,9 @@
             {{-- content --}}
           </section>
 
+          
+
+          @include('admin.components.frontdesk.doorlockmodal')
 
           {{-- modals --}}
           @foreach($reserverooms as $reserveroom)

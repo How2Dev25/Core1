@@ -86,7 +86,17 @@ public function assignkeycard($reservationID)
 
 
     
-    public function removeassigneddoorLock(){
-
-    }
+   public function removeAssignment($doorlockfrontdeskID)
+{
+    $assignment = DoorlockFrontdesk::findOrFail($doorlockfrontdeskID);
+    
+    // Optional: Update doorlock status
+    Doorlock::where('doorlockID', $assignment->doorlockID)
+        ->update(['doorlock_status' => 'Inactive']);
+    
+    // Remove the assignment
+    $assignment->delete();
+    
+    return redirect()->back()->with('success', 'Assignment removed successfully!');
+}
 }

@@ -29,6 +29,7 @@ use App\Models\channelListings;
 use App\Models\DeptAccount;
 use App\Models\DeptLogs;
 use App\Models\doorlock;
+use App\Models\doorlockFrontdesk;
 use App\Models\dynamicBilling;
 use App\Models\Ecm;
 use App\Models\ecmtype;
@@ -880,8 +881,14 @@ Route::get('/doorlockadmin', function(){
 
     $doorlocks = doorlock::join('core1_room', 'core1_room.roomID', '=', 'doorlock.roomID')
     ->latest('doorlock.created_at')
-    ->get();        
-    return view('admin.doorlock', compact('rooms', 'doorlocks'));
+    ->get();  
+    
+    $totaldoorlock = doorlock::count();
+    $totalassigned = doorlockFrontdesk::count();
+    $totalActive = doorlock::where('doorlock_status', 'Active')->count();
+    $totalinnactive = doorlock::where('doorlock_status', 'Innactive')->count();
+    return view('admin.doorlock', compact('rooms', 'doorlocks', 
+    'totalActive', 'totalinnactive', 'totalassigned', 'totaldoorlock'));
 });
 
 Route::post('/storedoorLock', [doorlockController::class, 'storedoorLock']);
@@ -889,6 +896,9 @@ Route::put('/modifydoorLock/{doorlockID}', [doorlockController::class, 'modifydo
 Route::delete('/removedoorLock/{doorlockID}', [doorlockController::class, 'removedoorLock']);
 
 Route::get('/assignkeycard/{reservationID}', [doorlockController::class, 'assignkeycard']);
+
+Route::delete('/doorlock-assignments/{doorlockfrontdeskID}', [doorlockController::class, 'removeAssignment'])
+    ->name('assignments.remove');
 // Inventory And Stocks
 Route::get('/ias', function(){
      employeeAuthCheck();
@@ -1112,9 +1122,13 @@ Route::get('/frontdesk', function(){
     ->join('core1_inventory', 'core1_inventory.core1_inventoryID', '=', 'additional_booking.core1_inventoryID')
     ->latest('additional_booking.created_at')
     ->get();
+
+      $doorfrontdesk = doorlockFrontdesk::join('doorlock', 'doorlock.doorlockID', '=', 'doorlockfrontdesk.doorlockID')
+      ->latest('doorlockfrontdesk.created_at')
+      ->get();
     
     return view('admin.frontdesk', compact('reserverooms', 'totaleventreservation', 'pendingeventreservation', 
-    'confirmedeventreservation', 'cancelledeventreservation', 'totalItems', 'instock', 'lowstock', 'nostock', 'inventory', 'additionalBooking', ));
+    'confirmedeventreservation', 'cancelledeventreservation', 'totalItems', 'instock', 'lowstock', 'nostock', 'inventory', 'additionalBooking', 'doorfrontdesk' ));
 });
 
 Route::put('/reservationcheckin/{reservationID}', [reservationController::class, 'checkin']);

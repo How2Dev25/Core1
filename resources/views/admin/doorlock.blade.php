@@ -56,7 +56,7 @@
                             <p class="text-xs text-gray-500">All keycards</p>
                         </div>
                     </div>
-                    <p class="text-3xl font-bold text-gray-800">120</p>
+                    <p class="text-3xl font-bold text-gray-800">{{ $totaldoorlock }}</p>
                 </div>
             </div>
 
@@ -73,10 +73,10 @@
                         </div>
                         <div>
                             <h3 class="text-base font-semibold text-gray-800">Assigned Keycard</h3>
-                            <p class="text-xs text-gray-500">Keycards assigned to room</p>
+                            <p class="text-xs text-gray-500">Keycards assigned to guest</p>
                         </div>
                     </div>
-                    <p class="text-3xl font-bold text-gray-800">74</p>
+                    <p class="text-3xl font-bold text-gray-800">{{ $totalassigned }}</p>
                 </div>
             </div>
 
@@ -96,7 +96,7 @@
                             <p class="text-xs text-gray-500">Currently active</p>
                         </div>
                     </div>
-                    <p class="text-3xl font-bold text-gray-800">58</p>
+                    <p class="text-3xl font-bold text-gray-800">{{  $totalActive }}</p>
                 </div>
             </div>
 
@@ -116,7 +116,7 @@
                             <p class="text-xs text-gray-500">Disabled or inactive</p>
                         </div>
                     </div>
-                    <p class="text-3xl font-bold text-gray-800">16</p>
+                    <p class="text-3xl font-bold text-gray-800">{{  $totalinnactive }}</p>
                 </div>
             </div>
 
@@ -135,7 +135,7 @@
               </div>
             @endif
 
-           
+
 
 
           <div class="mt-5">
@@ -244,6 +244,8 @@
 
 
          @include('admin.components.doorlock.addrfid')
+
+
 
          @foreach ($doorlocks as $doorlock)
             @include('admin.components.doorlock.editrfid')
