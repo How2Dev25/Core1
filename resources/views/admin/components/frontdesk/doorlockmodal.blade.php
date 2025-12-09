@@ -8,6 +8,7 @@
                 <thead class="bg-blue-900 text-white">
                     <tr>
                         <th>Room</th>
+                        <th>RFID</th>
                         <th>Guest Name</th>
                         <th>Guest ID</th>
                         <th>Booking ID</th>
@@ -20,6 +21,7 @@
                     @forelse ($doorfrontdesk as $assignment)
                         <tr>
                             <td>Room {{ $assignment->roomID }}</td>
+                            <td>{{ $assignment->rfid }}</td>
                             <td>{{ $assignment->guestname }}</td>
                             <td>{{ $assignment->guestID ?? 'N/A' }}</td>
                             <td>{{ $assignment->bookingID }}</td>
@@ -68,7 +70,7 @@
 
             <div class="bg-base-200 p-3 rounded-lg mb-4">
                 <p><strong>Guest:</strong> {{ $assignment->guestname }}</p>
-                <p><strong>Doorlock ID:</strong> {{ $assignment->doorlockID }}</p>
+                <p><strong>RFID:</strong> {{ $assignment->rfid}}</p>
                 <p><strong>Booking ID:</strong> {{ $assignment->bookingID }}</p>
             </div>
 

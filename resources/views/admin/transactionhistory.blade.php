@@ -120,7 +120,19 @@
                                 </div>
                             </div>
 
-                        </div>
+                        </div>  
+
+                    <div class="mt-5">
+                        <button onclick="openBillingReportModal()"
+                            class="inline-flex items-center px-5 py-3 bg-[#001f54] text-white font-medium rounded-lg hover:bg-[#002d75] transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <span>Generate Report</span>
+                        </button>
+                    </div>
 
                         <!-- Transactions Table -->
                         <!-- Filter -->
@@ -217,7 +229,7 @@
 
         {{-- modals --}}
 
-
+        @include('admin.components.billing.generatereport')
 
 
         @livewireScripts

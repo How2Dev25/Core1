@@ -128,8 +128,9 @@
                   <livewire:channels-booking />
                 </div>
               </div>
-
             </div>
+
+
 
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 mt-5">
@@ -195,6 +196,9 @@
 
 
 
+
+
+
             <div class="grid grid-cols-5 max-md:grid-cols-2 gap-5 items-center">
               <button onclick="view_room.showModal()"
                 class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950 text-white rounded-lg shadow-md transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50">
@@ -226,6 +230,10 @@
                 <span class="font-medium">Door Locks</span>
               </button>
             </div>
+
+
+
+
 
 
 
@@ -298,14 +306,39 @@
             @endif
 
             <div class="flex flex-col gap-5 w-full">
-              <div class="w-full">
+              <div class="w-full mt-5">
+                  <button onclick="openReportModal()"
+                    class="inline-flex items-center px-5 py-3 bg-[#001f54] text-white font-medium rounded-lg hover:bg-[#002d75] transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>Room Booking Report</span>
+                  </button>
                 <livewire:approve-reserve />
               </div>
               <div class="w-full">
+                <button onclick="openEventReportModal()"
+                  class="inline-flex items-center px-5 py-3 bg-[#001f54] text-white font-medium rounded-lg hover:bg-[#002d75] transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span>Event Report</span>
+                </button>
+
                   <livewire:event-reservations />
               </div>
 
               <div class="w-full">
+                <button onclick="openAdditionalReportModal()"
+                  class="inline-flex items-center px-5 py-3 bg-[#001f54] text-white font-medium rounded-lg hover:bg-[#002d75] transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span>Additional Report</span>
+                </button>
                 @include('admin.components.frontdesk.additionalstable')
               </div>
 
@@ -320,9 +353,13 @@
             {{-- content --}}
           </section>
 
-          
+
 
           @include('admin.components.frontdesk.doorlockmodal')
+          @include('admin.components.frontdesk.printbookingreport')
+          @include('admin.components.frontdesk.printeventbooking')
+          @include('admin.components.frontdesk.printadditionalreportbooking')
+
 
           {{-- modals --}}
           @foreach($reserverooms as $reserveroom)
@@ -361,6 +398,9 @@
   </body>
 
 @endauth
+
+
+<script src="{{ asset('javascript/bookingreports.js') }}"></script>
 
 
 <script src="{{asset('javascript/photouploadglobal.js')}}"></script>

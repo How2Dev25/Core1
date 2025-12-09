@@ -1098,6 +1098,16 @@ Route::get('/frontdesk', function(){
         ->latest('core1_reservation.created_at')
         ->get();
 
+        $reservations = Ecm::join('core1_eventtype', 'core1_eventtype.eventtype_ID', '=', 'core1_ecm.eventtype_ID')
+    ->select(
+        'core1_ecm.*',
+        'core1_eventtype.eventtype_name',
+        'core1_eventtype.eventtype_photo',
+        'core1_eventtype.eventtype_price'
+    )
+    ->latest('core1_ecm.created_at')
+    ->get();
+
           $totaleventreservation = Ecm::count();
       $pendingeventreservation = Ecm::
         where('eventstatus', 'Pending')
@@ -1128,7 +1138,7 @@ Route::get('/frontdesk', function(){
       ->get();
     
     return view('admin.frontdesk', compact('reserverooms', 'totaleventreservation', 'pendingeventreservation', 
-    'confirmedeventreservation', 'cancelledeventreservation', 'totalItems', 'instock', 'lowstock', 'nostock', 'inventory', 'additionalBooking', 'doorfrontdesk' ));
+    'confirmedeventreservation', 'cancelledeventreservation', 'totalItems', 'instock', 'lowstock', 'nostock', 'inventory', 'additionalBooking', 'doorfrontdesk', 'reservations' ));
 });
 
 Route::put('/reservationcheckin/{reservationID}', [reservationController::class, 'checkin']);

@@ -152,7 +152,7 @@
                                     </svg>
                                 </button>
 
-                                 @if($reserveroom->reservation_bookingstatus == 'Checked In')
+                                @if(strtolower($reserveroom->reservation_bookingstatus) === 'checked in')
 
                                 <button onclick="document.getElementById('assign_keycard_{{$reserveroom->reservationID}}').showModal()"
                                     class="btn btn-sm" title="Assign Keycard" style="background-color: #001f54; color: white;">
