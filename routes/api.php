@@ -40,3 +40,4 @@ Route::get('/facilities', [ApiController::class, 'facility']);
 
 Route::post('/scan-rfid', [ApiController::class, 'scanRfid']);
 
+Route::get('/doorlock-status/{doorlockID}', [ApiController::class, 'checkDoorlockStatus']);

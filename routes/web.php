@@ -1382,19 +1382,27 @@ Route::get('/reservethisroom/{roomID}', [roomController::class, 'reservethisroom
 Route::get('/myreservation', function(){
 
        guestAuthCheck();
-    $reserverooms = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
-    ->leftJoin('core1_loyaltyandrewards', 'core1_loyaltyandrewards.roomID', '=', 'core1_room.roomID')
-    ->where('core1_reservation.guestID', Auth::guard('guest')->user()->guestID)
-    ->orderBy('core1_reservation.created_at', 'desc')
+  $reserverooms = Reservation::from('core1_reservation as r')
+    ->join('core1_room as room', 'room.roomID', '=', 'r.roomID')
+    ->leftJoin('core1_loyaltyandrewards as lr', 'lr.roomID', '=', 'room.roomID')
+    ->leftJoin('doorlock as dl', 'dl.roomID', '=', 'room.roomID')
+    ->leftJoin('doorlockfrontdesk as fd', 'fd.doorlockID', '=', 'dl.doorlockID')
+    ->where('r.guestID', Auth::guard('guest')->user()->guestID)
+    ->orderBy('r.created_at', 'desc')
     ->select(
-        'core1_reservation.*',
-        'core1_room.*',
-        DB::raw('COALESCE(core1_loyaltyandrewards.loyalty_value, 0) as loyalty_value'),
-        'core1_loyaltyandrewards.roomID as loyaltyroomID',
-        'core1_reservation.created_at as reservation_created_at'
+        'r.*',                 // reservation data
+        'room.*',              // room data
+        DB::raw('COALESCE(lr.loyalty_value, 0) as loyalty_value'),
+        'lr.roomID as loyaltyroomID',
+        'r.created_at as reservation_created_at',
+
+        // ADDED (recommended)
+        'dl.doorlockID',
+        'dl.rfid',
+        'fd.doorlockfrontdesk_status'
     )
     ->get();
-
+    
     $totalreservation = Reservation::where('core1_reservation.guestID', Auth::guard('guest')->user()->guestID)->count();
     $approvereservation = Reservation::where('core1_reservation.guestID', Auth::guard('guest')->user()->guestID)
     ->where('reservation_bookingstatus', 'Confirmed')->count();

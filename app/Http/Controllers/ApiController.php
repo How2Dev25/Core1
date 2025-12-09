@@ -351,4 +351,19 @@ public function hotelincome(Request $request)
     }
 
 
+    public function checkDoorlockStatus($doorlockID)
+{
+    $doorlockFrontdesk = doorlockFrontdesk::where('doorlockID', $doorlockID)->first();
+
+    if (!$doorlockFrontdesk) {
+        return response()->json(['success' => false, 'message' => 'Doorlock not found'], 404);
+    }
+
+    return response()->json([
+        'success' => true,
+        'status' => $doorlockFrontdesk->doorlockfrontdesk_status
+    ]);
+}
+
+
 }

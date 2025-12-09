@@ -152,6 +152,8 @@
                                     </svg>
                                 </button>
 
+                                 @if($reserveroom->reservation_bookingstatus == 'Checked In')
+
                                 <button onclick="document.getElementById('assign_keycard_{{$reserveroom->reservationID}}').showModal()"
                                     class="btn btn-sm" title="Assign Keycard" style="background-color: #001f54; color: white;">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -187,6 +189,8 @@
                                         <button>close</button>
                                     </form>
                                 </dialog>
+
+                                @endif
 
                                 @if($reserveroom->payment_status === 'Paid')
                                     <!-- Trigger button -->
