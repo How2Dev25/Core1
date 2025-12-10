@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ReservationPOS extends Model
 {
 
-     protected $table = 'reservationPOS';
+     protected $table = 'reservationpos';
 
      protected $primaryKey = 'reservationposID';
       protected $fillable = [

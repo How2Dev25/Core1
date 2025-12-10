@@ -33,18 +33,63 @@
        
           
           <!-- Category -->
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Category</span>
-            </label>
-          <select name="core1_inventory_category" class="select select-bordered w-full" required>
-    <option disabled {{ $inv->core1_inventory_category == null ? 'selected' : '' }}>Select category</option>
-    <option {{ $inv->core1_inventory_category == 'Linens' ? 'selected' : '' }}>Linens</option>
-    <option {{ $inv->core1_inventory_category == 'Bath Amenities' ? 'selected' : '' }}>Bath Amenities</option>
-    <option {{ $inv->core1_inventory_category == 'Cleaning Supplies' ? 'selected' : '' }}>Cleaning Supplies</option>
-    <option {{ $inv->core1_inventory_category == 'Room Equipment' ? 'selected' : '' }}>Room Equipment</option>
-</select>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Category</span>
+        </label>
+        <div class="flex gap-2">
+          <select name="core1_inventory_category" class="select select-bordered w-full"
+            id="categorySelect-{{ $inv->core1_inventoryID }}" required>
+            <option disabled {{ $inv->core1_inventory_category == null ? 'selected' : '' }}>Select category</option>
+            <option {{ $inv->core1_inventory_category == 'Linens' ? 'selected' : '' }}>Linens</option>
+            <option {{ $inv->core1_inventory_category == 'Bath Amenities' ? 'selected' : '' }}>Bath Amenities</option>
+            <option {{ $inv->core1_inventory_category == 'Cleaning Supplies' ? 'selected' : '' }}>Cleaning Supplies</option>
+            <option {{ $inv->core1_inventory_category == 'Room Equipment' ? 'selected' : '' }}>Room Equipment</option>
+          </select>
+          <label for="addCategoryModal-{{ $inv->core1_inventoryID }}"
+            class="btn btn-outline btn-primary cursor-pointer">Add</label>
+        </div>
+      </div>
+      
+      <!-- DaisyUI Modal -->
+      <input type="checkbox" id="addCategoryModal-{{ $inv->core1_inventoryID }}" class="modal-toggle" />
+      <div class="modal">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg">Add New Category</h3>
+          <input type="text" id="newCategoryInput-{{ $inv->core1_inventoryID }}" placeholder="Enter category name"
+            class="input input-bordered w-full mt-4" />
+          <div class="modal-action">
+            <label for="addCategoryModal-{{ $inv->core1_inventoryID }}" class="btn btn-ghost">Cancel</label>
+            <button type="button" class="btn btn-primary saveCategoryBtn" data-id="{{ $inv->core1_inventoryID }}">Save</button>
           </div>
+        </div>
+      </div>
+<script>
+  document.querySelectorAll('.saveCategoryBtn').forEach(button => {
+      button.addEventListener('click', () => {
+        const id = button.dataset.id;
+        const select = document.getElementById(`categorySelect-${id}`);
+        const input = document.getElementById(`newCategoryInput-${id}`);
+        const modal = document.getElementById(`addCategoryModal-${id}`);
+
+        const newCategory = input.value.trim();
+        if (newCategory) {
+          // Create new option and select it
+          const option = document.createElement('option');
+          option.textContent = newCategory;
+          option.value = newCategory;
+          option.selected = true;
+          select.appendChild(option);
+
+          // Close modal
+          modal.checked = false;
+        } else {
+          alert('Please enter a category name.');
+        }
+      });
+    });
+
+</script>
           
           <!-- Subcategory -->
           <div class="form-control">

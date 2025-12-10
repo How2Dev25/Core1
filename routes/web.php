@@ -329,13 +329,13 @@ Route::get('/pointofsale', function(){
       employeeAuthCheck();
       verifyfrontdesk();
 
-    $reservationroom = ReservationPOS::join('core1_room', 'core1_room.roomID', '=', 'reservationPOS.roomID')
-    ->leftJoin('inventorypos', 'inventorypos.reservationposID', '=', 'reservationPOS.reservationposID')
+      $reservationroom = ReservationPOS::join('core1_room', 'core1_room.roomID', '=', 'reservationpos.roomID')
+    ->leftJoin('inventorypos', 'inventorypos.reservationposID', '=', 'reservationpos.reservationposID')
     ->leftJoin('core1_inventory', 'core1_inventory.core1_inventoryID', '=', 'inventorypos.core1_inventoryID')
-    ->where('reservationPOS.employeeID', Auth::user()->Dept_no)
-    ->orderBy('reservationPOS.created_at', 'desc')
+    ->where('reservationpos.employeeID', Auth::user()->Dept_no)
+    ->orderBy('reservationpos.created_at', 'desc')
     ->get([
-        'reservationPOS.*',
+        'reservationpos.*',
         'core1_room.roomtype',
         'core1_room.roomphoto',
         'core1_inventory.core1_inventory_name',
@@ -344,6 +344,8 @@ Route::get('/pointofsale', function(){
         'core1_inventory_image',
         'inventorypos.inventoryposID',
     ]);
+
+    
       $reservationevent = eventPOS::join('core1_eventtype', 'core1_eventtype.eventtype_ID', '=', 
       'eventpos.eventtype_ID')->where('employeeID', Auth::user()->Dept_no)
       ->latest('eventpos.created_at')

@@ -32,18 +32,66 @@
        
           
           <!-- Category -->
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Category</span>
-            </label>
-            <select name="core1_inventory_category" class="select select-bordered w-full" required>
-              <option disabled selected>Select category</option>
-              <option>Linens</option>
-              <option>Bath Amenities</option>
-              <option>Cleaning Supplies</option>
-              <option>Room Equipment</option>
-            </select>
-          </div>
+         <div class="form-control">
+  <label class="label">
+    <span class="label-text">Category</span>
+  </label>
+  <div class="flex gap-2">
+    <select id="categorySelect" name="core1_inventory_category" class="select select-bordered w-full" required>
+      <option disabled selected>Select category</option>
+      <option>Linens</option>
+      <option>Bath Amenities</option>
+      <option>Cleaning Supplies</option>
+      <option>Room Equipment</option>
+    </select>
+    <button type="button" class="btn btn-outline btn-primary" id="addCategoryBtn">Add</button>
+  </div>
+</div>
+
+<!-- DaisyUI Modal -->
+<input type="checkbox" id="addCategoryModal" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Add New Category</h3>
+    <input type="text" id="newCategoryInput" placeholder="Enter category name" class="input input-bordered w-full mt-4" />
+    <div class="modal-action">
+      <label for="addCategoryModal" class="btn btn-ghost">Cancel</label>
+      <button class="btn btn-primary" id="saveCategoryBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const addCategoryBtn = document.getElementById('addCategoryBtn');
+  const saveCategoryBtn = document.getElementById('saveCategoryBtn');
+  const categorySelect = document.getElementById('categorySelect');
+  const newCategoryInput = document.getElementById('newCategoryInput');
+  const addCategoryModalCheckbox = document.getElementById('addCategoryModal');
+
+  // Open modal when "Add" button is clicked
+  addCategoryBtn.addEventListener('click', () => {
+    newCategoryInput.value = ''; // Clear input
+    addCategoryModalCheckbox.checked = true;
+  });
+
+  // Save new category
+  saveCategoryBtn.addEventListener('click', () => {
+    const newCategory = newCategoryInput.value.trim();
+    if (newCategory) {
+      // Create new option and select it
+      const option = document.createElement('option');
+      option.textContent = newCategory;
+      option.value = newCategory;
+      option.selected = true;
+      categorySelect.appendChild(option);
+
+      // Close modal
+      addCategoryModalCheckbox.checked = false;
+    } else {
+      alert('Please enter a category name.');
+    }
+  });
+</script>
           
           <!-- Subcategory -->
           <div class="form-control">
