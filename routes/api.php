@@ -41,3 +41,12 @@ Route::get('/facilities', [ApiController::class, 'facility']);
 Route::post('/scan-rfid', [ApiController::class, 'scanRfid']);
 
 Route::get('/doorlock-status/{doorlockID}', [ApiController::class, 'checkDoorlockStatus']);
+
+
+// Core Human 
+Route::get('/requestemployee', [ApiController::class, 'requestEmployee']);
+Route::put('/approverequest/{requestempID}', [ApiController::class, 'approveEmployeeRequest']);
+Route::put('/rejectrequest/{requestempID}', [ApiController::class, 'rejectEmployeeRequest']);
+
+Route::get('/reportEmployee', [ApiController::class, 'reportEmployee']);
+Route::put('/resolvedEmployee/{reportID}', [ApiController::class, 'resolvedEmployee']);

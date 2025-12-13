@@ -8,8 +8,10 @@ use App\Models\DeptLogs;
 use App\Models\doorlock;
 use App\Models\doorlockFrontdesk;
 use App\Models\Ecm;
+use App\Models\EmployeeReport;
 use App\Models\facility;
 use App\Models\hotelBilling;
+use App\Models\requestEmployee;
 use App\Models\Reservation;
 use App\Models\restobillingandpayments;
 use App\Models\room;
@@ -366,6 +368,164 @@ public function hotelincome(Request $request)
         'status' => $doorlockFrontdesk->doorlockfrontdesk_status
     ]);
 }
+
+
+// Core Human Integration
+
+    public function requestEmployee(Request $request){
+      $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        try{
+            $requestEmployee = requestEmployee::all();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Fetched Succesfully',
+                'data' =>  $requestEmployee,
+            ],200);
+        }
+        catch(\Exception $e){
+             return response()->json([
+                'success' => false,
+                'message' => 'Cant fetch data',
+                'data' => $e->getMessage(),
+            ], 401);
+        }
+    }
+
+
+    public function approveEmployeeRequest(Request $request, $requestempID){
+         $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+
+    $requestEmployee = requestEmployee::find($requestempID);
+    if (!$requestEmployee) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not found.'
+        ], 404);
+    }
+    $requestEmployee->status = 'Approved';
+    $requestEmployee->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Request approved successfully.',
+        'data' => $requestEmployee
+    ], 200);
+       
+
+    }
+
+
+     public function rejectEmployeeRequest(Request $request, $requestempID){
+         $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+
+    $requestEmployee = requestEmployee::find($requestempID);
+    if (!$requestEmployee) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not found.'
+        ], 404);
+    }
+    $requestEmployee->status = 'Rejected';
+    $requestEmployee->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Request approved successfully.',
+        'data' => $requestEmployee
+    ], 200);
+       
+
+    }
+
+
+
+
+     public function reportEmployee(Request $request){
+      $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        try{
+            $reportEmployee = EmployeeReport::all();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Fetched Succesfully',
+                'data' =>  $reportEmployee,
+            ],200);
+        }
+        catch(\Exception $e){
+             return response()->json([
+                'success' => false,
+                'message' => 'Cant fetch data',
+                'data' => $e->getMessage(),
+            ], 401);
+        }
+    }
+
+
+    public function resolvedEmployee(Request $request, $reportID){
+         $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        $resolveemployee = EmployeeReport::findOrFail($reportID);
+
+        if(!$resolveemployee){
+            return response()->json([
+                'success' => false,
+                'message' => 'Request Not Found',
+            ], 400);
+        }
+
+        $resolveemployee->status = 'Resolved';
+        $resolveemployee->save();
+
+        return response()->json([
+
+            'success' => true,
+            'message' => 'Status Has been set to Resolved',
+            'data' => $resolveemployee,
+        ], 200);
+    }
+
+
+   
 
 
 }

@@ -152,7 +152,17 @@
                                             <td>{{ $request->position }}</td>
                                             <td>{{ $request->quantity }}</td>
                                             <td>{{ $request->reason }}</td>
-                                            <td><span class="badge badge-warning">{{ $request->status }}</span></td>
+                                        <td>
+                                            @php
+                                                $statusClass = match ($request->status) {
+                                                    'Approved' => 'badge-success',
+                                                    'Rejected' => 'badge-error',
+                                                    'Pending' => 'badge-warning',
+                                                    default => 'badge-neutral',
+                                                };
+                                            @endphp
+                                            <span class="badge {{ $statusClass }}">{{ $request->status }}</span>
+                                        </td>
                                             <td>{{ $request->created_at->diffForHumans() }}</td> 
                                             <td class="flex flex-col gap-2">
                                                 <button onclick="document.getElementById('viewmanpower_{{ $request->requestempID }}').showModal()" class="btn btn-xs btn-outline">View</button>
@@ -188,11 +198,11 @@
 
 
         {{-- modals --}}
-    @foreach ($requestemp as $request )
+    @foreach ($requestemp as $request)
     @include('admin.components.requesition.viewrequest')
     @include('admin.components.requesition.removerequest')
     @endforeach
-    
+
 
         </div>
 
