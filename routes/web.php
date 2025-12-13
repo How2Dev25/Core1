@@ -5,6 +5,8 @@ use App\Http\Controllers\bookingAddonsController;
 use App\Http\Controllers\channelController;
 use App\Http\Controllers\doorlockController;
 use App\Http\Controllers\ecmController;
+use App\Http\Controllers\EmployeeReportController;
+use App\Http\Controllers\employeerequestController;
 use App\Http\Controllers\eventtypeController;
 use App\Http\Controllers\facilityController;
 use App\Http\Controllers\hmpController;
@@ -33,6 +35,7 @@ use App\Models\doorlockFrontdesk;
 use App\Models\dynamicBilling;
 use App\Models\Ecm;
 use App\Models\ecmtype;
+use App\Models\EmployeeReport;
 use App\Models\eventPOS;
 use App\Models\facility;
 use App\Models\Guest;
@@ -46,6 +49,7 @@ use App\Models\ordersfromresto;
 use App\Models\restointegration;
 use App\Models\room;
 use App\Models\Lar;
+use App\Models\requestEmployee;
 use App\Models\room_maintenance;
 use App\Models\roomfeedbacks;
 use App\Models\roomtypes;
@@ -1068,8 +1072,50 @@ Route::post('/aireserve', [reservationController::class, 'searchRooms']);
 Route::post('/createreservation', [reservationController::class, 'store']);
 Route::put('/modifyreservation/{reservationID}', [reservationController::class, 'modify']);
 Route::delete('/deletereservation/{reservationID}', [reservationController::class, 'delete']);
+
+
+// HR integration
+Route::get('/requestemployee', function(){
+     employeeAuthCheck();
+     verifydashboard();
+
+     
+    $requestemp = requestEmployee::latest()->get();
+
+    $totalreq = requestEmployee::count();
+
+    $pendingreq = requestEmployee::where('status', 'Pending')->count();
+    $approvereq = requestEmployee::where('status', 'Approved')->count();
+    $rejectreq = requestEmployee::where('status', 'Rejected')->count();
+    return view('admin.requesitionemp', compact('requestemp', 
+    'pendingreq', 'approvereq', 'rejectreq', 'totalreq'));
+});
+
+Route::post('/requestEmployee', [employeerequestController::class, 'requestEmployee']);
+Route::delete('/removerequestEmployee/{requestempID}', [employeerequestController::class, 'removerequestEmployee']);
+
+// report employee
+Route::get('/reportemployee', function(){
+     employeeAuthCheck();
+     verifydashboard();
+
+     $employees = DeptAccount::all();
+     $reports = EmployeeReport::latest()->get();
+
+     $totalemp = DeptAccount::count();
+     $active = DeptAccount::where('status', 'Active')->count();
+     $reportscount = EmployeeReport::count();
+     $awaiting = EmployeeReport::where('status', 'Pending')->count();
+     
+    return view('admin.reportemployee', compact('employees', 
+    'reports', 'totalemp', 'active', 'reportscount', 'awaiting'));
+});
+
+Route::post('/reportemp', [EmployeeReportController::class, 'store']);
+Route::delete('/removereport/{reportID}', [EmployeeReportController::class, 'remove']);
 // guest
 Route::post('/guestcreatereservation', [reservationController::class, 'gueststore']);
+
  
 
 Route::get('/reservationpage', function(){
@@ -1506,6 +1552,8 @@ Route::get('/recentorders', function(){
     ->get();
     return view('guest.recentorders', compact('mycart'));
 });
+
+
 
 Route::delete('/cancelorder/{orderID}', [orderController::class, 'cancelorder']);
 Route::put('/deliverorder/{orderID}', [orderController::class, 'delivered']);

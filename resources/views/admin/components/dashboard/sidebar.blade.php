@@ -250,9 +250,9 @@
 
       <!-- Room Management -->
       @if(
-          Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Room Attendant'
-          || Auth::user()->role === 'Room Manager'
-        )
+  Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Room Attendant'
+  || Auth::user()->role === 'Room Manager'
+)
                 <div class="collapse group">
                   <input type="checkbox" class="peer" />
                   <div
@@ -268,9 +268,9 @@
                   </div>
                   <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
                     @if(
-            Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Room Attendant'
-            || Auth::user()->role === 'Room Manager'
-          )
+    Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Room Attendant'
+    || Auth::user()->role === 'Room Manager'
+  )
                       <a href="/roommanagement"
                         class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
                         <span class="flex items-center gap-2">
@@ -291,9 +291,9 @@
                     @endif
 
                     @if(
-            Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Room Attendant'
-            || Auth::user()->role === 'Room Manager'
-          )
+    Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Room Attendant'
+    || Auth::user()->role === 'Room Manager'
+  )
                       <a href="/roomtypesadmin"
                         class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
                         <span class="flex items-center gap-2">
@@ -440,6 +440,53 @@
           </div>
         </a>
       @endif
+
+
+
+      @if(Auth::user()->role === 'Hotel Admin')
+        <!-- Manpower Management -->
+        <div class="collapse group">
+          <input type="checkbox" class="peer" />
+
+          <div
+            class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
+
+            <div class="flex items-center">
+              <div
+                class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+                <i class="fas fa-users-cog text-[#F7B32B] group-hover:text-white"></i>
+              </div>
+              <span class="ml-3 sidebar-text">Staff Management</span>
+            </div>
+
+            <i
+              class="fas fa-chevron-down w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"></i>
+          </div>
+
+          <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
+
+            <!-- Manpower Requisitions -->
+            <a href="/requestemployee"
+              class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+              <span class="flex items-center gap-2">
+                <i class="fas fa-file-signature w-4 h-4 text-[#F7B32B]"></i>
+                Manpower Requisitions
+              </span>
+            </a>
+
+            <!-- Employee Reports -->
+            <a href="/reportemployee"
+              class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+              <span class="flex items-center gap-2">
+                <i class="fas fa-chart-line w-4 h-4 text-[#F7B32B]"></i>
+                Report Employee
+              </span>
+            </a>
+
+          </div>
+        </div>
+      @endif
+
     </nav>
   </div>
 </div>
