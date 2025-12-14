@@ -47,6 +47,8 @@
     <!-- Hero Section -->
     @include('landing.hero')
 
+    @include('landing.offerings')
+
     {{-- promo and events --}}
 
 
