@@ -31,24 +31,7 @@
                     <div class="pb-5 border-b border-base-300 animate-fadeIn">
                         <h1 class="text-2xl font-bold text-[#191970] bg-clip-text ">Event And Conference Management</h1>
                     </div>
-                    {{-- Subsystem Name --}}
-
-                    {{-- content --}}
-                    <!-- content -->
-                    <!DOCTYPE html>
-                    <html lang="en">
-
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Event Booking</title>
-                        <script src="https://cdn.tailwindcss.com"></script>
-                        <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet"
-                            type="text/css" />
-
-                    </head>
-
-                    <body>
+                 
                         <section class="p-6  min-h-screen ">
                             <form autocomplete="off" action="/bookthisevent" method="POST" id="eventBookingForm"
                                 class="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
@@ -538,7 +521,7 @@
 
                                             <div
                                                 class="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[#001f54] to-[#1a3470] text-white border-t-4 border-t-white/20">
-                                                <span class="flex items-center text-black gap-2 text-lg font-bold">
+                                                <span class="flex items-center text-white gap-2 text-lg font-bold">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                                         viewBox="0 0 24 24" fill="none" stroke="#F7B32B" stroke-width="2"
                                                         stroke-linecap="round" stroke-linejoin="round">

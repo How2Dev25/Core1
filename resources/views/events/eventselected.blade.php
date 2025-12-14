@@ -559,8 +559,7 @@ $today = \Carbon\Carbon::today()->format('Y-m-d');
                                         <path d="m16 8 2-2 2 2"></path>
                                         <path d="M21 14V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h11">
                                         </path>
-                                        <path d="M5 12V极速赛车开奖直播 历史记录 澳洲幸运10开奖结果 飞飞加拿大预测2.8 幸运飞行艇开奖结果" class="hidden">
-                                        </path>
+                                        
                                     </svg>
                                 </div>
                                 <div>
