@@ -2,21 +2,15 @@
 <div id="toastContainer" class="fixed bottom-4 right-4 space-y-2 z-50"></div>
 
 <dialog id="confirm_modal_bas2" class="modal">
-  <div class="modal-box max-w-md relative">
+  <div class="modal-box max-w-3xl max-h-[85vh] overflow-y-auto">
     <!-- Close button -->
     <form method="dialog" class="absolute top-4 right-4">
       <button class="btn btn-sm btn-circle btn-ghost">&times;</button>
     </form>
 
-    @include('booking.roombookingterms')
-
-    <div class="text-center p-6">
-      <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
-          stroke-width="2">
-          <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-        </svg>
-      </div>
+   
+    <div class=" p-6">
+      @include('booking.roombookingterms')
 
       <h3 class="text-lg font-medium text-gray-900 mb-2">Submit</h3>
       <p class="text-sm text-gray-500 mb-6">Are you sure you want to book this room?</p>
@@ -27,7 +21,7 @@
         </form>
 
         <div class="flex-1 relative">
-          <button id="confirmBtn" type="button" class="btn btn-primary w-full flex items-center justify-center"
+          <button id="submitBtn" type="button" class="btn btn-primary w-full opacity-50 cursor-not-allowed transition " disabled
             onclick="submitReservation()">
             <span id="btnText">Yes</span>
             <svg id="btnSpinner" class="animate-spin ml-2 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg"
@@ -45,9 +39,7 @@
     </div>
   </div>
 
-  <form method="dialog" class="modal-backdrop">
-    <button>close</button>
-  </form>
+  
 </dialog>
 
 <script>
@@ -71,13 +63,15 @@
 
   async function submitReservation() {
     const form = document.getElementById('reservationForm');
-    const confirmBtn = document.getElementById('confirmBtn');
+    const confirmBtn = document.getElementById('submitBtn');
     const btnText = document.getElementById('btnText');
     const btnSpinner = document.getElementById('btnSpinner');
 
     confirmBtn.disabled = true;
     btnText.textContent = 'Processing...';
     btnSpinner.classList.remove('hidden');
+
+    
 
     const formData = new FormData(form);
 
