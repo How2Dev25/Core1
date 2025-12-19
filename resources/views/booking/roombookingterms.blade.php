@@ -81,7 +81,7 @@
         </li>
     </ul>
 
-    <div class="mt-6 flex items-start gap-3 text-left">
+    <div class="mt-6 flex items-center gap-3 text-left">
         <input type="checkbox" id="agreeTerms" class="checkbox checkbox-primary mt-1" onchange="toggleSubmitButton()" />
     
         <label for="agreeTerms" class="text-sm text-gray-700 cursor-pointer">

@@ -53,26 +53,12 @@ const FormValidator = {
             },
             message: "You must be at least 18 years old"
         },
-        guestphonenumber: {
-            required: true,
-            validate: (value) => {
-                // Accept formats: +639XXXXXXXXX, 639XXXXXXXXX, 09XXXXXXXXX, 9XXXXXXXXX
-                const cleaned = value.replace(/\D/g, '');
-                
-                // Check if it's a valid PH mobile number
-                if (value.startsWith('+63')) {
-                    return cleaned.length === 12; // +63 + 10 digits
-                } else if (value.startsWith('63') && !value.startsWith('+')) {
-                    return cleaned.length === 11; // 63 + 10 digits
-                } else if (value.startsWith('0')) {
-                    return cleaned.length === 11; // 0 + 10 digits
-                } else if (value.match(/^9/)) {
-                    return cleaned.length === 10; // 9 + 9 digits
-                }
-                return false;
-            },
-            message: "Enter valid PH mobile (e.g., +639XXXXXXXXX, 09XXXXXXXXX)"
-        },
+       guestphonenumber: {
+  required: true,
+  validate: () =>
+    document.getElementById("guestPhoneHidden").value !== "",
+  message: "Enter a valid mobile number"
+},      
         guestemailaddress: {
             required: true,
             validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
@@ -89,22 +75,11 @@ const FormValidator = {
             message: "Contact person name is required"
         },
         guestcontactpersonnumber: {
-            required: true,
-            validate: (value) => {
-                const cleaned = value.replace(/\D/g, '');
-                if (value.startsWith('+63')) {
-                    return cleaned.length === 12;
-                } else if (value.startsWith('63') && !value.startsWith('+')) {
-                    return cleaned.length === 11;
-                } else if (value.startsWith('0')) {
-                    return cleaned.length === 11;
-                } else if (value.match(/^9/)) {
-                    return cleaned.length === 10;
-                }
-                return false;
-            },
-            message: "Enter valid PH mobile for contact person"
-        },
+  required: true,
+  validate: () =>
+    document.getElementById("contactPhoneHidden").value !== "",
+  message: "Enter a valid contact number"
+},
         reservation_validID: {
             required: true,
             validate: (input) => {

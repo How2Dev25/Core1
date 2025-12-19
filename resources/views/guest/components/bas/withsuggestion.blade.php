@@ -10,6 +10,9 @@
     @vite('resources/css/app.css')
 
     <script src="https://unpkg.com/lucide@latest"></script>
+       <link rel="stylesheet" href="{{ asset('mobilevalid/intlTelInput.min.css') }}">
+    <script src="{{ asset('mobilevalid/intlTelInput.min.js') }}"></script>
+    <script src="{{ asset('mobilevalid/utils.js') }}"></script>
 
     <title>{{$title}} - Booking And Reservation</title>
     @livewireStyles
@@ -151,7 +154,7 @@
                                     </div>
 
                                     <!-- Reservation Details -->
-                                    <div class="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
+                                    <div class="bg-white/95  rounded-3xl p-8 shadow-2xl border border-white/20">
                                         <div class="flex items-center gap-4 mb-6">
                                             <div
                                                 class="p-3 bg-gradient-to-br from-[#001f54] to-[#1a3470] rounded-2xl shadow-lg">
@@ -257,7 +260,7 @@
                                     </div>
 
                                     <!-- Guest Info -->
-                                    <div class="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
+                                    <div class="bg-white/95  rounded-3xl p-8 shadow-2xl border border-white/20">
                                         <div class="flex items-center gap-4 mb-6">
                                             <div
                                                 class="p-3 bg-gradient-to-br from-[#001f54] to-[#1a3470] rounded-2xl shadow-lg">
@@ -320,22 +323,16 @@
 
                                             <div class="form-control">
                                                 <label class="label font-semibold text-[#001f54] mb-2">
-                                                    <span class="flex items-center gap-2">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path
-                                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                                            </path>
-                                                        </svg>
-                                                        Mobile Number
-                                                    </span>
+                                                    Mobile Number <span class="text-red-500">*</span>
                                                 </label>
-                                                <input value="{{Auth::guard('guest')->user()->guest_mobile}}" type="tel"
-                                                    name="guestphonenumber"
-                                                    class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
-                                                    required />
+
+                                                <input type="tel" id="guestPhone"
+                                                    class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54]" required />
+
+                                                <!-- hidden field for backend -->
+                                                <input type="hidden" name="guestphonenumber" id="guestPhoneHidden">
                                             </div>
+
 
                                             <div class="form-control">
                                                 <label class="label font-semibold text-[#001f54] mb-2">
@@ -394,25 +391,16 @@
                                                     required />
                                             </div>
 
-                                            <div class="form-control">
-                                                <label class="label font-semibold text-[#001f54] mb-2">
-                                                    <span class="flex items-center gap-2">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path
-                                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                                            </path>
-                                                        </svg>
-                                                        Contact Person Number
-                                                    </span>
-                                                </label>
-                                                <input type="tel" name="guestcontactpersonnumber"
-                                                    class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
-                                                    minlength="11" maxlength="11"
-                                pattern="[0-9]{11}" placeholder="e.g. 09123456789"
-                                                    required />
-                                            </div>
+                                        <div class="form-control ">
+                                            <label class="label font-semibold text-[#001f54] mb-2">
+                                                Contact Person Number <span class="text-red-500">*</span>
+                                            </label>
+
+                                            <input type="tel" id="contactPhone"
+                                                class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54]" required />
+
+                                            <input type="hidden" name="guestcontactpersonnumber" id="contactPhoneHidden">
+                                        </div>
                                             <input type="hidden" name="subtotal" id="hiddenSubtotal">
                                             <input type="hidden" name="vat" id="hiddenVat">
                                             <input type="hidden" name="serviceFee" id="hiddenServiceFee">
@@ -420,7 +408,7 @@
                                         </div>
                                     </div>
 
-                                        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
+                                        <div class="bg-white/95  rounded-3xl p-8 shadow-2xl border border-white/20">
         <div class="flex items-center gap-4 mb-6">
             <div class="p-3 bg-gradient-to-br from-[#001f54] to-[#1a3470] rounded-2xl shadow-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -786,6 +774,7 @@
                         @include('guest.components.bas.confirmation')
 
 
+                        <script src="{{ asset('mobilevalid/utilize.js') }}"></script>
 
                         <!-- Initialize Lucide Icons -->
                         <!-- JavaScript to Fill Form on Card Click -->
