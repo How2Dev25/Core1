@@ -183,8 +183,10 @@
                     </script>
 
 
+                    <script src="{{ asset('javascript/chart.js') }}">
 
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    </script>
+
                     <script>
                         document.addEventListener("DOMContentLoaded", function () {
                             // Reservations (Last 7 Days)

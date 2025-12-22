@@ -14,6 +14,7 @@ use App\Models\hotelBilling;
 use App\Models\requestEmployee;
 use App\Models\Reservation;
 use App\Models\restobillingandpayments;
+use App\Models\rfidHistory;
 use App\Models\room;
 use App\Models\stockRequest;
 use Illuminate\Http\Request;
@@ -346,6 +347,17 @@ public function hotelincome(Request $request)
         $doorlockFrontdesk->doorlockfrontdesk_status ? 0 : 1;
 
     $doorlockFrontdesk->save();
+
+
+       $doorStateText = $doorlockFrontdesk->doorlockfrontdesk_status
+        ? 'Unlocked'
+        : 'Locked';
+
+    // 📝 Save to history_logs
+    rfidHistory::create([
+        'doorlockID' => $doorlock->doorlockID,
+        'door_state' => $doorStateText,
+    ]);
 
     return response()->json([
         'success' => true,

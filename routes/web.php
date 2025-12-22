@@ -886,8 +886,17 @@ Route::get('/doorlockadmin', function(){
    $rooms = Room::all();
 
     $doorlocks = doorlock::join('core1_room', 'core1_room.roomID', '=', 'doorlock.roomID')
+    ->leftJoin('doorlockfrontdesk', 'doorlockfrontdesk.doorlockID', '=', 'doorlock.doorlockID')
+    ->select(
+        'doorlock.*',
+        'core1_room.roomID',
+        'doorlockfrontdesk.doorlockID as frontdesk_doorlockID',
+        'doorlockfrontdesk.doorlockfrontdesk_status',
+        'doorlockfrontdesk.guestname',
+        'doorlockfrontdesk.bookingID'
+    )
     ->latest('doorlock.created_at')
-    ->get();  
+    ->get();
     
     $totaldoorlock = doorlock::count();
     $totalassigned = doorlockFrontdesk::count();
@@ -896,6 +905,8 @@ Route::get('/doorlockadmin', function(){
     return view('admin.doorlock', compact('rooms', 'doorlocks', 
     'totalActive', 'totalinnactive', 'totalassigned', 'totaldoorlock'));
 });
+
+Route::get('/monitordoorlock/{doorlockID}', [doorlockController::class, 'monitor']);
 
 Route::post('/storedoorLock', [doorlockController::class, 'storedoorLock']);
 Route::put('/modifydoorLock/{doorlockID}', [doorlockController::class, 'modifydoorLock']);

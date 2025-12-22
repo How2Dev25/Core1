@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     @vite('resources/css/app.css')
+    <script src="{{ asset('javascript/chart.js') }}"></script>
+
 
     <script src="https://unpkg.com/lucide@latest"></script>
 

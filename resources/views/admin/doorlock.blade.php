@@ -163,7 +163,6 @@
                     <div class="flex items-start justify-between mb-4">
                       <div class="flex-1">
                         <h3 class="card-title text-xl font-bold text-gray-800">Room {{ $doorlock->roomID }}</h3>
-                        <p class="text-sm text-gray-500 mt-1">Lock ID: #{{ $doorlock->doorlockID }}</p>
                       </div>
                       <div
                         class="badge {{ $doorlock->doorlock_status == 'Active' ? 'badge-success' : 'badge-error' }} badge-lg gap-2">
@@ -189,8 +188,54 @@
                       </div>
                     </div>
 
+                    <!-- Assignment Section (DESIGN ONLY) -->
+                    <div class="bg-gradient-to-br from-emerald-50 to-teal-50 p-4 rounded-xl mb-4 border border-emerald-100">
+                      <div class="flex items-start gap-3">
+                        <div class="bg-emerald-500 p-2 rounded-lg">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M5.121 17.804A9 9 0 1118 6.196M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                        </div>
+
+                      <div class="flex-1">
+                        <p class="text-xs font-semibold text-emerald-700 uppercase tracking-wide mb-1">
+                          Assigned To
+                        </p>
+
+                        @if(!empty($doorlock->guestname))
+                          <p class="text-sm font-bold text-gray-800">
+                            {{ $doorlock->guestname }}
+                          </p>
+                        @else
+                          <p class="text-sm italic text-gray-500">
+                            Not assigned
+                          </p>
+                        @endif
+
+                        @if(!empty($doorlock->bookingID))
+                          <p class="text-xs text-gray-600">
+                            Booking ID:
+                            <span class="font-mono">{{ $doorlock->bookingID }}</span>
+                          </p>
+                        @endif
+                      </div>
+                      </div>
+                    </div>
+
                     <!-- Action Buttons -->
                     <div class="card-actions flex gap-2 mt-4">
+
+                  @if(!is_null($doorlock->frontdesk_doorlockID))
+                    <a target="_blank" href="/monitordoorlock/{{ $doorlock->frontdesk_doorlockID }}" class="btn btn-info btn-sm flex-1 gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 17v-2a4 4 0 014-4h4m0 0l-3-3m3 3l-3 3M3 3h6v6H3V3z" />
+                      </svg>
+                      Monitor
+                    </a>
+                  @endif
                       <button onclick="document.getElementById('editrfid_{{ $doorlock->doorlockID }}').showModal()"
                         class="btn btn-primary btn-sm flex-1 gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
