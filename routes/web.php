@@ -408,6 +408,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/department/profile/update', [userController::class, 'updateadmin'])->name('department.profile.update');
 });
 
+Route::get('employeeprofile/{Dept_no}', [userController::class, 'employeeProfile']);
+
 Route::get('/employeedashboard', function() {
     employeeAuthCheck();
     verifydashboard();
@@ -575,6 +577,7 @@ Route::get('/employeedashboard', function() {
             'department_accounts.status',
             'department_accounts.email',
             'adminphoto',
+            'department_accounts.Dept_no',
         )
         ->take(5)
         ->get();

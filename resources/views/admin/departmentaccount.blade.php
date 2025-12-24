@@ -121,55 +121,68 @@
                     <th>Employee</th>
                     <th>Email & Role</th>
                     <th>Status</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   @foreach ($employee as $employees)
-                    @php
-                      // Fetch the employee photo (from additionalInfo relation)
-                      $photo = $employees->additionalInfo->adminphoto ?? null;
-                      $initials = strtoupper(substr($employees->employee_name, 0, 2));
-                    @endphp
-                    <tr class="hover:bg-gray-50 transition">
-                      <td class="font-medium">{{ $employees->employee_id }}</td>
-                      <td>{{ $employees->dept_name }}</td>
-                      <td>
-                        <div class="flex items-center gap-3">
-                          <div class="avatar flex-shrink-0">
-                            @if ($photo)
-                              <div class="h-12 w-12 rounded-full overflow-hidden shadow-md">
-                                <img src="{{ asset($photo) }}" alt="Employee Photo" class="object-cover w-full h-full">
-                              </div>
-                            @else
-                              <div class="h-12 w-12 rounded-full bg-blue-900 flex items-center justify-center shadow-md">
-                                <span
-                                  class="text-white font-bold text-lg select-none flex items-center justify-center w-full h-full">
-                                  {{ strtoupper($initials) }}
-                                </span>
-                              </div>
-                            @endif
-                          </div>
+                                                    @php
+                    // Fetch the employee photo (from additionalInfo relation)
+                    $photo = $employees->additionalInfo->adminphoto ?? null;
+                    $initials = strtoupper(substr($employees->employee_name, 0, 2));
+                                                    @endphp
+                                                    <tr class="hover:bg-gray-50 transition">
+                                                      <td class="font-medium">{{ $employees->employee_id }}</td>
+                                                      <td>{{ $employees->dept_name }}</td>
+                                                      <td>
+                                                        <div class="flex items-center gap-3">
+                                                          <div class="avatar flex-shrink-0">
+                                                            @if ($photo)
+                                                              <div class="h-12 w-12 rounded-full overflow-hidden shadow-md">
+                                                                <img src="{{ asset($photo) }}" alt="Employee Photo" class="object-cover w-full h-full">
+                                                              </div>
+                                                            @else
+                                                              <div class="h-12 w-12 rounded-full bg-blue-900 flex items-center justify-center shadow-md">
+                                                                <span
+                                                                  class="text-white font-bold text-lg select-none flex items-center justify-center w-full h-full">
+                                                                  {{ strtoupper($initials) }}
+                                                                </span>
+                                                              </div>
+                                                            @endif
+                                                          </div>
 
-                          <div class="flex flex-col justify-center">
-                            <div class="font-bold text-gray-800 leading-tight">
-                              {{ $employees->employee_name }}
-                            </div>
-                          </div>
-                        </div>
+                                                          <div class="flex flex-col justify-center">
+                                                            <div class="font-bold text-gray-800 leading-tight">
+                                                              {{ $employees->employee_name }}
+                                                            </div>
+                                                          </div>
+                                                        </div>
 
-                      </td>
-                      <td>
-                        <div class="text-sm opacity-80">{{ $employees->email }}</div>
-                        <span class="badge badge-ghost badge-sm">{{ $employees->role }}</span>
-                      </td>
-                      <td>
-                        <span id="deptspan"
-                          class="px-2 py-1 rounded-full text-white text-xs 
-                                                                                      {{ $employees->status == 'Active' ? 'bg-green-500' : 'bg-red-500' }}">
-                          {{ $employees->status }}
-                        </span>
-                      </td>
-                    </tr>
+                                                      </td>
+                                                      <td>
+                                                        <div class="text-sm opacity-80">{{ $employees->email }}</div>
+                                                        <span class="badge badge-ghost badge-sm">{{ $employees->role }}</span>
+                                                      </td>
+                                                      <td>
+                                                        <span id="deptspan"
+                                                          class="px-2 py-1 rounded-full text-white text-xs 
+                                                                                                                      {{ $employees->status == 'Active' ? 'bg-green-500' : 'bg-red-500' }}">
+                                                          {{ $employees->status }}
+                                                        </span>
+                                                      </td>
+                                                    <td class="text-center">
+                                                      <a href="/employeeprofile/{{ $employees->Dept_no }}" class="btn btn-sm btn-primary gap-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 116 0z" />
+                                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5
+                                                                         c4.478 0 8.268 2.943 9.542 7
+                                                                         -1.274 4.057 -5.064 7 -9.542 7
+                                                                         -4.477 0 -8.268 -2.943 -9.542 -7z" />
+                                                        </svg>
+                                                        View Profile
+                                                      </a>
+                                                    </td>
+                                                    </tr>
                   @endforeach
                 </tbody>
               </table>

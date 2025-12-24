@@ -718,6 +718,22 @@ public function updateadmin(Request $request)
 
 
 
+public function employeeProfile(DeptAccount $Dept_no)
+{
+    $deptAccount = $Dept_no;
+
+     if (!Auth::check()) {
+        return redirect('/restrictedemployee')->send(); // stop execution and redirect
+    }
+
+       if(Auth::user()->role !== 'Hotel Admin'){
+        return redirect('/restrictedemployee')->send();
+    }
+
+
+    return view('admin.deptprofiles', compact('deptAccount'));
+}
+
 
 }
 
