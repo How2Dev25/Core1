@@ -27,7 +27,8 @@ Route::get('/core1stockrequest', [ApiController::class, 'stockrequest']);
 // integration with resto
 
 Route::get('/restobillingandpayments', [ApiController::class, 'fetchrestobillingandpayments']);
-
+Route::get('/getKOT', [ApiController::class, 'fetchKOT']);
+Route::put('/cookKOT/{order_id}', [ApiController::class, 'cookKOT']);
 
 
 // rooms 

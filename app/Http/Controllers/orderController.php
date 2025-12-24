@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\kotresto;
 use App\Models\ordersfromresto;
+use App\Models\Reservation;
 use App\Models\restoCart;
 use App\Models\restointegration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class orderController extends Controller
 {
@@ -34,41 +37,71 @@ class orderController extends Controller
         return redirect()->back()->with('success', 'Order Removed');
     }
 
-   public function confirmorder()
+public function confirmorder()
 {
-    $myorders = restoCart::where('guestID', Auth::guard('guest')->user()->guestID)->get();
+    $guestID = Auth::guard('guest')->user()->guestID;
 
-    foreach ($myorders as $orders) {
-        ordersfromresto::create([
-            'menuID'            => $orders->menuID,
-            'bookingID'         => $orders->bookingID,
-            'order_quantity'    => $orders->order_quantity,
-            'order_status'      => $orders->order_status,
-            'guestID'           => $orders->guestID,
-            'orderguest_name'   => $orders->orderguest_name,
-            'orderguest_email'  => $orders->orderguest_email,
-            'orderguest_contact'=> $orders->orderguest_contact,
-        ]);
+    $myorders = restoCart::where('guestID', $guestID)->get();
+
+    if ($myorders->isEmpty()) {
+        return redirect()->back()->with('error', 'Your cart is empty.');
     }
 
-    // After creating orders, delete them from the cart
-    foreach ($myorders as $orders) {
-        $orders->delete();
-    }
+    DB::transaction(function () use ($myorders) {
 
-    return redirect()->back()->with('success', 'Success we received your order.');
+        foreach ($myorders as $order) {
+
+            $getroom = Reservation::where('bookingID', $order->bookingID)
+                ->value('roomID');
+
+            $foodname = restointegration::where('menuID', $order->menuID)
+                ->value('menu_name');
+
+            $ordersfromresto = ordersfromresto::create([
+                'menuID'             => $order->menuID,
+                'bookingID'          => $order->bookingID,
+                'order_quantity'     => $order->order_quantity,
+                'order_status'       => $order->order_status,
+                'guestID'            => $order->guestID,
+                'orderguest_name'    => $order->orderguest_name,
+                'orderguest_email'   => $order->orderguest_email,
+                'orderguest_contact' => $order->orderguest_contact,
+            ]);
+
+            kotresto::create([
+                'table_number' => 'Room# ' . $getroom,
+                'order_id'     => $ordersfromresto->orderID,
+                'item_name'    => $foodname,
+                'quantity'     => $order->order_quantity,
+                'status'       => 'Pending',
+                'menu_id'      => $order->menuID
+            ]);
+        }
+
+        // Clear cart AFTER everything succeeds
+        restoCart::where('guestID', Auth::guard('guest')->user()->guestID)->delete();
+    });
+
+    return redirect()->back()->with('success', 'Success! We received your order.');
 }
+public function cancelorder($orderID){
+   
+    ordersfromresto::where('orderID', $orderID)->delete();
+    kotresto::where('order_id', $orderID)->delete();
 
-public function cancelorder(ordersfromresto $orderID){
-    $orderID -> delete();
 
     return redirect()->back()->with('success', 'Order Has Been Cancelled');
 }
 
-public function delivered(ordersfromresto $orderID){
-    $orderID->update([
+public function delivered($orderID){
+     ordersfromresto::where('orderID', $orderID)->update([
         'order_status' => 'Delivered',
+     ]);
+
+    kotresto::where('order_id', $orderID)->update([
+        'status' => 'Delivered',
     ]);
+
 
     return redirect()->back()->with('success', 'Order Has Been Delivered');
 }

@@ -11,6 +11,8 @@ use App\Models\Ecm;
 use App\Models\EmployeeReport;
 use App\Models\facility;
 use App\Models\hotelBilling;
+use App\Models\kotresto;
+use App\Models\ordersfromresto;
 use App\Models\requestEmployee;
 use App\Models\Reservation;
 use App\Models\restobillingandpayments;
@@ -274,7 +276,64 @@ public function hotelincome(Request $request)
         }
     }
 
+    
+    public function fetchKOT(Request $request){
+        $token = $request->header('Authorization');
 
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        try {
+            $fetchKot = kotresto::all();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Success',
+                'data' => $fetchKot,
+            ], 200);
+        }
+
+        catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed',
+                'data' => $e->getMessage(),
+            ], 401);
+        }
+    }
+
+    public function cookKOT(Request $request, $order_id){
+        $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        kotresto::where('order_id', $order_id)->update([
+            'status' => 'cook',
+        ]);
+
+      ordersfromresto::where('orderID', $order_id)->update([
+    'order_status' => 'Cooking',
+        ]);
+
+   return response()->json([
+    'success' => true,
+    'order_id' => $order_id,
+    'status' => 'Cooking',
+    'message' => "Order {$order_id} is now cooking"
+]);
+
+    }
+
+    // facilities
     public function facility(Request $request){
           $token = $request->header('Authorization');
 
@@ -535,6 +594,9 @@ public function hotelincome(Request $request)
             'data' => $resolveemployee,
         ], 200);
     }
+
+
+
 
 
    
