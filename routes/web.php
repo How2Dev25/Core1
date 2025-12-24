@@ -927,8 +927,10 @@ Route::get('/ias', function(){
 
     $inventory = Inventory::latest()->get();
     $stock = stockRequest::latest()->get();
+
+    $deliveredStocks = stockRequest::where('core1_request_status', 'Delivered')->get();
     return view ('admin.ias', ['inventory' => $inventory, 'stock' => $stock, 
-    'totalItems'=> $totalItems, 'instock' => $instock, 'lowstock' => $lowstock, 'nostock' => $nostock ]);
+    'totalItems'=> $totalItems, 'instock' => $instock, 'lowstock' => $lowstock, 'nostock' => $nostock, 'deliveredStocks' => $deliveredStocks ]);
     });
 Route::post('/createinventory', [inventoryController::class, 'store']);
 Route::put('/updateinventory/{core1_inventoryID}', [inventoryController::class, 'modify']);

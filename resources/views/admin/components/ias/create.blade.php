@@ -24,8 +24,18 @@
             <label class="label">
               <span class="label-text">Item Name</span>
             </label>
-            <input type="text" name="core1_inventory_name" placeholder="Bath Towels" 
-                   class="input input-bordered w-full" required>
+
+            <select id="categorySelect" name="core1_inventory_name" class="select select-bordered w-full" required>
+              <option disabled selected>Add Delivered Item</option>
+            
+              @forelse ($deliveredStocks as $delivered)
+                <option value="{{ $delivered->core1_request_items }}" data-stock="{{ $delivered->core1_request_needed }}">
+                  {{ $delivered->core1_request_items }}
+                </option>
+              @empty
+                <option disabled value="None">No Delivered Items</option>
+              @endforelse
+            </select>
           </div>
           
          
@@ -128,8 +138,19 @@
             <label class="label">
               <span class="label-text">Current Stock</span>
             </label>
-            <input type="number" name="core1_inventory_stocks" min="0" 
-                   class="input input-bordered w-full" required>
+          <input readonly type="number" id="currentStock" name="core1_inventory_stocks" min="0" class="input input-bordered w-full"
+            required>
+
+            <script>
+              document.getElementById('categorySelect').addEventListener('change', function () {
+                const selectedOption = this.options[this.selectedIndex];
+                const stock = selectedOption.getAttribute('data-stock');
+
+                if (stock !== null) {
+                  document.getElementById('currentStock').value = stock;
+                }
+              });
+            </script>
           </div>
           
           <!-- Reorder Threshold -->

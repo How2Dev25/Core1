@@ -126,7 +126,7 @@
             <label class="label">
               <span class="label-text">Current Stock</span>
             </label>
-            <input value="{{$inv->core1_inventory_stocks}}" type="number" name="core1_inventory_stocks" min="0" 
+            <input readonly value="{{$inv->core1_inventory_stocks}}" type="number" name="core1_inventory_stocks" min="0" 
                    class="input input-bordered w-full" required>
           </div>
           

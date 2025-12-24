@@ -21,8 +21,11 @@ Route::get('/hotelaudittrails', [ApiController::class, 'hotelaudit']);
 // integration With  Financials
 Route::get('/core1financials', [ApiController::class, 'hotelincome']);
 
-// integration with Logistics 2 
+// integration with Logistics 1
 Route::get('/core1stockrequest', [ApiController::class, 'stockrequest']);
+Route::put('/approvedStockRequest/{core1_stockID}', [ApiController::class, 'approvedStockRequest']);
+Route::put('/deliveredStockRequest/{core1_stockID}',[ApiController::class, 'deliveredStockRequest']);
+
 
 // integration with resto
 

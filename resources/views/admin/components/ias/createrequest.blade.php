@@ -57,25 +57,29 @@
               <option value="maintenance">Maintenance Items</option>
             </select>
           </div>
+
+          <div class="form-control flex-col">
+            <label class="label">
+              <span class="label-text font-medium flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-list-checks">
+                  <path d="m3 17 2 2 4-4" />
+                  <path d="m3 7 2 2 4-4" />
+                  <path d="M13 6h8" />
+                  <path d="M13 12h8" />
+                  <path d="M13 18h8" />
+                </svg>
+                Request Item
+              </span>
+          
+            </label>
+            <input name="core1_request_items" class="input input-bordered w-full pl-10" required></input>
+          </div>
         </div>
 
         <!-- Request Items -->
-        <div class="form-control flex-col">
-          <label class="label">
-            <span class="label-text font-medium flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks">
-                <path d="m3 17 2 2 4-4"/>
-                <path d="m3 7 2 2 4-4"/>
-                <path d="M13 6h8"/>
-                <path d="M13 12h8"/>
-                <path d="M13 18h8"/>
-              </svg>
-              Request Items
-            </span>
-            <span class="label-text-alt text-gray-500">(Separate items with commas)</span>
-          </label>
-          <textarea name="core1_request_items" class="textarea textarea-bordered h-32 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" placeholder="Bath towels, King-size sheets, Pillow cases, Shampoo bottles" required></textarea>
-        </div>
+       
 
         <!-- Status, Priority, and Needed -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

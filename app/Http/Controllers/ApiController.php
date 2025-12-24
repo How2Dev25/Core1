@@ -229,7 +229,7 @@ public function hotelincome(Request $request)
 
 
         try{
-            $stockrequest = stockRequest::where('core1_request_status', 'Approved')->get();
+            $stockrequest = stockRequest::all();
 
             return response()->json([
                 'success' => true,
@@ -244,6 +244,47 @@ public function hotelincome(Request $request)
                 'data' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function approvedStockRequest(Request $request, stockRequest $core1_stockID){
+        $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        $core1_stockID->update([
+            'core1_request_status' => 'Approved',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status Approved'
+        ]);
+    }
+
+
+     public function deliveredStockRequest(Request $request, stockRequest $core1_stockID){
+        $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        $core1_stockID->update([
+            'core1_request_status' => 'Delivered',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status Delivered'
+        ]);
     }
 
 
