@@ -649,6 +649,10 @@ Route::get('/guestaccount', function(){
     return view('admin.guestaccount', compact('guest', 'checkinguest', 'pendingguest', 'totalguest'));
 });
 
+Route::put('/suspendGuest/{guestID}', [userController::class, 'suspendGuest']);
+Route::put('/unsuspendGuest/{guestID}', [userController::class, 'unsuspendGuest']);
+Route::delete('/removeGuest/{guestID}', [userController::class, 'removeGuest']);
+
 Route::get('/departmentlogs', function (Request $request) {
     employeeAuthCheck();
     verifyusermanagement();

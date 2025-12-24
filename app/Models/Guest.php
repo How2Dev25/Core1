@@ -20,6 +20,7 @@ class Guest extends Authenticatable
         'guest_mobile',
         'guest_password',
         'guest_birthday',
+        'guest_status',
     ];
 
     protected $hidden = [

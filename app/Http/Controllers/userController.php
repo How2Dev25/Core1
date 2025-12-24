@@ -481,6 +481,12 @@ public function guestlogin(Request $request)
 
         $guest = Auth::guard('guest')->user();
 
+         if($guest->guest_status == 'Suspended'){
+        return back()->withErrors([
+            'guest_status' => 'Account is Suspended',
+        ]);
+    }
+
         // Generate OTP
         $otp = rand(100000, 999999);
         Session::put('guest_otp', $otp);
@@ -606,6 +612,12 @@ public function resendGuestOtp(Request $request)
 
             $this->addLoyaltyPoints($guest->guestID, $guest->guest_name);
         }
+
+    if($guest->guest_status === 'Suspended'){
+        return redirect('/loginguest')->withErrors([
+            'guest_status' => 'Account has been suspended.'
+        ]);
+    }
 
         Auth::guard('guest')->login($guest);
 
@@ -735,6 +747,367 @@ public function employeeProfile(DeptAccount $Dept_no)
 }
 
 
+public function suspendGuest(Guest $guestID){
+    $guestID->update([
+        'guest_status' => 'Suspended'
+    ]);
+
+    $guests = $guestID;
+
+    $mail = new PHPMailer(true);
+
+try {
+    $mail->isSMTP();
+    $mail->Host       = env('MAIL_HOST');
+    $mail->SMTPAuth   = true;
+    $mail->Username   = env('MAIL_USERNAME');
+    $mail->Password   = env('MAIL_PASSWORD');
+    $mail->SMTPSecure = env('MAIL_ENCRYPTION'); // tls or ssl
+    $mail->Port       = env('MAIL_PORT');
+
+    $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+    $mail->addAddress($guests->guest_email, $guests->guest_name);
+    $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo');
+    $mail->isHTML(true);
+    $mail->Subject = "Account Suspended - Soliera Hotel";
+
+    $mailBody = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Suspended - Soliera Hotel</title>
+</head>
+<body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
+<div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+
+<!-- Header -->
+<div style="background-color:#001f54; padding:30px 20px; text-align:center;">
+    <img src="cid:hotelLogo" alt="Soliera Hotel Logo" style="width:80px; height:80px; border-radius:50%; margin-bottom:15px;">
+    <h1 style="color:#F7B32B; margin:0; font-size:28px; font-weight:bold;">SOLIERA HOTEL</h1>
+    <p style="color:#ffffff; margin:10px 0 0 0; font-size:16px;">Savor The Stay, Dine With Elegance</p>
+</div>
+
+<!-- Account Status -->
+<div style="padding:20px; text-align:center; background-color:#fff3cd;">
+    <div style="display:inline-block; background-color:#dc3545; color:#ffffff; padding:10px 24px; border-radius:20px; font-weight:bold; font-size:14px; margin-bottom:10px;">
+        ⚠️ ACCOUNT STATUS: SUSPENDED
+    </div>
+</div>
+
+<!-- Main Content -->
+<div style="padding:30px 20px;">
+    <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Account Suspended</h2>
+    
+    <!-- Guest Info -->
+    <div style="text-align:center; margin-bottom:25px;">
+        <p style="color:#666; font-size:16px; margin:0 0 5px 0;">
+            Dear <span style="color:#001f54; font-weight:bold;">$guests->guest_name</span>,
+        </p>
+        <p style="color:#666; font-size:14px; margin:0;">
+            Account Email: <span style="color:#001f54; font-weight:bold;">$guests->guest_email</span>
+        </p>
+    </div>
+
+    <!-- Notification Box -->
+    <div style="padding:25px; background-color:#fff3cd; border-left:4px solid #ffc107; border-radius:8px; margin-bottom:25px;">
+        <p style="color:#856404; margin:0 0 15px 0; line-height:1.6; font-size:15px;">
+            We are writing to inform you that your guest account with Soliera Hotel has been temporarily suspended.
+        </p>
+        <p style="color:#856404; margin:0; line-height:1.6; font-size:15px;">
+            During this suspension period, you will not be able to:
+        </p>
+        <ul style="color:#856404; margin:10px 0 0 20px; line-height:1.8; font-size:14px;">
+            <li>Access your account</li>
+            <li>Make new reservations</li>
+            <li>View booking history</li>
+        </ul>
+    </div>
+
+    <!-- Contact Information -->
+    <div style="text-align:center; padding:25px; background-color:#001f54; border-radius:8px;">
+        <h3 style="color:#F7B32B; margin:0 0 15px 0; font-size:18px;">Need Assistance?</h3>
+        <p style="color:#ffffff; margin:0 0 15px 0; line-height:1.6; font-size:14px;">
+            If you believe this suspension was made in error or if you have any questions,<br>
+            please contact our support team immediately.
+        </p>
+        <div style="margin-top:15px;">
+            <p style="color:#F7B32B; margin:0; font-size:14px; font-weight:bold;">
+                📧 Email: support@solierahotel.com
+            </p>
+            <p style="color:#F7B32B; margin:5px 0 0 0; font-size:14px; font-weight:bold;">
+                📞 Phone: +63 XXX XXX XXXX
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div style="background-color:#001f54; padding:20px; text-align:center;">
+    <p style="color:#F7B32B; margin:0 0 5px 0; font-size:14px;">© 2025 Soliera Hotel. All rights reserved.</p>
+    <p style="color:#ffffff; margin:0; font-size:12px; opacity:0.8;">This is an automated message. Please do not reply to this email.</p>
+</div>
+</div>
+</body>
+</html>
+HTML;
+
+    $mail->Body = $mailBody;
+    $mail->send();
+
+} catch (Exception $e) {
+    Log::error("Guest suspension email could not be sent: {$mail->ErrorInfo}");
+}
+
+return redirect()->back()->with('success', 'Guest Account Has Been Suspended');
+
+}
+
+public function unsuspendGuest(Guest $guestID){
+ $guestID->update([
+        'guest_status' => 'Verified'
+    ]);
+
+    $guests = $guestID;
+
+    // ==========================================
+// UNSUSPEND EMAIL
+// ==========================================
+$mail = new PHPMailer(true);
+
+try {
+    $mail->isSMTP();
+    $mail->Host       = env('MAIL_HOST');
+    $mail->SMTPAuth   = true;
+    $mail->Username   = env('MAIL_USERNAME');
+    $mail->Password   = env('MAIL_PASSWORD');
+    $mail->SMTPSecure = env('MAIL_ENCRYPTION');
+    $mail->Port       = env('MAIL_PORT');
+
+    $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+    $mail->addAddress($guests->guest_email, $guests->guest_name);
+    $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo');
+    $mail->isHTML(true);
+    $mail->Subject = "Account Unsuspended - Welcome Back to Soliera Hotel";
+
+    $mailBody = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Unsuspended - Soliera Hotel</title>
+</head>
+<body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
+<div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+
+<!-- Header -->
+<div style="background-color:#001f54; padding:30px 20px; text-align:center;">
+    <img src="cid:hotelLogo" alt="Soliera Hotel Logo" style="width:80px; height:80px; border-radius:50%; margin-bottom:15px;">
+    <h1 style="color:#F7B32B; margin:0; font-size:28px; font-weight:bold;">SOLIERA HOTEL</h1>
+    <p style="color:#ffffff; margin:10px 0 0 0; font-size:16px;">Savor The Stay, Dine With Elegance</p>
+</div>
+
+<!-- Account Status -->
+<div style="padding:20px; text-align:center; background-color:#d1e7dd;">
+    <div style="display:inline-block; background-color:#28a745; color:#ffffff; padding:10px 24px; border-radius:20px; font-weight:bold; font-size:14px; margin-bottom:10px;">
+        ✅ ACCOUNT STATUS: UNSUSPENDED
+    </div>
+</div>
+
+<!-- Main Content -->
+<div style="padding:30px 20px;">
+    <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Account Unsuspended</h2>
+    
+    <!-- Guest Info -->
+    <div style="text-align:center; margin-bottom:25px;">
+        <p style="color:#666; font-size:16px; margin:0 0 5px 0;">
+            Dear <span style="color:#001f54; font-weight:bold;">$guests->guest_name</span>,
+        </p>
+        <p style="color:#666; font-size:14px; margin:0;">
+            Account Email: <span style="color:#001f54; font-weight:bold;">$guests->guest_email</span>
+        </p>
+    </div>
+
+    <!-- Success Box -->
+    <div style="padding:25px; background-color:#d1e7dd; border-left:4px solid #28a745; border-radius:8px; margin-bottom:25px;">
+        <p style="color:#0f5132; margin:0 0 15px 0; line-height:1.6; font-size:15px; font-weight:bold;">
+            🎉 Great News! Your account suspension has been lifted.
+        </p>
+        <p style="color:#0f5132; margin:0; line-height:1.6; font-size:15px;">
+            You now have full access to all features and can:
+        </p>
+        <ul style="color:#0f5132; margin:10px 0 0 20px; line-height:1.8; font-size:14px;">
+            <li>Log in to your account</li>
+            <li>Make new reservations</li>
+            <li>View and manage your bookings</li>
+            <li>Access all guest services</li>
+        </ul>
+    </div>
+
+    <!-- Call to Action -->
+    <div style="text-align:center; padding:25px; background-color:#001f54; border-radius:8px;">
+        <h3 style="color:#F7B32B; margin:0 0 15px 0; font-size:18px;">Ready to Book Your Next Stay?</h3>
+        <p style="color:#ffffff; margin:0 0 20px 0; line-height:1.6; font-size:14px;">
+            We're delighted to have you back! Explore our exclusive offers<br>
+            and experience the comfort and elegance of Soliera Hotel.
+        </p>
+        <a href="#" style="display:inline-block; background-color:#F7B32B; color:#001f54; padding:12px 30px; text-decoration:none; border-radius:25px; font-weight:bold; font-size:14px;">
+            Book Now
+        </a>
+    </div>
+
+    <!-- Support -->
+    <div style="text-align:center; margin-top:25px; padding:20px; background-color:#f8f9fa; border-radius:8px;">
+        <p style="color:#666; margin:0 0 10px 0; font-size:14px;">
+            Have questions? Our support team is here to help!
+        </p>
+        <p style="color:#001f54; margin:0; font-size:14px; font-weight:bold;">
+            📧 support@solierahotel.com | 📞 +63 XXX XXX XXXX
+        </p>
+    </div>
+</div>
+
+<!-- Footer -->
+<div style="background-color:#001f54; padding:20px; text-align:center;">
+    <p style="color:#F7B32B; margin:0 0 5px 0; font-size:14px;">© 2025 Soliera Hotel. All rights reserved.</p>
+    <p style="color:#ffffff; margin:0; font-size:12px; opacity:0.8;">This is an automated message. Please do not reply to this email.</p>
+</div>
+</div>
+</body>
+</html>
+HTML;
+
+    $mail->Body = $mailBody;
+    $mail->send();
+
+} catch (Exception $e) {
+    Log::error("Guest unsuspend email could not be sent: {$mail->ErrorInfo}");
+}
+
+return redirect()->back()->with('success', 'Guest Account Has Been Unsuspended');
+
 }
 
 
+
+
+public function removeGuest(Guest $guestID){
+    $guestID->delete();
+
+    $guests = $guestID;
+    guestloyaltypoints::where('guestID', $guests->guestID)->delete();
+    
+    $mail = new PHPMailer(true);
+
+try {
+    $mail->isSMTP();
+    $mail->Host       = env('MAIL_HOST');
+    $mail->SMTPAuth   = true;
+    $mail->Username   = env('MAIL_USERNAME');
+    $mail->Password   = env('MAIL_PASSWORD');
+    $mail->SMTPSecure = env('MAIL_ENCRYPTION');
+    $mail->Port       = env('MAIL_PORT');
+
+    $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+    $mail->addAddress($guests->guest_email, $guests->guest_name);
+    $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo');
+    $mail->isHTML(true);
+    $mail->Subject = "Account Removed - Soliera Hotel";
+
+    $mailBody = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Removed - Soliera Hotel</title>
+</head>
+<body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
+<div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+
+<!-- Header -->
+<div style="background-color:#001f54; padding:30px 20px; text-align:center;">
+    <img src="cid:hotelLogo" alt="Soliera Hotel Logo" style="width:80px; height:80px; border-radius:50%; margin-bottom:15px;">
+    <h1 style="color:#F7B32B; margin:0; font-size:28px; font-weight:bold;">SOLIERA HOTEL</h1>
+    <p style="color:#ffffff; margin:10px 0 0 0; font-size:16px;">Savor The Stay, Dine With Elegance</p>
+</div>
+
+<!-- Account Status -->
+<div style="padding:20px; text-align:center; background-color:#f8d7da;">
+    <div style="display:inline-block; background-color:#dc3545; color:#ffffff; padding:10px 24px; border-radius:20px; font-weight:bold; font-size:14px; margin-bottom:10px;">
+        🗑️ ACCOUNT STATUS: REMOVED
+    </div>
+</div>
+
+<!-- Main Content -->
+<div style="padding:30px 20px;">
+    <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Account Removed</h2>
+    
+    <!-- Guest Info -->
+    <div style="text-align:center; margin-bottom:25px;">
+        <p style="color:#666; font-size:16px; margin:0 0 5px 0;">
+            Dear <span style="color:#001f54; font-weight:bold;">$guests->guest_name</span>,
+        </p>
+        <p style="color:#666; font-size:14px; margin:0;">
+            Previous Account Email: <span style="color:#001f54; font-weight:bold;">$guests->guest_email</span>
+        </p>
+    </div>
+
+    <!-- Warning Box -->
+    <div style="padding:25px; background-color:#f8d7da; border-left:4px solid #dc3545; border-radius:8px; margin-bottom:25px;">
+        <p style="color:#721c24; margin:0 0 15px 0; line-height:1.6; font-size:15px; font-weight:bold;">
+            ⚠️ Your guest account has been permanently removed from our system.
+        </p>
+        <p style="color:#721c24; margin:0 0 10px 0; line-height:1.6; font-size:15px;">
+            This means:
+        </p>
+        <ul style="color:#721c24; margin:10px 0 0 20px; line-height:1.8; font-size:14px;">
+            <li>All your account data has been deleted</li>
+            <li>You can no longer access this account</li>
+            <li>Your booking history is no longer available</li>
+            <li>This action cannot be undone</li>
+        </ul>
+    </div>
+
+    <!-- Farewell Message -->
+    <div style="text-align:center; padding:25px; background-color:#001f54; border-radius:8px; margin-bottom:20px;">
+        <h3 style="color:#F7B32B; margin:0 0 15px 0; font-size:18px;">Thank You</h3>
+        <p style="color:#ffffff; margin:0; line-height:1.6; font-size:14px;">
+            We appreciate the time you spent with us at Soliera Hotel.<br>
+            Should you wish to return in the future, you're always welcome to create a new account.
+        </p>
+    </div>
+
+    <!-- Contact Information -->
+    <div style="text-align:center; padding:20px; background-color:#f8f9fa; border-radius:8px;">
+        <p style="color:#666; margin:0 0 10px 0; font-size:14px;">
+            If you believe this was done in error, please contact us immediately:
+        </p>
+        <p style="color:#001f54; margin:0; font-size:14px; font-weight:bold;">
+            📧 support@solierahotel.com | 📞 +63 XXX XXX XXXX
+        </p>
+    </div>
+</div>
+
+<!-- Footer -->
+<div style="background-color:#001f54; padding:20px; text-align:center;">
+    <p style="color:#F7B32B; margin:0 0 5px 0; font-size:14px;">© 2025 Soliera Hotel. All rights reserved.</p>
+    <p style="color:#ffffff; margin:0; font-size:12px; opacity:0.8;">This is an automated message. Please do not reply to this email.</p>
+</div>
+</div>
+</body>
+</html>
+HTML;
+
+    $mail->Body = $mailBody;
+    $mail->send();
+
+} catch (Exception $e) {
+    Log::error("Guest removal email could not be sent: {$mail->ErrorInfo}");
+}
+
+return redirect()->back()->with('success', 'Guest Account Has Been Removed');
+}
+}
