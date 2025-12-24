@@ -60,7 +60,7 @@
         </div>
 
         <!-- Request Items -->
-        <div class="form-control">
+        <div class="form-control flex-col">
           <label class="label">
             <span class="label-text font-medium flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks">
@@ -79,25 +79,7 @@
 
         <!-- Status, Priority, and Needed -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text font-medium flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-circle">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="12" x2="12" y1="8" y2="12"/>
-                  <line x1="12" x2="12.01" y1="16" y2="16"/>
-                </svg>
-                Status
-              </span>
-            </label>
-            <select name="core1_request_status" class="select select-bordered w-full" required>
-              <option value="Pending" selected>Pending</option>
-              <option value="Approved">Approved</option>
-              <option value="Rejected">Rejected</option>
-              <option value="Fulfilled">Fulfilled</option>
-            </select>
-          </div>
-          
+        
           <div class="form-control">
             <label class="label">
               <span class="label-text font-medium flex items-center gap-2">

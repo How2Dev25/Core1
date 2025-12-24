@@ -246,6 +246,9 @@ public function hotelincome(Request $request)
         }
     }
 
+
+    
+
     // integration wtih restaurant
 
     public function fetchrestobillingandpayments(Request $request){

@@ -92,12 +92,14 @@
                 Status
               </span>
             </label>
-                    <select name="core1_request_status" class="select select-bordered w-full" required>
+          <input type="hidden" name="core1_request_status" value="{{ $stocks->core1_request_status }}">
+          
+          <select class="select select-bordered w-full bg-gray-100 cursor-not-allowed" disabled>
             <option value="Pending" {{ $stocks->core1_request_status == 'Pending' ? 'selected' : '' }}>Pending</option>
             <option value="Approved" {{ $stocks->core1_request_status == 'Approved' ? 'selected' : '' }}>Approved</option>
             <option value="Rejected" {{ $stocks->core1_request_status == 'Rejected' ? 'selected' : '' }}>Rejected</option>
             <option value="Fulfilled" {{ $stocks->core1_request_status == 'Fulfilled' ? 'selected' : '' }}>Fulfilled</option>
-            </select>
+          </select>
           </div>
           
           <div class="form-control">

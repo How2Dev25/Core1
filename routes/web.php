@@ -945,17 +945,31 @@ Route::get('/hmm', function(){
      verifyhousekeeping();
       $roomID = room::where('roomstatus', '!=', 'Occupied')->where('roomstatus', '!=', 'Maintenance')->latest()->get();
       $inventory = Inventory::latest()->get();
-      $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
+
+
+      if(Auth::user()->role == 'Hotel Admin'){
+         $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
+      ->join('department_accounts', 'department_accounts.Dept_no', '=', 'core1_roommaintenance.maintenanceassigned_To')
       ->latest('core1_roommaintenance.created_at')->get();
+      }
+      elseif(Auth::user()->role == 'Maintenance Staff'){
+        $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
+      ->join('department_accounts', 'department_accounts.Dept_no', '=', 'core1_roommaintenance.maintenanceassigned_To')
+      ->where('core1_roommaintenance.maintenanceassigned_To', Auth::user()->Dept_no)
+      ->latest('core1_roommaintenance.created_at')->get();
+      }
+    
        $totalrooms = room::count();
          $maintenancerooms = room::where('roomstatus', 'Maintenance')->count();
          $urgentmaintenance = room_maintenance::where('maintenance_priority', 'Urgent')->count();
          $inventorystocks = Inventory::sum('core1_inventory_stocks'); 
           $lowstock = Inventory::whereColumn('core1_inventory_stocks', '<', 'core1_inventory_threshold')->count();
-      
+        $maintenancestaffs = DeptAccount::where('role', 'Maintenance Staff')->get();
         return view('admin.hmm', [
             'inventory' => $inventory, 'rooms' => $rooms, 'roomID' => $roomID,
-        'totalrooms' => $totalrooms, 'maintenancerooms' => $maintenancerooms, 'urgentmaintenance' => $urgentmaintenance, 'inventorystocks' => $inventorystocks, 'lowstock' => $lowstock ]);
+        'totalrooms' => $totalrooms, 'maintenancerooms' => $maintenancerooms, 'urgentmaintenance' => $urgentmaintenance, 'inventorystocks' => $inventorystocks, 
+        'lowstock' => $lowstock,
+    'maintenancestaffs' => $maintenancestaffs ]);
 
 });
 Route::post('/createmaintenance', [roommantenanceController::class, 'store']);

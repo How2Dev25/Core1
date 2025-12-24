@@ -21,7 +21,7 @@
 
         <select name="roomID" class="select">
             @forelse ($roomID as $roomsID)
-            <option value="{{$roomsID->roomID}}">Room {{$roomsID->roomID}}</option>
+            <option value="{{$roomsID->roomID}}">Room {{$roomsID->roomID}} {{ $roomsID->roomtype }}</option>
             @empty
                 <option disabled selected>No Rooms Found</option>
             @endforelse
@@ -38,39 +38,11 @@
             Maintenance Description
           </span>
         </label>
-        <textarea name="maintenancedescription" class="textarea textarea-bordered h-24" placeholder="Describe the maintenance issue..." required>Leaky faucet in bathroom needs repair</textarea>
+        <textarea name="maintenancedescription" class="textarea textarea-bordered h-24" placeholder="Describe the maintenance issue..." required></textarea>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <!-- Maintenance Status -->
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text flex items-center gap-1">
-              <i data-lucide="alert-circle" class="w-4 h-4"></i>
-              Status
-            </span>
-          </label>
-          <select name="maintenancestatus" class="select select-bordered w-full" required>
-            <option>
-              <span class="flex items-center gap-2">
-                <i data-lucide="clock" class="w-4 h-4 text-warning"></i>
-                Pending
-              </span>
-            </option>
-            <option>
-              <span class="flex items-center gap-2">
-                <i data-lucide="wrench" class="w-4 h-4 text-info"></i>
-                In Progress
-              </span>
-            </option>
-            <option>
-              <span class="flex items-center gap-2">
-                <i data-lucide="check-circle" class="w-4 h-4 text-success"></i>
-                Completed
-              </span>
-            </option>
-          </select>
-        </div>
 
         <!-- Priority Level -->
         <div class="form-control">
@@ -120,10 +92,13 @@
         <div class="relative">
           <i data-lucide="users" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
           <select name="maintenanceassigned_To" class="select select-bordered w-full pl-10" required>
-            <option disabled selected>Select staff member</option>
-            <option>John Smith (Plumber)</option>
-            <option>Maria Garcia (Housekeeping)</option>
-            <option>David Lee (Maintenance)</option>
+            <option disabled selected>Select Maintenance Staff</option>
+            @forelse ($maintenancestaffs as $staffs)
+              <option value="{{ $staffs->Dept_no }}">{{ $staffs->employee_name }} ({{ $staffs->role }})</option>
+            @empty
+              <option disabled selected>No Staff Available</option>
+            @endforelse
+           
           </select>
         </div>
       </div>

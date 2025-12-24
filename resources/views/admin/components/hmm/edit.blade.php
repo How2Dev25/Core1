@@ -42,7 +42,7 @@
               Status
             </span>
           </label>
-          <select name="maintenancestatus" class="select select-bordered w-full" required>
+          <select disabled name="maintenancestatus" class="select select-bordered w-full" >
             <option value="Pending" @selected($room->maintenancestatus === 'Pending')>
               <span class="flex items-center gap-2">
                 <i data-lucide="clock" class="w-4 h-4 text-warning"></i>
@@ -62,6 +62,8 @@
               </span>
             </option>
           </select>
+
+          <input hidden name="maintenancestatus" type="text" value="{{ $room->maintenancestatus }}">
         </div>
 
         <!-- Priority Level -->
@@ -107,7 +109,7 @@
         <label class="label">
           <span class="label-text">Assign To</span>
         </label>
-        <input type="text" name="maintenanceassigned_To" class="input input-bordered" value="{{ $room->maintenanceassigned_To }}" required>
+        <input readonly type="text" name="maintenanceassigned_To" class="input input-bordered" value="{{ $room->maintenanceassigned_To }}" required>
       </div>
 
 
@@ -115,13 +117,15 @@
 
       <!-- Actions -->
       <div class="modal-action">
+           @if(Auth::user()->role == "Hotel Admin")
         <button type="submit" class="btn btn-primary gap-2">
           <i data-lucide="save" class="w-4 h-4"></i>
           Save Changes
         </button>
+        @endif
         <button type="button" onclick="document.getElementById('assign_maintenance_modal_{{ $room->roommaintenanceID }}').close()" class="btn gap-2">
           <i data-lucide="x" class="w-4 h-4"></i>
-          Cancel
+          Close
         </button>
       </div>
     </form>

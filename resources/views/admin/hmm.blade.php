@@ -218,13 +218,14 @@
     <!-- Maintenance Rooms Section -->
      <div class="flex justify-between items-center mb-6 mt-5">
 
+         @if(Auth::user()->role == "Hotel Admin")
       <div class="flex space-x-2 ">
         <button onclick="create_maintenance_modal.showModal()" class="btn btn-primary">
           <i data-lucide="plus" class="w-5 h-5 mr-1"></i>
           New Request
         </button>
-
       </div>
+      @endif
     </div>
 
     <div class="card bg-base-100 shadow">
@@ -274,108 +275,106 @@
 
           <!-- Room Card  -->
         @forelse ($rooms as $room)
-      <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow duration-200">
-          <figure>
-              <img src="{{ asset($room->roomphoto ?? 'placeholder-image.jpg') }}" 
-                   alt="Room {{ $room->roomID }}" class="h-48 w-full object-cover">
-              <!-- Status badge on image -->
-              @if($room->priority)
-                  <div class="absolute top-2 right-2 badge 
-                      @if($room->priority === 'Low') badge-info
-                      @elseif($room->priority === 'Medium') badge-warning
-                      @elseif($room->priority === 'High') badge-error
-                      @elseif($room->priority === 'Urgent') badge-error bg-red-600
-                      @endif gap-1">
-                      @if($room->priority === 'Low')
-                          <i data-lucide="signal-low" class="w-3 h-3"></i>
-                      @elseif($room->priority === 'Medium')
-                          <i data-lucide="signal-medium" class="w-3 h-3"></i>
-                      @else
-                          <i data-lucide="signal-high" class="w-3 h-3"></i>
-                      @endif
-                      {{ $room->priority }}
-                  </div>
-              @endif
-          </figure>
-          <div class="card-body">
-              <div class="flex justify-between items-start">
-                  <div>
-                      <h3 class="card-title">Room {{ $room->roomID }}</h3>
-                      <div class="badge 
-                          @if($room->maintenancestatus === 'Pending') badge-warning
-                          @elseif($room->maintenancestatus === 'In Progress') badge-info
-                          @elseif($room->maintenancestatus === 'Completed') badge-success
+          <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow duration-200">
+              <figure>
+                  <img src="{{ asset($room->roomphoto ?? 'placeholder-image.jpg') }}" 
+                       alt="Room {{ $room->roomID }}" class="h-48 w-full object-cover">
+                  <!-- Status badge on image -->
+                  @if($room->priority)
+                      <div class="absolute top-2 right-2 badge 
+                          @if($room->priority === 'Low') badge-info
+                          @elseif($room->priority === 'Medium') badge-warning
+                          @elseif($room->priority === 'High') badge-error
+                          @elseif($room->priority === 'Urgent') badge-error bg-red-600
                           @endif gap-1">
-                          @if($room->maintenancestatus === 'Pending')
-                              <i data-lucide="clock" class="w-3 h-3"></i>
-                          @elseif($room->maintenancestatus === 'In Progress')
-                              <i data-lucide="wrench" class="w-3 h-3"></i>
+                          @if($room->priority === 'Low')
+                              <i data-lucide="signal-low" class="w-3 h-3"></i>
+                          @elseif($room->priority === 'Medium')
+                              <i data-lucide="signal-medium" class="w-3 h-3"></i>
                           @else
-                              <i data-lucide="check-circle" class="w-3 h-3"></i>
+                              <i data-lucide="signal-high" class="w-3 h-3"></i>
                           @endif
-                          {{ $room->maintenancestatus }}
+                          {{ $room->priority }}
                       </div>
-                      <div class="badge badge-info gap-1 mt-1">
-                          <i data-lucide="home" class="w-3 h-3"></i>
-                          {{ $room->roomtype }}
+                  @endif
+              </figure>
+              <div class="card-body">
+                  <div class="flex justify-between items-start">
+                      <div>
+                          <h3 class="card-title">Room {{ $room->roomID }}</h3>
+                          <div class="badge 
+                              @if($room->maintenancestatus === 'Pending') badge-warning
+                              @elseif($room->maintenancestatus === 'In Progress') badge-info
+                              @elseif($room->maintenancestatus === 'Completed') badge-success
+                              @endif gap-1">
+                              @if($room->maintenancestatus === 'Pending')
+                                  <i data-lucide="clock" class="w-3 h-3"></i>
+                              @elseif($room->maintenancestatus === 'In Progress')
+                                  <i data-lucide="wrench" class="w-3 h-3"></i>
+                              @else
+                                  <i data-lucide="check-circle" class="w-3 h-3"></i>
+                              @endif
+                              {{ $room->maintenancestatus }}
+                          </div>
+                          <div class="badge badge-info gap-1 mt-1">
+                              <i data-lucide="home" class="w-3 h-3"></i>
+                              {{ $room->roomtype }}
+                          </div>
+                      </div>
+                      <div class="dropdown dropdown-end">
+                          <label tabindex="0" class="btn btn-ghost btn-sm">
+                              <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                          </label>
+
+                          <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                                @if(Auth::user()->role == "Hotel Admin")
+                              <li><a onclick="delete_maintenance_{{ $room->roommaintenanceID }}.showModal()">
+                                  <i data-lucide="trash-2" class="w-4 h-4"></i> Delete
+                              </a>
+                            </li>
+                            @endif
+                              @if($room->maintenancestatus !== 'Completed')
+                              <li><a onclick="complete_maintenance_{{ $room->roommaintenanceID }}.showModal()">
+                                  <i data-lucide="check" class="w-4 h-4"></i> Mark Complete
+                              </a></li>
+                              @endif
+                          </ul>
                       </div>
                   </div>
-                  <div class="dropdown dropdown-end">
-                      <label tabindex="0" class="btn btn-ghost btn-sm">
-                          <i data-lucide="more-vertical" class="w-4 h-4"></i>
-                      </label>
-                      <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
 
-                          <li><a onclick="delete_maintenance_{{ $room->roommaintenanceID }}.showModal()">
-                              <i data-lucide="trash-2" class="w-4 h-4"></i> Delete
-                          </a></li>
-                          @if($room->maintenancestatus !== 'Completed')
-                          <li><a onclick="complete_maintenance_{{ $room->roommaintenanceID }}.showModal()">
-                              <i data-lucide="check" class="w-4 h-4"></i> Mark Complete
-                          </a></li>
-                          @endif
-                      </ul>
-                  </div>
-              </div>
+                  <!-- Assigned Staff -->
+                  @if($room->maintenanceassigned_To)
+                    <div class="mt-2 flex items-center gap-2 text-sm">
+                        <span>Assigned to: {{ $room->employee_name ?? 'Staff' }} ({{ $room->role }})</span>
+                    </div>
+                  @endif
 
-              <!-- Assigned Staff -->
-              @if($room->maintenanceassigned_To)
-              <div class="mt-2 flex items-center gap-2 text-sm">
-                  <div class="avatar">
-                      <div class="w-6 rounded-full">
-                          <img src="{{ asset($room->assignedStaff->photo ?? 'images/defaults/staff.png') }}" />
+                  <p class="text-sm text-gray-500 mt-2">
+                      <i data-lucide="calendar" class="w-4 h-4 inline mr-1"></i>
+                      {{ $room->created_at->format('M d, Y h:i A') }}
+                  </p>
+                  <p class="text-sm mt-2">
+                      <i data-lucide="alert-circle" class="w-4 h-4 inline mr-1 text-warning"></i>
+                      {{ Str::limit($room->maintenancedescription, 100) }}
+                  </p>
+
+                  <div class="card-actions justify-between items-center mt-4">
+
+
+                          <button onclick="document.getElementById('assign_maintenance_modal_{{ $room->roommaintenanceID }}').showModal()" 
+                                  class="btn btn-sm btn-primary">
+                              <i data-lucide="user-check" class="w-4 h-4 mr-1"></i>
+                              View Details
+                          </button>
+
+
+                      <div class="text-xs text-gray-500">
+                          Last updated: {{ $room->updated_at->diffForHumans() }}
                       </div>
-                  </div>
-                  <span>Assigned to: {{ $room->maintenanceassigned_To ?? 'Staff' }}</span>
-              </div>
-              @endif
-
-              <p class="text-sm text-gray-500 mt-2">
-                  <i data-lucide="calendar" class="w-4 h-4 inline mr-1"></i>
-                  {{ $room->created_at->format('M d, Y h:i A') }}
-              </p>
-              <p class="text-sm mt-2">
-                  <i data-lucide="alert-circle" class="w-4 h-4 inline mr-1 text-warning"></i>
-                  {{ Str::limit($room->maintenancedescription, 100) }}
-              </p>
-
-              <div class="card-actions justify-between items-center mt-4">
-
-
-                      <button onclick="document.getElementById('assign_maintenance_modal_{{ $room->roommaintenanceID }}').showModal()" 
-                              class="btn btn-sm btn-primary">
-                          <i data-lucide="user-check" class="w-4 h-4 mr-1"></i>
-                          Assign Staff
-                      </button>
-
-
-                  <div class="text-xs text-gray-500">
-                      Last updated: {{ $room->updated_at->diffForHumans() }}
                   </div>
               </div>
           </div>
-      </div>
-  @empty
+        @empty
       <div class="col-span-full text-center py-12">
           <div class="mx-auto w-24 h-24 text-gray-400 mb-4">
               <i data-lucide="home" class="w-full h-full"></i>

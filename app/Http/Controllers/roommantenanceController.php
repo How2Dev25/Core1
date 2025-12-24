@@ -17,10 +17,11 @@ class roommantenanceController extends Controller
         $form = $request->validate([
             'roomID' => 'required',
             'maintenancedescription' => 'required',
-            'maintenancestatus' => 'required',
             'maintenanceassigned_To' => 'required',
             'maintenance_priority' => 'required',
         ]);
+
+        $form['maintenancestatus'] = 'Pending';
 
         room_maintenance::create($form);
 

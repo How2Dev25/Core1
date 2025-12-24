@@ -13,12 +13,13 @@ class stockController extends Controller
     public function store(Request $request){
         $form = $request->validate([
             'core1_request_items' => 'required',
-            'core1_request_status' => 'required',
             'core1_request_category' => 'required',
             'core1_request_priority' => 'required',
             'core1_request_needed' => 'required',
             
         ]);
+
+        $form['core1_request_status'] = 'Pending';
 
         $stockcreated =  stockRequest::create($form);
 
