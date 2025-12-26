@@ -248,8 +248,8 @@
                                 </span>
                             </label>
                         <input type="tel" name="guestphonenumber" class="input input-bordered w-full rounded-xl border-2 border-gray-200 
-                                   focus:border-[#001f54] focus:outline-none transition-colors" minlength="11" maxlength="11"
-                            pattern="[0-9]{11}" placeholder="e.g. 09123456789" required />
+                                   focus:border-[#001f54] focus:outline-none transition-colors" placeholder="Enter phone number" required />
+
                         </div>
 
                         <div class="form-control">
@@ -325,11 +325,8 @@
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="tel" name="guestcontactpersonnumber"
-                                class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
-                               minlength="11" maxlength="11"
-                            pattern="[0-9]{11}" placeholder="e.g. 09123456789" required />
-                        </div>
+                        <input type="tel" name="guestcontactpersonnumber" class="input input-bordered w-full rounded-xl border-2 border-gray-200 
+                                   focus:border-[#001f54] focus:outline-none transition-colors" placeholder="Enter phone number" required />
 
                         <input type="hidden" name="subtotal" id="hiddenSubtotal">
                         <input type="hidden" name="vat" id="hiddenVat">
@@ -784,6 +781,292 @@ if (typeof MutationObserver !== 'undefined') {
     </div>
 </dialog>
 
+
+<script>
+    const ModalPhoneInputHandler = {
+            // Store initialized instances per modal
+            instances: new Map(),
+
+            // Configuration for intlTelInput
+            getOptions() {
+                return {
+                    initialCountry: "auto",
+                    geoIpLookup: (callback) => {
+                        fetch("https://ipapi.co/json/")
+                            .then(res => res.json())
+                            .then(data => callback(data.country_code))
+                            .catch(() => callback("ph")); // Default to Philippines
+                    },
+                    separateDialCode: true,
+                    nationalMode: false,
+                    utilsScript: "/mobilevalid/utils.js", // Adjust path as needed
+                    preferredCountries: ["ph", "us", "gb"],
+                    // Only allow phone numbers
+                    onlyCountries: [], // Leave empty to allow all countries
+                };
+            },
+
+            // Initialize phone inputs for a specific modal
+            initForModal(modal) {
+                if (!modal) return;
+
+                const modalId = modal.id;
+
+                // Check if already initialized
+                if (this.instances.has(modalId)) {
+                    return this.instances.get(modalId);
+                }
+
+                // Find phone input fields in this modal
+                const guestPhoneInput = modal.querySelector('[name="guestphonenumber"]');
+                const contactPhoneInput = modal.querySelector('[name="guestcontactpersonnumber"]');
+
+                if (!guestPhoneInput || !contactPhoneInput) {
+                    console.warn(`Phone inputs not found in modal ${modalId}`);
+                    return null;
+                }
+
+                // Create unique IDs for these inputs if they don't have them
+                if (!guestPhoneInput.id) {
+                    guestPhoneInput.id = `guestPhone_${modalId}`;
+                }
+                if (!contactPhoneInput.id) {
+                    contactPhoneInput.id = `contactPhone_${modalId}`;
+                }
+
+                // Initialize intlTelInput for both fields
+                const guestPhoneIti = window.intlTelInput(guestPhoneInput, this.getOptions());
+                const contactPhoneIti = window.intlTelInput(contactPhoneInput, this.getOptions());
+
+                // Store instances
+                const instances = {
+                    guestPhone: guestPhoneIti,
+                    contactPhone: contactPhoneIti,
+                    guestPhoneInput,
+                    contactPhoneInput
+                };
+
+                this.instances.set(modalId, instances);
+
+                // Set up validation handlers
+                this.setupValidationHandlers(modal, instances);
+
+                return instances;
+            },
+
+            // Set up validation handlers for phone inputs
+            setupValidationHandlers(modal, instances) {
+                const { guestPhone, contactPhone, guestPhoneInput, contactPhoneInput } = instances;
+
+                // Helper function to validate and sync number
+                const validateAndSync = (iti, input) => {
+                    if (iti.isValidNumber()) {
+                        // Get the full international number (E.164 format)
+                        const fullNumber = iti.getNumber();
+                        input.value = fullNumber;
+
+                        // Remove error styling
+                        input.classList.remove('border-red-500', 'focus:border-red-500');
+                        input.classList.add('border-gray-200', 'focus:border-[#001f54]');
+
+                        // Hide error message if exists
+                        const errorElement = input.parentNode.querySelector('.field-error');
+                        if (errorElement) {
+                            errorElement.classList.add('hidden');
+                        }
+
+                        return true;
+                    } else {
+                        // Add error styling
+                        input.classList.remove('border-gray-200', 'focus:border-[#001f54]');
+                        input.classList.add('border-red-500', 'focus:border-red-500');
+
+                        // Show error message
+                        let errorElement = input.parentNode.querySelector('.field-error');
+                        if (!errorElement) {
+                            errorElement = document.createElement('div');
+                            errorElement.className = 'field-error text-red-500 text-sm mt-1 flex items-center gap-1';
+                            input.parentNode.appendChild(errorElement);
+                        }
+
+                        errorElement.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <span>Please enter a valid phone number</span>
+                `;
+                        errorElement.classList.remove('hidden');
+
+                        return false;
+                    }
+                };
+
+                // Guest phone validation
+                guestPhoneInput.addEventListener('blur', () => {
+                    validateAndSync(guestPhone, guestPhoneInput);
+                });
+
+                guestPhoneInput.addEventListener('countrychange', () => {
+                    // Clear any previous errors when country changes
+                    guestPhoneInput.classList.remove('border-red-500', 'focus:border-red-500');
+                    guestPhoneInput.classList.add('border-gray-200', 'focus:border-[#001f54]');
+                    const errorElement = guestPhoneInput.parentNode.querySelector('.field-error');
+                    if (errorElement) {
+                        errorElement.classList.add('hidden');
+                    }
+                });
+
+                // Contact phone validation
+                contactPhoneInput.addEventListener('blur', () => {
+                    validateAndSync(contactPhone, contactPhoneInput);
+                });
+
+                contactPhoneInput.addEventListener('countrychange', () => {
+                    contactPhoneInput.classList.remove('border-red-500', 'focus:border-red-500');
+                    contactPhoneInput.classList.add('border-gray-200', 'focus:border-[#001f54]');
+                    const errorElement = contactPhoneInput.parentNode.querySelector('.field-error');
+                    if (errorElement) {
+                        errorElement.classList.add('hidden');
+                    }
+                });
+
+                // Validate on form submit
+                const form = modal.querySelector('form');
+                if (form) {
+                    form.addEventListener('submit', (e) => {
+                        const guestValid = validateAndSync(guestPhone, guestPhoneInput);
+                        const contactValid = validateAndSync(contactPhone, contactPhoneInput);
+
+                        if (!guestValid || !contactValid) {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            // Scroll to first invalid phone input
+                            if (!guestValid) {
+                                guestPhoneInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            } else if (!contactValid) {
+                                contactPhoneInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        }
+                    }, { capture: true });
+                }
+            },
+
+            // Destroy instances for a modal (cleanup)
+            destroyForModal(modalId) {
+                const instances = this.instances.get(modalId);
+                if (!instances) return;
+
+                // Destroy intlTelInput instances
+                if (instances.guestPhone) {
+                    instances.guestPhone.destroy();
+                }
+                if (instances.contactPhone) {
+                    instances.contactPhone.destroy();
+                }
+
+                // Remove from map
+                this.instances.delete(modalId);
+            },
+
+            // Reset phone inputs for a modal
+            resetForModal(modalId) {
+                const instances = this.instances.get(modalId);
+                if (!instances) return;
+
+                // Reset the inputs
+                if (instances.guestPhoneInput) {
+                    instances.guestPhoneInput.value = '';
+                    instances.guestPhoneInput.classList.remove('border-red-500', 'focus:border-red-500');
+                    instances.guestPhoneInput.classList.add('border-gray-200', 'focus:border-[#001f54]');
+                }
+                if (instances.contactPhoneInput) {
+                    instances.contactPhoneInput.value = '';
+                    instances.contactPhoneInput.classList.remove('border-red-500', 'focus:border-red-500');
+                    instances.contactPhoneInput.classList.add('border-gray-200', 'focus:border-[#001f54]');
+                }
+
+                // Hide error messages
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.querySelectorAll('.field-error').forEach(error => {
+                        error.classList.add('hidden');
+                    });
+                }
+            }
+        };
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize for all existing modals
+            document.querySelectorAll('dialog[id^="bookroom_"]').forEach(modal => {
+                // Don't initialize immediately - wait for modal to open
+                modal.addEventListener('show', () => {
+                    setTimeout(() => {
+                        ModalPhoneInputHandler.initForModal(modal);
+                    }, 100);
+                });
+            });
+
+            // Watch for modal openings via showModal()
+            const originalShowModal = HTMLDialogElement.prototype.showModal;
+            HTMLDialogElement.prototype.showModal = function () {
+                originalShowModal.call(this);
+
+                // If it's a booking modal, initialize phone inputs
+                if (this.id && this.id.startsWith('bookroom_')) {
+                    setTimeout(() => {
+                        ModalPhoneInputHandler.initForModal(this);
+                    }, 100);
+                }
+            };
+
+            // Clean up when modal closes
+            document.addEventListener('click', (e) => {
+                // Check for modal close button
+                const closeButton = e.target.closest('button[onclick*="close"]');
+                if (closeButton) {
+                    const modalIdMatch = closeButton.getAttribute('onclick')?.match(/bookroom_(\d+)/);
+                    if (modalIdMatch) {
+                        const modalId = `bookroom_${modalIdMatch[1]}`;
+                        ModalPhoneInputHandler.resetForModal(modalId);
+                    }
+                }
+
+                // Check for modal open button
+                const openButton = e.target.closest('button[onclick*="showModal"]');
+                if (openButton) {
+                    const modalIdMatch = openButton.getAttribute('onclick')?.match(/bookroom_(\d+)/);
+                    if (modalIdMatch) {
+                        const modalId = `bookroom_${modalIdMatch[1]}`;
+                        const modal = document.getElementById(modalId);
+                        if (modal) {
+                            setTimeout(() => {
+                                ModalPhoneInputHandler.initForModal(modal);
+                            }, 150);
+                        }
+                    }
+                }
+            });
+
+            // Handle ESC key to reset
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    const openModal = document.querySelector('dialog[open][id^="bookroom_"]');
+                    if (openModal) {
+                        ModalPhoneInputHandler.resetForModal(openModal.id);
+                    }
+                }
+            });
+        });
+
+        // Export for use in other scripts if needed
+        if (typeof window !== 'undefined') {
+            window.ModalPhoneInputHandler = ModalPhoneInputHandler;
+        }
+</script>
 <script>
     // Validation Module for Modal POS Booking Form
     const ModalFormValidator = {
@@ -844,15 +1127,7 @@ if (typeof MutationObserver !== 'undefined') {
                 },
                 message: "You must be at least 18 years old"
             },
-            guestphonenumber: {
-                required: true,
-                validate: (value) => {
-                    // Accept formats: 09XXXXXXXXX (11 digits starting with 09)
-                    const cleaned = value.replace(/\D/g, '');
-                    return cleaned.length === 11 && cleaned.startsWith('09');
-                },
-                message: "Enter valid PH mobile (09XXXXXXXXX - 11 digits)"
-            },
+                
             guestemailaddress: {
                 required: true,
                 validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
@@ -868,14 +1143,7 @@ if (typeof MutationObserver !== 'undefined') {
                 validate: (value) => value.trim().length >= 2,
                 message: "Contact person name is required"
             },
-            guestcontactpersonnumber: {
-                required: true,
-                validate: (value) => {
-                    const cleaned = value.replace(/\D/g, '');
-                    return cleaned.length === 11 && cleaned.startsWith('09');
-                },
-                message: "Enter valid PH mobile (09XXXXXXXXX - 11 digits)"
-            },
+          
             reservation_validID: {
                 required: true,
                 validate: (input) => {

@@ -10,7 +10,9 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link rel="stylesheet" href="{{ asset('mobilevalid/intlTelInput.min.css') }}">
+    <script src="{{ asset('mobilevalid/intlTelInput.min.js') }}"></script>
+    <script src="{{ asset('mobilevalid/utils.js') }}"></script>
     @vite('resources/css/app.css')
 </head>
 
@@ -133,7 +135,7 @@
                                 </div>
 
                                 <!-- Birthday -->
-                                <div>
+                                <div class="col-span-1 sm:col-span-2">
                                     <label class="block text-white/90 text-sm font-medium mb-2"
                                         for="guest_birthday">Birthday</label>
                                     <div class="relative">
@@ -146,20 +148,31 @@
                                     </div>
                                 </div>
 
-                                <!-- Mobile Number -->
-                                <div>
-                                    <label class="block text-white/90 text-sm font-medium mb-2"
-                                        for="guest_mobile">Mobile Number</label>
-                                    <div class="relative">
-                                        <div
-                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <i class="fas fa-phone-alt text-white/50"></i>
+                                <div class="col-span-1 sm:col-span-2">
+                                        <div>
+                                            <label class="block text-white/90 text-sm font-medium mb-2">
+                                                Mobile Number
+                                            </label>
+                                        
+                                            <input type="tel" id="contactPhone"
+                                                class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54]" required />
+                                        
+                                            <!-- Example / hint -->
+                                            <p id="phoneExample" class="text-xs text-gray-400 mt-1"></p>
+                                        
+                                            <!-- Error message -->
+                                            <p id="phoneError" class="text-xs text-red-500 mt-1 hidden">
+                                                Please enter a valid mobile number
+                                            </p>
+                                        
+                                            <!-- Hidden E.164 value -->
+                                            <input type="hidden" id="guest_mobile" name="guest_mobile">
                                         </div>
-                                        <input id="guest_mobile" type="tel" placeholder="+1 (555) 123-4567" required
-                                            name="guest_mobile"
-                                            class="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50">
-                                    </div>
+
                                 </div>
+
+                                <!-- Mobile Number -->
+                    
 
                                 <!-- Email -->
                                 <div class="col-span-1 sm:col-span-2">
@@ -279,6 +292,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="{{ asset('mobilevalid/registrationvalid.js') }}"></script>
     <script>
         AOS.init({
             duration: 1000,

@@ -9,7 +9,9 @@
     @vite('resources/css/app.css')
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+      <link rel="stylesheet" href="{{ asset('mobilevalid/intlTelInput.min.css') }}">
+      <script src="{{ asset('mobilevalid/intlTelInput.min.js') }}"></script>
+      <script src="{{ asset('mobilevalid/utils.js') }}"></script>
     <title>{{$title}} - POS</title>
     @livewireStyles
 </head>
@@ -383,7 +385,7 @@
               @include('admin.components.pos.removeadditional')
             @endforeach
 
-            @foreach ($bookedreservationCart as $bookedRooms )
+            @foreach ($bookedreservationCart as $bookedRooms)
               @include('admin.components.pos.removeadditionalbookings')
             @endforeach
              <!-- Confirm Booking Modal -->
