@@ -66,6 +66,31 @@
         </div>
       </div>
 
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-2">
+            <i class="fa-solid fa-camera mr-1" style="color: #F7B32B;"></i> Photo
+          </label>
+          @if(!empty($myroomfeedback->roomfeedbackphoto))
+            <div class="relative group">
+              <img src="{{ $myroomfeedback->roomfeedbackphoto }}" alt="Feedback photo"
+                class="w-full max-w-sm mx-auto rounded-lg shadow-md border border-gray-200 cursor-pointer hover:shadow-lg transition"
+                onclick="openImageModal('{{ $myroomfeedback->roomfeedbackphoto }}', {{ $myroomfeedback->roomfeedbackID }})">
+              <div
+                class="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 rounded-lg flex items-center justify-center">
+                <i
+                  class="fa-solid fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"></i>
+              </div>
+            </div>
+
+          @else
+            <div
+              class="p-4 border border-gray-200 rounded-xl bg-gray-50 text-sm text-gray-500 flex items-center justify-center gap-2">
+              <i class="fa-regular fa-image text-lg" style="color: #cbd5e1;"></i>
+              <span>No photo attached to this feedback.</span>
+            </div>
+          @endif
+        </div>
+
       <!-- Hotel Staff Response -->
       <div class="mt-6">
         <label class="block text-sm font-medium text-gray-600 mb-2">

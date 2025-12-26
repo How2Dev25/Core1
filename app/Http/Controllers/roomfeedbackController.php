@@ -17,7 +17,20 @@ class roomfeedbackController extends Controller
             'roomID' => 'required',
             'roomrating' => 'required',
             'roomfeedbackfeedback' => 'required',
+            'roomfeedbackphoto' => 'nullable',
         ]);
+
+
+if ($request->hasFile('roomfeedbackphoto')) {
+    $file = $request->file('roomfeedbackphoto');
+
+    $filename = time() . '_' . $file->getClientOriginalName();
+    $filepath = 'images/feedbacks/' . $filename;
+
+    $file->move(public_path('images/feedbacks'), $filename);
+
+    $form['roomfeedbackphoto'] = $filepath;
+}
 
         $form['guestID'] = Auth::guard('guest')->user()->guestID;
         $form['roomfeedbackstatus'] = 'Open';
@@ -60,7 +73,23 @@ class roomfeedbackController extends Controller
             'roomID' => 'required',
             'roomrating' => 'required',
             'roomfeedbackfeedback' => 'required',
+              'roomfeedbackphoto' => 'nullable',
         ]);
+
+
+        if ($request->hasFile('roomfeedbackphoto')) {
+    $file = $request->file('roomfeedbackphoto');
+
+    $filename = time() . '_' . $file->getClientOriginalName();
+    $filepath = 'images/feedbacks/' . $filename;
+
+    $file->move(public_path('images/feedbacks'), $filename);
+
+    $form['roomfeedbackphoto'] = $filepath;
+}
+else{
+     $form['roomfeedbackphoto'] = $roomfeedbackID->roomfeedbackphoto;
+}
 
         $form['guestID'] = Auth::guard('guest')->user()->guestID;
         $form['roomfeedbackstatus'] = 'Open';

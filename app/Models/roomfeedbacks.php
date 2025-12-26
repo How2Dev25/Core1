@@ -24,6 +24,7 @@ class roomfeedbacks extends Model
         'roomfeedbackstatus',
         'roomrating',
         'roomfeedbackresponse',
+        'roomfeedbackphoto'
        ];
     
 }
