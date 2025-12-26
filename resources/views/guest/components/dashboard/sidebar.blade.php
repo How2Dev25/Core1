@@ -132,12 +132,7 @@
               <i class="fa-solid fa-star text-[#F7B32B]"></i> Room Feedbacks
             </span>
           </a>
-          <a href="#"
-            class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-heart text-[#F7B32B]"></i> Service Feedbacks
-            </span>
-          </a>
+         
         </div>
       </div>
 

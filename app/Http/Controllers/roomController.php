@@ -14,6 +14,7 @@ use App\Models\roomtypes;
 use App\Models\dynamicBilling;
 use App\Models\guestloyaltypoints;
 use App\Models\loyaltyrules;
+use App\Models\roomfeedbacks;
 
 class roomController extends Controller
 {
@@ -354,7 +355,25 @@ if ($form['roomstatus'] === 'Maintenance') {
         ->latest('core1_roomphotos.created_at')
         ->get();
 
-        return view('guest.components.dashboard.rooms.roomdetails', ['room' => $room, 'roomphotos' => $roomphotos]);
+         $feedbacks = roomfeedbacks::join(
+        'core1_guest',
+        'core1_guest.guestID',
+        '=',
+        'core1_roomfeedback.guestID'
+    )
+    ->where('core1_roomfeedback.roomID', $roomID)
+    ->select(
+        'core1_roomfeedback.*',
+        'core1_roomfeedback.created_at as roomfeedbacktimestamp',
+        'core1_guest.*'
+    )
+    ->orderByDesc('core1_roomfeedback.created_at')
+    ->get();
+
+
+        return view('guest.components.dashboard.rooms.roomdetails', 
+        ['room' => $room, 'roomphotos' => $roomphotos,
+    'feedbacks' => $feedbacks]);
     }
 
     public function reservethisroom($roomID){

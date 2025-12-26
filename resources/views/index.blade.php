@@ -71,8 +71,8 @@
     @include('landing.ameneties')
 
 
-    <!-- Testimonials -->
-    {{-- @include('landing.testimonials') --}}
+  
+     @include('landing.testimonials') 
 
 
     {{-- Contacts --}}

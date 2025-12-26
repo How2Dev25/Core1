@@ -15,6 +15,7 @@ use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
 use App\Models\guestnotification;
 use App\Models\employeenotification;
+use App\Models\roomfeedbacks;
 
 class landingController extends Controller
 {
@@ -47,7 +48,24 @@ public function employeenotif($guestname, $roomID)
         ->latest('core1_roomphotos.created_at')
         ->get();
 
-        return view('booking.roomselected', ['room' => $room, 'roomphotos' => $roomphotos]);
+       $feedbacks = roomfeedbacks::join(
+        'core1_guest',
+        'core1_guest.guestID',
+        '=',
+        'core1_roomfeedback.guestID'
+    )
+    ->where('core1_roomfeedback.roomID', $roomID)
+    ->select(
+        'core1_roomfeedback.*',
+        'core1_roomfeedback.created_at as roomfeedbacktimestamp',
+        'core1_guest.*'
+    )
+    ->orderByDesc('core1_roomfeedback.created_at')
+    ->get();
+
+    
+        return view('booking.roomselected', ['room' => $room, 'roomphotos' => $roomphotos, 
+        'feedbacks' => $feedbacks]);
     }
 
         public function bookconfirmlanding($roomID){

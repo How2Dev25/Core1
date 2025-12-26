@@ -178,15 +178,9 @@ function verifyintegrationresto(){
 // 
 Route::get('/', function () {
     $rooms = Room::all();
-    $ratingcomments = GuestRatings::all();
+ 
 
-    // Ratings summary
-    $averageRating   = GuestRatings::avg('rating_rating');
-    $totalReviews    = GuestRatings::count();
-    $recommendRate   = GuestRatings::where('rating_rating', '>=', 4)->count();
-    $recommendRate   = $totalReviews > 0 
-                        ? round(($recommendRate / $totalReviews) * 100) 
-                        : 0;
+
 
     // Fetch promos and events
     $promos = Hmp::where('hotelpromostatus', 'Active')->get();
@@ -194,18 +188,33 @@ Route::get('/', function () {
     $facility = facility::all();
 
     $promoCount = $promos->count();
+
+
+     $feedbacks = roomfeedbacks::join(
+        'core1_guest',
+        'core1_guest.guestID',
+        '=',
+        'core1_roomfeedback.guestID'
+    )
+    ->join('core1_room', 'core1_room.roomID', '=', 'core1_roomfeedback.roomID')
+    ->select(
+        'core1_roomfeedback.*',
+        'core1_roomfeedback.created_at as roomfeedbacktimestamp',
+        'core1_guest.*',
+        'core1_room.*'
+    )
+    ->inRandomOrder()
+    ->limit(6)
+    ->get();
     
 
     return view('index', compact(
         'rooms',
-        'ratingcomments',
-        'averageRating',
-        'totalReviews',
-        'recommendRate',
         'promos',
         'promoCount',
         'events',
         'facility',
+        'feedbacks'
     ));
 });
 
