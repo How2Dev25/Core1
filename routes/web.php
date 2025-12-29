@@ -923,6 +923,13 @@ Route::get('/doorlockadmin', function(){
 });
 
 Route::get('/monitordoorlock/{doorlockID}', [doorlockController::class, 'monitor']);
+// Route 1: Main page view
+Route::get('/admin/doorlock/monitor/{doorlockID}', [doorlockController::class, 'monitor'])
+    ->name('admin.doorlock.monitor');
+
+// Route 2: AJAX data endpoint (for real-time updates)
+Route::get('/admin/doorlock/monitor-data/{doorlockID}', [doorlockController::class, 'getMonitorData'])
+    ->name('admin.doorlock.monitor.data');
 
 Route::post('/storedoorLock', [doorlockController::class, 'storedoorLock']);
 Route::put('/modifydoorLock/{doorlockID}', [doorlockController::class, 'modifydoorLock']);

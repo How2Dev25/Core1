@@ -106,127 +106,173 @@ public function removeAssignment($doorlockfrontdeskID)
 }
 
 
-public function monitor($doorlockID){
-    // rfid logs
-$doorlock = rfidHistory::join('doorlockfrontdesk as df1', 'df1.doorlockID', '=', 'rfid_history.doorlockID')
-    ->join('doorlock as d', 'd.doorlockID', '=', 'df1.doorlockID')
-    ->where('rfid_history.doorlockID', $doorlockID)
-    ->select(
-        'rfid_history.*',
-        'df1.*',
-        'rfid_history.created_at as rfiddate',
-        'd.*'
-    )
-    ->orderBy('rfid_history.created_at', 'desc')
-    ->paginate(5); // <-- Change 10 to how many rows per page you want
-
-
-    //    booking details
+public function monitor($doorlockID)
+{
+    // Main view load
     $doorlockfrontdesk = doorlockFrontdesk::join('core1_reservation', 'core1_reservation.bookingID', '=', 'doorlockfrontdesk.bookingID')
-    ->join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
-    ->join('doorlock', 'doorlock.doorlockID', 'doorlockfrontdesk.doorlockID')
-    ->where('doorlockfrontdesk.doorlockID', $doorlockID )
-    ->first();
+        ->join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+        ->join('doorlock', 'doorlock.doorlockID', 'doorlockfrontdesk.doorlockID')
+        ->where('doorlockfrontdesk.doorlockID', $doorlockID)
+        ->first();
 
+    return view('admin.doorlockmonitor', compact('doorlockfrontdesk', 'doorlockID'));
+}
 
+public function getMonitorData($doorlockID)
+{
+    // RFID logs with pagination
+    $doorlock = rfidHistory::join('doorlockfrontdesk as df1', 'df1.doorlockID', '=', 'rfid_history.doorlockID')
+        ->join('doorlock as d', 'd.doorlockID', '=', 'df1.doorlockID')
+        ->where('rfid_history.doorlockID', $doorlockID)
+        ->select(
+            'rfid_history.*',
+            'df1.*',
+            'rfid_history.created_at as rfiddate',
+            'd.*'
+        )
+        ->orderBy('rfid_history.created_at', 'desc')
+        ->paginate(5);
 
-  $doorlockHistory = rfidHistory::where('doorlockID', $doorlockID)
-    ->orderBy('created_at')
-    ->get();
+    // Get all history for analytics
+    $doorlockHistory = rfidHistory::where('doorlockID', $doorlockID)
+        ->orderBy('created_at', 'desc')
+        ->get();
 
-// Access Pattern (24h)
-$accessPattern = $doorlockHistory->filter(function ($h) {
-    return $h->created_at >= Carbon::now()->subDay();
-})->map(function ($h) {
-    return [
-        'time' => $h->created_at->format('H:i'), // hour:minute
-        'state' => $h->door_state
-    ];
-});
+    // Access Pattern (24h) - hourly grouping for cleaner visualization
+    $accessPattern = $doorlockHistory
+        ->filter(fn($h) => $h->created_at >= Carbon::now()->subDay())
+        ->groupBy(fn($h) => $h->created_at->format('H:00'))
+        ->map(fn($group) => [
+            'unlocked' => $group->where('door_state', 'Unlocked')->count(),
+            'locked' => $group->where('door_state', 'Locked')->count()
+        ]);
 
-// Activity Distribution
-$activityDistribution = $doorlockHistory->groupBy('door_state')->map->count();
+    // Activity Distribution
+    $activityDistribution = $doorlockHistory->groupBy('door_state')->map->count();
 
-// Weekly Summary (last 7 days)
-$weeklySummary = $doorlockHistory->groupBy(function ($h) {
-    return $h->created_at->format('l'); // Day name
-})->map->count();
+    // Weekly Summary (last 7 days)
+    $weeklySummary = collect();
+    for ($i = 6; $i >= 0; $i--) {
+        $date = Carbon::now()->subDays($i);
+        $dayName = $date->format('l');
+        $count = $doorlockHistory->filter(fn($h) => $h->created_at->isSameDay($date))->count();
+        $weeklySummary->put($dayName, $count);
+    }
 
+    // Security Analysis
+    $securityAnalysis = $this->analyzeSecurityStatus($doorlockHistory);
 
+    // Metrics
+    $totalLogs = $doorlockHistory->count();
+    $openEvents = $doorlockHistory->where('door_state', 'Unlocked')->count();
+    $closedEvents = $doorlockHistory->where('door_state', 'Locked')->count();
 
- $lastActivity = $doorlockHistory->last();
+    return response()->json([
+        'doorlock' => $doorlock,
+        'accessPattern' => $accessPattern,
+        'activityDistribution' => $activityDistribution,
+        'weeklySummary' => $weeklySummary,
+        'overallStatus' => $securityAnalysis['status'],
+        'statusReason' => $securityAnalysis['reason'],
+        'lastActivityTime' => $securityAnalysis['lastActivityTime'],
+        'rapidAttemptsToday' => $securityAnalysis['rapidAttemptsToday'],
+        'totalLogs' => $totalLogs,
+        'openEvents' => $openEvents,
+        'closedEvents' => $closedEvents,
+        'suspiciousEvents' => $securityAnalysis['suspiciousEvents'],
+        'suspiciousDetails' => $securityAnalysis['details']
+    ]);
+}
+
+private function analyzeSecurityStatus($doorlockHistory)
+{
+    $lastActivity = $doorlockHistory->first(); // Already sorted desc
     $lastActivityTime = $lastActivity ? $lastActivity->created_at->diffForHumans() : 'No activity';
-
-    // Overall Status
-    $overallStatus = 'NORMAL';
-
-    // Check for rapid repeated access (<10 seconds between taps)
-    $rapidAccess = false;
-    $doorlockHistoryArray = $doorlockHistory->values();
-    for ($i = 1; $i < $doorlockHistoryArray->count(); $i++) {
-        $diff = $doorlockHistoryArray[$i]->created_at->diffInSeconds($doorlockHistoryArray[$i - 1]->created_at);
-        if ($diff < 10) {
-            $rapidAccess = true;
-            break;
-        }
-    }
-
-    if ($rapidAccess) {
-        $overallStatus = 'SUSPICIOUS';
-    }
-
-    // Check last access time outside expected hours (11 PM - 6 AM)
-    if ($lastActivity && ($lastActivity->created_at->hour < 6 || $lastActivity->created_at->hour > 23)) {
-        $overallStatus = 'SUSPICIOUS';
-    }
-
-    // Rapid taps today
+    
+    $status = 'NORMAL';
+    $reason = 'All activity appears normal';
+    $suspiciousEvents = 0;
+    $details = [];
+    
+    // 1. Check for excessive rapid access (3+ times within 30 seconds = suspicious)
     $rapidAttemptsToday = 0;
-    $todayHistory = $doorlockHistory->where('created_at', '>=', Carbon::now()->startOfDay())->values();
-    for ($i = 1; $i < $todayHistory->count(); $i++) {
-        $diff = $todayHistory[$i]->created_at->diffInSeconds($todayHistory[$i - 1]->created_at);
-        if ($diff < 10) {
+    $todayHistory = $doorlockHistory
+        ->where('created_at', '>=', Carbon::now()->startOfDay())
+        ->sortBy('created_at')
+        ->values();
+    
+    $rapidSequences = 0;
+    for ($i = 2; $i < $todayHistory->count(); $i++) {
+        $time1 = $todayHistory[$i - 2]->created_at;
+        $time2 = $todayHistory[$i - 1]->created_at;
+        $time3 = $todayHistory[$i]->created_at;
+        
+        // 3 accesses within 30 seconds
+        if ($time3->diffInSeconds($time1) <= 30) {
+            $rapidSequences++;
             $rapidAttemptsToday++;
         }
     }
-
-
-      $totalLogs = $doorlockHistory->count();
-
-    // Open Events
-    $openEvents = $doorlockHistory->where('door_state', 'Unlocked')->count();
-
-    // Closed Events
-    $closedEvents = $doorlockHistory->where('door_state', 'Locked')->count();
-
-    // Suspicious Events
-    $suspiciousEvents = 0;
-    $historyArray = $doorlockHistory->sortBy('created_at')->values();
-
-    // Detect rapid repeated access (<10 seconds apart)
+    
+    if ($rapidSequences >= 2) {
+        $status = 'SUSPICIOUS';
+        $suspiciousEvents += $rapidSequences;
+        $details[] = "Multiple rapid access sequences detected ({$rapidSequences} times)";
+    }
+    
+    // 2. Check for very late night access (2 AM - 5 AM = potentially suspicious)
+    $lateNightAccess = $doorlockHistory->filter(function($h) {
+        $hour = $h->created_at->hour;
+        return $hour >= 2 && $hour < 5;
+    });
+    
+    if ($lateNightAccess->count() >= 3) {
+        $status = 'SUSPICIOUS';
+        $suspiciousEvents += $lateNightAccess->count();
+        $details[] = "{$lateNightAccess->count()} access attempts during late night hours (2-5 AM)";
+    }
+    
+    // 3. Check for unusual access patterns (more than 20 accesses in an hour)
+    $hourlyAccess = $doorlockHistory
+        ->filter(fn($h) => $h->created_at >= Carbon::now()->subHour())
+        ->count();
+    
+    if ($hourlyAccess > 20) {
+        $status = 'SUSPICIOUS';
+        $suspiciousEvents += floor($hourlyAccess / 10);
+        $details[] = "Unusually high access frequency ({$hourlyAccess} times in the last hour)";
+    }
+    
+    // 4. Check for failed pattern (rapid lock/unlock cycles)
+    $historyArray = $doorlockHistory->take(10)->values();
+    $lockUnlockCycles = 0;
     for ($i = 1; $i < $historyArray->count(); $i++) {
-        $diff = $historyArray[$i]->created_at->diffInSeconds($historyArray[$i - 1]->created_at);
-        if ($diff < 10) {
-            $suspiciousEvents++;
+        if ($historyArray[$i]->door_state !== $historyArray[$i - 1]->door_state) {
+            $diff = $historyArray[$i]->created_at->diffInSeconds($historyArray[$i - 1]->created_at);
+            if ($diff < 5) { // State change within 5 seconds
+                $lockUnlockCycles++;
+            }
         }
     }
-
-    // Optional: count access outside allowed hours
-    foreach ($historyArray as $history) {
-        $hour = $history->created_at->hour;
-        if ($hour < 6 || $hour > 23) {
-            $suspiciousEvents++;
-        }
+    
+    if ($lockUnlockCycles >= 3) {
+        $status = 'SUSPICIOUS';
+        $suspiciousEvents += $lockUnlockCycles;
+        $details[] = "Rapid lock/unlock cycles detected ({$lockUnlockCycles} times)";
     }
-
-// Pass to Blade
-return view('admin.doorlockmonitor', compact('doorlockHistory', 'accessPattern', 
-'activityDistribution', 'weeklySummary', 'doorlockfrontdesk','doorlock',  'overallStatus',
-        'lastActivityTime',
-        'rapidAttemptsToday',
-     'totalLogs',
-        'openEvents',
-        'closedEvents',
-        'suspiciousEvents'));
+    
+    // Set reason based on findings
+    if ($status === 'SUSPICIOUS') {
+        $reason = implode('; ', $details);
+    }
+    
+    return [
+        'status' => $status,
+        'reason' => $reason,
+        'lastActivityTime' => $lastActivityTime,
+        'rapidAttemptsToday' => $rapidAttemptsToday,
+        'suspiciousEvents' => $suspiciousEvents,
+        'details' => $details
+    ];
 }
 }
