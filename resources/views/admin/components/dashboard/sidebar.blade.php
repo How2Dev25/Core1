@@ -424,6 +424,51 @@
         </a>
       @endif
 
+          @if(Auth::user()->role === 'Hotel Admin')
+
+            <div class="px-4 py-2 mt-4">
+              <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">Artificial Intelligence</span>
+            </div>
+            <!-- Gemini / Reservation Analytics -->
+            <div class="collapse group">
+              <input type="checkbox" class="peer" />
+
+              <div
+                class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
+
+                <div class="flex items-center">
+                  <div
+                    class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+                    <i class="fas fa-chart-pie text-[#F7B32B] group-hover:text-white"></i>
+                  </div>
+                  <span class="ml-3 sidebar-text">Reservation Analytics</span>
+                </div>
+
+                <i
+                  class="fas fa-chevron-down w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"></i>
+              </div>
+
+              <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
+
+                <!-- Gemini Prompt Analytics -->
+                <a href="/geminiAnalytics"
+                  class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+                  <span class="flex items-center gap-2">
+                    <i class="fas fa-robot w-4 h-4 text-[#F7B32B]"></i>
+                    Gemini Analytics
+                  </span>
+                </a>
+
+                <!-- Reservations Summary -->
+
+                <!-- Guest Preferences -->
+
+
+              </div>
+            </div>
+          @endif
+
+    
       <!-- Section Label -->
       @if(Auth::user()->role === 'Hotel Admin')
         <div class="px-4 py-2 mt-4">
@@ -439,7 +484,7 @@
             <span class="ml-3 sidebar-text">Restaurant Menu</span>
           </div>
         </a>
-      @endif
+      @endif  
 
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\aiPrompt;
 use App\Models\guestnotification;
 use App\Models\Inventory;
 use App\Models\Reservation;
@@ -68,9 +69,16 @@ public function searchRooms(Request $request)
    $roomtypes = roomtypes::pluck('roomtype_name')->toArray(); 
 
     // Step 1: Try to get rooms based on requested type
-$rooms = Room::leftJoin('core1_loyaltyandrewards', 'core1_loyaltyandrewards.roomID', '=', 'core1_room.roomID')
+$rooms = Room::leftJoin(
+        'core1_loyaltyandrewards',
+        'core1_loyaltyandrewards.roomID',
+        '=',
+        'core1_room.roomID'
+    )
     ->whereIn('core1_room.roomtype', $roomtypes)
-    ->when($roomtype, fn($q) => $q->where('core1_room.roomtype', $roomtype))
+    ->when($roomtype, fn ($q) =>
+        $q->where('core1_room.roomtype', $roomtype)
+    )
     ->where('core1_room.roomstatus', 'Available')
     ->select(
         'core1_room.*',
@@ -81,13 +89,28 @@ $rooms = Room::leftJoin('core1_loyaltyandrewards', 'core1_loyaltyandrewards.room
 
     // Step 2: If no rooms found, get all available rooms and flash a message
     if ($rooms->isEmpty()) {
-        session()->flash('info', "Sorry, no {$roomtype} rooms are available. Here are other available rooms you might like:");
 
-        $rooms = Room::query()
-            ->whereIn('roomtype', $roomtype)
-            ->where('roomstatus', 'Available')
-            ->get();
-    }
+    session()->flash(
+        'info',
+        "Sorry, no {$roomtype} rooms are available. Here are other available rooms you might like:"
+    );
+
+    $rooms = Room::leftJoin(
+            'core1_loyaltyandrewards',
+            'core1_loyaltyandrewards.roomID',
+            '=',
+            'core1_room.roomID'
+        )
+        ->whereIn('core1_room.roomtype', $roomtypes)   // ✅ valid array
+        ->where('core1_room.roomtype', '!=', $roomtype) // ✅ exclude requested type
+        ->where('core1_room.roomstatus', 'Available')
+        ->select(
+            'core1_room.*',
+            DB::raw('COALESCE(core1_loyaltyandrewards.loyalty_value, 0) as loyalty_value'),
+            'core1_loyaltyandrewards.roomID as loyaltyroomID'
+        )
+        ->get();
+}
 
 $servicefee = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
 $taxrate = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
@@ -97,6 +120,20 @@ $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person 
             ->value('points_balance');
 
      $loyaltyrules = loyaltyrules::all();
+
+
+     aiPrompt::create([
+    'guestID' => Auth::guard('guest')->id(),
+    'prompt_text' => $prompt,
+    'roomtype' => $parsed['roomtype'] ?? null,
+    'roommaxguest' => $parsed['roommaxguest'] ?? null,
+    'roomfeatures' => isset($parsed['roomfeatures']) ? json_encode($parsed['roomfeatures']) : null,
+    'reservation_days' => $parsed['reservation_days'] ?? null,
+    'checkin_date' => $parsed['checkin_date'] ?? null,
+    'checkout_date' => $parsed['checkout_date'] ?? null,
+    'special_request' => $parsed['special_request'] ?? null,
+    'raw_json' => $aiRaw
+]);
 
 
     return view('guest.components.bas.withsuggestion', [

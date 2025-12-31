@@ -13,7 +13,6 @@ class GeminiService
     protected $apiKey;
 protected $endpoint = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash-lite:generateContent';
 
-
     public function __construct()
     {
         $this->apiKey = config('services.gemini.key');

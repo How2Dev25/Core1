@@ -25,6 +25,7 @@ use App\Http\Controllers\stockController;
 use App\Http\Controllers\userController;
 use App\Models\additionalBooking;
 use App\Models\additionalBookingCart;
+use App\Models\aiPrompt;
 use App\Models\AuditTrails;
 use App\Models\Channel;
 use App\Models\channelListings;
@@ -228,6 +229,63 @@ Route::get('/termsandconditions', function(){
 });
 
 
+
+// AI Admin
+Route::get('/geminiAnalytics', function() {
+    employeeAuthCheck();
+verifydashboard();
+    // Fetch ALL AI prompts (not filtered by guest)
+    $aiPrompts = aiPrompt::all();
+
+    // Aggregate data for charts & preferences
+    $roomTypeStats = $aiPrompts->groupBy('roomtype')->map->count();
+    
+    // If roomfeatures is JSON array
+    $featureCounts = $aiPrompts->pluck('roomfeatures')
+        ->map(fn($f) => is_string($f) ? json_decode($f, true) : $f)
+        ->flatten()
+        ->countBy();
+
+    $avgDays = $aiPrompts->avg('reservation_days');
+
+    // Guest preferences (grouped by guestID)
+    $guestPreferences = $aiPrompts->groupBy('guestID');
+
+    // Prepare data for AI admin insights
+    $analyticsData = [
+        'total_searches' => $aiPrompts->count(),
+        'top_room_type' => $roomTypeStats->keys()->first() ?? 'Standard',
+        'top_room_count' => $roomTypeStats->first() ?? 0,
+        'all_room_types' => $roomTypeStats->keys()->toArray(),
+        'top_feature' => $featureCounts->keys()->first() ?? 'wifi',
+        'all_features' => $featureCounts->keys()->toArray(),
+        'avg_days' => $avgDays ?? 2
+    ];
+
+    // Generate AI-powered admin insights using dedicated service
+    $suggestionService = app(\App\Services\GeminiSuggestionService::class);
+    $aiSuggestions = [];
+    
+    if ($aiPrompts->isNotEmpty()) {
+        try {
+            // GeminiSuggestionService automatically falls back on error
+            $aiSuggestions = $suggestionService->generateAdminInsights($analyticsData);
+        } catch (\Exception $e) {
+            Log::error('Failed to generate admin insights:', ['error' => $e->getMessage()]);
+            // Service handles fallback internally, but catch catastrophic errors
+            $aiSuggestions = [];
+        }
+    }
+
+    return view('admin.geminianalytics', compact(
+        'aiPrompts',
+        'roomTypeStats',
+        'featureCounts',
+        'avgDays',
+        'guestPreferences',
+        'aiSuggestions'
+    ));
+});
 // resto integ
 
 Route::get('/restoadmin', function () {
@@ -259,7 +317,7 @@ Route::get('/bookinglanding', function(){
     return view('booking.booking');
 });
 Route::get('/roomselectionlanding', function(){
-    
+
     return view('booking.roomselection');
 });
 Route::get('/selectedroom/{roomID}', [landingController::class, 'selectedroom']);
@@ -1532,11 +1590,30 @@ Route::get('/myreservation', function(){
   'approvereservation','pendingreservation', 'cancelledreservation','serviceFeedynamic', 'taxRatedynamic'));
 });
 
+Route::get('/aiguest', function() {
+    guestAuthCheck(); // your existing guest auth check
 
-Route::get('/aiguest', function(){
-    guestAuthCheck();
+    // Get the current guest's ID (adjust based on your auth logic)
+    $guestID = Auth::guard('guest')->user()->guestID;
 
-    return view('guest.aibookingguest');
+    // Fetch AI prompts for this guest
+    $aiPrompts = aiPrompt::where('guestID', $guestID)->get();
+
+    // Aggregate data for charts & preferences
+    $roomTypeStats = $aiPrompts->groupBy('roomtype')->map->count();
+    
+    // If roomfeatures is JSON array
+    $featureCounts = $aiPrompts->pluck('roomfeatures')
+        ->map(fn($f) => is_string($f) ? json_decode($f, true) : $f)
+        ->flatten()
+        ->countBy();
+
+    $avgDays = $aiPrompts->avg('reservation_days');
+
+    // Guest preferences (grouped by guestID – here only one guest)
+    $guestPreferences = $aiPrompts->groupBy('guestID');
+
+    return view('guest.aibookingguest', compact('aiPrompts','roomTypeStats','featureCounts','avgDays','guestPreferences'));
 });
 
 Route::get('/aisuggestion', function(){
