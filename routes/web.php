@@ -64,6 +64,9 @@ use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Http; // ✅ Make sure this is the Http facade
+use Illuminate\Support\Facades\Log;
+
 // security for guest
 function guestAuthCheck() {
     if (!Auth::guard('guest')->check()) {
@@ -256,6 +259,7 @@ Route::get('/bookinglanding', function(){
     return view('booking.booking');
 });
 Route::get('/roomselectionlanding', function(){
+    
     return view('booking.roomselection');
 });
 Route::get('/selectedroom/{roomID}', [landingController::class, 'selectedroom']);
@@ -1701,3 +1705,28 @@ $reservations = Ecm::join('core1_eventtype', 'core1_eventtype.eventtype_ID', '='
 
 });
 
+
+
+
+// For AI debug
+Route::get('/gemini/models', function () {
+    $apiKey = config('services.gemini.key');
+    $endpoint = 'https://generativelanguage.googleapis.com/v1/models';
+
+    try {
+        $response = Http::timeout(30)->get($endpoint . '?key=' . $apiKey);
+
+        if ($response->failed()) {
+            log::error('⚠️ Gemini API failed to list models', ['response' => $response->body()]);
+            return response()->json(['error' => 'Failed to fetch models.'], 500);
+        }
+
+        $data = $response->json();
+        // $data['models'] usually contains the list of available models
+        return response()->json($data);
+
+    } catch (\Exception $e) {
+        Log::error('❌ Gemini API exception:', ['error' => $e->getMessage()]);
+        return response()->json(['error' => 'Exception: ' . $e->getMessage()], 500);
+    }
+});

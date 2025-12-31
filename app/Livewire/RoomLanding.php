@@ -4,34 +4,64 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\room;
+use App\Models\Room;
+use App\Models\roomtypes;
 
 class RoomLanding extends Component
 {
-       public $statusFilter = 'Available'; // Default to showing available rooms
+    use WithPagination;
+
+    public $statusFilter = ''; // Default to show all
     public $typeFilter = '';
     public $searchTerm = '';
 
+    protected $paginationTheme = 'tailwind'; // Optional, for Tailwind pagination
+
+    public function clearFilters()
+    {
+        $this->statusFilter = '';
+        $this->typeFilter = '';
+        $this->searchTerm = '';
+    }
+
+    public function updating($property)
+    {
+        // Reset pagination when filters or search change
+        if (in_array($property, ['statusFilter', 'typeFilter', 'searchTerm'])) {
+            $this->resetPage();
+        }
+    }
+
     public function render()
     {
+        $allowedRoomTypes = roomtypes::pluck('roomtype_name')->toArray();
+
         $rooms = Room::query()
-            ->when($this->statusFilter, function($query) {
+            // Filter by status if set
+            ->when($this->statusFilter, function ($query) {
                 return $query->where('roomstatus', $this->statusFilter);
             })
-            ->when($this->typeFilter, function($query) {
+            // Filter by type if set and valid
+            ->when($this->typeFilter && in_array($this->typeFilter, $allowedRoomTypes), function ($query) {
                 return $query->where('roomtype', $this->typeFilter);
             })
-            ->when($this->searchTerm, function($query) {
-                return $query->where(function($q) {
-                    $q->where('roomID', 'like', '%'.$this->searchTerm.'%')
-                      ->orWhere('roomfeatures', 'like', '%'.$this->searchTerm.'%');
+            // Search by roomID, type, or features
+            ->when($this->searchTerm, function ($query) {
+                $search = $this->searchTerm;
+                $query->where(function ($q) use ($search) {
+                    $q->where('roomID', 'like', "%{$search}%")
+                      ->orWhere('roomtype', 'like', "%{$search}%")
+                      ->orWhere('roomfeatures', 'like', "%{$search}%");
                 });
             })
+            // Only include rooms that are allowed types
+            ->whereIn('roomtype', $allowedRoomTypes)
             ->latest()
-            ->get();
+            ->paginate(9);
 
         return view('livewire.room-landing', [
-            'rooms' => $rooms
+            'rooms' => $rooms,
+            'allowedRoomTypes' => $allowedRoomTypes,
         ]);
     }
 }

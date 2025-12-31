@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\room;
+use App\Models\roomtypes;
 use Illuminate\Support\Facades\DB;
 
 class RoomDisplay extends Component
@@ -57,6 +58,7 @@ class RoomDisplay extends Component
 
     public function render()
     {
+            $allowedRoomTypes = roomtypes::pluck('roomtype_name')->toArray();
       $query = room::leftJoin('core1_loyaltyandrewards', 'core1_loyaltyandrewards.roomID', '=', 'core1_room.roomID')
     ->where('core1_room.roomstatus', 'Available')
      ->select(
@@ -66,9 +68,10 @@ class RoomDisplay extends Component
     );
 
         // Category filter
-        if ($this->category) {
-            $query->where('roomtype', $this->category);
-        }
+     if ($this->category && in_array($this->category, $allowedRoomTypes)) {
+        $query->where('roomtype', $this->category);
+    }
+
 
         // Search filter
         if ($this->search) {
@@ -126,6 +129,6 @@ class RoomDisplay extends Component
             ]
         ];
 
-        return view('livewire.room-display', compact('rooms', 'suggestedRooms', 'stats'));
+        return view('livewire.room-display', compact('rooms', 'suggestedRooms', 'stats', 'allowedRoomTypes'));
     }
 }

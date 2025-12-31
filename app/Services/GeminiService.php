@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\roomtypes;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -10,7 +11,8 @@ use Carbon\Carbon;
 class GeminiService
 {
     protected $apiKey;
-    protected $endpoint = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-pro:generateContent';
+protected $endpoint = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash-lite:generateContent';
+
 
     public function __construct()
     {
@@ -77,21 +79,25 @@ TEXT;
 }
 
 
-   protected function mockResponse(string $prompt): string
+protected function mockResponse(string $prompt): string
 {
     Log::debug('🤖 Returning fallback response for prompt:', ['prompt' => $prompt]);
 
     $promptLower = strtolower($prompt);
 
-    // Determine room type
-    $roomType = match (true) {
-        str_contains($promptLower, 'deluxe') => 'Deluxe',
-        str_contains($promptLower, 'suite') => 'Suite',
-        str_contains($promptLower, 'executive') => 'Executive',
-        default => 'Standard'
-    };
+    // Step 0: Get allowed room types dynamically from DB
+    $allowedRoomTypes = roomtypes::pluck('roomtype_name')->toArray();
 
-    // Determine number of guests
+    // Step 1: Determine room type based on prompt
+    $roomType = 'Standard'; // default
+    foreach ($allowedRoomTypes as $type) {
+        if (str_contains($promptLower, strtolower($type))) {
+            $roomType = $type;
+            break;
+        }
+    }
+
+    // Step 2: Determine number of guests
     $guestCount = 2; // default
     if (preg_match('/\b(1|one)\b/', $promptLower)) $guestCount = 1;
     elseif (preg_match('/\b(2|two)\b/', $promptLower)) $guestCount = 2;
@@ -99,7 +105,7 @@ TEXT;
     elseif (preg_match('/\b(4|four)\b/', $promptLower)) $guestCount = 4;
     elseif (preg_match('/\b(5|five)\b/', $promptLower)) $guestCount = 5;
 
-    // Detect features
+    // Step 3: Detect features
     $features = [];
     if (str_contains($promptLower, 'wifi') || str_contains($promptLower, 'internet')) $features[] = 'wifi';
     if (str_contains($promptLower, 'aircon') || str_contains($promptLower, 'air conditioning')) $features[] = 'aircon';
@@ -107,14 +113,14 @@ TEXT;
     if (str_contains($promptLower, 'balcony')) $features[] = 'balcony';
     if (str_contains($promptLower, 'sea view') || str_contains($promptLower, 'ocean view')) $features[] = 'sea view';
 
-    // Detect special requests
+    // Step 4: Detect special requests
     $specialRequest = '';
     if (str_contains($promptLower, 'pillow')) $specialRequest .= 'extra pillow; ';
     if (str_contains($promptLower, 'late check-out')) $specialRequest .= 'late check-out; ';
     if (str_contains($promptLower, 'early check-in')) $specialRequest .= 'early check-in; ';
     $specialRequest = trim($specialRequest, '; ');
 
-    // Dates: try to detect, otherwise default to tomorrow + 2 days
+    // Step 5: Dates: try to detect, otherwise default to tomorrow + 2 days
     $checkin = Carbon::now()->addDay();
     $checkout = Carbon::now()->addDays(3);
 
@@ -133,4 +139,5 @@ TEXT;
         "special_request" => $specialRequest
     ]);
 }
+
 }

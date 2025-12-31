@@ -184,14 +184,13 @@
                         <!-- Category -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                            <select wire:model="category"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <option value="">All Categories</option>
-                                <option value="Standard">Standard</option>
-                                <option value="Deluxe">Deluxe</option>
-                                <option value="Suite">Suite</option>
-                                <option value="Executive">Executive</option>
-                            </select>
+                        <select wire:model="category"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">All Categories</option>
+                            @foreach($allowedRoomTypes as $type)
+                                <option value="{{ $type }}">{{ $type }}</option>
+                            @endforeach
+                        </select>
                         </div>
 
                         <!-- Price Range -->

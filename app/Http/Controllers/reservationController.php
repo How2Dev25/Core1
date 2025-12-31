@@ -28,6 +28,7 @@ use App\Models\guestloyaltypoints;
 use App\Models\Lar;
 use App\Models\loyaltyrules;
 use App\Models\hotelBilling;
+use App\Models\roomtypes;
 
 class reservationController extends Controller
 {
@@ -64,11 +65,11 @@ public function searchRooms(Request $request)
     $roomtype = $parsed['roomtype'] ?? null;
 
     // Allowed room types
-    $allowedTypes = ['Standard', 'Deluxe', 'Suite', 'Executive'];
+   $roomtypes = roomtypes::pluck('roomtype_name')->toArray(); 
 
     // Step 1: Try to get rooms based on requested type
 $rooms = Room::leftJoin('core1_loyaltyandrewards', 'core1_loyaltyandrewards.roomID', '=', 'core1_room.roomID')
-    ->whereIn('core1_room.roomtype', $allowedTypes)
+    ->whereIn('core1_room.roomtype', $roomtypes)
     ->when($roomtype, fn($q) => $q->where('core1_room.roomtype', $roomtype))
     ->where('core1_room.roomstatus', 'Available')
     ->select(
@@ -83,7 +84,7 @@ $rooms = Room::leftJoin('core1_loyaltyandrewards', 'core1_loyaltyandrewards.room
         session()->flash('info', "Sorry, no {$roomtype} rooms are available. Here are other available rooms you might like:");
 
         $rooms = Room::query()
-            ->whereIn('roomtype', $allowedTypes)
+            ->whereIn('roomtype', $roomtype)
             ->where('roomstatus', 'Available')
             ->get();
     }
