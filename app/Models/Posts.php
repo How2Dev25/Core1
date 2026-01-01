@@ -22,5 +22,22 @@ class Posts extends Model
             'post_image',
             'post_video',
         ];
+
+         public function likes()
+    {
+        return $this->hasMany(Like::class, 'postID', 'postID');
+    }
+
+    // Count likes
+    public function likesCount()
+    {
+        return $this->likes()->count();
+    }
+
+    // Check if a guest liked this post
+    public function isLikedBy($guestID)
+    {
+        return $this->likes()->where('guestID', $guestID)->exists();
+    }
     
 }

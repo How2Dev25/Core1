@@ -1698,21 +1698,51 @@ Route::get('/profileguest', function(){
 
 Route::put('/guestupdate/{guestID}', [userController::class, 'updateguest']);
 
-// Forum
 
-Route::get('/guestcommunity', function(){
+
+
+
+Route::get('/guestcommunity', function (Request $request) {
     guestAuthCheck();
 
-    // Load initial 5 posts
+    $filter = $request->query('filter', 'recent');
+    $guestID = Auth::guard('guest')->user()->guestID;
+
     $posts = Posts::join('core1_guest', 'core1_guest.guestID', '=', 'posts.guestID')
-        ->select('posts.*', 'core1_guest.guest_name', 'core1_guest.guest_photo', )
-        ->latest('posts.created_at')
-          ->paginate(5); // Changed to paginate() instead of get()
+        ->select(
+            'posts.*',
+            'core1_guest.guest_name',
+            'core1_guest.guest_photo'
+        )
+        ->withCount('likes');
+       
 
-   
-    return view('guest.community', compact('posts' ));
-});
+    // 🔹 FILTER LOGIC
+    if ($filter === 'popular') {
+        $posts->orderBy('likes_count', 'desc');
+    } elseif ($filter === 'my_posts') {
+        $posts->where('posts.guestID', $guestID)
+              ->orderBy('posts.created_at', 'desc');
+    } else {
+        // most recent (default)
+        $posts->orderBy('posts.created_at', 'desc');
+    }
 
+    $posts = $posts->paginate(10)->withQueryString();
+
+$myRecentPosts = Posts::join('core1_guest', 'core1_guest.guestID', '=', 'posts.guestID')
+    ->where('posts.guestID', $guestID)
+    ->select(
+        'posts.*',
+        'core1_guest.guest_name',
+        'core1_guest.guest_photo'
+    )
+    ->withCount('likes')
+    ->latest('posts.created_at')
+    ->take(5)
+    ->get();
+    return view('guest.community', compact('posts', 'filter', 'myRecentPosts'));
+})->name('community');;
 
 
 
@@ -1721,6 +1751,11 @@ Route::get('/guestcommunity', function(){
 Route::post('/communitypost', [postController::class, 'store']);
 Route::put('/communityupdate/{postID}', [postController::class, 'update']);
 Route::delete('/communityremove/{postID}', [postController::class, 'destroy']);
+Route::post('/communityreport/{postID}', [postController::class, 'report']);
+
+
+Route::post('/posts/{postID}/like', [postController::class, 'like'])->name('posts.like');
+Route::post('/posts/{postID}/unlike', [postController::class, 'unlike'])->name('posts.unlike');
 
 // Online Payment 
 Route::get('/payment/success', [ReservationController::class, 'paymentSuccess'])->name('payment.success');

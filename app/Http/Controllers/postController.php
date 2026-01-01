@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Posts;
+use App\Models\reportPost;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
+use App\Models\Like;
 
 class postController extends Controller
 {
@@ -175,6 +177,48 @@ class postController extends Controller
     }
 
 
+    public function report(Request $request, $postID){
 
+        $form = $request->validate([
+            'reportpost_details' => 'nullable',
+            'reportpost_reason' => 'required',
+        ]);
+
+        $form['postID'] = $postID;
+
+        reportPost::create($form);
+
+        return back()->with('success', 'Post is reported');
+
+    }
+
+      public function like($postID)
+    {
+        $guestID = Auth::guard('guest')->user()->guestID;
+
+        Like::firstOrCreate([
+            'postID' => $postID,
+            'guestID' => $guestID
+        ]);
+
+        return response()->json([
+            'likesCount' => Like::where('postID', $postID)->count(),
+            'liked' => true
+        ]);
+    }
+
+    public function unlike($postID)
+    {
+        $guestID = Auth::guard('guest')->user()->guestID;
+
+        Like::where('postID', $postID)
+            ->where('guestID', $guestID)
+            ->delete();
+
+        return response()->json([
+            'likesCount' => Like::where('postID', $postID)->count(),
+            'liked' => false
+        ]);
+    }
 
 }

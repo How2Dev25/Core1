@@ -91,15 +91,16 @@
             <!-- ACTIONS BAR - Reddit Style -->
           <div class="flex items-center gap-4 pt-3 border-t border-gray-100">
     <!-- LIKE -->
-    <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">
-        <i class="fa-regular fa-heart text-gray-500"></i>
-        <span class="text-sm font-medium text-gray-700 hidden sm:inline">
-            {{ $post->likes_count ?? 0 }}
-        </span>
-        <span class="text-sm font-medium text-gray-700 sm:hidden">
-            {{ $post->likes_count ?? 0 }}
-        </span>
-    </button>
+  <button class="like-btn flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+        data-postid="{{ $post->postID }}">
+    <i class="fa-heart {{ $post->isLikedBy(Auth::guard('guest')->user()->guestID) ? 'fa-solid text-red-500' : 'fa-regular text-gray-500' }}"></i>
+    <span class="text-sm font-medium text-gray-700 hidden sm:inline like-count">
+        {{ $post->likesCount() }}
+    </span>
+    <span class="text-sm font-medium text-gray-700 sm:hidden like-count">
+        {{ $post->likesCount() }}
+    </span>
+</button>
 
     <!-- COMMENT -->
     <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">
@@ -173,4 +174,36 @@
         </div>
     </div>
 </div>
+
+<script>
+document.querySelectorAll('.like-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const postID = this.dataset.postid;
+        const icon = this.querySelector('i');
+        const countEls = this.querySelectorAll('.like-count');
+        const isLiked = icon.classList.contains('fa-solid'); // already liked
+        const url = isLiked ? `/posts/${postID}/unlike` : `/posts/${postID}/like`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Toggle heart
+            icon.classList.toggle('fa-solid', !isLiked);
+            icon.classList.toggle('fa-regular', isLiked);
+            icon.classList.toggle('text-red-500', !isLiked);
+            icon.classList.toggle('text-gray-500', isLiked);
+
+            // Update like count
+            countEls.forEach(el => el.textContent = data.likesCount);
+        })
+        .catch(err => console.error(err));
+    });
+});
+</script>
 @endif
