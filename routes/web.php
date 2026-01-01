@@ -15,6 +15,7 @@ use App\Http\Controllers\landingController;
 use App\Http\Controllers\larController;
 use App\Http\Controllers\orderController;
 use App\Http\Controllers\posController;
+use App\Http\Controllers\postController;
 use App\Http\Controllers\ratingController;
 use App\Http\Controllers\reservationController;
 use App\Http\Controllers\restoController;
@@ -47,6 +48,7 @@ use App\Models\hotelBilling;
 use App\Models\Inventory;
 use App\Models\loyaltyrules;
 use App\Models\ordersfromresto;
+use App\Models\Posts;
 use App\Models\restointegration;
 use App\Models\room;
 use App\Models\Lar;
@@ -1696,6 +1698,29 @@ Route::get('/profileguest', function(){
 
 Route::put('/guestupdate/{guestID}', [userController::class, 'updateguest']);
 
+// Forum
+
+Route::get('/guestcommunity', function(){
+    guestAuthCheck();
+
+    // Load initial 5 posts
+    $posts = Posts::join('core1_guest', 'core1_guest.guestID', '=', 'posts.guestID')
+        ->select('posts.*', 'core1_guest.guest_name', 'core1_guest.guest_photo', )
+        ->latest('posts.created_at')
+          ->paginate(5); // Changed to paginate() instead of get()
+
+   
+    return view('guest.community', compact('posts' ));
+});
+
+
+
+
+
+
+Route::post('/communitypost', [postController::class, 'store']);
+Route::put('/communityupdate/{postID}', [postController::class, 'update']);
+Route::delete('/communityremove/{postID}', [postController::class, 'destroy']);
 
 // Online Payment 
 Route::get('/payment/success', [ReservationController::class, 'paymentSuccess'])->name('payment.success');
