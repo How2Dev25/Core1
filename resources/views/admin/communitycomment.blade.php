@@ -1,6 +1,83 @@
-<!-- Posts Container -->
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    @vite('resources/css/app.css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <title>{{$title}} - Forum</title>
+    @livewireStyles
+</head>
+@auth
+
+
+    <body class="bg-base-100">
+        <div class="flex h-screen overflow-hidden">
+            <!-- Sidebar -->
+            @include('admin.components.dashboard.sidebar')
+
+
+
+
+
+
+            <!-- Main content -->
+            <div class="flex flex-col flex-1 overflow-hidden">
+                <!-- Navbar -->
+                @include('admin.components.dashboard.navbar')
+
+
+
+
+
+
+
+
+                <!-- Dashboard Content -->
+                <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 transition-slow ">
+                    {{-- Subsystem Name --}}
+
+                    {{-- Subsystem Name --}}
+
+                    <section class="flex-1  p-6">
+
+                        <div class="flex flex-col lg:flex-row gap-6">
+                            <!-- Left Column (Posts) -->
+                            <div class="w-full">
+
+                                @if(session('success'))
+                                    <div id="success-alert"
+                                        class="fixed top-5 right-5 z-50 bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        <span class="text-sm font-medium">
+                                            {{ session('success') }}
+                                        </span>
+                                    </div>
+
+                                    <script>
+                                        setTimeout(() => {
+                                            const alert = document.getElementById('success-alert');
+                                            if (alert) {
+                                                alert.style.opacity = '0';
+                                                setTimeout(() => alert.remove(), 300);
+                                            }
+                                        }, 3000);
+                                    </script>
+                                @endif
+
+                                <!-- Create Post Trigger -->
+                               
+                               
+
+                             <!-- Posts Container -->
 <div class="space-y-1"> <!-- Reduced spacing between posts -->
-    @forelse($posts as $post)
     <div class="bg-white border-t border-gray-200 first:border-t-0 hover:bg-gray-50 transition-colors">
         <div class="p-3 sm:p-4">
 
@@ -103,7 +180,7 @@
             @if($post->post_image)
                 <div class="mb-3 rounded-lg overflow-hidden">
                     <img src="{{ asset($post->post_image) }}"
-                         class="w-full max-h-1/2 object-cover"
+                         class="w-full max-h-96 object-contain"
                          alt="Post image">
                 </div>
             @endif
@@ -111,7 +188,7 @@
             @if($post->post_video)
                 <div class="mb-3 rounded-lg overflow-hidden">
                     <video controls
-                           class="w-full max-h-96 bg-gray-100">
+                           class="w-full max-h-96 ">
                         <source src="{{ asset($post->post_video) }}">
                         Your browser does not support video.
                     </video>
@@ -146,13 +223,12 @@
     @endif
 
     <!-- COMMENT -->
-<a href="{{ Auth::guard('guest')->check() 
+    <a href="{{ Auth::guard('guest')->check() 
             ? route('redirectcommentguest', $post->postID) 
             : (Auth::check() ? route('redirectcommentadmin', $post->postID) : '#') }}"
+            target="_blank"
    class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">
-
     <i class="fa-regular fa-comment text-gray-500"></i>
-
     <span class="text-sm font-medium text-gray-700 hidden sm:inline">
         {{ $post->comments_count ?? 0 }}
     </span>
@@ -165,94 +241,66 @@
 
         </div>
     </div>
-    @empty
-    <div class="bg-white border-t border-gray-200 p-8 text-center">
-        <i class="fa-regular fa-message text-4xl text-gray-300 mb-3"></i>
-        <h3 class="text-lg font-medium text-gray-500 mb-1">No posts yet</h3>
-        <p class="text-gray-400">Be the first to share your experience! 👋</p>
-    </div>
-    @endforelse
+
 </div>
 
-<!-- PAGINATION - Reddit Style -->
-@if($posts->hasPages())
-<div class="mt-6">
-    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
-        <div class="flex items-center justify-between p-4">
-            <!-- Previous Button -->
-            @if($posts->onFirstPage())
-                <span class="px-4 py-2 text-gray-400 cursor-not-allowed">
-                    <i class="fa-solid fa-chevron-left mr-2"></i> Previous
-                </span>
-            @else
-                <a href="{{ $posts->previousPageUrl() }}" 
-                   class="flex items-center px-4 py-2 text-blue-900 hover:bg-gray-50 rounded-lg">
-                    <i class="fa-solid fa-chevron-left mr-2"></i> Previous
-                </a>
-            @endif
 
-            <!-- Page Numbers -->
-            <div class="flex items-center space-x-2">
-                @foreach($posts->getUrlRange(1, $posts->lastPage()) as $page => $url)
-                    @if($page == $posts->currentPage())
-                        <span class="w-8 h-8 flex items-center justify-center bg-blue-900 text-white rounded-lg font-medium">
-                            {{ $page }}
-                        </span>
-                    @elseif($page == 1 || $page == $posts->lastPage() || ($page >= $posts->currentPage() - 1 && $page <= $posts->currentPage() + 1))
-                        <a href="{{ $url }}" 
-                           class="w-8 h-8 flex items-center justify-center text-blue-900 hover:bg-gray-50 rounded-lg font-medium">
-                            {{ $page }}
-                        </a>
-                    @elseif($page == $posts->currentPage() - 2 || $page == $posts->currentPage() + 2)
-                        <span class="text-gray-400">...</span>
-                    @endif
-                @endforeach
+
+                            </div>
+
+                      
+                        </div>
+
+
+
             </div>
-
-            <!-- Next Button -->
-            @if($posts->hasMorePages())
-                <a href="{{ $posts->nextPageUrl() }}" 
-                   class="flex items-center px-4 py-2 text-blue-900 hover:bg-gray-50 rounded-lg">
-                    Next <i class="fa-solid fa-chevron-right ml-2"></i>
-                </a>
-            @else
-                <span class="px-4 py-2 text-gray-400 cursor-not-allowed">
-                    Next <i class="fa-solid fa-chevron-right ml-2"></i>
-                </span>
-            @endif
         </div>
-    </div>
-</div>
 
-<script>
-document.querySelectorAll('.like-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const postID = this.dataset.postid;
-        const icon = this.querySelector('i');
-        const countEls = this.querySelectorAll('.like-count');
-        const isLiked = icon.classList.contains('fa-solid'); // already liked
-        const url = isLiked ? `/posts/${postID}/unlike` : `/posts/${postID}/like`;
 
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json'
-            },
-        })
-        .then(res => res.json())
-        .then(data => {
-            // Toggle heart
-            icon.classList.toggle('fa-solid', !isLiked);
-            icon.classList.toggle('fa-regular', isLiked);
-            icon.classList.toggle('text-red-500', !isLiked);
-            icon.classList.toggle('text-gray-500', isLiked);
 
-            // Update like count
-            countEls.forEach(el => el.textContent = data.likesCount);
-        })
-        .catch(err => console.error(err));
-    });
-});
-</script>
-@endif
+
+        </section>
+
+
+
+        <!-- Graph Section -->
+
+
+
+
+        </div>
+
+
+
+
+        <!-- Initialize Lucide Icons -->
+        <script>
+            lucide.createIcons();
+        </script>
+
+
+
+
+
+
+
+        </main>
+        </div>
+        </div>
+
+
+        <!-- Create Post Modal -->
+      
+
+        <!-- Report Post Modal -->
+        
+
+
+        @livewireScripts
+        @include('javascriptfix.soliera_js')
+    </body>
+@endauth
+
+
+
+</html>

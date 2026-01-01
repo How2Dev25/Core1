@@ -26,6 +26,10 @@ class postController extends Controller
             ]);
         }
 
+        if(Auth::check()){
+            $form['post_role'] = 'Admin';
+        }
+
         // Image upload
         if ($request->hasFile('post_image')) {
             $file = $request->file('post_image');
@@ -50,7 +54,10 @@ class postController extends Controller
             $form['post_image'] = null;
         }
 
-        $form['guestID'] = Auth::guard('guest')->user()->guestID;
+        if(Auth::guard('guest')->check()){
+             $form['guestID'] = Auth::guard('guest')->user()->guestID;
+        }
+       
 
         Posts::create($form);
 
@@ -63,7 +70,6 @@ class postController extends Controller
  public function update(Request $request, $postID)
 {
     $post = Posts::where('postID', $postID)
-        ->where('guestID', Auth::guard('guest')->user()->guestID)
         ->firstOrFail();
 
     $form = $request->validate([
@@ -159,7 +165,6 @@ class postController extends Controller
     public function destroy($postID)
     {
         $post = Posts::where('postID', $postID)
-            ->where('guestID', Auth::guard('guest')->user()->guestID)
             ->firstOrFail();
 
         // delete media
@@ -220,5 +225,21 @@ class postController extends Controller
             'liked' => false
         ]);
     }
+
+    public function redirectCommentAdmin($postID){
+        $post = Posts::leftJoin('core1_guest', 'core1_guest.guestID', '=', 'posts.guestID')
+        ->select(
+            'posts.*',
+            'core1_guest.guest_name',
+            'core1_guest.guest_photo'
+        )
+        ->where('posts.postID', $postID)
+        ->withCount('likes')
+        ->first();
+
+         return view('admin.communitycomment', compact('post'));
+    }
+
+    
 
 }

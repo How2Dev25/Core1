@@ -1708,7 +1708,7 @@ Route::get('/guestcommunity', function (Request $request) {
     $filter = $request->query('filter', 'recent');
     $guestID = Auth::guard('guest')->user()->guestID;
 
-    $posts = Posts::join('core1_guest', 'core1_guest.guestID', '=', 'posts.guestID')
+    $posts =  Posts::leftJoin('core1_guest', 'core1_guest.guestID', '=', 'posts.guestID')
         ->select(
             'posts.*',
             'core1_guest.guest_name',
@@ -1730,7 +1730,7 @@ Route::get('/guestcommunity', function (Request $request) {
 
     $posts = $posts->paginate(10)->withQueryString();
 
-$myRecentPosts = Posts::join('core1_guest', 'core1_guest.guestID', '=', 'posts.guestID')
+$myRecentPosts =Posts::leftJoin('core1_guest', 'core1_guest.guestID', '=', 'posts.guestID')
     ->where('posts.guestID', $guestID)
     ->select(
         'posts.*',
@@ -1745,7 +1745,51 @@ $myRecentPosts = Posts::join('core1_guest', 'core1_guest.guestID', '=', 'posts.g
 })->name('community');;
 
 
+// admin side
+Route::get('/guestcommunityadmin', function (Request $request) {
+   employeeAuthCheck();
+    verifycrm();
+    $filter = $request->query('filter', 'recent');
 
+
+    $posts = Posts::leftJoin('core1_guest', 'core1_guest.guestID', '=', 'posts.guestID')
+        ->select(
+            'posts.*',
+            'core1_guest.guest_name',
+            'core1_guest.guest_photo'
+        )
+        ->withCount('likes');
+       
+
+    // 🔹 FILTER LOGIC
+    if ($filter === 'popular') {
+        $posts->orderBy('likes_count', 'desc');
+    } elseif ($filter === 'my_posts') {
+        $posts->where('posts.post_role', 'Admin')
+              ->orderBy('posts.created_at', 'desc');
+    } else {
+        // most recent (default)
+        $posts->orderBy('posts.created_at', 'desc');
+    }
+
+    $posts = $posts->paginate(10)->withQueryString();
+
+$myRecentPosts = Posts::leftJoin('core1_guest', 'core1_guest.guestID', '=', 'posts.guestID')
+    ->where('posts.post_role', 'Admin')
+    ->select(
+        'posts.*',
+        'core1_guest.guest_name',
+        'core1_guest.guest_photo'
+    )
+    ->withCount('likes')
+    ->latest('posts.created_at')
+    ->take(5)
+    ->get();
+    return view('admin.community', compact('posts', 'filter', 'myRecentPosts'));
+})->name('community');;
+
+    
+// admin side forum
 
 
 Route::post('/communitypost', [postController::class, 'store']);
@@ -1756,6 +1800,8 @@ Route::post('/communityreport/{postID}', [postController::class, 'report']);
 
 Route::post('/posts/{postID}/like', [postController::class, 'like'])->name('posts.like');
 Route::post('/posts/{postID}/unlike', [postController::class, 'unlike'])->name('posts.unlike');
+
+Route::get('/redirectcommentadmin/{postID}', [postController::class, 'redirectCommentAdmin'])->name('redirectcommentadmin');
 
 // Online Payment 
 Route::get('/payment/success', [ReservationController::class, 'paymentSuccess'])->name('payment.success');

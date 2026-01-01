@@ -2,39 +2,51 @@
 <html lang="en" data-theme="light">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    @vite('resources/css/app.css')
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  @vite('resources/css/app.css')
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <script src="https://unpkg.com/lucide@latest"></script>
 
-    <title>{{$title}} - Forum</title>
-    @livewireStyles
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <title>{{$title}} - Forum</title>
+  @livewireStyles
 </head>
-@auth('guest')
+@auth
 
-        <body class="bg-base-100">
-            <div class="flex h-screen overflow-hidden">
-                <!-- Sidebar -->
-                @include('guest.components.dashboard.sidebar')
 
-                <!-- Main content -->
-                <div class="flex flex-col flex-1 overflow-hidden">
-                    <!-- Navbar -->
-                    @include('guest.components.dashboard.navbar')
-
-                    <!-- Dashboard Content -->
-                    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 transition-slow ">
-                        {{-- Subsystem Name --}}
-
-                        {{-- Subsystem Name --}}
+  <body class="bg-base-100">
+    <div class="flex h-screen overflow-hidden">
+      <!-- Sidebar -->
+      @include('admin.components.dashboard.sidebar')
 
 
 
-                        <section class="flex-1  p-6">
+
+
+
+      <!-- Main content -->
+      <div class="flex flex-col flex-1 overflow-hidden">
+        <!-- Navbar -->
+        @include('admin.components.dashboard.navbar')
+
+
+
+
+
+
+
+
+        <!-- Dashboard Content -->
+        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 transition-slow ">
+          {{-- Subsystem Name --}}
+          
+          {{-- Subsystem Name --}}
+
+                  <section class="flex-1  p-6">
 
                               <div class="flex flex-col lg:flex-row gap-6">
         <!-- Left Column (Posts) -->
@@ -66,13 +78,13 @@
             <div class="flex items-center gap-3 mb-4">
                 <div class="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-r from-blue-600 to-blue-800 p-0.5">
                     <div class="w-full h-full rounded-full bg-white p-0.5">
-                        <img src="{{ asset(Auth::guard('guest')->user()->guest_photo ?? 'images/defaults/user.png') }}" 
+                        <img src="{{ asset('images/logo/sonly.png') }}" 
                              alt="Your profile" 
                              class="w-full h-full rounded-full object-cover">
                     </div>
                 </div>
                 <h3 class="font-medium text-gray-900">
-                    Welcome, {{ Auth::guard('guest')->user()->guest_name ?? 'Guest' }}
+                    Welcome, Admin
                 </h3>
             </div>
 
@@ -139,8 +151,8 @@
 
             <!-- Advertisement -->
         
-        </div>
-    </div>
+                        </div>
+                        </div>
                              </div>
 
 
@@ -155,10 +167,20 @@
 
 
 
-                        <!-- Initialize Lucide Icons -->
-                        <script>
-                            lucide.createIcons();
-                        </script>
+          <!-- Graph Section -->
+
+
+
+
+      </div>
+
+
+
+
+      <!-- Initialize Lucide Icons -->
+      <script>
+        lucide.createIcons();
+      </script>
 
 
 
@@ -166,17 +188,12 @@
 
 
 
-                    </main>
-                </div>
-            </div>
+      </main>
+    </div>
+    </div>
 
 
-
-
-
-            {{-- modals --}}
-
-              <!-- Create Post Modal -->
+            <!-- Create Post Modal -->
            @include('guest.components.forum.create')
 
         <!-- Report Post Modal -->
@@ -188,36 +205,10 @@
 
 
 
-
-            @livewireScripts
-            @include('javascriptfix.soliera_js')
-
-
-
-
+    @livewireScripts
+    @include('javascriptfix.soliera_js')
+  </body>
 @endauth
-</body>
-
-
-<script>
-        function toggleLike(btn) {
-            const svg = btn.querySelector('svg');
-            const countSpan = btn.querySelector('.like-count');
-            let count = parseInt(countSpan.textContent);
-            
-            if (svg.getAttribute('fill') === 'currentColor') {
-                svg.setAttribute('fill', 'none');
-                btn.classList.remove('text-yellow-400');
-                countSpan.textContent = count - 1;
-            } else {
-                svg.setAttribute('fill', 'currentColor');
-                btn.classList.add('text-yellow-400');
-                countSpan.textContent = count + 1;
-            }
-        }
-
-    </script>
-                
 
 
 

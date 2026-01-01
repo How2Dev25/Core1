@@ -21,6 +21,7 @@ class Posts extends Model
             'post_content',
             'post_image',
             'post_video',
+            'post_role',
         ];
 
          public function likes()
