@@ -40,5 +40,10 @@ class Posts extends Model
     {
         return $this->likes()->where('guestID', $guestID)->exists();
     }
+
+      public function comments()
+    {
+        return $this->hasMany(postComments::class, 'postID', 'postID');
+    }
     
 }

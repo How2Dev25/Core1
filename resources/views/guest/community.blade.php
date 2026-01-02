@@ -109,15 +109,15 @@
     </div>
 
             <div class="flex gap-2 mb-4">
-    <a href="{{ route('community', ['filter' => 'recent']) }}"
+    <a href="{{ route('guest.community', ['filter' => 'recent']) }}"
        class="px-3 py-1.5 rounded-lg {{ $filter === 'recent' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
         Most Recent
     </a>
-    <a href="{{ route('community', ['filter' => 'popular']) }}"
+    <a href="{{ route('guest.community', ['filter' => 'popular']) }}"
        class="px-3 py-1.5 rounded-lg {{ $filter === 'popular' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
         Popular
     </a>
-    <a href="{{ route('community', ['filter' => 'my_posts']) }}"
+    <a href="{{ route('guest.community', ['filter' => 'my_posts']) }}"
        class="px-3 py-1.5 rounded-lg {{ $filter === 'my_posts' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
         My Posts
     </a>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\postComments;
 use App\Models\Posts;
 use App\Models\reportPost;
 use Illuminate\Support\Facades\Auth;
@@ -234,11 +235,61 @@ class postController extends Controller
             'core1_guest.guest_photo'
         )
         ->where('posts.postID', $postID)
-        ->withCount('likes')
+        ->withCount('likes', 'comments')
         ->first();
 
-         return view('admin.communitycomment', compact('post'));
+         $postcomments = postComments::leftJoin('core1_guest', 'core1_guest.guestID', 'postcomments.commenterID')
+        ->where('postcomments.postID', $postID)
+        ->select(
+              'postcomments.*',
+            'core1_guest.guest_name',
+            'core1_guest.guest_photo'
+        )
+        ->latest('postcomments.created_at')
+        ->get();
+
+         return view('admin.communitycomment', compact('post', 'postcomments'));
     }
+
+    public function redirectCommentGuest($postID){
+        $post = Posts::leftJoin('core1_guest', 'core1_guest.guestID', '=', 'posts.guestID')
+        ->select(
+            'posts.*',
+            'core1_guest.guest_name',
+            'core1_guest.guest_photo'
+        )
+        ->where('posts.postID', $postID)
+        ->withCount('likes', 'comments')
+        ->first();
+
+        
+    $posts = Posts::leftJoin('core1_guest', 'core1_guest.guestID', '=', 'posts.guestID')
+        ->select(
+            'posts.*',
+            'core1_guest.guest_name',
+            'core1_guest.guest_photo'
+        )
+        ->withCount('likes', 'comments');
+       
+
+        $postcomments = postComments::leftJoin('core1_guest', 'core1_guest.guestID', 'postcomments.commenterID')
+        ->where('postcomments.postID', $postID)
+        ->select(
+              'postcomments.*',
+            'core1_guest.guest_name',
+            'core1_guest.guest_photo'
+        )
+        ->latest('postcomments.created_at')
+        ->get();
+
+        $countComment = postComments::where('postID', $postID)->count();
+
+         return view('guest.communitycomments', compact('post', 'postcomments', 'countComment'));
+    }
+
+
+
+    
 
     
 

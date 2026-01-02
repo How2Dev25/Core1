@@ -15,6 +15,7 @@ use App\Http\Controllers\landingController;
 use App\Http\Controllers\larController;
 use App\Http\Controllers\orderController;
 use App\Http\Controllers\posController;
+use App\Http\Controllers\postCommentController;
 use App\Http\Controllers\postController;
 use App\Http\Controllers\ratingController;
 use App\Http\Controllers\reservationController;
@@ -1714,7 +1715,7 @@ Route::get('/guestcommunity', function (Request $request) {
             'core1_guest.guest_name',
             'core1_guest.guest_photo'
         )
-        ->withCount('likes');
+       ->withCount('likes', 'comments');
        
 
     // 🔹 FILTER LOGIC
@@ -1737,12 +1738,12 @@ $myRecentPosts =Posts::leftJoin('core1_guest', 'core1_guest.guestID', '=', 'post
         'core1_guest.guest_name',
         'core1_guest.guest_photo'
     )
-    ->withCount('likes')
+    ->withCount('likes', 'comments')
     ->latest('posts.created_at')
     ->take(5)
     ->get();
     return view('guest.community', compact('posts', 'filter', 'myRecentPosts'));
-})->name('community');;
+})->name('guest.community');;
 
 
 // admin side
@@ -1758,7 +1759,7 @@ Route::get('/guestcommunityadmin', function (Request $request) {
             'core1_guest.guest_name',
             'core1_guest.guest_photo'
         )
-        ->withCount('likes');
+        ->withCount('likes', 'comments');
        
 
     // 🔹 FILTER LOGIC
@@ -1781,13 +1782,18 @@ $myRecentPosts = Posts::leftJoin('core1_guest', 'core1_guest.guestID', '=', 'pos
         'core1_guest.guest_name',
         'core1_guest.guest_photo'
     )
-    ->withCount('likes')
+    ->withCount('likes', 'comments')
     ->latest('posts.created_at')
     ->take(5)
     ->get();
     return view('admin.community', compact('posts', 'filter', 'myRecentPosts'));
 })->name('community');;
 
+// comment
+
+Route::post('/postcomment/{postID}', [postCommentController::class, 'store']);
+Route::delete('/deletecomment/{postID}/{commentID}', [PostCommentController::class, 'destroy'])
+    ->name('deletecomment');
     
 // admin side forum
 
@@ -1802,6 +1808,7 @@ Route::post('/posts/{postID}/like', [postController::class, 'like'])->name('post
 Route::post('/posts/{postID}/unlike', [postController::class, 'unlike'])->name('posts.unlike');
 
 Route::get('/redirectcommentadmin/{postID}', [postController::class, 'redirectCommentAdmin'])->name('redirectcommentadmin');
+Route::get('/redirectcommentguest/{postID}', [postController::class, 'redirectCommentGuest'])->name('redirectcommentguest');
 
 // Online Payment 
 Route::get('/payment/success', [ReservationController::class, 'paymentSuccess'])->name('payment.success');
