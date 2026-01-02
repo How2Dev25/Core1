@@ -131,15 +131,34 @@
         <!-- Right Column (Sidebar) - Using flex-1 -->
     <div class="flex-1 lg:w-4/12 lg:sticky lg:top-6 lg:h-fit max-md:hidden">
         <div class="space-y-6">
-            <!-- Your Recent Posts -->
-            @include('guest.components.forum.recentpost')
+    <!-- Your Recent Posts -->
+    @include('guest.components.forum.recentpost')
 
-            <!-- Quick Actions -->
-           
-
-            <!-- Advertisement -->
-        
+    <!-- Community Guidelines Button -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 bg-blue-900 rounded-full flex items-center justify-center">
+                <i class="fas fa-users text-yellow-400 text-xl"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-lg text-blue-900">Community Guidelines</h3>
+                <p class="text-gray-600 text-sm">Read and agree to our forum rules</p>
+            </div>
         </div>
+        <p class="text-gray-700 mb-4 text-sm">
+            Before participating in discussions, please review our community guidelines to ensure a respectful and meaningful experience for everyone.
+        </p>
+        <button class="btn bg-blue-900 hover:bg-blue-800 text-white w-full" onclick="showCommunityModal()">
+            <i class="fas fa-file-contract mr-2"></i>
+            View Community Guidelines
+        </button>
+    </div>
+
+    <!-- Quick Actions -->
+    @include('guest.components.dashboard.promotionsection')
+
+    <!-- Advertisement -->
+</div>
     </div>
                              </div>
 
@@ -187,6 +206,7 @@
         @endforeach
 
 
+        @include('guest.components.forum.terms')
 
 
             @livewireScripts

@@ -1742,7 +1742,9 @@ $myRecentPosts =Posts::leftJoin('core1_guest', 'core1_guest.guestID', '=', 'post
     ->latest('posts.created_at')
     ->take(5)
     ->get();
-    return view('guest.community', compact('posts', 'filter', 'myRecentPosts'));
+
+    $promos = Hmp::all();
+    return view('guest.community', compact('posts', 'filter', 'myRecentPosts', 'promos'));
 })->name('guest.community');;
 
 
@@ -1786,7 +1788,9 @@ $myRecentPosts = Posts::leftJoin('core1_guest', 'core1_guest.guestID', '=', 'pos
     ->latest('posts.created_at')
     ->take(5)
     ->get();
-    return view('admin.community', compact('posts', 'filter', 'myRecentPosts'));
+
+    $promos = Hmp::all();
+    return view('admin.community', compact('posts', 'filter', 'myRecentPosts', 'promos'));
 })->name('community');;
 
 // comment

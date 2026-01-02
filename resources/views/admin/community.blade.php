@@ -147,7 +147,8 @@
             @include('guest.components.forum.recentpost')
 
             <!-- Quick Actions -->
-           
+            @include('guest.components.dashboard.promotionsection')
+
 
             <!-- Advertisement -->
         

@@ -1,11 +1,11 @@
 <section id="about" class="hero min-h-screen p-5  flex items-center justify-center text-white relative overflow-hidden">
     <!-- Enhanced Background Layers -->
-    <div class="absolute inset-0 bg-black/10 z-10"></div>
-    <div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/20 to-black/60 z-10"></div>
+   <div class="absolute inset-0 bg-black/50 z-10"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/40 to-black/80 z-10"></div>
 
     <!-- Animated Parallax Background -->
     <div class="parallax-bg absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out"
-        style="background-image: url('{{ asset('images/defaults/christmas.png') }}');">
+        style="background-image: url('{{ asset('images/defaults/hotel3.jpg') }}');">
     </div>
 
     <!-- Floating Decorative Elements -->
