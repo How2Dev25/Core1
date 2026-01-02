@@ -1,14 +1,11 @@
-<section id="about" class="hero min-h-screen p-5  flex items-center justify-center text-white relative overflow-hidden">
-    <!-- Enhanced Background Layers -->
-   <div class="absolute inset-0 bg-black/50 z-10"></div>
+<section id="about" class="hero min-h-screen p-5 flex items-center justify-center text-white relative overflow-hidden">
+    <div class="absolute inset-0 bg-black/50 z-10"></div>
     <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/40 to-black/80 z-10"></div>
 
-    <!-- Animated Parallax Background -->
     <div class="parallax-bg absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out"
         style="background-image: url('{{ asset('images/defaults/hotel3.jpg') }}');">
     </div>
 
-    <!-- Floating Decorative Elements -->
     <div class="absolute inset-0 z-10 pointer-events-none overflow-hidden">
         <div
             class="floating-element absolute top-1/4 left-10 w-24 h-24 bg-amber-500/10 rounded-full blur-3xl animate-float-slow">
@@ -21,348 +18,131 @@
         </div>
     </div>
 
-    <!-- Main Content Container -->
     <div class="z-20 relative w-full max-w-7xl mx-auto lg:mt-20 px-4 sm:px-6 lg:px-8 py-12 lg:py-0">
         <div class="flex flex-col items-center min-h-[calc(100vh-6rem)]">
 
-            <!-- Left Column - Main Content -->
-        <div class="w-full mt-20 max-md:mt-45 flex flex-col justify-center items-center text-center px-4">
-        
-            <!-- Star Rating Section -->
-            <div class="opacity-0 animate-slide-in-left w-full flex justify-center" style="animation-delay: 0.1s;">
-                <div>
-                    <div class="flex items-center justify-center gap-3 mb-3">
-                        <div class="flex gap-1 justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-400 animate-star-pulse"
-                                style="animation-delay: 0s;" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M12 .587l3.668 7.571 8.332 1.151-6.064 5.879 1.48 8.295L12 18.896l-7.416 4.587 1.48-8.295L.0 9.309l8.332-1.151z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-400 animate-star-pulse"
-                                style="animation-delay: 0.1s;" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M12 .587l3.668 7.571 8.332 1.151-6.064 5.879 1.48 8.295L12 18.896l-7.416 4.587 1.48-8.295L.0 9.309l8.332-1.151z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-400 animate-star-pulse"
-                                style="animation-delay: 0.2s;" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M12 .587l3.668 7.571 8.332 1.151-6.064 5.879 1.48 8.295L12 18.896l-7.416 4.587 1.48-8.295L.0 9.309l8.332-1.151z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-400 animate-star-pulse"
-                                style="animation-delay: 0.3s;" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M12 .587l3.668 7.571 8.332 1.151-6.064 5.879 1.48 8.295L12 18.896l-7.416 4.587 1.48-8.295L.0 9.309l8.332-1.151z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-400 animate-star-pulse"
-                                style="animation-delay: 0.4s;" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M12 .587l3.668 7.571 8.332 1.151-6.064 5.879 1.48 8.295L12 18.896l-7.416 4.587 1.48-8.295L.0 9.309l8.332-1.151z" />
-                            </svg>
+            <div class="w-full mt-20 max-md:mt-45 flex flex-col justify-center items-center text-center px-4">
+
+                <div class="opacity-0 animate-reveal-down w-full flex justify-center" style="animation-delay: 0.2s;">
+                    <div>
+                        <div class="flex items-center justify-center gap-3 mb-3">
+                            <div class="flex gap-1 justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 text-amber-400 animate-star-pulse" style="animation-delay: 0s;"
+                                    viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 .587l3.668 7.571 8.332 1.151-6.064 5.879 1.48 8.295L12 18.896l-7.416 4.587 1.48-8.295L.0 9.309l8.332-1.151z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 text-amber-400 animate-star-pulse" style="animation-delay: 0.1s;"
+                                    viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 .587l3.668 7.571 8.332 1.151-6.064 5.879 1.48 8.295L12 18.896l-7.416 4.587 1.48-8.295L.0 9.309l8.332-1.151z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 text-amber-400 animate-star-pulse" style="animation-delay: 0.2s;"
+                                    viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 .587l3.668 7.571 8.332 1.151-6.064 5.879 1.48 8.295L12 18.896l-7.416 4.587 1.48-8.295L.0 9.309l8.332-1.151z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 text-amber-400 animate-star-pulse" style="animation-delay: 0.3s;"
+                                    viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 .587l3.668 7.571 8.332 1.151-6.064 5.879 1.48 8.295L12 18.896l-7.416 4.587 1.48-8.295L.0 9.309l8.332-1.151z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 text-amber-400 animate-star-pulse" style="animation-delay: 0.4s;"
+                                    viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 .587l3.668 7.571 8.332 1.151-6.064 5.879 1.48 8.295L12 18.896l-7.416 4.587 1.48-8.295L.0 9.309l8.332-1.151z" />
+                                </svg>
+                            </div>
+                            <span class="text-amber-400 text-sm font-bold tracking-widest uppercase">5-Star Luxury
+                                Hotel</span>
                         </div>
-        
-                        <span class="text-amber-400 text-sm font-semibold tracking-wide">
-                            5-STAR LUXURY HOTEL
-                        </span>
+                        <div
+                            class="h-0.5 w-20 mx-auto bg-gradient-to-r from-amber-400 to-transparent animate-expand-line">
+                        </div>
                     </div>
-        
-                    <div class="h-0.5 w-20 mx-auto bg-gradient-to-r from-amber-400 to-transparent animate-expand-line"></div>
                 </div>
-            </div>
-        
-            <!-- Hotel Name -->
-            <div class="space-y-3 opacity-0 animate-slide-in-left w-full text-center" style="animation-delay: 0.3s;">
-                <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-none mx-auto">
-                    <span
-                        class="text-[#F7B32B] animate-text-shimmer bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent bg-[length:200%_100%]">
-                        SOLIERA
-                    </span>
-                </h1>
-        
-                <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight">
-                    HOTEL & RESTAURANT
-                </h2>
-        
-                <div
-                    class="h-px w-full max-w-md mx-auto bg-gradient-to-r from-amber-400 via-amber-400/50 to-transparent animate-expand-full">
-                </div>
-            </div>
-        
-            <!-- Tagline -->
-           
-            
-            <!-- Description -->
-           
-        
-            <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4 opacity-0 animate-fade-in-up justify-center w-full mt-4"
-                style="animation-delay: 0.9s;">
-                <a href="#rooms"
-                    class="group relative bg-amber-500 hover:bg-amber-600 text-black font-bold px-8 py-4 rounded-xl transform hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/30 transition-all duration-300 text-center overflow-hidden">
-                    <span class="relative z-10 flex items-center justify-center gap-2">
-                        Explore Rooms
-                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                    </span>
+
+                <div class="space-y-4 opacity-0 animate-reveal-up w-full text-center" style="animation-delay: 0.5s;">
+                    <h1
+                        class="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-none mx-auto tracking-tighter">
+                        <span
+                            class="text-[#F7B32B] animate-text-shimmer bg-gradient-to-r from-amber-500 via-amber-200 to-amber-500 bg-clip-text text-transparent bg-[length:200%_100%] drop-shadow-2xl">
+                            SOLIERA
+                        </span>
+                    </h1>
+                    <h2
+                        class="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-light text-white/90 tracking-[0.2em] uppercase">
+                        Hotel & <span class="font-bold text-white">Restaurant</span>
+                    </h2>
                     <div
-                        class="absolute inset-0 bg-gradient-to-r from-amber-400 to-amber-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        class="h-px w-full max-w-lg mx-auto bg-gradient-to-r from-transparent via-amber-400/50 to-transparent animate-expand-full">
                     </div>
-                </a>
-        
-                <button onclick="view_room.showModal()"
-                    class="group relative border-2 border-white text-white hover:bg-white hover:text-black font-bold px-8 py-4 rounded-xl transform hover:scale-105 transition-all duration-300 backdrop-blur-sm hover:shadow-2xl hover:shadow-white/20">
-                    <span class="flex items-center justify-center gap-2">
-                        Book Now
-                        <svg class="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                    </span>
-                </button>
-            </div>
-        
-            <!-- Trust Indicators -->
-           
-        
-        </div>
+                </div>
 
-
-            <!-- Right Column - Enhanced Features Grid -->
-            <div class="mt-50 ">
-                <div class="flex gap-5 max-md:flex-col">
-                    {{-- right column --}}
-            <div class="w-1/2 max-md:w-full gap-5 flex flex-col justify-center items-center text-center px-6 py-8">
-            
-                <!-- Tagline - Subtly larger with emphasis -->
-                <div data-aos = "zoom-in-right" >
-                    <h3 class="text-3xl sm:text-4xl md:text-5xl font-medium text-white/95 tracking-wide italic drop-shadow-lg">
-                        Savor The <span class="font-semibold text-amber-200">Stay</span>,
-                        <br class="block sm:hidden">
-                        <span class="mt-2 block">
-                            Dine With <span class="font-semibold text-white">Elegance</span>
+                <div class="flex flex-col sm:flex-row gap-6 opacity-0 animate-fade-in-up justify-center w-full mt-10"
+                    style="animation-delay: 1.2s;">
+                    <a href="#rooms"
+                        class="group relative bg-amber-500 hover:bg-amber-600 text-black font-extrabold px-10 py-5 rounded-2xl transform hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(245,158,11,0.3)] transition-all duration-300 text-center overflow-hidden">
+                        <span class="relative z-10 flex items-center justify-center gap-3 text-lg">
+                            Explore Rooms
+                            <svg class="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
                         </span>
-                    </h3>
-                </div>
-            
-                <!-- Description / Typewriter - Slightly larger with selective emphasis -->
-                <div class="opacity-0 animate-fade-in-up mt-6" style="animation-delay: 0.6s;">
-                    <p class="text-xl sm:text-2xl md:text-3xl text-gray-200 max-w-3xl leading-relaxed
-                               min-h-[5.5rem] sm:min-h-[6.5rem] md:min-h-[7.5rem] drop-shadow-xl">
-                        <span id="typewriter">
-                            <span class="text-white">Experience luxury hospitality where</span>
-                            <br class="hidden sm:block">
-                            <span class="font-medium text-amber-100">every meal is a masterpiece</span>
-                            <span class="text-white"> and every</span>
-                            <br class="hidden sm:block">
-                            <span class="font-medium text-amber-100">moment is unforgettable</span>
+                    </a>
+                    <button onclick="view_room.showModal()"
+                        class="group relative border-2 border-white/30 text-white hover:border-white hover:bg-white/10 font-extrabold px-10 py-5 rounded-2xl transform hover:-translate-y-1 transition-all duration-300 backdrop-blur-md text-lg">
+                        <span class="flex items-center justify-center gap-3">
+                            Book Now
+                            <svg class="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
                         </span>
-                        <span class="inline-block w-0.5 h-7 sm:h-8 md:h-9 bg-amber-400 ml-1.5 animate-pulse" id="cursor"></span>
-                    </p>
+                    </button>
                 </div>
-
-
-                <div class="flex flex-wrap justify-center items-center gap-6 pt-4  w-full"
-                   >
-                    <div data-aos="zoom-in-left" data-aos-delay="100" class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span class="text-sm text-gray-300">Monitor Loyalty Points</span>
-                    </div>
-                    <div data-aos="zoom-in-left"  data-aos-delay="200" class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span class="text-sm text-gray-300">Best Price Guarantee</span>
-                    </div>
-                    <div data-aos="zoom-in-left" data-aos-delay="300" class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span class="text-sm text-gray-300">24/7 Support</span>
-                    </div>
-                </div>
-            
             </div>
 
-
-                <div class="w-1/2 max-md:w-full">
-
-                         <div  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
-
-                    <!-- Feature Card 1 - Book Rooms -->
-                    <div  class="group relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden hover:bg-white/15 transition-all duration-500 cursor-pointer opacity-0 animate-fade-in-up hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20"
-                        style="animation-delay: 0.2s;">
-                        <div class="h-40 bg-cover bg-center relative overflow-hidden"
-                            style="background-image: url('{{asset('images/defaults/rooms/1 standard/room1.png')}}');">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent group-hover:from-black/60 transition-all duration-500">
-                            </div>
-                            <div
-                                class="absolute inset-0 bg-amber-500/0 group-hover:bg-amber-500/10 transition-all duration-500">
-                            </div>
-                            <div
-                                class="absolute top-4 left-4 transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                                <div
-                                    class="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-5 relative">
-                            <h4
-                                class="font-bold text-lg mb-2 text-amber-400 group-hover:text-amber-300 transition-colors duration-300">
-                                Book Rooms</h4>
-                            <p
-                                class="text-gray-200 text-sm leading-relaxed group-hover:text-white transition-colors duration-300">
-                                Reserve your perfect stay with our luxury suites and premium accommodations.
-                            </p>
-                            <div
-                                class="absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r from-amber-400 to-amber-600 group-hover:w-full transition-all duration-500">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Feature Card 2 - Personalized Accounts -->
-                    <div class="group relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden hover:bg-white/15 transition-all duration-500 cursor-pointer opacity-0 animate-fade-in-up hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20"
-                        style="animation-delay: 0.4s;">
-                        <div class="h-40 bg-cover bg-center relative overflow-hidden"
-                            style="background-image: url('{{asset('images/defaults/personalacc.png')}}');">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent group-hover:from-black/60 transition-all duration-500">
-                            </div>
-                            <div
-                                class="absolute inset-0 bg-amber-500/0 group-hover:bg-amber-500/10 transition-all duration-500">
-                            </div>
-                            <div
-                                class="absolute top-4 left-4 transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                                <div
-                                    class="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-5 relative">
-                            <h4
-                                class="font-bold text-lg mb-2 text-amber-400 group-hover:text-amber-300 transition-colors duration-300">
-                                Personalized Accounts</h4>
-                            <p
-                                class="text-gray-200 text-sm leading-relaxed group-hover:text-white transition-colors duration-300">
-                                Enjoy tailored experiences with your personal preferences and loyalty rewards.
-                            </p>
-                            <div
-                                class="absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r from-amber-400 to-amber-600 group-hover:w-full transition-all duration-500">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Feature Card 3 - Book Events -->
-                    <div class="group relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden hover:bg-white/15 transition-all duration-500 cursor-pointer opacity-0 animate-fade-in-up hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20"
-                        style="animation-delay: 0.6s;">
-                        <div class="h-40 bg-cover bg-center relative overflow-hidden"
-                            style="background-image: url('{{asset('images/defaults/events/christmas.png')}}');">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent group-hover:from-black/60 transition-all duration-500">
-                            </div>
-                            <div
-                                class="absolute inset-0 bg-amber-500/0 group-hover:bg-amber-500/10 transition-all duration-500">
-                            </div>
-                            <div
-                                class="absolute top-4 left-4 transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                                <div
-                                    class="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-5 relative">
-                            <h4
-                                class="font-bold text-lg mb-2 text-amber-400 group-hover:text-amber-300 transition-colors duration-300">
-                                Book Events</h4>
-                            <p
-                                class="text-gray-200 text-sm leading-relaxed group-hover:text-white transition-colors duration-300">
-                                Host unforgettable weddings, conferences, and celebrations in our elegant venues.
-                            </p>
-                            <div
-                                class="absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r from-amber-400 to-amber-600 group-hover:w-full transition-all duration-500">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Feature Card 4 - Facilities -->
-                    <div class="group relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden hover:bg-white/15 transition-all duration-500 cursor-pointer opacity-0 animate-fade-in-up hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20"
-                        style="animation-delay: 0.8s;">
-                        <div class="h-40 bg-cover bg-center relative overflow-hidden"
-                            style="background-image: url('{{asset('images/defaults/facilities/confe.jfif')}}');">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent group-hover:from-black/60 transition-all duration-500">
-                            </div>
-                            <div
-                                class="absolute inset-0 bg-amber-500/0 group-hover:bg-amber-500/10 transition-all duration-500">
-                            </div>
-                            <div
-                                class="absolute top-4 left-4 transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                                <div
-                                    class="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-5 relative">
-                            <h4
-                                class="font-bold text-lg mb-2 text-amber-400 group-hover:text-amber-300 transition-colors duration-300">
-                                Premium Facilities</h4>
-                            <p
-                                class="text-gray-200 text-sm leading-relaxed group-hover:text-white transition-colors duration-300">
-                                World-class spa, fitness center, pool, and business facilities at your service.
-                            </p>
-                            <div
-                                class="absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r from-amber-400 to-amber-600 group-hover:w-full transition-all duration-500">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-                </div>
-               
-            </div>
+          
         </div>
     </div>
-
-
-
 </section>
 
-
-
 <style>
-    /* Enhanced Animations */
-    @keyframes slide-in-left {
+    /* New Entrance Animations */
+    @keyframes reveal-up {
+        from {
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    @keyframes reveal-down {
+        from {
+            opacity: 0;
+            transform: translateY(-40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes reveal-left {
         from {
             opacity: 0;
             transform: translateX(-50px);
@@ -374,18 +154,47 @@
         }
     }
 
-    @keyframes fade-in-up {
+    @keyframes reveal-right {
         from {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateX(50px);
         }
 
         to {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateX(0);
         }
     }
 
+    .animate-reveal-up {
+        animation: reveal-up 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .animate-reveal-down {
+        animation: reveal-down 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .animate-reveal-left {
+        animation: reveal-left 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .animate-reveal-right {
+        animation: reveal-right 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* 3D Card Effect */
+    .card-3d-wrap {
+        transition: all 0.5s ease;
+        perspective: 1000px;
+        transform-style: preserve-3d;
+    }
+
+    .card-3d-wrap:hover {
+        transform: translateY(-10px) rotateX(5deg) rotateY(-5deg);
+        box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 158, 11, 0.2);
+    }
+
+    /* Existing Animations Preserved */
     @keyframes star-pulse {
 
         0%,
@@ -395,8 +204,8 @@
         }
 
         50% {
-            opacity: 0.7;
-            transform: scale(0.95);
+            opacity: 0.5;
+            transform: scale(0.8);
         }
     }
 
@@ -430,88 +239,28 @@
         }
     }
 
-    @keyframes float {
-
-        0%,
-        100% {
-            transform: translateY(0) translateX(0);
-        }
-
-        50% {
-            transform: translateY(-20px) translateX(10px);
-        }
-    }
-
     @keyframes float-slow {
 
         0%,
         100% {
-            transform: translateY(0) translateX(0) scale(1);
+            transform: translateY(0) scale(1);
         }
 
         50% {
-            transform: translateY(-30px) translateX(-15px) scale(1.1);
+            transform: translateY(-30px) scale(1.1);
         }
-    }
-
-    @keyframes float-delayed {
-
-        0%,
-        100% {
-            transform: translateY(0) translateX(0) rotate(0deg);
-        }
-
-        50% {
-            transform: translateY(-25px) translateX(15px) rotate(5deg);
-        }
-    }
-
-    .animate-slide-in-left {
-        animation: slide-in-left 0.8s ease-out forwards;
-    }
-
-    .animate-fade-in-up {
-        animation: fade-in-up 0.8s ease-out forwards;
     }
 
     .animate-star-pulse {
-        animation: star-pulse 2s ease-in-out infinite;
-    }
-
-    .animate-expand-line {
-        animation: expand-line 1s ease-out forwards;
-        animation-delay: 0.3s;
-    }
-
-    .animate-expand-full {
-        animation: expand-full 1s ease-out forwards;
-        animation-delay: 0.5s;
+        animation: star-pulse 2s infinite;
     }
 
     .animate-text-shimmer {
-        animation: text-shimmer 3s linear infinite;
+        animation: text-shimmer 4s linear infinite;
     }
 
-    .animate-float {
-        animation: float 6s ease-in-out infinite;
-    }
-
-    .animate-float-slow {
-        animation: float-slow 8s ease-in-out infinite;
-    }
-
-    .animate-float-delayed {
-        animation: float-delayed 7s ease-in-out infinite;
-        animation-delay: 1s;
-    }
-
-    /* Parallax Effect */
-    .parallax-bg {
-        will-change: transform;
-    }
-
-    html {
-        scroll-behavior: smooth;
+    .animate-fade-in-up {
+        animation: reveal-up 1s ease-out forwards;
     }
 </style>
 <script>
