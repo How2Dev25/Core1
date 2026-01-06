@@ -2,10 +2,7 @@
 <dialog id="bookroom_{{ $room->roomID }}" class="modal">
     <div class="modal-box max-w-4xl bg-white rounded-2xl shadow-xl">
         <!-- Header -->
-        <form method="dialog" class="absolute right-4 top-4 z-10">
-            <button class="btn btn-sm btn-circle btn-ghost">✕</button>
-        </form>
-
+     
 
    <form autocomplete="off" action="submitroompos" method="POST" id="reservationForm" enctype="multipart/form-data"
             class="flex flex-col gap-8 max-w-7xl mx-auto">
@@ -335,7 +332,7 @@
                     </div>
                 </div>
 
-                    <div class="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
+                    <div class=" rounded-3xl p-8 s">
                         <div class="flex items-center gap-4 mb-6">
                             <div class="p-3 bg-gradient-to-br from-[#001f54] to-[#1a3470] rounded-2xl shadow-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"

@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('mobilevalid/intlTelInput.min.css') }}">
+    <script src="{{ asset('mobilevalid/intlTelInput.min.js') }}"></script>
+    <script src="{{ asset('mobilevalid/utils.js') }}"></script>
     @vite('resources/css/app.css')
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -379,35 +382,26 @@
                                                                        focus:border-[#001f54] focus:outline-none transition-colors" required />
                                         </div>
 
-                                        <div class="form-control">
-                                            <label class="label font-semibold text-[#001f54] mb-2">
-                                                <span class="flex items-center gap-2">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 
-                                                                                        19.79 19.79 0 0 1-8.63-3.07 
-                                                                                        19.5 19.5 0 0 1-6-6 
-                                                                                        19.79 19.79 0 0 1-3.07-8.67A2 
-                                                                                        2 0 0 1 4.11 2h3a2 2 0 0 1 
-                                                                                        2 1.72 12.84 12.84 0 0 0 
-                                                                                        .7 2.81 2 2 0 0 1-.45 
-                                                                                        2.11L8.09 9.91a16 16 0 0 
-                                                                                        0 6 6l1.27-1.27a2 2 0 0 
-                                                                                        1 2.11-.45 12.84 12.84 
-                                                                                        0 0 0 2.81.7A2 2 0 0 1 
-                                                                                        22 16.92z"></path>
-                                                    </svg>
-                                                    Mobile Number
-                                                </span>
-                                            </label>
-                                            <input value="{{ Auth::guard('guest')->user()->guest_mobile }}" type="tel"
-                                                name="eventorganizer_phone"
-                                                class="input input-bordered w-full rounded-xl border-2 border-gray-200 
-                                                                       focus:border-[#001f54] focus:outline-none transition-colors"
-                                                                       minlength="11" maxlength="11"
-                            pattern="[0-9]{11}" placeholder="e.g. 09123456789" required />
-                                        </div>
+                                           <div class="form-control">
+    <label class="label font-semibold text-[#001f54] mb-2">
+        <span class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+            Mobile Number
+        </span>
+        <span class="text-red-500">*</span>
+    </label>
+
+    <input type="tel" id="organizerPhone"
+        class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors" 
+        required />
+
+    <!-- Hidden field for backend -->
+    <input type="hidden" name="eventorganizer_phone" id="organizerPhoneHidden">
+                    </div>
 
                                         <div class="form-control md:col-span-2">
                                             <label class="label font-semibold text-[#001f54] mb-2">
@@ -665,7 +659,7 @@
 @endauth
 </body>
 
-
+<script src="{{ asset('javascript/eventvalid.js')}}"></script>
 
 
 <script>

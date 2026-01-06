@@ -2,10 +2,7 @@
 <dialog id="bookeventtye_{{ $eventtype->eventtype_ID}}" class="modal">
     <div class="modal-box max-w-4xl bg-white rounded-2xl shadow-xl">
         <!-- Header -->
-        <form method="dialog" class="absolute right-4 top-4 z-10">
-            <button class="btn btn-sm btn-circle btn-ghost">✕</button>
-        </form>
-
+     
         <form autocomplete="off" action="/submitEvent" method="POST"
             id="eventBookingForm_{{ $eventtype->eventtype_ID }}" class="flex flex-col gap-8 max-w-7xl mx-auto">
             @csrf
@@ -284,7 +281,7 @@ $today = \Carbon\Carbon::today()->format('Y-m-d');
                             </label>
                             <input type="tel" name="eventorganizer_phone"
                                 class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
-                                minlength="11" maxlength="11" pattern="[0-9]{11}" placeholder="e.g. 09123456789"
+                                placeholder="e.g. 09123456789"
                                 required />
                         </div>
 
@@ -451,6 +448,8 @@ $today = \Carbon\Carbon::today()->format('Y-m-d');
         </form>
     </div>
 </dialog>
+
+
 
 <script>
     function calculateSimpleBilling(eventId) {
