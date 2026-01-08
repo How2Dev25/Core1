@@ -13,6 +13,7 @@ use App\Http\Controllers\hmpController;
 use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\landingController;
 use App\Http\Controllers\larController;
+use App\Http\Controllers\missingRFIDController;
 use App\Http\Controllers\orderController;
 use App\Http\Controllers\posController;
 use App\Http\Controllers\postCommentController;
@@ -53,6 +54,7 @@ use App\Models\Posts;
 use App\Models\restointegration;
 use App\Models\room;
 use App\Models\Lar;
+use App\Models\missingRFID;
 use App\Models\requestEmployee;
 use App\Models\room_maintenance;
 use App\Models\roomfeedbacks;
@@ -1924,3 +1926,58 @@ Route::get('/gemini/models', function () {
         return response()->json(['error' => 'Exception: ' . $e->getMessage()], 500);
     }
 });
+
+// RFID missing
+
+Route::get('/missingRFID', function () {
+
+    $rfidbookings = doorlockFrontdesk::join('doorlock', 'doorlock.doorlockID', '=', 'doorlockfrontdesk.doorlockID')
+        ->join('core1_reservation', 'core1_reservation.bookingID', '=', 'doorlockfrontdesk.bookingID')
+        ->join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+        ->latest('doorlockfrontdesk.created_at')
+        ->get();
+
+    return view('missingrfid.missing', compact('rfidbookings'));
+});
+
+Route::post('/submitMissingRFID', [missingRFIDController::class, 'store']);
+
+Route::get('/missingrfid_guest', function(){
+       guestAuthCheck();
+         $rfidbookings = doorlockFrontdesk::join('doorlock', 'doorlock.doorlockID', '=', 'doorlockfrontdesk.doorlockID')
+        ->join('core1_reservation', 'core1_reservation.bookingID', '=', 'doorlockfrontdesk.bookingID')
+        ->join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+        ->latest('doorlockfrontdesk.created_at')
+        ->get();
+    return view('guest.missingrfid', compact('rfidbookings'));
+});
+
+Route::get('/missingRFID_admin', function(){
+
+      employeeAuthCheck();
+    verifydashboard();
+
+$missingRFIDs = missingRFID::join('doorlock', 'doorlock.doorlockID', '=', 'missing_rfid.doorlockID')
+    ->join('doorlockfrontdesk', 'doorlockfrontdesk.doorlockID', '=', 'doorlock.doorlockID')
+    ->join('core1_reservation', 'core1_reservation.bookingID', '=', 'doorlockfrontdesk.bookingID')
+    ->join('core1_room', 'core1_room.roomID', '=', 'doorlock.roomID')
+    ->select(
+        'missing_rfid.*',
+        'core1_reservation.bookingID',
+        'core1_reservation.guestname as guest_name',
+        'core1_reservation.roomID',
+        'doorlockfrontdesk.doorlockfrontdeskID',
+        
+    )
+    ->get();
+
+
+       $countmissing = missingRFID::count();
+      $totaldoorlock = doorlock::count();
+    $totalassigned = doorlockFrontdesk::count();
+   
+
+    return view('admin.missingrfid', compact('missingRFIDs', 'countmissing', 'totaldoorlock', 'totalassigned'));
+});
+
+Route::put('removemissingrfid/{doorlockfrontdeskID}', [missingRFIDController::class, 'removeAssignment']);

@@ -211,7 +211,25 @@
         </div>
       </a>
 
-
+          <div class="px-4 py-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-blue-300 sidebar-text">
+              Reports
+            </span>
+          </div>
+          
+          <!-- Missing RFID Report -->
+          <a href="/missingrfid_guest" class="block">
+            <div class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all 
+                     hover:bg-blue-600/50 text-white group">
+          
+              <div class="p-1.5 rounded-lg bg-blue-800/30 
+                          group-hover:bg-blue-700/50 transition-colors">
+                <i class="fas fa-id-card text-[#F7B32B] group-hover:text-white"></i>
+              </div>
+          
+              <span class="ml-3 sidebar-text">Missing RFID</span>
+            </div>
+          </a>
 
 
 

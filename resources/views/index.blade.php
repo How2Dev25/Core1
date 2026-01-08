@@ -78,6 +78,8 @@
   
      @include('landing.testimonials') 
 
+     @include('landing.missingrfid')
+
 
     {{-- Contacts --}}
     @include('landing.contacts')

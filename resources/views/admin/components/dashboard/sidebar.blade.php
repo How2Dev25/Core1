@@ -289,7 +289,7 @@
                       </a>
                     @endif
 
-                    @if(Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Receptionist')
+                    @if(Auth::user()->role === 'Hotel Admin')
                       <a href="/doorlockadmin"
                         class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
                         <span class="flex items-center gap-2">
@@ -297,6 +297,14 @@
                           Door Locks
                         </span>
                       </a>
+
+                        <a href="/missingRFID_admin"
+    class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+    <span class="flex items-center gap-2">
+      <i class="fas fa-exclamation-triangle w-4 h-4 text-[#F7B32B]"></i>
+      Missing Door Lock
+    </span>
+  </a>  
                     @endif
 
                     @if(
