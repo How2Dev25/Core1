@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Room;
+use App\Models\room;
 use App\Models\roomtypes;
 
 class RoomLanding extends Component
@@ -36,7 +36,7 @@ class RoomLanding extends Component
     {
         $allowedRoomTypes = roomtypes::pluck('roomtype_name')->toArray();
 
-        $rooms = Room::query()
+        $rooms = room::query()
             // Filter by status if set
             ->when($this->statusFilter, function ($query) {
                 return $query->where('roomstatus', $this->statusFilter);
