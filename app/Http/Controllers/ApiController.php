@@ -715,7 +715,37 @@ public function hotelincome(Request $request)
     }
 
 
+    public function bookedRooms(Request $request){
+            $token = $request->header('Authorization');
 
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+
+        try{
+            $bookedrooms = Reservation::join('core1_room', 'core1_room.roomID', '=', 'core1_reservation.roomID')
+            ->where('core1_reservation.reservation_bookingstatus', 'Checked in')
+            ->latest('core1_reservation.created_at')
+            ->get();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Booked Reservation Successfully Fetched',
+                'data' => $bookedrooms,
+            ], 200);
+        }
+        catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch data',
+                'data' => $e->getMessage(),
+            ], 400);
+        }
+    }
 
 
    

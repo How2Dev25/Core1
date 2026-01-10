@@ -35,6 +35,8 @@ Route::get('/restobillingandpayments', [ApiController::class, 'fetchrestobilling
 Route::get('/getKOT', [ApiController::class, 'fetchKOT']);
 Route::put('/cookKOT/{order_id}', [ApiController::class, 'cookKOT']);
 
+Route::get('/bookedrooms', [ApiController::class, 'bookedRooms']);
+
 
 // rooms 
 Route::get('/core1rooms', [ApiController::class, 'rooms'] );
