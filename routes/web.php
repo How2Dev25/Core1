@@ -1978,8 +1978,8 @@ $missingRFIDs = missingRFID::join('doorlock', 'doorlock.doorlockID', '=', 'missi
     ->get();
 
 
-       $countmissing = missingRFID::count();
-      $totaldoorlock = doorlock::count();
+    $countmissing = missingRFID::where('missing_rfid_status', '!=', 'Resolved')->count();
+    $totaldoorlock = doorlock::count();
     $totalassigned = doorlockFrontdesk::count();
    
 
