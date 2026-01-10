@@ -891,7 +891,13 @@ Route::get('/facilities', function(){
     employeeAuthCheck();
     verifyevent();
     $facilities = facility::latest()->get();
-    return view('admin.facilities', compact('facilities'));
+
+    $totalfacility = facility::count();
+
+    $availablefacility = facility::where('facility_status', 'Available')->count();
+
+     $occupiedfacility = facility::where('facility_status', 'Occupied')->count();
+    return view('admin.facilities', compact('facilities', 'totalfacility', 'availablefacility'));
 });
 
 Route::post('/facilitycreate', [facilityController::class, 'store']);

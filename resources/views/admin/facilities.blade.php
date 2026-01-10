@@ -37,73 +37,62 @@
           <!-- content -->
           <section class="p-8 mt-5 max-w-screen-xl mx-auto space-y-10">
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <!-- Total Facilities -->
-              <div
-                class="border border-blue-100 bg-gradient-to-br from-blue-50 to-white rounded-xl p-5 shadow-sm hover:shadow-lg transition-all group">
-                <div class="flex items-center gap-4">
-                  <div
-                    class="p-3 rounded-lg bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    🏢
-                  </div>
+              <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                <div class="flex items-center justify-between">
                   <div>
-                    <h3 class="text-sm font-semibold">Total Facilities</h3>
-                    <p class="text-2xl font-bold text-gray-800">12</p>
+                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Facilities</h3>
+                    <p class="text-3xl font-bold text-gray-800 mt-2">{{ $totalfacility }}</p>
+                    <div class="flex items-center mt-3">
+                      <span class="text-sm font-medium text-gray-500">Soliera Hotel</span>
+                    </div>
+                  </div>
+                  <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                    <i class="fa-solid fa-building text-yellow-400 text-2xl"></i>
                   </div>
                 </div>
               </div>
 
               <!-- Available -->
-              <div
-                class="border border-green-100 bg-gradient-to-br from-green-50 to-white rounded-xl p-5 shadow-sm hover:shadow-lg transition-all group">
-                <div class="flex items-center gap-4">
-                  <div
-                    class="p-3 rounded-lg bg-green-100 text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors">
-                    ✅
-                  </div>
+              <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                <div class="flex items-center justify-between">
                   <div>
-                    <h3 class="text-sm font-semibold">Available</h3>
-                    <p class="text-2xl font-bold text-gray-800">8</p>
+                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Available</h3>
+                    <p class="text-3xl font-bold text-gray-800 mt-2">{{ $availablefacility }}</p>
+                    <div class="flex items-center mt-3">
+                      <span class="text-sm font-medium text-gray-500">Ready for use</span>
+                    </div>
+                  </div>
+                  <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                    <i class="fa-solid fa-check-circle text-yellow-400 text-2xl"></i>
                   </div>
                 </div>
               </div>
 
               <!-- Occupied -->
-              <div
-                class="border border-yellow-100 bg-gradient-to-br from-yellow-50 to-white rounded-xl p-5 shadow-sm hover:shadow-lg transition-all group">
-                <div class="flex items-center gap-4">
-                  <div
-                    class="p-3 rounded-lg bg-yellow-100 text-yellow-600 group-hover:bg-yellow-600 group-hover:text-white transition-colors">
-                    🕒
-                  </div>
+              <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                <div class="flex items-center justify-between">
                   <div>
-                    <h3 class="text-sm font-semibold">Occupied</h3>
-                    <p class="text-2xl font-bold text-gray-800">3</p>
+                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Maintenance</h3>
+                    <p class="text-3xl font-bold text-gray-800 mt-2">0</p>
+                   
+                  </div>
+                  <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                    <i class="fa-solid fa-clock text-yellow-400 text-2xl"></i>
                   </div>
                 </div>
               </div>
 
               <!-- Under Maintenance -->
-              <div
-                class="border border-red-100 bg-gradient-to-br from-red-50 to-white rounded-xl p-5 shadow-sm hover:shadow-lg transition-all group">
-                <div class="flex items-center gap-4">
-                  <div
-                    class="p-3 rounded-lg bg-red-100 text-red-600 group-hover:bg-red-600 group-hover:text-white transition-colors">
-                    🛠️
-                  </div>
-                  <div>
-                    <h3 class="text-sm font-semibold">Under Maintenance</h3>
-                    <p class="text-2xl font-bold text-gray-800">1</p>
-                  </div>
-                </div>
-              </div>
+             
             </div>
 
             <!-- Header with Create Button -->
             <div class="flex items-center justify-between">
               <h2 class="text-2xl font-bold text-gray-800">Facilities</h2>
               <button onclick="document.getElementById('create_facility_modal').showModal()" class="btn btn-primary">
-                + Create Facility
+                + Add Facility
               </button>
             </div>
 
