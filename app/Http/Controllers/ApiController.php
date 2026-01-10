@@ -72,7 +72,10 @@ class ApiController extends Controller
     }
 
     try{
-        $getEvents = Ecm::where('eventstatus', 'Confirmed')->get();
+        $getEvents = Ecm::join('core1_eventtype', 'core1_eventtype.eventtype_ID', '=', 'core1_ecm.eventtype_ID')
+        ->join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')
+        ->latest('core1_ecm.created_at')
+        ->get();
 
         return response()->json([
             'success' => true,
@@ -90,6 +93,78 @@ class ApiController extends Controller
 
     }
 
+
+    public function eventapproved(Request $request, $eventbookingID){
+        $geteventsbookings = Ecm::findOrFail($eventbookingID);
+
+
+        $token = $request->header('Authorization');
+
+         if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Unauthorized. Invalid API token.'
+        ], 401);
+    }
+
+        
+             $geteventsbookings = Ecm::findOrFail($eventbookingID);
+
+             if(!$geteventsbookings){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'request not found'
+                ], 400);
+             }
+
+              $geteventsbookings->eventstatus = 'Approved';
+              $geteventsbookings->save();
+
+              return response()->json([
+                'success' => true,
+                'message' => 'Event Approved'
+              ], 200);
+
+
+}
+
+public function rejectevent(Request $request, $eventbookingID){
+
+      $geteventsbookings = Ecm::findOrFail($eventbookingID);
+
+    
+        $token = $request->header('Authorization');
+
+         if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Unauthorized. Invalid API token.'
+        ], 401);         
+    }
+
+      if(!$geteventsbookings){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'request not found',
+                ], 400);
+             }
+
+             if($geteventsbookings->event_paymentstatus == 'Paid'){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Guest Has Already Paid',
+                ], 400);
+             }
+
+              $geteventsbookings->eventstatus = 'Rejected';
+              $geteventsbookings->save();
+
+              return response()->json([
+                'success' => true,
+                'message' => 'Event Rejected'
+              ], 200);
+    
+}
 
     public function hotelaccounts(Request $request){
     $token = $request->header('Authorization');
@@ -393,7 +468,7 @@ public function hotelincome(Request $request)
 
             return response()->json([
                 'success' => true,
-                'message' => 'Events fetched Successfully',
+                'message' => 'Facilities fetched Successfully',
                 'data' => $facilities,
             ], 200);
 

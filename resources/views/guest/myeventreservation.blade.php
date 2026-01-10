@@ -120,15 +120,19 @@
                                                     </div>
 
                                                     <!-- Status Badge - Top Left -->
-                                                    <div class="absolute top-5 left-5">
-                                                        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold shadow-xl backdrop-blur-sm
-                                                                                                                                                                                                    {{ $reservation->eventstatus == 'Approved' ? 'bg-emerald-500 text-white' :
-            ($reservation->eventstatus == 'Pending' ? 'bg-amber-500 text-white' :
-                'bg-rose-500 text-white') }}">
-                                                            <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-                                                            {{ $reservation->eventstatus }}
-                                                        </span>
-                                                    </div>
+                                            <div class="absolute top-5 left-5">
+    <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold shadow-xl backdrop-blur-sm
+        @if($reservation->eventstatus == 'Pending') bg-amber-500 text-white
+        @elseif($reservation->eventstatus == 'Approved') bg-blue-500 text-white
+        @elseif($reservation->eventstatus == 'Confirmed') bg-green-500 text-white
+        @elseif($reservation->eventstatus == 'Rejected') bg-red-500 text-white
+        @elseif($reservation->eventstatus == 'Done') bg-gray-500 text-white
+        @else bg-gray-300 text-gray-800
+        @endif">
+        <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+        {{ $reservation->eventstatus }}
+    </span>
+</div>
 
                                                     <!-- Price Tag - Top Right -->
                                                     <div

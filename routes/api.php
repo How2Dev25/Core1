@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 
 // events
 Route::get('/core1events', [ApiController::class, 'events'] );
+Route::put('/eventapproved/{eventbookingID}', [ApiController::class, 'eventapproved']);
+Route::put('/eventrejected/{eventbookingID}', [ApiController::class, 'rejectevent']);
 // User Management
 Route::get('/accounts', [ApiController::class, 'hotelaccounts']);
 Route::get('/hoteldeptlogs', [ApiController::class, 'hoteldeptLogs']);
