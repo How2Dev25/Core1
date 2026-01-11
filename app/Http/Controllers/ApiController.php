@@ -22,11 +22,343 @@ use App\Models\stockRequest;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception as MailException;
+use Illuminate\Support\Facades\Log;
+use App\Models\ecmtype;
+
 
 class ApiController extends Controller
 {
 
+    // maillers
+
+public function sendApprovalEmail($eventData){
+    $eventtype = ecmtype::where('eventtype_ID', $eventData['eventtype_ID'])->value('eventtype_name');
+    $mail = new PHPMailer(true);
+
+    try {
+        $mail->isSMTP();
+        $mail->Host       = env('MAIL_HOST');
+        $mail->SMTPAuth   = true;
+        $mail->Username   = env('MAIL_USERNAME');
+        $mail->Password   = env('MAIL_PASSWORD');
+        $mail->SMTPSecure = env('MAIL_ENCRYPTION');
+        $mail->Port       = env('MAIL_PORT');
+
+        $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+        $mail->addAddress($eventData['eventorganizer_email'], $eventData['eventorganizer_name']);
+        $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo');
+        $mail->isHTML(true);
+        $mail->Subject = "Event Booking Approved - {$eventData['event_name']}";
+
+        $checkinDate = date('F j, Y', strtotime($eventData['event_checkin']));
+        $checkoutDate = date('F j, Y', strtotime($eventData['event_checkout']));
+        
+        $equipmentList = '';
+        if (!empty($eventData['event_equipment'])) {
+            $equipmentItems = is_array($eventData['event_equipment']) ? $eventData['event_equipment'] : explode(',', $eventData['event_equipment']);
+            foreach ($equipmentItems as $item) {
+                $equipmentList .= '<li style="color:#666; margin-bottom:5px;">• ' . trim($item) . '</li>';
+            }
+        }
+
+        $mailBody = '<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Approval - Soliera Hotel</title>
+</head>
+<body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
+<div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+
+<div style="background-color:#001f54; padding:30px 20px; text-align:center;">
+    <img src="cid:hotelLogo" alt="Soliera Hotel Logo" style="width:80px; height:80px; border-radius:50%; margin-bottom:15px;">
+    <h1 style="color:#F7B32B; margin:0; font-size:28px; font-weight:bold;">SOLIERA HOTEL</h1>
+    <p style="color:#ffffff; margin:10px 0 0 0; font-size:16px;">Savor The Stay, Dine With Elegance</p>
+</div>
+
+<div style="padding:20px; text-align:center; background-color:#f8f9fa;">
+    <div style="display:inline-block; background-color:#28a745; color:#ffffff; padding:8px 20px; border-radius:20px; font-weight:bold; font-size:14px; margin-bottom:10px;">
+        ✓ ADMINISTRATIVELY APPROVED
+    </div>
+</div>
+
+<div style="padding:30px 20px;">
+    <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Hotel Administrative Has Approved Your Event Booking</h2>
+    
+    <div style="text-align:center; margin-bottom:20px;">
+        <p style="color:#666; font-size:16px; margin:0;">
+           Reservation ID: <span style="color:#001f54; font-weight:bold;">' . ($eventData['event_bookingreceiptID'] ?? 'N/A') . '</span>
+        </p>
+    </div>
+    
+    <div style="text-align:center; padding:20px; background-color:#d4edda; border-radius:8px; margin-bottom:25px;">
+        <h3 style="color:#155724; margin:0 0 10px 0; font-size:20px;">✓ Administrative Approval Received</h3>
+        <p style="color:#155724; margin:0; line-height:1.6;">
+            Great news! Your event booking has been approved by our administrative team.<br>
+            <strong>Please wait for front desk confirmation to complete your reservation.</strong>
+        </p>
+    </div>
+
+    <div style="background-color:#fff3cd; border-left:4px solid #F7B32B; padding:15px; border-radius:4px; margin-bottom:20px;">
+        <p style="color:#856404; margin:0; font-size:14px; line-height:1.6;">
+            <strong>⏳ Next Step:</strong> Your booking is currently pending front desk confirmation. 
+            You will receive another email once the front desk team confirms your event reservation. 
+            This typically takes 1-2 business days.
+        </p>
+    </div>
+
+    <div style="background-color:#f8f9fa; border-radius:8px; padding:20px; margin-bottom:20px;">
+        <h3 style="color:#001f54; margin:0 0 15px 0; font-size:18px; border-bottom:2px solid #F7B32B; padding-bottom:10px;">📋 Event Details</h3>
+        
+        <table style="width:100%; border-collapse:collapse;">
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px; width:40%;">Event Name:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . $eventData['event_name'] . '</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px;">Event Type:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . $eventtype . '</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px;">Check-in Date:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . $checkinDate . '</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px;">Check-out Date:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . $checkoutDate . '</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px;">Number of Guests:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . $eventData['event_numguest'] . ' Guests</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px;">Total Price:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">₱ ' . number_format($eventData['event_total_price'], 2) . '</td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="background-color:#f8f9fa; border-radius:8px; padding:20px; margin-bottom:20px;">
+        <h3 style="color:#001f54; margin:0 0 15px 0; font-size:18px; border-bottom:2px solid #F7B32B; padding-bottom:10px;">👤 Organizer Information</h3>
+        
+        <table style="width:100%; border-collapse:collapse;">
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px; width:40%;">Organizer Name:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . $eventData['eventorganizer_name'] . '</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px;">Email Address:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . $eventData['eventorganizer_email'] . '</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px;">Contact Number:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . $eventData['eventorganizer_phone'] . '</td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="background-color:#e7f3ff; border-left:4px solid #0066cc; padding:15px; border-radius:4px; margin-bottom:20px;">
+        <p style="color:#004085; margin:0; font-size:14px; line-height:1.6;">
+            <strong>📌 Important:</strong> Your reservation is not yet final. Please wait for the front desk confirmation email 
+            before making any payments or final arrangements for your event.
+        </p>
+    </div>
+
+    <div style="text-align:center; padding:20px 0;">
+        <p style="color:#666; font-size:14px; margin:0 0 10px 0;">For inquiries or questions about your booking, please contact us:</p>
+        <p style="color:#001f54; font-weight:bold; margin:0; font-size:14px;">📧 ' . env('MAIL_FROM_ADDRESS') . '</p>
+    </div>
+</div>
+
+<div style="background-color:#001f54; padding:20px; text-align:center;">
+    <p style="color:#F7B32B; margin:0 0 5px 0; font-size:14px; font-weight:bold;">Thank you for choosing Soliera Hotel!</p>
+    <p style="color:#ffffff; margin:0; font-size:12px;">© 2025 Soliera Hotel. All rights reserved.</p>
+</div>
+</div>
+</body>
+</html>';
+
+        $mail->Body = $mailBody;
+        $mail->send();
+        
+        return true;
+
+  } catch (MailException $e) {
+    Log::error("Event approval email could not be sent: " . $e->getMessage());
+    return false;
+} catch (\Exception $e) {
+    Log::error("System error while sending email: " . $e->getMessage());
+    return false;
+}
+}
+
+
+
+
+public function sendRejectionEmail($eventData){
+    $eventtype = ecmtype::where('eventtype_ID', $eventData['eventtype_ID'])->value('eventtype_name');
+    $mail = new PHPMailer(true);
+
+    try {
+        $mail->isSMTP();
+        $mail->Host       = env('MAIL_HOST');
+        $mail->SMTPAuth   = true;
+        $mail->Username   = env('MAIL_USERNAME');
+        $mail->Password   = env('MAIL_PASSWORD');
+        $mail->SMTPSecure = env('MAIL_ENCRYPTION');
+        $mail->Port       = env('MAIL_PORT');
+
+        $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+        $mail->addAddress($eventData['eventorganizer_email'], $eventData['eventorganizer_name']);
+        $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo');
+        $mail->isHTML(true);
+        $mail->Subject = "Event Booking Declined - {$eventData['event_name']}";
+
+        $checkinDate = date('F j, Y', strtotime($eventData['event_checkin']));
+        $checkoutDate = date('F j, Y', strtotime($eventData['event_checkout']));
+        
+        $equipmentList = '';
+        if (!empty($eventData['event_equipment'])) {
+            $equipmentItems = is_array($eventData['event_equipment']) ? $eventData['event_equipment'] : explode(',', $eventData['event_equipment']);
+            foreach ($equipmentItems as $item) {
+                $equipmentList .= '<li style="color:#666; margin-bottom:5px;">• ' . trim($item) . '</li>';
+            }
+        }
+
+        $mailBody = '<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Rejection - Soliera Hotel</title>
+</head>
+<body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
+<div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+
+<div style="background-color:#001f54; padding:30px 20px; text-align:center;">
+    <img src="cid:hotelLogo" alt="Soliera Hotel Logo" style="width:80px; height:80px; border-radius:50%; margin-bottom:15px;">
+    <h1 style="color:#F7B32B; margin:0; font-size:28px; font-weight:bold;">SOLIERA HOTEL</h1>
+    <p style="color:#ffffff; margin:10px 0 0 0; font-size:16px;">Savor The Stay, Dine With Elegance</p>
+</div>
+
+<div style="padding:20px; text-align:center; background-color:#f8f9fa;">
+    <div style="display:inline-block; background-color:#dc3545; color:#ffffff; padding:8px 20px; border-radius:20px; font-weight:bold; font-size:14px; margin-bottom:10px;">
+        BOOKING DECLINED
+    </div>
+</div>
+
+<div style="padding:30px 20px;">
+    <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Event Booking Could Not Be Approved</h2>
+    
+    <div style="text-align:center; margin-bottom:20px;">
+        <p style="color:#666; font-size:16px; margin:0;">
+           Reservation ID: <span style="color:#001f54; font-weight:bold;">' . ($eventData['event_bookingreceiptID'] ?? 'N/A') . '</span>
+        </p>
+    </div>
+    
+    <div style="text-align:center; padding:20px; background-color:#f8d7da; border-radius:8px; margin-bottom:25px;">
+        <h3 style="color:#721c24; margin:0 0 10px 0; font-size:20px;">We are Sorry</h3>
+        <p style="color:#721c24; margin:0; line-height:1.6;">
+            Unfortunately, we are unable to accommodate your event booking at this time.<br>
+            We apologize for any inconvenience this may cause.
+        </p>
+    </div>
+
+    <div style="background-color:#f8f9fa; border-radius:8px; padding:20px; margin-bottom:20px;">
+        <h3 style="color:#001f54; margin:0 0 15px 0; font-size:18px; border-bottom:2px solid #F7B32B; padding-bottom:10px;">Declined Event Details</h3>
+        
+        <table style="width:100%; border-collapse:collapse;">
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px; width:40%;">Event Name:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . htmlspecialchars($eventData['event_name']) . '</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px;">Event Type:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . htmlspecialchars($eventtype) . '</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px;">Requested Check-in:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . $checkinDate . '</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px;">Requested Check-out:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . $checkoutDate . '</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px;">Number of Guests:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . htmlspecialchars($eventData['event_numguest']) . ' Guests</td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="background-color:#f8f9fa; border-radius:8px; padding:20px; margin-bottom:20px;">
+        <h3 style="color:#001f54; margin:0 0 15px 0; font-size:18px; border-bottom:2px solid #F7B32B; padding-bottom:10px;">Organizer Information</h3>
+        
+        <table style="width:100%; border-collapse:collapse;">
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px; width:40%;">Organizer Name:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . htmlspecialchars($eventData['eventorganizer_name']) . '</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px;">Email Address:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . htmlspecialchars($eventData['eventorganizer_email']) . '</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; color:#666; font-size:14px;">Contact Number:</td>
+                <td style="padding:10px 0; color:#001f54; font-weight:bold; font-size:14px;">' . htmlspecialchars($eventData['eventorganizer_phone']) . '</td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="background-color:#e7f3ff; border-left:4px solid #0066cc; padding:15px; border-radius:4px; margin-bottom:20px;">
+        <p style="color:#004085; margin:0; font-size:14px; line-height:1.6;">
+            <strong>Alternative Options:</strong> We would still love to host your event! 
+            Please contact us to discuss alternative dates, venues, or event packages that may better suit your needs. 
+            Our team is ready to help you find the perfect solution.
+        </p>
+    </div>
+
+    <div style="background-color:#d1ecf1; border-left:4px solid #17a2b8; padding:15px; border-radius:4px; margin-bottom:20px;">
+        <p style="color:#0c5460; margin:0; font-size:14px; line-height:1.6;">
+            <strong>Refund Information:</strong> If you have already made any payment or deposit, 
+            it will be fully refunded within 5-7 business days. You will receive a separate confirmation email once the refund has been processed.
+        </p>
+    </div>
+
+    <div style="text-align:center; padding:20px 0;">
+        <p style="color:#666; font-size:14px; margin:0 0 10px 0;">For more information or to discuss alternatives, please contact us:</p>
+        <p style="color:#001f54; font-weight:bold; margin:0; font-size:14px;">' . htmlspecialchars(env('MAIL_FROM_ADDRESS')) . '</p>
+    </div>
+</div>
+
+<div style="background-color:#001f54; padding:20px; text-align:center;">
+    <p style="color:#F7B32B; margin:0 0 5px 0; font-size:14px; font-weight:bold;">We hope to serve you in the future!</p>
+    <p style="color:#ffffff; margin:0; font-size:12px;">&copy; 2025 Soliera Hotel. All rights reserved.</p>
+</div>
+</div>
+</body>
+</html>';
+
+        $mail->Body = $mailBody;
+        $mail->send();
+        
+        return true;
+
+    } catch (MailException $e) {
+        Log::error("Event rejection email could not be sent: " . $e->getMessage());
+        return false;
+    } catch (\Exception $e) {
+        Log::error("System error while sending email: " . $e->getMessage());
+        return false;
+    }
+}
+
+
     // for admin
+
     
     public function rooms(Request $request){
 
@@ -94,76 +426,96 @@ class ApiController extends Controller
     }
 
 
-    public function eventapproved(Request $request, $eventbookingID){
-        $geteventsbookings = Ecm::findOrFail($eventbookingID);
+public function eventapproved(Request $request, $eventbookingID){
+   $token = $request->header('Authorization');
 
-
-        $token = $request->header('Authorization');
-
-         if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+     if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
         return response()->json([
             'success' => false,
             'message' => 'Unauthorized. Invalid API token.'
         ], 401);
     }
 
-        
-             $geteventsbookings = Ecm::findOrFail($eventbookingID);
+    $geteventsbookings = Ecm::findOrFail($eventbookingID);
 
-             if(!$geteventsbookings){
-                return response()->json([
-                    'success' => false,
-                    'message' => 'request not found'
-                ], 400);
-             }
+    if(!$geteventsbookings){
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not found'
+        ], 400);
+    }
 
-              $geteventsbookings->eventstatus = 'Approved';
-              $geteventsbookings->save();
+    $geteventsbookings->eventstatus = 'Approved';
+    $geteventsbookings->save();
 
-              return response()->json([
-                'success' => true,
-                'message' => 'Event Approved'
-              ], 200);
+    // Prepare event data for email
+    $eventData = [
+        'event_name' => $geteventsbookings->event_name,
+        'eventtype_ID' => $geteventsbookings->eventtype_ID,
+        'event_checkin' => $geteventsbookings->event_checkin,
+        'event_checkout' => $geteventsbookings->event_checkout,
+        'event_numguest' => $geteventsbookings->event_numguest,
+        'event_total_price' => $geteventsbookings->event_total_price,
+        'event_bookingreceiptID' => $geteventsbookings->event_bookingreceiptID,
+        'event_equipment' => $geteventsbookings->event_equipment,
+        'eventorganizer_name' => $geteventsbookings->eventorganizer_name,
+        'eventorganizer_email' => $geteventsbookings->eventorganizer_email,
+        'eventorganizer_phone' => $geteventsbookings->eventorganizer_phone,
+    ];
 
+    // Send approval email
+    $this->sendApprovalEmail($eventData);
 
+    return response()->json([
+        'success' => true,
+        'message' => 'Event Approved and notification sent'
+    ], 200);
 }
 
 public function rejectevent(Request $request, $eventbookingID){
+    $token = $request->header('Authorization');
 
-      $geteventsbookings = Ecm::findOrFail($eventbookingID);
-
-    
-        $token = $request->header('Authorization');
-
-         if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+    if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
         return response()->json([
             'success' => false,
             'message' => 'Unauthorized. Invalid API token.'
-        ], 401);         
+        ], 401);
     }
 
-      if(!$geteventsbookings){
-                return response()->json([
-                    'success' => false,
-                    'message' => 'request not found',
-                ], 400);
-             }
+    $geteventsbookings = Ecm::findOrFail($eventbookingID);
 
-             if($geteventsbookings->event_paymentstatus == 'Paid'){
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Guest Has Already Paid',
-                ], 400);
-             }
+    if(!$geteventsbookings){
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not found'
+        ], 400);
+    }
 
-              $geteventsbookings->eventstatus = 'Rejected';
-              $geteventsbookings->save();
+    $geteventsbookings->eventstatus = 'Rejected';
+    $geteventsbookings->save();
 
-              return response()->json([
-                'success' => true,
-                'message' => 'Event Rejected'
-              ], 200);
-    
+    // Prepare event data for email
+    $eventData = [
+        'event_name' => $geteventsbookings->event_name,
+        'eventtype_ID' => $geteventsbookings->eventtype_ID,
+        'event_checkin' => $geteventsbookings->event_checkin,
+        'event_checkout' => $geteventsbookings->event_checkout,
+        'event_numguest' => $geteventsbookings->event_numguest,
+        'event_total_price' => $geteventsbookings->event_total_price,
+        'event_bookingreceiptID' => $geteventsbookings->event_bookingreceiptID,
+        'event_equipment' => $geteventsbookings->event_equipment,
+        'eventorganizer_name' => $geteventsbookings->eventorganizer_name,
+        'eventorganizer_email' => $geteventsbookings->eventorganizer_email,
+        'eventorganizer_phone' => $geteventsbookings->eventorganizer_phone,
+    ];
+
+    // Send rejection email
+    $this->sendRejectionEmail($eventData);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Event Rejected and notification sent'
+    ], 200);
 }
 
     public function hotelaccounts(Request $request){
