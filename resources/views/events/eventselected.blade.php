@@ -417,6 +417,19 @@ $today = \Carbon\Carbon::today()->format('Y-m-d');
                         <span>{{session('success')}}</span>
                     </div>
                 @endif
+
+
+                @if(session('error'))
+    <div role="alert"
+        class="alert alert-error mb-6 rounded-2xl shadow-lg bg-gradient-to-r from-red-500 to-rose-500 text-white border-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        <span>{{ session('error') }}</span>
+    </div>
+@endif
                 <!-- Billing Summary Card -->
                 <div
                     class="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20 lg:sticky lg:top-6 ">

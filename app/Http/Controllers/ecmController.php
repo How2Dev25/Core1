@@ -886,6 +886,20 @@ public function billingHistory ($bookingID, $guestID, $guestname, $amount_paid, 
         ? Auth::guard('guest')->user()->guestID
         : null;
 
+
+        // check if eventtype ID is available 
+       
+        $isAvailable = ecmtype::join('core1_facility', 'core1_facility.facilityID', '=', 'core1_eventtype.facilityID')
+            ->where('core1_eventtype.eventtype_ID', $form['eventtype_ID'])
+            ->where('core1_eventtype.eventtype_status', 'Active')
+            ->where('core1_facility.facility_status', 'Available')
+            ->exists();
+
+        if (!$isAvailable) {
+            return back()->with('error', 'Event or facility is currently unavailable.');
+        }
+                
+
     // ✅ If online payment
     if ($form['event_paymentmethod'] === 'Online Payment') {
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));

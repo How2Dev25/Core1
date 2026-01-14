@@ -448,6 +448,20 @@ public function eventapproved(Request $request, $eventbookingID){
     $geteventsbookings->eventstatus = 'Approved';
     $geteventsbookings->save();
 
+     ecmtype::where('eventtype_ID', $geteventsbookings->eventtype_ID)
+    ->update([
+        'eventtype_status' => 'Inactive'
+    ]);
+
+    $geteventypefacilityID = ecmtype::where('eventtype_ID', $geteventsbookings->eventtype_ID)
+    ->value('facilityID');
+
+    facility::where('facilityID', $geteventypefacilityID)->update([
+        'facility_status' => 'Unavailable'
+    ]);
+
+
+
     // Prepare event data for email
     $eventData = [
         'event_name' => $geteventsbookings->event_name,
@@ -493,6 +507,19 @@ public function rejectevent(Request $request, $eventbookingID){
 
     $geteventsbookings->eventstatus = 'Rejected';
     $geteventsbookings->save();
+
+        ecmtype::where('eventtype_ID', $geteventsbookings->eventtype_ID)
+    ->update([
+        'eventtype_status' => 'Active'
+    ]);
+
+    $geteventypefacilityID = ecmtype::where('eventtype_ID', $geteventsbookings->eventtype_ID)
+    ->value('facilityID');
+
+    facility::where('facilityID', $geteventypefacilityID)->update([
+        'facility_status' => 'Available'
+    ]);
+
 
     // Prepare event data for email
     $eventData = [
