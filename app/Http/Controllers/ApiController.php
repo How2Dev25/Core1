@@ -26,6 +26,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception as MailException;
 use Illuminate\Support\Facades\Log;
 use App\Models\ecmtype;
+use Illuminate\Support\Facades\Http;
 
 
 class ApiController extends Controller
@@ -786,7 +787,9 @@ public function hotelincome(Request $request)
         }
 
         try {
-            $fetchKot = kotresto::all();
+            $fetchKot = kotresto::join('orderfromresto', 'orderfromresto.orderID', '=', 'kot_orders.order_id')
+            ->latest('kot_orders.created_at')
+            ->get();
 
             return response()->json([
                 'success' => true,
@@ -830,6 +833,118 @@ public function hotelincome(Request $request)
 ]);
 
     }
+
+
+    public function preparingKOT(Request $request, $order_id){
+
+     $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        kotresto::where('order_id', $order_id)->update([
+            'status' => 'Preparing',
+        ]);
+
+      ordersfromresto::where('orderID', $order_id)->update([
+    'order_status' => 'Preparing',
+        ]);
+
+   return response()->json([
+    'success' => true,
+    'order_id' => $order_id,
+    'status' => 'Preparing',
+    'message' => "Order {$order_id} is now preparing"
+]);
+}
+
+public function readytoserve(Request $request, $order_id){
+
+ $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        kotresto::where('order_id', $order_id)->update([
+            'status' => 'Ready to Serve',
+        ]);
+
+      ordersfromresto::where('orderID', $order_id)->update([
+    'order_status' => 'Ready to Serve',
+        ]);
+
+   return response()->json([
+    'success' => true,
+    'order_id' => $order_id,
+    'status' => 'Ready To Serve',
+    'message' => "Order {$order_id} is now Ready To Serve"
+]);
+
+}
+
+public function completedKOT(Request $request, $order_id){
+    
+ $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        kotresto::where('order_id', $order_id)->update([
+            'status' => 'Completed',
+        ]);
+
+      ordersfromresto::where('orderID', $order_id)->update([
+    'order_status' => 'Completed',
+        ]);
+
+   return response()->json([
+    'success' => true,
+    'order_id' => $order_id,
+    'status' => 'Completed',
+    'message' => "Order {$order_id} is now Completed"
+]);
+    
+}
+
+
+public function voidedKOT(Request $request, $order_id){
+    $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        kotresto::where('order_id', $order_id)->update([
+            'status' => 'Voided',
+        ]);
+
+      ordersfromresto::where('orderID', $order_id)->update([
+    'order_status' => 'Voided',
+        ]);
+
+   return response()->json([
+    'success' => true,
+    'order_id' => $order_id,
+    'status' => 'Voided',
+    'message' => "Order {$order_id} is now Voided"
+]);
+
+}
 
     // facilities
     public function facility(Request $request){
@@ -1127,7 +1242,5 @@ public function hotelincome(Request $request)
     }
 
 
-   
-
-
+ 
 }

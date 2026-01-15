@@ -1037,6 +1037,10 @@ Route::post('/createstockrequest', [stockController::class, 'store']);
 Route::put('/editstockrequest/{core1_stockID}', [stockController::class, 'modify']);
 Route::delete('/deletestockrequest/{core1_stockID}', [stockController::class, 'delete']);
 
+Route::put('/approvestockrequest/{core1_stockID}', [stockController::class, 'approve']);
+Route::put('/rejectstockrequest/{core1_stockID}', [stockController::class, 'reject']);
+Route::put('/deliveredstockrequest/{core1_stockID}', [stockController::class, 'deliver']);
+
 // Housekeeping And Maintenance 
 Route::get('/hmm', function(){
      employeeAuthCheck();

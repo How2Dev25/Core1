@@ -265,12 +265,12 @@
     </div>
     
   <div class="overflow-x-auto bg-white rounded-lg shadow">
-    @if(session('stockcreated'))
+    @if(session('success'))
             <div role="alert" class="alert alert-success mt-2 mb-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>{{session('stockcreated')}}</span>
+          <span>{{session('success')}}</span>
         </div>
         @elseif(session('stockupdated'))
          <div role="alert" class="alert alert-success mt-2 mb-2">
@@ -446,23 +446,134 @@
     ({{ $stocks->created_at->diffForHumans() }})
 </td>
         <td>
-          <div class="flex gap-2">
+          <div class="flex gap-2 flex-col">
           
-            <button class="btn btn-xs btn-ghost" onclick="edit_request_modal_{{$stocks->core1_stockID}}.showModal()" data-id="{{ $stocks->id }}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">
-                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                <path d="m15 5 4 4"/>
-              </svg>
-            </button>
-            <button class="btn btn-xs btn-ghost text-error" onclick="delete_request_modal_{{$stocks->core1_stockID}}.showModal()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2">
-                <path d="M3 6h18"/>
-                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
-                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                <line x1="10" x2="10" y1="11" y2="17"/>
-                <line x1="14" x2="14" y1="11" y2="17"/>
-              </svg>
-            </button>
+            <!-- Edit Button (existing) -->
+<button class="btn btn-xs btn-ghost" onclick="edit_request_modal_{{$stocks->core1_stockID}}.showModal()" data-id="{{ $stocks->id }}">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">
+    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+    <path d="m15 5 4 4"/>
+  </svg>
+  Modify/View
+</button>
+
+<!-- Delete Button (existing) -->
+<button class="btn btn-xs btn-ghost text-error" onclick="delete_request_modal_{{$stocks->core1_stockID}}.showModal()">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2">
+    <path d="M3 6h18"/>
+    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+    <line x1="10" x2="10" y1="11" y2="17"/>
+    <line x1="14" x2="14" y1="11" y2="17"/>
+  </svg>
+Remove
+</button>
+
+<!-- Approve Button -->
+@if(Auth::user()->role === 'Hotel Admin')
+
+    {{-- PENDING: can Approve or Reject --}}
+    @if($stocks->core1_request_status === 'Pending')
+
+        <!-- Approve -->
+        <button class="btn btn-xs btn-success text-white"
+            onclick="approve_request_modal_{{$stocks->core1_stockID}}.showModal()">
+            Approve
+        </button>
+
+        <!-- Reject -->
+        <button class="btn btn-xs btn-error text-white"
+            onclick="reject_request_modal_{{$stocks->core1_stockID}}.showModal()">
+            Reject
+        </button>
+
+    {{-- APPROVED: can only Deliver --}}
+    @elseif($stocks->core1_request_status === 'Approved')
+
+        <!-- Delivered -->
+        <button class="btn btn-xs btn-info text-white"
+            onclick="delivered_request_modal_{{$stocks->core1_stockID}}.showModal()">
+            Delivered
+        </button>
+
+    {{-- REJECTED or DELIVERED: no actions --}}
+   
+
+    @endif
+
+@endif
+
+
+
+<!-- APPROVE REQUEST MODAL -->
+<dialog id="approve_request_modal_{{$stocks->core1_stockID}}" class="modal">
+  <div class="modal-box">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <h3 class="font-bold text-lg">Approve Request</h3>
+    <p class="py-4">Are you sure you want to approve this request?</p>
+    
+    <form action="/approvestockrequest/{{$stocks->core1_stockID}}" method="POST">
+      @csrf
+      @method('PUT')
+      <div class="modal-action">
+        <button type="button" class="btn" onclick="approve_request_modal_{{$stocks->core1_stockID}}.close()">Cancel</button>
+        <button type="submit" class="btn btn-success">Confirm Approval</button>
+      </div>
+    </form>
+  </div>
+  <div class="modal-backdrop" onclick="approve_request_modal_{{$stocks->core1_stockID}}.close()"></div>
+</dialog>
+
+<!-- REJECT REQUEST MODAL -->
+<dialog id="reject_request_modal_{{$stocks->core1_stockID}}" class="modal">
+  <div class="modal-box">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <h3 class="font-bold text-lg">Reject Request</h3>
+    <p class="py-4">Please provide a reason for rejecting this request.</p>
+    
+    <form action="/rejectstockrequest/{{$stocks->core1_stockID}}"  method="POST">
+      @csrf
+      @method('PUT')
+     
+      
+      <div class="modal-action">
+        <button type="button" class="btn" onclick="reject_request_modal_{{$stocks->core1_stockID}}.close()">Cancel</button>
+        <button type="submit" class="btn btn-error">Confirm Rejection</button>
+      </div>
+    </form>
+  </div>
+  <div class="modal-backdrop" onclick="reject_request_modal_{{$stocks->core1_stockID}}.close()"></div>
+</dialog>
+
+<!-- DELIVERED REQUEST MODAL -->
+<dialog id="delivered_request_modal_{{$stocks->core1_stockID}}" class="modal">
+  <div class="modal-box">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <h3 class="font-bold text-lg">Mark as Delivered</h3>
+    <p class="py-4">Confirm delivery details for this request.</p>
+    
+    <form action="/deliveredstockrequest/{{$stocks->core1_stockID}}" method="POST">
+      @csrf
+      @method('PUT')
+      
+    
+      
+      
+      
+      <div class="modal-action">
+        <button type="button" class="btn" onclick="delivered_request_modal_{{$stocks->core1_stockID}}.close()">Cancel</button>
+        <button type="submit" class="btn btn-info">Mark as Delivered</button>
+      </div>
+    </form>
+  </div>
+  <div class="modal-backdrop" onclick="delivered_request_modal_{{$stocks->core1_stockID}}.close()"></div>
+</dialog>
           </div>
         </td>
       </tr>

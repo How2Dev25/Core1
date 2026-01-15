@@ -34,8 +34,19 @@ Route::put('/deliveredStockRequest/{core1_stockID}',[ApiController::class, 'deli
 Route::get('/restobillingandpayments', [ApiController::class, 'fetchrestobillingandpayments']);
 Route::get('/getKOT', [ApiController::class, 'fetchKOT']);
 Route::put('/cookKOT/{order_id}', [ApiController::class, 'cookKOT']);
+Route::put('/preparingKOT/{order_id}', [ApiController::class, 'preparingKOT']);
+Route::put('/readyKOT/{order_id}', [ApiController::class, 'readytoserve']);
+Route::put('/completedKOT/{order_id}', [ApiController::class, 'completedKOT']);
+Route::put('/voidKOT/{order_id}', [ApiController::class, 'voidedKOT']);
+
+
+
 
 Route::get('/bookedrooms', [ApiController::class, 'bookedRooms']);
+
+
+
+
 
 
 // rooms 
@@ -58,3 +69,5 @@ Route::put('/rejectrequest/{requestempID}', [ApiController::class, 'rejectEmploy
 
 Route::get('/reportEmployee', [ApiController::class, 'reportEmployee']);
 Route::put('/resolvedEmployee/{reportID}', [ApiController::class, 'resolvedEmployee']);
+
+

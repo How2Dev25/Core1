@@ -96,4 +96,39 @@ class stockController extends Controller
 
         return redirect()->back();
     }
+
+
+        public function approve(stockRequest $core1_stockID){
+       
+        $core1_stockID->update([
+            'core1_request_status' => 'Approved',
+        ]);
+
+        return redirect()->back()->with('success', 'Stock Request Has Been Approved');
+
+     
+    }
+
+
+     public function deliver(stockRequest $core1_stockID){
+       
+
+        $core1_stockID->update([
+            'core1_request_status' => 'Delivered',
+        ]);
+
+        return redirect()->back()->with('success', 'Stock Request Has Been Delivered');
+    }
+
+
+     public function reject(stockRequest $core1_stockID){
+       
+
+        $core1_stockID->update([
+            'core1_request_status' => 'Rejected',
+        ]);
+
+        return redirect()->back()->with('success', 'Stock Request Has Been Delivered');
+    }
+
 }

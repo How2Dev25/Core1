@@ -1150,6 +1150,7 @@ public function generateInvoice($reservationID)
             'core1_reservation.total',
             'core1_reservation.roomID',
             'core1_reservation.guestID',
+            'core1_reservation.payment_status',
         )
         ->firstOrFail();
 
@@ -1171,25 +1172,26 @@ public function generateInvoice($reservationID)
         ->get();
 
     // ✅ Compute totals (Hotel + Restaurant)
-      $nights = Carbon::parse($booking->reservation_checkin)
-    ->diffInDays(Carbon::parse($booking->reservation_checkout));
+    $nights = Carbon::parse($booking->reservation_checkin)
+        ->diffInDays(Carbon::parse($booking->reservation_checkout));
 
     $roomSubtotal = $booking->subtotal;
     $vat          = $booking->vat;
     $serviceFee   = $booking->serviceFee;
     $hotelTotal   = $booking->total;
 
-       $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
-        $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+    $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+    $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
 
-      $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
-        $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
+    $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
+    $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
 
     $restaurantTotal = $orders->sum(function($order) {
         return $order->menu_price * $order->order_quantity;
     });
 
-   
+    // Calculate grand total
+    $grandTotal = $hotelTotal + $restaurantTotal;
 
     // ✅ Render Blade template for PDF (pass all data)
     $html = view('admin.components.invoices.invoices-pdf', [
@@ -1218,6 +1220,16 @@ public function generateInvoice($reservationID)
         ->setPaper('A4')
         ->save($pdfPath);
 
+    // ====================================================================
+    // ✅ SEND TO BILLING & INVOICING API
+    // ====================================================================
+    try {
+        $this->sendToBillingAPI($booking, $pdfPath, $grandTotal, $paymentstatus);
+    } catch (Exception $e) {
+        Log::error("Failed to send invoice to Billing API: {$e->getMessage()}");
+        // Continue execution even if API call fails
+    }
+
     // -------------------------
     // Send Email with PHPMailer
     // -------------------------
@@ -1242,8 +1254,7 @@ public function generateInvoice($reservationID)
         $mail->isHTML(true);
         $mail->Subject = "Booking Invoice - {$booking->bookingID}";
 
-        $mail->Body = 
-         // HTML email body (no images)
+        // HTML email body
         $mailBody = <<<HTML
         <!DOCTYPE html>
         <html lang="en">
@@ -1291,6 +1302,7 @@ public function generateInvoice($reservationID)
         </html>
         HTML;
 
+        $mail->Body = $mailBody;
         $mail->send();
     } catch (Exception $e) {
         Log::error("Invoice email could not be sent: {$mail->ErrorInfo}");
@@ -1311,27 +1323,27 @@ public function generateInvoice($reservationID)
             'date'          => Carbon::now()->toDateTimeString(),
         ]);
 
-            if ($orders->isNotEmpty()) {
-                foreach ($orders as $order) {
-                    restobillingandpayments::create([
-                        'client_name'    => $booking->guestname,
-                        'client_email'   => $booking->guestemailaddress,
-                        'client_contact' => $booking->guestphonenumber,
-                        'invoice_number' => $booking->reservation_receipt,
-                        'invoice_date'   => Carbon::now()->format('Y-m-d'),
-                        'due_date'       => Carbon::parse($booking->reservation_checkout)->format('Y-m-d'),
-                        'status'         => $paymentstatus,
-                        'description'    => $order->menu_name,
-                        'quantity'       => $order->order_quantity,
-                        'unit_price'     => $order->menu_price,
-                        'total_amount'   => $order->menu_price * $order->order_quantity,
-                        'payment_date'   => $booking->updated_at ?? null,
-                        'payment_amount' => $order->menu_price * $order->order_quantity,
-                        'MOP'            => $booking->payment_method ?? 'Cash',
-                        'trans_ref'      => $booking->reservation_receipt ?? null,
-                    ]);
-                }
+        if ($orders->isNotEmpty()) {
+            foreach ($orders as $order) {
+                restobillingandpayments::create([
+                    'client_name'    => $booking->guestname,
+                    'client_email'   => $booking->guestemailaddress,
+                    'client_contact' => $booking->guestphonenumber,
+                    'invoice_number' => $booking->reservation_receipt,
+                    'invoice_date'   => Carbon::now()->format('Y-m-d'),
+                    'due_date'       => Carbon::parse($booking->reservation_checkout)->format('Y-m-d'),
+                    'status'         => $paymentstatus,
+                    'description'    => $order->menu_name,
+                    'quantity'       => $order->order_quantity,
+                    'unit_price'     => $order->menu_price,
+                    'total_amount'   => $order->menu_price * $order->order_quantity,
+                    'payment_date'   => $booking->updated_at ?? null,
+                    'payment_amount' => $order->menu_price * $order->order_quantity,
+                    'MOP'            => $booking->payment_method ?? 'Cash',
+                    'trans_ref'      => $booking->reservation_receipt ?? null,
+                ]);
             }
+        }
     }
 
     $guestname = $booking->guestname;
@@ -1341,6 +1353,126 @@ public function generateInvoice($reservationID)
 
     return redirect(asset("images/invoices/invoice_{$booking->reservationID}.pdf"));
 }
+
+/**
+ * Send invoice data to Billing & Invoicing API
+ * FIXED: Using correct column name 'gid' instead of 'guest_id'
+ */
+private function sendToBillingAPI($booking, $pdfPath, $totalAmount, $paymentStatus)
+{
+    // API Configuration
+    $apiUrl = env('BILLING_API_URL', 'https://financials.soliera-hotel-restaurant.com/api/receivable-billing-invoicing');
+    $apiToken = env('BILLING_API_TOKEN', 'uX8B1QqYJt7XqTf0sM3tKAh5nCjEjR1Xlqk4F8ZdD1mHq5V9y7oUj1QhUzPg5s');
+
+    // Determine payment status for API
+    $apiPayStatus = 'Pending';
+    $amountPaid = $totalAmount;
+
+   if (strtoupper($paymentStatus) === 'PAID') {
+    $apiPayStatus = 'Paid';
+    $amountPaid = $totalAmount;
+} elseif (strtoupper($paymentStatus) === 'PARTIAL') {
+    $apiPayStatus = 'Partial';
+    $amountPaid = $booking->amount_paid ?? 0;
+}
+
+    // ✅ FIXED: Prepare JSON payload - API expects 'guest_id' which it maps to 'gid' in database
+    $payload = [
+        'ref'            => $booking->reservation_receipt ?? "INV-{$booking->reservationID}",
+        'tid'            => $booking->bookingID ?? "TID-{$booking->reservationID}",
+        'guest_id'       => $booking->guestID ?? "GUEST-{$booking->reservationID}", // ✅ API expects 'guest_id'
+        'guest_name'     => $booking->guestname,
+        'payment_date'   => $booking->updated_at ? Carbon::parse($booking->updated_at)->format('Y-m-d') : Carbon::now()->format('Y-m-d'),
+        'amount_paid'    => (float) $amountPaid,
+        'total_due'      => (float) $totalAmount,
+        'payment_method' => strtoupper($booking->payment_method ?? 'CASH'),
+        'pay_status'     => $apiPayStatus,
+        'status'         => $apiPayStatus === 'PAID' ? 'COMPLETED' : 'PENDING',
+        'remarks'        => "Hotel invoice for booking {$booking->bookingID} - {$booking->guestname}",
+    ];
+
+    // Check if PDF file exists
+    if (!file_exists($pdfPath)) {
+        throw new Exception("PDF file not found at: {$pdfPath}");
+    }
+
+    // Read the PDF file content
+    $fileContent = file_get_contents($pdfPath);
+    if ($fileContent === false) {
+        throw new Exception("Failed to read PDF file at: {$pdfPath}");
+    }
+
+    $fileName = basename($pdfPath);
+
+    // Create multipart form data with file upload
+    $boundary = '----WebKitFormBoundary' . uniqid();
+    
+    // Build multipart body
+    $postData = '';
+    
+    // Add JSON payload as 'payload' field
+    $postData .= '--' . $boundary . "\r\n";
+    $postData .= 'Content-Disposition: form-data; name="payload"' . "\r\n";
+    $postData .= 'Content-Type: application/json' . "\r\n\r\n";
+    $postData .= json_encode($payload) . "\r\n";
+    
+    // Add PDF file as 'file_upload' field
+    $postData .= '--' . $boundary . "\r\n";
+    $postData .= 'Content-Disposition: form-data; name="file_upload"; filename="' . $fileName . '"' . "\r\n";
+    $postData .= 'Content-Type: application/pdf' . "\r\n\r\n";
+    $postData .= $fileContent . "\r\n";
+    
+    // End boundary
+    $postData .= '--' . $boundary . '--' . "\r\n";
+
+    // Initialize cURL
+    $ch = curl_init($apiUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_SSL_VERIFYHOST => 2,
+        CURLOPT_HTTPHEADER => [
+            'Accept: application/json',
+            'Authorization: Bearer ' . $apiToken,
+            'Content-Type: multipart/form-data; boundary=' . $boundary,
+        ],
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $postData,
+        CURLOPT_TIMEOUT => 30,
+    ]);
+
+    $response = curl_exec($ch);
+    $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
+    curl_close($ch);
+
+    // Handle cURL errors
+    if ($response === false) {
+        throw new Exception("cURL error: {$curlError}");
+    }
+
+    // Parse response
+    $responseData = json_decode($response, true);
+
+    // Log the API response with payload for debugging
+    Log::info("Billing API Response", [
+        'status_code' => $statusCode,
+        'response' => $responseData,
+        'booking_id' => $booking->bookingID,
+        'payload_sent' => $payload,
+        'file_name' => $fileName ?? 'N/A',
+        'file_size' => isset($fileContent) ? strlen($fileContent) : 0,
+    ]);
+
+    // Check for errors
+    if ($statusCode < 200 || $statusCode >= 300) {
+        throw new Exception("API returned error status {$statusCode}: " . ($responseData['message'] ?? $response));
+    }
+
+    return $responseData;
+}
+
 
 // guest
 
