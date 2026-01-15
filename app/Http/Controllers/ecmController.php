@@ -584,8 +584,6 @@ public function printReceipt($eventbookingID)
    
     $eventTotal = $event->event_total_price;
 
-   
-
     // Render Blade template for PDF
     $html = view('admin.components.invoices.event-receipt-pdf', [
         'event' => $event,
@@ -593,7 +591,6 @@ public function printReceipt($eventbookingID)
         'paymentstatus' => $paymentstatus,
         'eventTotal' => $eventTotal,
         'eventType' => $eventype,
-       
     ])->render();
 
     // PDF save path
@@ -607,6 +604,16 @@ public function printReceipt($eventbookingID)
     Pdf::loadHTML($html)
         ->setPaper('A4')
         ->save($pdfPath);
+
+    // ====================================================================
+    // ✅ SEND TO BILLING & INVOICING API
+    // ====================================================================
+    try {
+        $this->sendEventToBillingAPI($event, $pdfPath, $eventTotal);
+    } catch (Exception $e) {
+        Log::error("Failed to send event receipt to Billing API: {$e->getMessage()}");
+        // Continue execution even if API call fails
+    }
 
     // -------------------------
     // Send Email with PHPMailer
@@ -705,6 +712,115 @@ public function printReceipt($eventbookingID)
     return redirect(asset("images/invoices/event_receipt_{$event->eventbookingID}.pdf"));
 }
 
+/**
+ * Send event receipt data to Billing & Invoicing API
+ */
+private function sendEventToBillingAPI($event, $pdfPath, $totalAmount)
+{
+    // API Configuration
+    $apiUrl = env('BILLING_API_URL', 'https://financials.soliera-hotel-restaurant.com/api/receivable-billing-invoicing');
+    $apiToken = env('BILLING_API_TOKEN', 'uX8B1QqYJt7XqTf0sM3tKAh5nCjEjR1Xlqk4F8ZdD1mHq5V9y7oUj1QhUzPg5s');
+
+    // ✅ Always set as PAID with full amount since receipt generation means payment is complete
+    $apiPayStatus = 'PAID';
+    $amountPaid = $totalAmount;
+
+    // Prepare JSON payload for event booking
+    $payload = [
+        'ref'            => $event->event_bookingreceiptID ?? "EVT-{$event->eventbookingID}",
+        'tid'            => $event->eventbookingID,
+        'guest_id'       => $event->guestID ?? "EVENT-GUEST-{$event->eventbookingID}",
+        'guest_name'     => $event->eventorganizer_name,
+        'payment_date'   => $event->event_bookedate ? Carbon::parse($event->event_bookedate)->format('Y-m-d') : Carbon::now()->format('Y-m-d'),
+        'amount_paid'    => (float) $amountPaid,
+        'total_due'      => (float) $totalAmount,
+        'payment_method' => strtoupper($event->event_paymentmethod ?? 'CASH'),
+        'pay_status'     => $apiPayStatus,
+        'status'         => 'PENDING',
+        'remarks'        => "Event booking: {$event->event_name} - Organizer: {$event->eventorganizer_name} - Guests: {$event->event_numguest}",
+    ];
+
+    // Check if PDF file exists
+    if (!file_exists($pdfPath)) {
+        throw new Exception("PDF file not found at: {$pdfPath}");
+    }
+
+    // Read the PDF file content
+    $fileContent = file_get_contents($pdfPath);
+    if ($fileContent === false) {
+        throw new Exception("Failed to read PDF file at: {$pdfPath}");
+    }
+
+    $fileName = basename($pdfPath);
+
+    // Create multipart form data with file upload
+    $boundary = '----WebKitFormBoundary' . uniqid();
+    
+    // Build multipart body
+    $postData = '';
+    
+    // Add JSON payload as 'payload' field
+    $postData .= '--' . $boundary . "\r\n";
+    $postData .= 'Content-Disposition: form-data; name="payload"' . "\r\n";
+    $postData .= 'Content-Type: application/json' . "\r\n\r\n";
+    $postData .= json_encode($payload) . "\r\n";
+    
+    // Add PDF file as 'file_upload' field
+    $postData .= '--' . $boundary . "\r\n";
+    $postData .= 'Content-Disposition: form-data; name="file_upload"; filename="' . $fileName . '"' . "\r\n";
+    $postData .= 'Content-Type: application/pdf' . "\r\n\r\n";
+    $postData .= $fileContent . "\r\n";
+    
+    // End boundary
+    $postData .= '--' . $boundary . '--' . "\r\n";
+
+    // Initialize cURL
+    $ch = curl_init($apiUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_SSL_VERIFYHOST => 2,
+        CURLOPT_HTTPHEADER => [
+            'Accept: application/json',
+            'Authorization: Bearer ' . $apiToken,
+            'Content-Type: multipart/form-data; boundary=' . $boundary,
+        ],
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $postData,
+        CURLOPT_TIMEOUT => 30,
+    ]);
+
+    $response = curl_exec($ch);
+    $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
+    curl_close($ch);
+
+    // Handle cURL errors
+    if ($response === false) {
+        throw new Exception("cURL error: {$curlError}");
+    }
+
+    // Parse response
+    $responseData = json_decode($response, true);
+
+    // Log the API response with payload for debugging
+    Log::info("Billing API Response - Event Receipt", [
+        'status_code' => $statusCode,
+        'response' => $responseData,
+        'event_booking_id' => $event->eventbookingID,
+        'payload_sent' => $payload,
+        'file_name' => $fileName ?? 'N/A',
+        'file_size' => isset($fileContent) ? strlen($fileContent) : 0,
+    ]);
+
+    // Check for errors
+    if ($statusCode < 200 || $statusCode >= 300) {
+        throw new Exception("API returned error status {$statusCode}: " . ($responseData['message'] ?? $response));
+    }
+
+    return $responseData;
+}
 public function notifyDone($guestID, $guestname, $event_bookingreceiptID, $eventData){
 
     if($guestID){

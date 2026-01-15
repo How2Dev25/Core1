@@ -1324,6 +1324,8 @@ Route::put('/reservationconfirm/{reservationID}', [reservationController::class,
 Route::put('/addonPaid/{additionalbookingID}', [bookingAddonsController::class, 'markAsPaid']);
 Route::delete('/addonRemove/{additionalbookingID}', [bookingAddonsController::class, 'removeAddon']);
 
+Route::get('/printinventoryreceipt/{additionalbookingID}', [bookingAddonsController::class, 'printReceipt']);
+
 // loyalty and rewards
 
 Route::get('/lar', function(){
