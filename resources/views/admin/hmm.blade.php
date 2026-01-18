@@ -364,7 +364,11 @@
                           <button onclick="document.getElementById('assign_maintenance_modal_{{ $room->roommaintenanceID }}').showModal()" 
                                   class="btn btn-sm btn-primary">
                               <i data-lucide="user-check" class="w-4 h-4 mr-1"></i>
+                            @if(Auth::user()->role == "Hotel Admin")
+                              View Details / Assign Staff
+                            @else
                               View Details
+                            @endif
                           </button>
 
 

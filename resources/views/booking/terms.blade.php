@@ -21,21 +21,33 @@
                 <h4 class="font-semibold text-lg text-blue-900 mb-2">
                     General Policy
                 </h4>
-        
+
                 <ul class="mt-3 space-y-2 pl-5 list-none">
-                    <li>→ Guests must confirm their reservation on or before <strong>6:00 PM</strong> on the day of arrival.
+                    <li>→ Guests must confirm their reservation on or before <strong>6:00 PM</strong> on the day of
+                        arrival.</li>
+
+                    <li>→ <strong>Reservation Holding Policy:</strong> Pay-at-Hotel bookings are held for
+                        only
+                        <strong>24 hours</strong> from the time of reservation. Unconfirmed reservations will be
+                        automatically
+                        cancelled and the room will be released for other guests.
                     </li>
-                    <li>→ <strong>No-show policy:</strong> Failure to arrive without prior notice will result in a charge
+
+                    <li>→ <strong>No-show policy:</strong> Failure to arrive without prior notice will result in a
+                        charge
                         equivalent to the first night’s stay.</li>
+
                     <li>→ <strong>Minors policy:</strong> Minors are not allowed to check in without a parent or legal
                         guardian. This must be clearly stated and acknowledged upon booking.</li>
+
                     <li>→ <strong>Pet-friendly policy:</strong> Pets are allowed only in designated rooms and must be
                         declared during reservation. Additional rules and charges may apply.</li>
+
                     <li>→ <strong>Security deposit:</strong> A refundable security deposit of <strong>₱1,000</strong> is
                         required upon check-in and will be returned upon check-out, subject to room inspection.</li>
                 </ul>
             </li>
-        
+
             <li>
                 <h4 class="font-semibold text-lg text-blue-900 mb-2">
                     Booking & Cancellation
@@ -45,7 +57,7 @@
                     Late cancellations and no-shows will be charged accordingly.
                 </p>
             </li>
-        
+
             <li>
                 <h4 class="font-semibold text-lg text-blue-900 mb-2">
                     Data Privacy Act of 2012
@@ -57,7 +69,7 @@
                     and customer service.
                 </p>
             </li>
-        
+
             <li>
                 <h4 class="font-semibold text-lg text-blue-900 mb-2">
                     Consumer Protection
@@ -68,7 +80,7 @@
                     deceptive or unfair trade practices.
                 </p>
             </li>
-        
+
             <li>
                 <h4 class="font-semibold text-lg text-blue-900 mb-2">
                     Electronic Commerce
@@ -79,7 +91,7 @@
                     legally binding and recognized.
                 </p>
             </li>
-        
+
             <li>
                 <h4 class="font-semibold text-lg text-blue-900 mb-2">
                     Guest Responsibilities

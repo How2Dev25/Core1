@@ -29,6 +29,7 @@ use App\Models\guestloyaltypoints;
 use App\Models\Lar;
 use App\Models\loyaltyrules;
 use App\Models\hotelBilling;
+use App\Models\room_maintenance;
 use App\Models\roomtypes;
 
 class reservationController extends Controller
@@ -883,11 +884,18 @@ HTML;
           $bookingID = $reservationID->bookingID;
 
          room::where('roomID', $roomID)->update([
-            'roomstatus' => 'Available',
+            'roomstatus' => 'Maintenance',
         ]);
 
         $reservationID->update([
             'payment_status' => 'Paid',
+        ]);
+
+        room_maintenance::create([
+            'maintenance_priority' => 'High',
+            'maintenancedescription' => 'Room Cleaning',
+            'roomID' => $roomID,
+            'maintenancestatus' => 'Pending',
         ]);
 
 

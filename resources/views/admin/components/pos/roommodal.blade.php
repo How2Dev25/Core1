@@ -171,377 +171,82 @@
                 </div>
 
                 <!-- Guest Information Card -->
-                <div class="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
+
+                <div class=" bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
                     <div class="flex items-center gap-4 mb-6">
                         <div class="p-3 bg-gradient-to-br from-[#001f54] to-[#1a3470] rounded-2xl shadow-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="#F7B32B" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                stroke="#F7B32B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
                             </svg>
                         </div>
                         <div>
-                            <h2
-                                class="text-2xl font-bold bg-gradient-to-r from-[#001f54] to-[#1a3470] bg-clip-text text-transparent">
-                                Guest Information
+                            <h2 class="text-2xl font-bold bg-gradient-to-r from-[#001f54] to-[#1a3470] bg-clip-text text-transparent">
+                                Valid ID Upload
                             </h2>
-                            <p class="text-gray-600">Please provide your details</p>
+                            <p class="text-gray-600">Please upload a clear photo of your valid ID</p>
                         </div>
                     </div>
-
+                
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- File Input Section -->
                         <div class="form-control">
                             <label class="label font-semibold text-[#001f54] mb-2">
                                 <span class="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="17 8 12 3 7 8"></polyline>
+                                        <line x1="12" y1="3" x2="12" y2="15"></line>
                                     </svg>
-                                    Full Name
+                                    Upload Valid ID
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input value="" type="text" name="guestname"
-                                class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
-                                required />
-                        </div>
-
-                        <div class="form-control">
-                            <label class="label font-semibold text-[#001f54] mb-2">
-                                <span class="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                                    </svg>
-                                    Birthday
-                                    <span class="text-red-500">*</span>
-                                </span>
-                            </label>
-                            <input value="" id="guestbirthday" type="date" name="guestbirthday"
-                                class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
-                                required />
-                            <span id="ageError" class="text-red-500 text-sm mt-1 hidden">Age must be 18 or above.</span>
-                        </div>
-
-                        <div class="form-control">
-                            <label class="label font-semibold text-[#001f54] mb-2">
-                                <span class="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path
-                                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                        </path>
-                                    </svg>
-                                    Mobile Number
-                                    <span class="text-red-500">*</span>
-                                </span>
-                            </label>
-                        <input type="tel" name="guestphonenumber" class="input input-bordered w-full rounded-xl border-2 border-gray-200 
-                                   focus:border-[#001f54] focus:outline-none transition-colors" placeholder="Enter phone number" required />
-
-                        </div>
-
-                        <div class="form-control">
-                            <label class="label font-semibold text-[#001f54] mb-2">
-                                <span class="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path
-                                            d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                                        </path>
-                                        <polyline points="22,6 12,13 2,6"></polyline>
-                                    </svg>
-                                    Email Address
-                                    <span class="text-red-500">*</span>
-                                </span>
-                            </label>
-                            <input value="" type="email" name="guestemailaddress"
-                                class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
-                                required />
-                        </div>
-
-                        <div class="form-control md:col-span-2">
-                            <label class="label font-semibold text-[#001f54] mb-2">
-                                <span class="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
-                                        <circle cx="12" cy="10" r="3"></circle>
-                                    </svg>
-                                    Address
-                                    <span class="text-red-500">*</span>
-                                </span>
-                            </label>
-                            <textarea name="guestaddress"
-                                class="textarea textarea-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
-                                rows="2" required></textarea>
-                        </div>
-
-                        <div class="form-control">
-                            <label class="label font-semibold text-[#001f54] mb-2">
-                                <span class="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="9" cy="7" r="4"></circle>
-                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                    </svg>
-                                    Contact Person
-                                    <span class="text-red-500">*</span>
-                                </span>
-                            </label>
-                            <input type="text" name="guestcontactperson"
-                                class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
-                                required />
-                        </div>
-
-
-                        <div class="form-control">
-                            <label class="label font-semibold text-[#001f54] mb-2">
-                                <span class="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path
-                                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                        </path>
-                                    </svg>
-                                    Contact Person Number
-                                    <span class="text-red-500">*</span>
-                                </span>
-                            </label>
-                        <input type="tel" name="guestcontactpersonnumber" class="input input-bordered w-full rounded-xl border-2 border-gray-200 
-                                   focus:border-[#001f54] focus:outline-none transition-colors" placeholder="Enter phone number" required />
-
-                        <input type="hidden" name="subtotal" id="hiddenSubtotal">
-                        <input type="hidden" name="vat" id="hiddenVat">
-                        <input type="hidden" name="serviceFee" id="hiddenServiceFee">
-                        <input type="hidden" name="total" id="hiddenTotal">
-                    </div>
-                </div>
-
-                    <div class=" rounded-3xl p-8 s">
-                        <div class="flex items-center gap-4 mb-6">
-                            <div class="p-3 bg-gradient-to-br from-[#001f54] to-[#1a3470] rounded-2xl shadow-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    stroke="#F7B32B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                    <polyline points="21 15 16 10 5 21"></polyline>
-                                </svg>
-                            </div>
-                            <div>
-                                <h2 class="text-2xl font-bold bg-gradient-to-r from-[#001f54] to-[#1a3470] bg-clip-text text-transparent">
-                                    Valid ID Upload
-                                </h2>
-                                <p class="text-gray-600">Please upload a clear photo of your valid ID</p>
-                            </div>
-                        </div>
-                    
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- File Input Section -->
-                            <div class="form-control">
-                                <label class="label font-semibold text-[#001f54] mb-2">
-                                    <span class="flex items-center gap-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                            <polyline points="17 8 12 3 7 8"></polyline>
-                                            <line x1="12" y1="3" x2="12" y2="15"></line>
-                                        </svg>
-                                        Upload Valid ID
-                                        <span class="text-red-500">*</span>
-                                    </span>
-                                </label>
                             <input type="file" name="reservation_validID" id="validIdInput_{{ $room->roomID }}"
                                 class="file-input file-input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
                                 accept="image/*" required />
-
-                                <p class="text-sm text-gray-500 mt-2">Accepted: JPG, PNG, PDF (Max 5MB)</p>
-                            </div>
-                    
-                            <!-- Image Preview Section -->
-                            <div id="imagePreviewContainer_{{ $room->roomID }}" class="form-control">
-                                <label class="label font-semibold text-[#001f54] mb-2">
-                                    <span class="flex items-center gap-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                            <polyline points="21 15 16 10 5 21"></polyline>
-                                        </svg>
-                                        ID Preview
-                                    </span>
-                                </label>
-                                <div id="imagePreviewContainer"
-                                    class="border-2 border-dashed border-gray-300 rounded-xl p-4 h-48 flex items-center justify-center bg-gray-50">
-                                    <div class="text-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
-                                            stroke="#9CA3AF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
-                                            class="mx-auto mb-2">
-                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                            <polyline points="21 15 16 10 5 21"></polyline>
-                                        </svg>
-                                        <p class="text-gray-500">Preview will appear here</p>
-                                    </div>
+                
+                            <p class="text-sm text-gray-500 mt-2">Accepted: JPG, PNG, PDF (Max 5MB)</p>
+                        </div>
+                
+                        <!-- Image Preview Section -->
+                        <div id="imagePreviewContainer_{{ $room->roomID }}" class="form-control">
+                            <label class="label font-semibold text-[#001f54] mb-2">
+                                <span class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                    </svg>
+                                    ID Preview
+                                </span>
+                            </label>
+                            <div id="imagePreviewContainer"
+                                class="border-2 border-dashed border-gray-300 rounded-xl p-4 h-48 flex items-center justify-center bg-gray-50">
+                                <div class="text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                                        stroke="#9CA3AF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                                        class="mx-auto mb-2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                    </svg>
+                                    <p class="text-gray-500">Preview will appear here</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- JavaScript for image preview -->
-                  <script>
-// Image Preview Handler for Multiple Modals
-const ModalImagePreview = {
-    // Initialize image preview for all modals
-    init() {
-        // Set up event listeners for file inputs in all modals
-        document.querySelectorAll('dialog[id^="bookroom_"]').forEach(modal => {
-            this.setupImagePreviewForModal(modal);
-        });
-        
-        // Also set up for dynamically opened modals
-        this.setupModalObserver();
-    },
-    
-    // Set up image preview for a specific modal
-    setupImagePreviewForModal(modal) {
-        const fileInput = modal.querySelector('input[name="reservation_validID"]');
-        const previewContainer = modal.querySelector('#imagePreviewContainer');
-        
-        if (!fileInput || !previewContainer) return;
-        
-        // Store references on the input for cleanup
-        fileInput._previewHandler = (e) => this.handleImagePreview(e, modal);
-        fileInput.addEventListener('change', fileInput._previewHandler);
-        
-        // Store modal reference
-        modal._fileInput = fileInput;
-    },
-    
-    // Handle image preview for a specific modal
-    handleImagePreview(e, modal) {
-        const fileInput = e.target;
-        const previewContainer = modal.querySelector('#imagePreviewContainer');
-        const file = fileInput.files[0];
 
-        if (file) {
-            if (file.size > 5 * 1024 * 1024) { // 5MB limit
-                alert('File size exceeds 5MB limit');
-                fileInput.value = '';
-                this.resetPreview(previewContainer);
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                previewContainer.innerHTML = `
-                    <img src="${event.target.result}" 
-                         alt="ID Preview" 
-                         class="w-full h-full object-contain rounded-lg">
-                `;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            this.resetPreview(previewContainer);
-        }
-    },
-    
-    // Reset preview to default state
-    resetPreview(previewContainer) {
-        if (!previewContainer) return;
-        
-        previewContainer.innerHTML = `
-            <div class="text-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
-                    fill="none" stroke="#9CA3AF" stroke-width="1" stroke-linecap="round"
-                    stroke-linejoin="round" class="mx-auto mb-2">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                    <polyline points="21 15 16 10 5 21"></polyline>
-                </svg>
-                <p class="text-gray-500">Preview will appear here</p>
-            </div>
-        `;
-    },
-    
-    // Set up observer for dynamically created modals
-    setupModalObserver() {
-        // Watch for modal open events
-        document.addEventListener('show', (e) => {
-            const modal = e.target;
-            if (modal.tagName === 'DIALOG' && modal.id.startsWith('bookroom_')) {
-                this.setupImagePreviewForModal(modal);
-            }
-        });
-        
-        // Clean up when modal closes
-        document.addEventListener('close', (e) => {
-            const modal = e.target;
-            if (modal.tagName === 'DIALOG' && modal._fileInput) {
-                // Remove event listener
-                if (modal._fileInput._previewHandler) {
-                    modal._fileInput.removeEventListener('change', modal._fileInput._previewHandler);
-                    delete modal._fileInput._previewHandler;
-                }
-                delete modal._fileInput;
+                    <input type="hidden" name="subtotal" id="hiddenSubtotal">
+                    <input type="hidden" name="vat" id="hiddenVat">
+                    <input type="hidden" name="serviceFee" id="hiddenServiceFee">
+                    <input type="hidden" name="total" id="hiddenTotal">
+                </div>
                 
-                // Reset preview
-                const previewContainer = modal.querySelector('#imagePreviewContainer');
-                this.resetPreview(previewContainer);
-            }
-        });
-    },
-    
-    // Clean up all event listeners
-    cleanup() {
-        document.querySelectorAll('dialog[id^="bookroom_"]').forEach(modal => {
-            const fileInput = modal.querySelector('input[name="reservation_validID"]');
-            if (fileInput && fileInput._previewHandler) {
-                fileInput.removeEventListener('change', fileInput._previewHandler);
-                delete fileInput._previewHandler;
-            }
-        });
-    }
-};
-
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    ModalImagePreview.init();
-});
-
-// Also re-initialize if modals are added dynamically
-if (typeof MutationObserver !== 'undefined') {
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.type === 'childList') {
-                mutation.addedNodes.forEach((node) => {
-                    if (node.nodeType === 1 && node.tagName === 'DIALOG' && node.id.startsWith('bookroom_')) {
-                        ModalImagePreview.setupImagePreviewForModal(node);
-                    }
-                });
-            }
-        });
-    });
-    
-    observer.observe(document.body, { childList: true, subtree: true });
-}
-</script>
-
-            </div>
 
             <!-- RIGHT SIDE (Enhanced Billing Summary) -->
             <div class="w-full ">
@@ -777,6 +482,145 @@ if (typeof MutationObserver !== 'undefined') {
         
     </div>
 </dialog>
+
+
+                <script>
+                    // Image Preview Handler for Multiple Modals
+                    const ModalImagePreview = {
+                        // Initialize image preview for all modals
+                        init() {
+                            // Set up event listeners for file inputs in all modals
+                            document.querySelectorAll('dialog[id^="bookroom_"]').forEach(modal => {
+                                this.setupImagePreviewForModal(modal);
+                            });
+
+                            // Also set up for dynamically opened modals
+                            this.setupModalObserver();
+                        },
+
+                        // Set up image preview for a specific modal
+                        setupImagePreviewForModal(modal) {
+                            const fileInput = modal.querySelector('input[name="reservation_validID"]');
+                            const previewContainer = modal.querySelector('#imagePreviewContainer');
+
+                            if (!fileInput || !previewContainer) return;
+
+                            // Store references on the input for cleanup
+                            fileInput._previewHandler = (e) => this.handleImagePreview(e, modal);
+                            fileInput.addEventListener('change', fileInput._previewHandler);
+
+                            // Store modal reference
+                            modal._fileInput = fileInput;
+                        },
+
+                        // Handle image preview for a specific modal
+                        handleImagePreview(e, modal) {
+                            const fileInput = e.target;
+                            const previewContainer = modal.querySelector('#imagePreviewContainer');
+                            const file = fileInput.files[0];
+
+                            if (file) {
+                                if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                                    alert('File size exceeds 5MB limit');
+                                    fileInput.value = '';
+                                    this.resetPreview(previewContainer);
+                                    return;
+                                }
+
+                                const reader = new FileReader();
+                                reader.onload = function (event) {
+                                    previewContainer.innerHTML = `
+                                    <img src="${event.target.result}" 
+                                         alt="ID Preview" 
+                                         class="w-full h-full object-contain rounded-lg">
+                                `;
+                                };
+                                reader.readAsDataURL(file);
+                            } else {
+                                this.resetPreview(previewContainer);
+                            }
+                        },
+
+                        // Reset preview to default state
+                        resetPreview(previewContainer) {
+                            if (!previewContainer) return;
+
+                            previewContainer.innerHTML = `
+                            <div class="text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+                                    fill="none" stroke="#9CA3AF" stroke-width="1" stroke-linecap="round"
+                                    stroke-linejoin="round" class="mx-auto mb-2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                                <p class="text-gray-500">Preview will appear here</p>
+                            </div>
+                        `;
+                        },
+
+                        // Set up observer for dynamically created modals
+                        setupModalObserver() {
+                            // Watch for modal open events
+                            document.addEventListener('show', (e) => {
+                                const modal = e.target;
+                                if (modal.tagName === 'DIALOG' && modal.id.startsWith('bookroom_')) {
+                                    this.setupImagePreviewForModal(modal);
+                                }
+                            });
+
+                            // Clean up when modal closes
+                            document.addEventListener('close', (e) => {
+                                const modal = e.target;
+                                if (modal.tagName === 'DIALOG' && modal._fileInput) {
+                                    // Remove event listener
+                                    if (modal._fileInput._previewHandler) {
+                                        modal._fileInput.removeEventListener('change', modal._fileInput._previewHandler);
+                                        delete modal._fileInput._previewHandler;
+                                    }
+                                    delete modal._fileInput;
+
+                                    // Reset preview
+                                    const previewContainer = modal.querySelector('#imagePreviewContainer');
+                                    this.resetPreview(previewContainer);
+                                }
+                            });
+                        },
+
+                        // Clean up all event listeners
+                        cleanup() {
+                            document.querySelectorAll('dialog[id^="bookroom_"]').forEach(modal => {
+                                const fileInput = modal.querySelector('input[name="reservation_validID"]');
+                                if (fileInput && fileInput._previewHandler) {
+                                    fileInput.removeEventListener('change', fileInput._previewHandler);
+                                    delete fileInput._previewHandler;
+                                }
+                            });
+                        }
+                    };
+
+                    // Initialize when DOM is loaded
+                    document.addEventListener('DOMContentLoaded', () => {
+                        ModalImagePreview.init();
+                    });
+
+                    // Also re-initialize if modals are added dynamically
+                    if (typeof MutationObserver !== 'undefined') {
+                        const observer = new MutationObserver((mutations) => {
+                            mutations.forEach((mutation) => {
+                                if (mutation.type === 'childList') {
+                                    mutation.addedNodes.forEach((node) => {
+                                        if (node.nodeType === 1 && node.tagName === 'DIALOG' && node.id.startsWith('bookroom_')) {
+                                            ModalImagePreview.setupImagePreviewForModal(node);
+                                        }
+                                    });
+                                }
+                            });
+                        });
+
+                        observer.observe(document.body, { childList: true, subtree: true });
+                    }
+                </script>
 
 
 <script>
@@ -1107,39 +951,8 @@ if (typeof MutationObserver !== 'undefined') {
                     return "";
                 }
             },
-            guestname: {
-                required: true,
-                validate: (value) => value.trim().length >= 2,
-                message: "Full name must be at least 2 characters"
-            },
-            guestbirthday: {
-                required: true,
-                validate: (value) => {
-                    const birthDate = new Date(value);
-                    const today = new Date();
-                    let age = today.getFullYear() - birthDate.getFullYear();
-                    const m = today.getMonth() - birthDate.getMonth();
-                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
-                    return age >= 18;
-                },
-                message: "You must be at least 18 years old"
-            },
-                
-            guestemailaddress: {
-                required: true,
-                validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-                message: "Enter a valid email address"
-            },
-            guestaddress: {
-                required: true,
-                validate: (value) => value.trim().length >= 5,
-                message: "Address must be at least 5 characters"
-            },
-            guestcontactperson: {
-                required: true,
-                validate: (value) => value.trim().length >= 2,
-                message: "Contact person name is required"
-            },
+         
+          
           
             reservation_validID: {
                 required: true,

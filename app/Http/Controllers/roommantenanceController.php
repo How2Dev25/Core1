@@ -9,15 +9,27 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\AuditTrails;
+use App\Models\employeenotification;
 
 
 class roommantenanceController extends Controller
 {
+
+public function markasdoneannouncement($roomID)
+{
+    employeenotification::create([
+        'module' => 'Room Management',
+        'message' => "Maintenance for Room {$roomID} is Done And is updated to Available.",
+        'topic' => 'Maintenance',
+        'status' => 'new',
+        'guestname' => null,
+    ]);
+}
    public function store(Request $request){
         $form = $request->validate([
             'roomID' => 'required',
             'maintenancedescription' => 'required',
-            'maintenanceassigned_To' => 'required',
+            'maintenanceassigned_To' => 'nullable',
             'maintenance_priority' => 'required',
         ]);
 
@@ -46,40 +58,46 @@ class roommantenanceController extends Controller
         return redirect()->back();
    }
 
-   public function modify(Request $request, room_maintenance $roommaintenanceID){
-            $form = $request->validate([
-            'maintenancedescription' => 'required',
-            'maintenancestatus' => 'required',
-            'maintenanceassigned_To' => 'required',
-            'maintenance_priority' => 'required',
+   public function modify(Request $request, room_maintenance $roommaintenanceID)
+{
+  
+    $form = $request->validate([
+        'maintenancedescription' => 'required',
+        'maintenancestatus' => 'required',
+        'maintenance_priority' => 'required',
+    ]);
+
+    // Only update assigned staff if the user is Admin
+    if (Auth::user()->role === 'Hotel Admin' && $request->has('maintenanceassigned_To')) {
+        $form['maintenanceassigned_To'] = $request->maintenanceassigned_To;
+    }
+
+    $roomID = $roommaintenanceID->roomID;
+
+    $roommaintenanceID->update($form);
+
+    if ($form['maintenancestatus'] === 'Completed') {
+        Room::where('roomID', $roomID)->update([
+            'roomstatus' => 'Available',
         ]);
+    }
 
-        $roomID = $roommaintenanceID->roomID;
+    AuditTrails::create([
+        'dept_id' => Auth::user()->Dept_id,
+        'dept_name' => Auth::user()->dept_name,
+        'modules_cover' => 'Housekeeping And Maintenance',
+        'action' => 'Modify Maintenance',
+        'activity' => 'Modify Room Maintenance For Room ' . $roomID,
+        'employee_name' => Auth::user()->employee_name,
+        'employee_id' => Auth::user()->employee_id,
+        'role' => Auth::user()->role,
+        'date' => Carbon::now()->toDateTimeString(),
+    ]);
 
-       $roommaintenanceID->update($form);
+    session()->flash('maintenancemodify', 'Maintenance For This Room Has Been Modified');
 
-        if($form['maintenancestatus'] === 'Completed'){
-            Room::where('roomID', $roomID)->update([
-                'roomstatus' => 'Available',
-            ]);
-        }
-
-          AuditTrails::create([
-            'dept_id' => Auth::user()->Dept_id,
-            'dept_name' => Auth::user()->dept_name,
-            'modules_cover' => 'Housekeeping And Maintenance',
-            'action' => 'Modify Maintenance',
-            'activity' => 'Modify Room Maintenance For Room ' . $roomID,
-            'employee_name' => Auth::user()->employee_name,
-            'employee_id' => Auth::user()->employee_id,
-            'role' => Auth::user()->role,
-            'date' => Carbon::now()->toDateTimeString(),
-        ]);
-
-        session()->flash('maintenancemodify', 'Maintenance For This Room Has Been Modified');
-
-        return redirect()->back();
-   }
+    return redirect()->back();
+}
 
    public function delete(room_maintenance $roommaintenanceID){
             $roomID = $roommaintenanceID->roomID;
@@ -123,6 +141,8 @@ class roommantenanceController extends Controller
             'role' => Auth::user()->role,
             'date' => Carbon::now()->toDateTimeString(),
         ]);
+
+        $this->markasdoneannouncement($roommaintenanceID->roomID);
 
           session()->flash('maintenancecomplete', 'Maintenance Has Been Completed');
 

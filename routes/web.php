@@ -1051,11 +1051,20 @@ Route::get('/hmm', function(){
 
      $user = Auth::user();
 
-if ($user->role == 'Hotel Admin') {
 
+
+if ($user->role == 'Hotel Admin') {
     $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
-        ->join('department_accounts', 'department_accounts.Dept_no', '=', 'core1_roommaintenance.maintenanceassigned_To')
-        ->latest('core1_roommaintenance.created_at')
+        ->leftJoin('department_accounts', 'department_accounts.Dept_no', '=', 'core1_roommaintenance.maintenanceassigned_To')
+        ->select(
+            'core1_roommaintenance.*',  // all room maintenance columns
+            'core1_room.roomID',
+            'core1_room.roomtype',
+            'core1_room.roomphoto',
+            'department_accounts.employee_name',
+            'department_accounts.role'
+        )
+        ->orderBy('core1_roommaintenance.created_at', 'desc') // use room_maintenance created_at
         ->get();
 
 } elseif ($user->role == 'Maintenance Staff' || $user->role == 'Room Attendant') {
@@ -1063,9 +1072,18 @@ if ($user->role == 'Hotel Admin') {
     $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
         ->join('department_accounts', 'department_accounts.Dept_no', '=', 'core1_roommaintenance.maintenanceassigned_To')
         ->where('core1_roommaintenance.maintenanceassigned_To', $user->Dept_no)
-        ->latest('core1_roommaintenance.created_at')
+        ->select(
+            'core1_roommaintenance.*',
+            'core1_room.roomID',
+            'core1_room.roomtype',
+            'core1_room.roomphoto',
+            'department_accounts.employee_name',
+            'department_accounts.role'
+        )
+        ->orderBy('core1_roommaintenance.created_at', 'desc')
         ->get();
 }
+
     
        $totalrooms = room::count();
          $maintenancerooms = room::where('roomstatus', 'Maintenance')->count();

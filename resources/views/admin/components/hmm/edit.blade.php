@@ -104,13 +104,41 @@
       </div>
 
       
-           <!-- Assign To -->
-      <div class="form-control mb-4">
+         
+  <!-- Assign To -->
+  <div class="form-control mb-4">
+  
+  
+    @if(Auth::user()->role == "Hotel Admin")
+      <!-- Admin can select staff -->
+      <div class="form-control mb-6">
         <label class="label">
-          <span class="label-text">Assign To</span>
+          <span class="label-text flex items-center gap-1">
+            <i data-lucide="user" class="w-4 h-4"></i>
+            Assign To
+          </span>
         </label>
-        <input readonly type="text" name="maintenanceassigned_To" class="input input-bordered" value="{{ $room->maintenanceassigned_To }}" required>
+        <div class="relative">
+          <i data-lucide="users" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+          <select name="maintenanceassigned_To" class="select select-bordered w-full pl-10" required>
+            <option disabled selected>Select Maintenance Staff</option>
+            @forelse ($maintenancestaffs as $staffs)
+              <option value="{{ $staffs->Dept_no }}" @selected($staffs->Dept_no == $room->maintenanceassigned_To)>
+                {{ $staffs->employee_name }} ({{ $staffs->role }})
+              </option>
+            @empty
+              <option disabled selected>No Staff Available</option>
+            @endforelse
+          </select>
+        </div>
       </div>
+
+    @else
+      <!-- Non-admins see readonly assigned staff -->
+      <input readonly type="text" name="maintenanceassigned_To" class="input input-bordered"
+        value="{{ $room->maintenanceassigned_To }}">
+    @endif
+  </div>
 
 
     

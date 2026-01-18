@@ -235,19 +235,22 @@ public function sendEventReservationEmail($eventData)
         'reservation_checkout' => 'required',
         'reservation_specialrequest' => 'required',
         'reservation_numguest' => 'required',
-        'guestname' => 'required',
-        'guestphonenumber' => 'required',
-        'guestemailaddress' => 'required',
-        'guestbirthday' => 'required',
-        'guestaddress' => 'required',
-        'guestcontactperson' => 'required',
-        'guestcontactpersonnumber' => 'required',
         'subtotal' => 'required',
         'vat' => 'required',
         'serviceFee' => 'required',
         'total' => 'required',
         'reservation_validID' => 'required',
     ]);
+
+    $form['guestname'] = 'POS_Guest_' . rand(1000, 9999);
+
+    // Other fields can also be filled with default/dummy values
+    $form['guestphonenumber'] = '0000000000';
+    $form['guestemailaddress'] = 'pos_guest' . rand(1000,9999) . '@soliera.com';
+    $form['guestbirthday'] = now()->subYears(30)->format('Y-m-d'); // default
+    $form['guestaddress'] = 'POS Address';
+    $form['guestcontactperson'] = 'POS Contact';
+    $form['guestcontactpersonnumber'] = '0000000000';
 
 
     $filename =  time() . '_' .$request->file('reservation_validID')->getClientOriginalName();
