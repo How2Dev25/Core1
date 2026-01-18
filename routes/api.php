@@ -71,3 +71,4 @@ Route::get('/reportEmployee', [ApiController::class, 'reportEmployee']);
 Route::put('/resolvedEmployee/{reportID}', [ApiController::class, 'resolvedEmployee']);
 
 
+Route::get('/guestaccounts', [ApiController::class, 'guestaccounts']);

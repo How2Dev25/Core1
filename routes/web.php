@@ -1049,17 +1049,23 @@ Route::get('/hmm', function(){
       $inventory = Inventory::latest()->get();
 
 
-      if(Auth::user()->role == 'Hotel Admin'){
-         $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
-      ->join('department_accounts', 'department_accounts.Dept_no', '=', 'core1_roommaintenance.maintenanceassigned_To')
-      ->latest('core1_roommaintenance.created_at')->get();
-      }
-      elseif(Auth::user()->role == 'Maintenance Staff'){
-        $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
-      ->join('department_accounts', 'department_accounts.Dept_no', '=', 'core1_roommaintenance.maintenanceassigned_To')
-      ->where('core1_roommaintenance.maintenanceassigned_To', Auth::user()->Dept_no)
-      ->latest('core1_roommaintenance.created_at')->get();
-      }
+     $user = Auth::user();
+
+if ($user->role == 'Hotel Admin') {
+
+    $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
+        ->join('department_accounts', 'department_accounts.Dept_no', '=', 'core1_roommaintenance.maintenanceassigned_To')
+        ->latest('core1_roommaintenance.created_at')
+        ->get();
+
+} elseif ($user->role == 'Maintenance Staff' || $user->role == 'Room Attendant') {
+
+    $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
+        ->join('department_accounts', 'department_accounts.Dept_no', '=', 'core1_roommaintenance.maintenanceassigned_To')
+        ->where('core1_roommaintenance.maintenanceassigned_To', $user->Dept_no)
+        ->latest('core1_roommaintenance.created_at')
+        ->get();
+}
     
        $totalrooms = room::count();
          $maintenancerooms = room::where('roomstatus', 'Maintenance')->count();

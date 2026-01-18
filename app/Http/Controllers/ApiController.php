@@ -26,8 +26,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception as MailException;
 use Illuminate\Support\Facades\Log;
 use App\Models\ecmtype;
+use App\Models\Guest;
 use Illuminate\Support\Facades\Http;
-
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class ApiController extends Controller
 {
@@ -1241,6 +1242,34 @@ public function voidedKOT(Request $request, $order_id){
         }
     }
 
+
+    public function guestaccounts(Request $request){
+           $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        try{
+            $guestaccount = Guest::all();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Accounts Fetched',
+                'data' => $guestaccount,
+            ], 200);
+        }
+        catch(\Exception $e){
+             return response()->json([
+                'success' => false,
+                'message' => 'Failed To Fetch Accounts',
+                'data' => $e->getMessage(),
+            ], 400);
+        }
+    }
 
  
 }

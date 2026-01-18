@@ -196,106 +196,106 @@
 
     <!-- Action Drawers for each reservation -->
 @foreach($reservations as $reservation)
-<div id="actions-drawer-{{$reservation->eventbookingID}}"
-    class="fixed top-0 right-0 h-full w-72 bg-white shadow-xl transform translate-x-full transition-transform duration-300 ease-in-out z-50 border-l border-gray-200">
+    <div id="actions-drawer-{{$reservation->eventbookingID}}"
+        class="fixed top-0 right-0 h-full w-72 bg-white shadow-xl transform translate-x-full transition-transform duration-300 ease-in-out z-50 border-l border-gray-200">
 
-    {{-- Header --}}
-    <div class="p-4 border-b border-gray-200 relative bg-blue-900 text-white">
-        <h4 class="font-bold text-lg">
-            Actions for Event #{{$reservation->event_bookingreceiptID}}
-        </h4>
-        <button
-            onclick="document.getElementById('actions-drawer-{{$reservation->eventbookingID}}').classList.add('translate-x-full')"
-            class="absolute top-3 right-3 btn btn-xs btn-circle btn-ghost hover:bg-white/20">
-            ✕
-        </button>
+        {{-- Header --}}
+        <div class="p-4 border-b border-gray-200 relative bg-blue-900 text-white">
+            <h4 class="font-bold text-lg">
+                Actions for Event #{{$reservation->event_bookingreceiptID}}
+            </h4>
+            <button
+                onclick="document.getElementById('actions-drawer-{{$reservation->eventbookingID}}').classList.add('translate-x-full')"
+                class="absolute top-3 right-3 btn btn-xs btn-circle btn-ghost hover:bg-white/20">
+                ✕
+            </button>
+        </div>
+
+        {{-- Body --}}
+        <div class="p-4 space-y-3">
+
+            {{-- PENDING --}}
+            @if($reservation->eventstatus === 'Pending')
+                <div class="flex flex-col items-center justify-center text-center p-6 border border-dashed rounded-lg bg-gray-50">
+                    <i class="fa-solid fa-clock text-3xl text-gray-400 mb-3"></i>
+                    <p class="text-sm font-medium text-gray-600">
+                        Waiting for Administrative Action
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Your event is currently under review.
+                    </p>
+                </div>
+
+            {{-- APPROVED --}}
+            @elseif($reservation->eventstatus === 'Approved')
+                {{-- Show buttons --}}
+                <button onclick="confirm_event_{{$reservation->eventbookingID}}.showModal()"
+                    class="btn btn-sm btn-block bg-blue-900 text-white gap-2 shadow-md">
+                    <i class="fa-solid fa-check text-yellow-400"></i>
+                    Confirm Event
+                </button>
+
+                <button onclick="cancel_event_{{$reservation->eventbookingID}}.showModal()"
+                    class="btn btn-sm btn-block bg-red-600 text-white gap-2 shadow-md">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                    Cancel Event
+                </button>
+
+            {{-- CONFIRMED --}}
+            @elseif($reservation->eventstatus === 'Confirmed')
+                    <button onclick="complete_event_{{$reservation->eventbookingID}}.showModal()"
+                        class="btn btn-sm btn-block bg-green-700 text-black gap-2 shadow-md">
+                        <i class="fa-solid fa-circle-check text-yellow-400"></i>
+                        Mark as Done
+                    </button>
+
+                    <button onclick="cancel_event_{{$reservation->eventbookingID}}.showModal()"
+                        class="btn btn-sm btn-block bg-red-600 text-white gap-2 shadow-md">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                        Cancel Event
+                    </button>
+
+                {{-- REJECTED --}}
+            @elseif($reservation->eventstatus === 'Rejected')
+                <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
+                     This event was rejected by administration.
+                </div>
+
+                <button onclick="delete_event_{{$reservation->eventbookingID}}.showModal()"
+                    class="btn btn-sm btn-block bg-gray-700 text-white gap-2 shadow-md">
+                    <i class="fa-solid fa-trash"></i>
+                    Delete Event
+                </button>
+
+            {{-- DONE --}}
+            @elseif($reservation->eventstatus === 'Done')
+                <div class="flex flex-col items-center justify-center text-center p-6 bg-green-50 border border-green-200 rounded-lg">
+                    <i class="fa-solid fa-circle-check text-3xl text-green-600 mb-2"></i>
+                    <p class="font-semibold text-green-700">
+                        Event Completed
+                    </p>
+                    <p class="text-xs text-green-600 mt-1">
+                        This event has been successfully completed.
+                    </p>
+                </div>
+
+
+
+            {{-- ANY OTHER STATUS --}}
+            @else
+                <div class="flex flex-col items-center justify-center text-center p-6 border border-dashed rounded-lg bg-gray-50">
+                    <i class="fa-solid fa-clock text-3xl text-gray-400 mb-3"></i>
+                    <p class="text-sm font-medium text-gray-600">
+                        Waiting for Administrative Action
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">
+                        This event is currently under review.
+                    </p>
+                </div>
+            @endif
+
+        </div>
     </div>
-
-    {{-- Body --}}
-    <div class="p-4 space-y-3">
-
-        {{-- PENDING --}}
-        @if($reservation->eventstatus === 'Pending')
-            <div class="flex flex-col items-center justify-center text-center p-6 border border-dashed rounded-lg bg-gray-50">
-                <i class="fa-solid fa-clock text-3xl text-gray-400 mb-3"></i>
-                <p class="text-sm font-medium text-gray-600">
-                    Waiting for Administrative Action
-                </p>
-                <p class="text-xs text-gray-500 mt-1">
-                    Your event is currently under review.
-                </p>
-            </div>
-
-        {{-- APPROVED --}}
-        @elseif($reservation->eventstatus === 'Approved')
-            {{-- Show buttons --}}
-            <button onclick="confirm_event_{{$reservation->eventbookingID}}.showModal()"
-                class="btn btn-sm btn-block bg-blue-900 text-white gap-2 shadow-md">
-                <i class="fa-solid fa-check text-yellow-400"></i>
-                Confirm Event
-            </button>
-
-            <button onclick="cancel_event_{{$reservation->eventbookingID}}.showModal()"
-                class="btn btn-sm btn-block bg-red-600 text-white gap-2 shadow-md">
-                <i class="fa-solid fa-circle-xmark"></i>
-                Cancel Event
-            </button>
-
-        {{-- CONFIRMED --}}
-        @elseif($reservation->eventstatus === 'Confirmed')
-            <button onclick="complete_event_{{$reservation->eventbookingID}}.showModal()"
-                class="btn btn-sm btn-block bg-green-700 text-white gap-2 shadow-md">
-                <i class="fa-solid fa-circle-check text-yellow-400"></i>
-                Mark as Done
-            </button>
-
-            <button onclick="cancel_event_{{$reservation->eventbookingID}}.showModal()"
-                class="btn btn-sm btn-block bg-red-600 text-white gap-2 shadow-md">
-                <i class="fa-solid fa-circle-xmark"></i>
-                Cancel Event
-            </button>
-
-        {{-- REJECTED --}}
-        @elseif($reservation->eventstatus === 'Rejected')
-            <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
-                 This event was rejected by administration.
-            </div>
-
-            <button onclick="delete_event_{{$reservation->eventbookingID}}.showModal()"
-                class="btn btn-sm btn-block bg-gray-700 text-white gap-2 shadow-md">
-                <i class="fa-solid fa-trash"></i>
-                Delete Event
-            </button>
-
-        {{-- DONE --}}
-        @elseif($reservation->eventstatus === 'Done')
-            <div class="flex flex-col items-center justify-center text-center p-6 bg-green-50 border border-green-200 rounded-lg">
-                <i class="fa-solid fa-circle-check text-3xl text-green-600 mb-2"></i>
-                <p class="font-semibold text-green-700">
-                    Event Completed
-                </p>
-                <p class="text-xs text-green-600 mt-1">
-                    This event has been successfully completed.
-                </p>
-            </div>
-
-            
-
-        {{-- ANY OTHER STATUS --}}
-        @else
-            <div class="flex flex-col items-center justify-center text-center p-6 border border-dashed rounded-lg bg-gray-50">
-                <i class="fa-solid fa-clock text-3xl text-gray-400 mb-3"></i>
-                <p class="text-sm font-medium text-gray-600">
-                    Waiting for Administrative Action
-                </p>
-                <p class="text-xs text-gray-500 mt-1">
-                    This event is currently under review.
-                </p>
-            </div>
-        @endif
-
-    </div>
-</div>
 @endforeach
 
     <!-- Details Modals (existing code remains the same) -->

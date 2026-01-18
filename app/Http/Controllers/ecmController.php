@@ -14,6 +14,7 @@ use PHPMailer\PHPMailer\Exception;
 use Illuminate\Support\Facades\Log;
 use App\Models\guestnotification;
 use App\Models\employeenotification;
+use App\Models\facility;
 use App\Models\hotelBilling;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Stripe\Stripe;
@@ -1183,6 +1184,18 @@ public function billingHistory ($bookingID, $guestID, $guestname, $amount_paid, 
        $eventbookingID->update([
             'eventstatus' => 'Done',
         ]);
+
+         ecmtype::where('eventtype_ID', $eventbookingID->eventtype_ID)
+    ->update([
+        'eventtype_status' => 'Active'
+    ]);
+
+    $geteventypefacilityID = ecmtype::where('eventtype_ID', $eventbookingID->eventtype_ID)
+    ->value('facilityID');
+
+    facility::where('facilityID', $geteventypefacilityID)->update([
+        'facility_status' => 'Available'
+    ]);
 
  
 
