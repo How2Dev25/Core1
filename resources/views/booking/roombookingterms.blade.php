@@ -15,6 +15,13 @@
             <ul class="mt-3 space-y-2 pl-5 list-none">
                 <li>→ Guests must confirm their reservation on or before <strong>6:00 PM</strong> on the day of arrival.
                 </li>
+
+                    <li>→ <strong> –> Reservation Holding Policy:</strong> Pay-at-Hotel bookings are held for
+                        only
+                        <strong>24 hours</strong> from the time of reservation. Unconfirmed reservations will be
+                        automatically
+                        cancelled and the room will be released for other guests.
+                    </li>
                 <li>→ <strong>No-show policy:</strong> Failure to arrive without prior notice will result in a charge
                     equivalent to the first night’s stay.</li>
                 <li>→ <strong>Minors policy:</strong> Minors are not allowed to check in without a parent or legal

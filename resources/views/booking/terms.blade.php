@@ -26,7 +26,7 @@
                     <li>→ Guests must confirm their reservation on or before <strong>6:00 PM</strong> on the day of
                         arrival.</li>
 
-                    <li>→ <strong>Reservation Holding Policy:</strong> Pay-at-Hotel bookings are held for
+                    <li>→ <strong> –> Reservation Holding Policy:</strong> Pay-at-Hotel bookings are held for
                         only
                         <strong>24 hours</strong> from the time of reservation. Unconfirmed reservations will be
                         automatically
