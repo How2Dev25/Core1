@@ -12,25 +12,44 @@
                 General Policy
             </h4>
 
-            <ul class="mt-3 space-y-2 pl-5 list-none">
-                <li>→ Guests must confirm their reservation on or before <strong>6:00 PM</strong> on the day of arrival.
-                </li>
-
-                    <li>→ <strong> –> Reservation Holding Policy:</strong> Pay-at-Hotel bookings are held for
-                        only
-                        <strong>24 hours</strong> from the time of reservation. Unconfirmed reservations will be
-                        automatically
-                        cancelled and the room will be released for other guests.
-                    </li>
-                <li>→ <strong>No-show policy:</strong> Failure to arrive without prior notice will result in a charge
-                    equivalent to the first night’s stay.</li>
-                <li>→ <strong>Minors policy:</strong> Minors are not allowed to check in without a parent or legal
-                    guardian. This must be clearly stated and acknowledged upon booking.</li>
-                <li>→ <strong>Pet-friendly policy:</strong> Pets are allowed only in designated rooms and must be
-                    declared during reservation. Additional rules and charges may apply.</li>
-                <li>→ <strong>Security deposit:</strong> A refundable security deposit of <strong>₱1,000</strong> is
-                    required upon check-in and will be returned upon check-out, subject to room inspection.</li>
-            </ul>
+        <ul class="mt-3 space-y-2 pl-5 list-none">
+            <li>→ Guests must confirm their reservation on or before <strong>6:00 PM</strong> on the day of arrival.</li>
+        
+            <li>→ <strong>Reservation Holding Policy:</strong> Pay-at-Hotel bookings are held for a maximum of <strong>24
+                    hours</strong> from the time of reservation. Unconfirmed reservations will be automatically cancelled, and
+                the room will be released to other guests.</li>
+        
+            <li>→ <strong>No-show Policy:</strong> Failure to arrive without prior notice will result in a charge equivalent to
+                the first night’s stay.</li>
+        
+            <li>→ <strong>Minors Policy:</strong> Minors are not allowed to check in without a parent or legal guardian. This
+                must be clearly stated and acknowledged upon booking.</li>
+        
+            <li>→ <strong>Pet-Friendly Policy:</strong> Pets are allowed only in designated rooms and must be declared during
+                reservation. Additional rules and charges may apply.</li>
+        
+            <li>→ <strong>Security Deposit:</strong> A refundable security deposit of <strong>₱1,000</strong> is required upon
+                check-in. The deposit will be returned upon check-out, subject to room inspection for any damages or missing
+                items.</li>
+        
+            <li>→ <strong>Standard Check-in & Check-out:</strong>
+                Check-in time is from <strong>2:00 PM</strong>, and check-out time is until <strong>12:00 PM</strong>.
+                Early check-in before 2:00 PM or late check-out after 12:00 PM is subject to availability and may incur an
+                additional charge at the hotel's standard hourly rate per hour.
+                Guests are advised to coordinate with the front desk in advance for any requests regarding early arrival or late
+                departure.
+                The standard hotel day is calculated based on a 24-hour period starting from the check-in time.
+            </li>
+        
+            <li>→ <strong>Payment Policy:</strong>
+                For <strong>Pay-at-Hotel</strong> reservations, a minimum <strong>50% deposit</strong> is required to confirm
+                your booking. Guests may choose to pay the full amount at the time of confirmation if they prefer.
+                For <strong>Online Payment</strong> reservations, <strong>100% payment</strong> is required at the time of
+                booking.
+                Partial payments for online bookings are not allowed.
+                All payments are non-refundable once the booking is confirmed, except as stated in our cancellation policy.
+            </li>
+        </ul>
         </li>
 
         <li>

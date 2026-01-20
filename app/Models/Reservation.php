@@ -43,5 +43,7 @@ class Reservation extends Model
             'loyalty_points_used',
             'loyalty_discount',
             'reservation_validID',
+            'deposit_amount',
+            'balance_remaining',
         ];
 }

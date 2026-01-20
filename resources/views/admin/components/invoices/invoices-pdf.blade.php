@@ -145,7 +145,7 @@
             <p><strong>Invoice Date:</strong> {{ date('Y-m-d') }}</p>
             <p><strong>Receipt:</strong> {{ $booking->reservation_receipt }}</p>
             <p><strong>Booking ID:</strong> {{ $booking->bookingID }}</p>
-            <p><strong>Status:</strong> {{$paymentstatus}}</p>
+            <p><strong>Payment Status:</strong> {{$paymentstatus}}</p>
         </div>
 
         <!-- Guest Info -->
@@ -196,39 +196,62 @@ $grandTotal = $roomTotal + $orderTotal;
                         <th class="text-right">Price</th>
                     </tr>
                 </thead>
-                <tbody>
+            <tbody>
+                <tr>
+                    <td>{{ $booking->roomID }} - {{ $booking->roomtype }}</td>
+                    <td>{{ $checkIn->format('M d, Y') }}</td>
+                    <td>{{ $checkOut->format('M d, Y') }}</td>
+                    <td>{{ $totalNights }}</td>
+                    <td class="text-right">{{ number_format($booking->roomprice, 2) }}</td>
+                </tr>
+            
+                <tr>
+                    <td colspan="4" class="text-right">Booked Date</td>
+                    <td class="text-right">{{ date('Y-m-d') }}</td>
+                </tr>
+            
+                <tr>
+                    <td colspan="4" class="text-right">Subtotal</td>
+                    <td class="text-right">{{ number_format($subtotal, 2) }}</td>
+                </tr>
+            
+                <tr>
+                    <td colspan="4" class="text-right">Tax ({{$taxRatedynamic}})</td>
+                    <td class="text-right">{{ number_format($taxAmount, 2) }}</td>
+                </tr>
+            
+                <tr>
+                    <td colspan="4" class="text-right">Service Fee ({{$serviceFeedynamic}})</td>
+                    <td class="text-right">{{ number_format($serviceFee, 2) }}</td>
+                </tr>
+            
+                <tr>
+                    <td colspan="4" class="text-right">Loyalty Discount</td>
+                    <td class="text-right">{{ number_format($booking->loyalty_discount, 2) }}</td>
+                </tr>
+            
+                <tr class="total">
+                    <td colspan="4" class="text-right">Room Total</td>
+                    <td class="text-right">{{ number_format($roomTotal, 2) }}</td>
+                </tr>
+            
+                {{-- PAYMENT BREAKDOWN --}}
+                @if(strtolower($booking->payment_status) == 'partial')
                     <tr>
-                        <td>{{ $booking->roomID }} - {{ $booking->roomtype }}</td>
-                        <td>{{ $checkIn->format('M d, Y') }}</td>
-                        <td>{{ $checkOut->format('M d, Y') }}</td>
-                        <td>{{ $totalNights }}</td>
-                        <td class="text-right">{{ number_format($booking->roomprice, 2) }}</td>
+                        <td colspan="4" class="text-right text-green-600 font-semibold">Deposit Paid</td>
+                        <td class="text-right text-green-600 font-semibold">
+                            {{ number_format($booking->deposit_amount, 2) }}
+                        </td>
                     </tr>
+
                     <tr>
-                        <td colspan="4" class="text-right">Booked Date</td>
-                        <td class="text-right">{{ date('Y-m-d') }}</td>
+                        <td colspan="4" class="text-right text-red-600 font-semibold">Balance Remaining</td>
+                        <td class="text-right text-red-600 font-semibold">
+                            {{ number_format($booking->balance_remaining, 2) }}
+                        </td>
                     </tr>
-                    <tr>
-                        <td colspan="4" class="text-right">Subtotal</td>
-                        <td class="text-right">{{ number_format($subtotal, 2) }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" class="text-right">Tax ({{$taxRatedynamic}})</td>
-                        <td class="text-right">{{ number_format($taxAmount, 2) }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" class="text-right">Service Fee ({{$serviceFeedynamic}})</td>
-                        <td class="text-right">{{ number_format($serviceFee, 2) }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" class="text-right">Loyalty Discount </td>
-                        <td class="text-right">{{$booking->loyalty_discount}}</td>
-                    </tr>
-                    <tr class="total">
-                        <td colspan="4" class="text-right">Room Total</td>
-                        <td class="text-right">{{ number_format($roomTotal, 2) }}</td>
-                    </tr>
-                </tbody>
+                @endif
+            </tbody>
             </table>
         </div>
 

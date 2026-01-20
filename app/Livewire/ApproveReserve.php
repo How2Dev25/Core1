@@ -16,12 +16,14 @@ class ApproveReserve extends Component
     public $typeFilter = '';
     public $searchTerm = '';
 
+    public $paymentFilter = '';
+
     // Reset pagination whenever filters/search change
     public function updated($propertyName)
     {
-        if (in_array($propertyName, ['statusFilter', 'typeFilter', 'searchTerm'])) {
-            $this->resetPage();
-        }
+      if (in_array($propertyName, ['statusFilter', 'typeFilter', 'searchTerm', 'paymentFilter'])) {
+    $this->resetPage();
+}
     }
 
     public function render()
@@ -40,6 +42,10 @@ class ApproveReserve extends Component
                       ->orWhere('core1_reservation.guestname', 'like', '%'.$this->searchTerm.'%');
                 })
             )
+            ->when($this->paymentFilter, fn($query) =>
+                 $query->where('payment_status', $this->paymentFilter)
+                )
+
             ->select('core1_reservation.*', 'core1_room.roomtype', 'core1_room.roomID', 'core1_room.roomprice', 'core1_room.roomphoto')
             ->latest('core1_reservation.created_at')
             ->paginate(5);
