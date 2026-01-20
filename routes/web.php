@@ -1056,6 +1056,7 @@ Route::get('/hmm', function(){
 if ($user->role == 'Hotel Admin') {
     $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
         ->leftJoin('department_accounts', 'department_accounts.Dept_no', '=', 'core1_roommaintenance.maintenanceassigned_To')
+        ->where('core1_roommaintenance.maintenancestatus', 'Pending')
         ->select(
             'core1_roommaintenance.*',  // all room maintenance columns
             'core1_room.roomID',
@@ -1072,6 +1073,7 @@ if ($user->role == 'Hotel Admin') {
     $rooms = room_maintenance::join('core1_room', 'core1_room.roomID', '=', 'core1_roommaintenance.roomID')
         ->join('department_accounts', 'department_accounts.Dept_no', '=', 'core1_roommaintenance.maintenanceassigned_To')
         ->where('core1_roommaintenance.maintenanceassigned_To', $user->Dept_no)
+        ->where('core1_roommaintenance.maintenancestatus', 'Pending')
         ->select(
             'core1_roommaintenance.*',
             'core1_room.roomID',

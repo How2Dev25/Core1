@@ -2166,79 +2166,50 @@ return redirect('/myreservation');
 }
 
 
-
-public function paymentSuccessLanding(Request $request)
+public function sendBookingConfirmationEmail($data)
 {
-    Stripe::setApiKey(env('STRIPE_SECRET'));
-    $form = session('reservation_form');
-
-    // Only insert after successful payment
-    $form['payment_status'] = 'Paid';
-    $form['reservation_bookingstatus'] = 'Pending';
-    $reservation = Reservation::create($form);
-
-   // Generate receipt number and booking ID
-    $receiptNo = 'SOL-' . date('Ymd') . '-' . str_pad($reservation->reservationID, 6, '0', STR_PAD_LEFT);
-    $bookingID = 'BKG-' . date('ymd') . '-' . str_pad($reservation->reservationID, 4, '0', STR_PAD_LEFT);
-
-    $reservation->update([
-        'reservation_receipt' => $receiptNo,
-        'bookingID' => $bookingID,
-    ]);
-
-    // Update room status
-    Room::where('roomID', $form['roomID'])->update([
-        'roomstatus' => 'Reserved',
-    ]);
-
-    // Get room price
-    $roomprice = Room::where('roomID', $form['roomID'])->value('roomprice');
-
-
-     // Calculate nights
- $nights = (strtotime($form['reservation_checkout']) - strtotime($form['reservation_checkin'])) / (60*60*24);
-
-// Calculate amounts for the entire stay
-$subtotal = $reservation->subtotal;
-$serviceFee = $reservation->serviceFee;
-$vat = $reservation->vat;
-$total = $reservation->total;
-
-// Format numbers for email
-$subtotalFormatted = number_format($subtotal, 2);
-$serviceFeeFormatted = number_format($serviceFee, 2);
-$vatFormatted = number_format($vat, 2);
-$totalFormatted = number_format($total, 2);
-
-  $bookedDate = date('F d, Y');
-
-    // Convert check-in and check-out to human-readable format
-    $checkin = date('F j, Y', strtotime($form['reservation_checkin']));
-    $checkout = date('F j, Y', strtotime($form['reservation_checkout']));
-
-            $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
-            $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
-
-            $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
-            $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
-            
-    // PHPMailer Integration
     $mail = new PHPMailer(true);
 
     try {
+        // Setup SMTP
         $mail->isSMTP();
         $mail->Host       = env('MAIL_HOST');
         $mail->SMTPAuth   = true;
         $mail->Username   = env('MAIL_USERNAME');
         $mail->Password   = env('MAIL_PASSWORD');
-        $mail->SMTPSecure = env('MAIL_ENCRYPTION'); // tls or ssl
+        $mail->SMTPSecure = env('MAIL_ENCRYPTION');
         $mail->Port       = env('MAIL_PORT');
-
         $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
-        $mail->addAddress($form['guestemailaddress'], $form['guestname']);
-         $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo'); // Make sure file exists
+
+        // Get dynamic billing rates
+        $servicefee2 = dynamicBilling::where('dynamic_name', 'Service Fee')->value('dynamic_price');
+        $taxrate2 = dynamicBilling::where('dynamic_name', 'Tax Rate')->value('dynamic_price');
+        $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
+        $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
+
+        // Format amounts
+        $subtotalFormatted = number_format($data['subtotal'], 2);
+        $serviceFeeFormatted = number_format($data['serviceFee'], 2);
+        $vatFormatted = number_format($data['vat'], 2);
+        $totalFormatted = number_format($data['total'], 2);
+
+        // Format dates
+        $checkin = date('F j, Y', strtotime($data['checkin']));
+        $checkout = date('F j, Y', strtotime($data['checkout']));
+        $bookedDate = isset($data['bookedDate']) ? date('F d, Y', strtotime($data['bookedDate'])) : date('F d, Y');
+
+        // Calculate nights
+        $nights = (strtotime($data['checkout']) - strtotime($data['checkin'])) / (60*60*24);
+
+        // Set email details
+        $mail->addAddress($data['email'], $data['guestname']);
+        $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo');
         $mail->isHTML(true);
-        $mail->Subject = "Booking Details - $bookingID";
+        $mail->Subject = "Booking Confirmed - {$data['bookingID']}";
+
+        // Determine deposit and balance display
+        $depositPaid = isset($data['deposit_amount']) ? number_format($data['deposit_amount'], 2) : number_format($data['total'], 2);
+        $balanceRemaining = isset($data['balance_remaining']) ? number_format($data['balance_remaining'], 2) : '0.00';
 
         // Email HTML body
         $mailBody = <<<HTML
@@ -2247,7 +2218,7 @@ $totalFormatted = number_format($total, 2);
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Booking Details - Soliera Hotel</title>
+<title>Booking Confirmed - Soliera Hotel</title>
 </head>
 <body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
 <div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
@@ -2261,33 +2232,27 @@ $totalFormatted = number_format($total, 2);
 
 <!-- Booking Status -->
 <div style="padding:20px; text-align:center; background-color:#f8f9fa;">
-    <div style="display:inline-block; background-color:#F7B32B; color:#001f54; padding:8px 20px; border-radius:20px; font-weight:bold; font-size:14px; margin-bottom:10px;">
-        📋 BOOKING STATUS: PENDING
+    <div style="display:inline-block; background-color:#28a745; color:#ffffff; padding:8px 20px; border-radius:20px; font-weight:bold; font-size:14px; margin-bottom:10px;">
+        ✓ BOOKING STATUS: CONFIRMED
     </div>
 </div>
 
 <!-- Main Content -->
 <div style="padding:30px 20px;">
-    <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Your Booking Details</h2>
+    <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Your Reservation is Confirmed!</h2>
     
     <!-- Booking Details -->
     <div style="background-color:#f8f9fa; border-radius:8px; padding:20px; margin-bottom:20px; border-left:4px solid #F7B32B;">
         <h3 style="color:#001f54; margin:0 0 15px 0; font-size:18px;">Booking Information</h3>
         <table style="width:100%; border-collapse:collapse;">
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Booking ID:</td><td style="padding:8px 0; color:#001f54; font-weight:bold;">$bookingID</td></tr>
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Room:</td><td style="padding:8px 0; color:#001f54;">{$form['roomID']}</td></tr>
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Guest Name:</td><td style="padding:8px 0; color:#001f54;">{$form['guestname']}</td></tr>
+            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Booking ID:</td><td style="padding:8px 0; color:#001f54; font-weight:bold;">{$data['bookingID']}</td></tr>
+            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Room:</td><td style="padding:8px 0; color:#001f54;">{$data['roomID']}</td></tr>
+            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Guest Name:</td><td style="padding:8px 0; color:#001f54;">{$data['guestname']}</td></tr>
             <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Check-in:</td><td style="padding:8px 0; color:#001f54;">$checkin</td></tr>
             <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Check-out:</td><td style="padding:8px 0; color:#001f54;">$checkout</td></tr>
             <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Nights:</td><td style="padding:8px 0; color:#001f54;">$nights</td></tr>
-             <tr>
-                <td style="padding:8px 0;color:#666;font-weight:bold;">Booked Date:</td>
-                <td style="padding:8px 0;color:#001f54;">$bookedDate</td>
-            </tr>
-              <tr>
-                <td style="padding:8px 0;color:#666;font-weight:bold;">Payment Method:</td>
-                <td style="padding:8px 0;color:#001f54;">{$form['payment_method']}</td>
-            </tr>
+            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Booked Date:</td><td style="padding:8px 0; color:#001f54;">$bookedDate</td></tr>
+            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Payment Method:</td><td style="padding:8px 0; color:#001f54;">{$data['payment_method']}</td></tr>
         </table>
     </div>
 
@@ -2302,13 +2267,21 @@ $totalFormatted = number_format($total, 2);
                 <td style="padding:12px 0 8px 0; color:#001f54; font-weight:bold; font-size:18px;">Total Amount:</td>
                 <td style="padding:12px 0 8px 0; color:#001f54; font-weight:bold; font-size:18px; text-align:right;">₱$totalFormatted</td>
             </tr>
+            <tr>
+                <td style="padding:8px 0; color:#28a745; font-weight:bold;">Deposit Paid:</td>
+                <td style="padding:8px 0; color:#28a745; text-align:right;">₱$depositPaid</td>
+            </tr>
+            <tr>
+                <td style="padding:8px 0; color:#dc3545; font-weight:bold;">Remaining Balance:</td>
+                <td style="padding:8px 0; color:#dc3545; text-align:right;">₱$balanceRemaining</td>
+            </tr>
         </table>
     </div>
 
     <!-- Thank You -->
     <div style="text-align:center; padding:20px; background-color:#001f54; border-radius:8px; margin-bottom:20px;">
         <h3 style="color:#F7B32B; margin:0 0 10px 0; font-size:20px;">Thank You for Your Booking!</h3>
-        <p style="color:#ffffff; margin:0; line-height:1.6;">We are delighted to welcome you to Soliera Hotel. Your booking is currently being processed and you will receive a confirmation once approved.</p>
+        <p style="color:#ffffff; margin:0; line-height:1.6;">We are delighted to confirm your reservation at Soliera Hotel. We look forward to welcoming you!</p>
     </div>
 </div>
 
@@ -2323,32 +2296,81 @@ HTML;
 
         $mail->Body = $mailBody;
         $mail->send();
+        
+        return true;
 
     } catch (Exception $e) {
         Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
+        return false;
     }
+}
 
-        $guestname = $form['guestname'];
-        $roomID = $form['roomID'];
 
-       $guestID = $reservationID->guestID ?? null;
 
-         $amount_paid = 
-         Reservation::where('reservationID', $reservation->reservationID)
-         ->value('total');
+public function paymentSuccessLanding(Request $request)
+{
+    Stripe::setApiKey(env('STRIPE_SECRET'));
+    $form = session('reservation_form');
+    
+    // Get payment session to retrieve card details
+    $sessionId = $request->get('session_id');
+    $session = \Stripe\Checkout\Session::retrieve($sessionId);
+    $paymentIntent = \Stripe\PaymentIntent::retrieve($session->payment_intent);
+    
+    // Get card brand (Visa, Mastercard, etc.)
+    $cardBrand = $paymentIntent->charges->data[0]->payment_method_details->card->brand ?? 'Unknown';
+    $cardBrand = ucfirst($cardBrand); // Capitalize first letter
 
-        $payment_method = Reservation::where('reservationID', $reservation->reservationID)
-        ->value('payment_method');
+    // Set to Confirmed instead of Pending
+    $form['payment_status'] = 'Paid';
+    $form['reservation_bookingstatus'] = 'Confirmed';
+    
+    
+    $reservation = Reservation::create($form);
 
-         $this->billingHistory($bookingID, $guestID, $guestname, $amount_paid, $payment_method);
+    // Generate receipt number and booking ID
+    $receiptNo = 'SOL-' . date('Ymd') . '-' . str_pad($reservation->reservationID, 6, '0', STR_PAD_LEFT);
+    $bookingID = 'BKG-' . date('ymd') . '-' . str_pad($reservation->reservationID, 4, '0', STR_PAD_LEFT);
 
-        $this->employeenotif($guestname, $roomID);
-       
+    $reservation->update([
+        'reservation_receipt' => $receiptNo,
+        'bookingID' => $bookingID,
+    ]);
 
-     session()->forget('reservation_form'); 
+    // Update room status
+    Room::where('roomID', $form['roomID'])->update([
+        'roomstatus' => 'Reserved',
+    ]);
+
+    // Send confirmation email
+    $this->sendBookingConfirmationEmail([
+        'bookingID' => $bookingID,
+        'roomID' => $form['roomID'],
+        'guestname' => $form['guestname'],
+        'email' => $form['guestemailaddress'],
+        'checkin' => $form['reservation_checkin'],
+        'checkout' => $form['reservation_checkout'],
+        'payment_method' => $form['payment_method'],
+        'subtotal' => $reservation->subtotal,
+        'serviceFee' => $reservation->serviceFee,
+        'vat' => $reservation->vat,
+        'total' => $reservation->total,
+        'deposit_amount' => $reservation->total,
+        'balance_remaining' => 0,
+        'bookedDate' => $reservation->created_at,
+    ]);
+
+    $guestID = $reservation->guestID ?? null;
+    $amount_paid = $reservation->total;
+    $payment_method = $reservation->payment_method;
+
+    $this->billingHistory($bookingID, $guestID, $form['guestname'], $amount_paid, $payment_method);
+
+    session()->forget('reservation_form'); 
     return redirect()->route('booking.success', $reservation->reservationID)
         ->with('success', 'Payment successful! Your booking has been confirmed.');
 }
+
 
 public function paymentCancel()
 {   
@@ -2363,7 +2385,7 @@ public function paymentSuccess(Request $request){
 
     // Only insert after successful payment
     $form['payment_status'] = 'Paid';
-    $form['reservation_bookingstatus'] = 'Pending';
+    $form['reservation_bookingstatus'] = 'Confirmed';
     $reservation = Reservation::create($form);
 
    // Generate receipt number and booking ID
@@ -2412,110 +2434,6 @@ $totalFormatted = number_format($total, 2);
             $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
             
     // PHPMailer Integration
-    $mail = new PHPMailer(true);
-
-    try {
-        $mail->isSMTP();
-        $mail->Host       = env('MAIL_HOST');
-        $mail->SMTPAuth   = true;
-        $mail->Username   = env('MAIL_USERNAME');
-        $mail->Password   = env('MAIL_PASSWORD');
-        $mail->SMTPSecure = env('MAIL_ENCRYPTION'); // tls or ssl
-        $mail->Port       = env('MAIL_PORT');
-
-        $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
-        $mail->addAddress($form['guestemailaddress'], $form['guestname']);
-         $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo'); // Make sure file exists
-        $mail->isHTML(true);
-        $mail->Subject = "Booking Details - $bookingID";
-
-        // Email HTML body
-        $mailBody = <<<HTML
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Booking Details - Soliera Hotel</title>
-</head>
-<body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
-<div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
-
-<!-- Header -->
-<div style="background-color:#001f54; padding:30px 20px; text-align:center;">
-    <img src="cid:hotelLogo" alt="Soliera Hotel Logo" style="width:80px; height:80px; border-radius:50%; margin-bottom:15px;">
-    <h1 style="color:#F7B32B; margin:0; font-size:28px; font-weight:bold;">SOLIERA HOTEL</h1>
-    <p style="color:#ffffff; margin:10px 0 0 0; font-size:16px;">Savor The Stay, Dine With Elegance</p>
-</div>
-
-<!-- Booking Status -->
-<div style="padding:20px; text-align:center; background-color:#f8f9fa;">
-    <div style="display:inline-block; background-color:#F7B32B; color:#001f54; padding:8px 20px; border-radius:20px; font-weight:bold; font-size:14px; margin-bottom:10px;">
-        📋 BOOKING STATUS: PENDING
-    </div>
-</div>
-
-<!-- Main Content -->
-<div style="padding:30px 20px;">
-    <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Your Booking Details</h2>
-    
-    <!-- Booking Details -->
-    <div style="background-color:#f8f9fa; border-radius:8px; padding:20px; margin-bottom:20px; border-left:4px solid #F7B32B;">
-        <h3 style="color:#001f54; margin:0 0 15px 0; font-size:18px;">Booking Information</h3>
-        <table style="width:100%; border-collapse:collapse;">
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Booking ID:</td><td style="padding:8px 0; color:#001f54; font-weight:bold;">$bookingID</td></tr>
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Room:</td><td style="padding:8px 0; color:#001f54;">{$form['roomID']}</td></tr>
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Guest Name:</td><td style="padding:8px 0; color:#001f54;">{$form['guestname']}</td></tr>
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Check-in:</td><td style="padding:8px 0; color:#001f54;">$checkin</td></tr>
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Check-out:</td><td style="padding:8px 0; color:#001f54;">$checkout</td></tr>
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Nights:</td><td style="padding:8px 0; color:#001f54;">$nights</td></tr>
-             <tr>
-                <td style="padding:8px 0;color:#666;font-weight:bold;">Booked Date:</td>
-                <td style="padding:8px 0;color:#001f54;">$bookedDate</td>
-            </tr>
-              <tr>
-                <td style="padding:8px 0;color:#666;font-weight:bold;">Payment Method:</td>
-                <td style="padding:8px 0;color:#001f54;">{$form['payment_method']}</td>
-            </tr>
-        </table>
-    </div>
-
-    <!-- Payment Summary -->
-    <div style="background-color:#f8f9fa; border-radius:8px; padding:20px; margin-bottom:20px; border-left:4px solid #F7B32B;">
-        <h3 style="color:#001f54; margin:0 0 15px 0; font-size:18px;">Payment Summary</h3>
-        <table style="width:100%; border-collapse:collapse;">
-            <tr><td style="padding:8px 0; color:#666;">Subtotal:</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$subtotalFormatted</td></tr>
-            <tr><td style="padding:8px 0; color:#666;">Service Fee ($serviceFeedynamic):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$serviceFeeFormatted</td></tr>
-            <tr><td style="padding:8px 0; color:#666;">VAT ($taxRatedynamic):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$vatFormatted</td></tr>
-            <tr style="border-top:2px solid #F7B32B;">
-                <td style="padding:12px 0 8px 0; color:#001f54; font-weight:bold; font-size:18px;">Total Amount:</td>
-                <td style="padding:12px 0 8px 0; color:#001f54; font-weight:bold; font-size:18px; text-align:right;">₱$totalFormatted</td>
-            </tr>
-        </table>
-    </div>
-
-    <!-- Thank You -->
-    <div style="text-align:center; padding:20px; background-color:#001f54; border-radius:8px; margin-bottom:20px;">
-        <h3 style="color:#F7B32B; margin:0 0 10px 0; font-size:20px;">Thank You for Your Booking!</h3>
-        <p style="color:#ffffff; margin:0; line-height:1.6;">We are delighted to welcome you to Soliera Hotel. Your booking is currently being processed and you will receive a confirmation once approved.</p>
-    </div>
-</div>
-
-<!-- Footer -->
-<div style="background-color:#001f54; padding:20px; text-align:center;">
-    <p style="color:#F7B32B; margin:0; font-size:14px;">© 2025 Soliera Hotel. All rights reserved.</p>
-</div>
-</div>
-</body>
-</html>
-HTML;
-
-        $mail->Body = $mailBody;
-        $mail->send();
-
-    } catch (Exception $e) {
-        Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
-    }
 
         $guestname = $form['guestname'];
         $roomID = $form['roomID'];
@@ -2528,6 +2446,23 @@ HTML;
 
         $payment_method = Reservation::where('reservationID', $reservation->reservationID)
         ->value('payment_method');
+
+          $this->sendBookingConfirmationEmail([
+        'bookingID' => $bookingID,
+        'roomID' => $form['roomID'],
+        'guestname' => $form['guestname'],
+        'email' => $form['guestemailaddress'],
+        'checkin' => $form['reservation_checkin'],
+        'checkout' => $form['reservation_checkout'],
+        'payment_method' => $form['payment_method'],
+        'subtotal' => $reservation->subtotal,
+        'serviceFee' => $reservation->serviceFee,
+        'vat' => $reservation->vat,
+        'total' => $reservation->total,
+        'deposit_amount' => $reservation->total,
+        'balance_remaining' => 0,
+        'bookedDate' => $reservation->created_at,
+    ]);
 
          $this->billingHistory($bookingID, $guestID, $guestname, $amount_paid, $payment_method);
 
@@ -2547,7 +2482,7 @@ public function paymentSuccessAI(Request $request){
 
     // Only insert after successful payment
     $form['payment_status'] = 'Paid';
-    $form['reservation_bookingstatus'] = 'Pending';
+    $form['reservation_bookingstatus'] = 'Confirmed';
     $reservation = Reservation::create($form);
 
    // Generate receipt number and booking ID
@@ -2596,110 +2531,22 @@ $totalFormatted = number_format($total, 2);
             $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
             
     // PHPMailer Integration
-    $mail = new PHPMailer(true);
-
-    try {
-        $mail->isSMTP();
-        $mail->Host       = env('MAIL_HOST');
-        $mail->SMTPAuth   = true;
-        $mail->Username   = env('MAIL_USERNAME');
-        $mail->Password   = env('MAIL_PASSWORD');
-        $mail->SMTPSecure = env('MAIL_ENCRYPTION'); // tls or ssl
-        $mail->Port       = env('MAIL_PORT');
-
-        $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
-        $mail->addAddress($form['guestemailaddress'], $form['guestname']);
-         $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo'); // Make sure file exists
-        $mail->isHTML(true);
-        $mail->Subject = "Booking Details - $bookingID";
-
-        // Email HTML body
-        $mailBody = <<<HTML
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Booking Details - Soliera Hotel</title>
-</head>
-<body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
-<div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
-
-<!-- Header -->
-<div style="background-color:#001f54; padding:30px 20px; text-align:center;">
-    <img src="cid:hotelLogo" alt="Soliera Hotel Logo" style="width:80px; height:80px; border-radius:50%; margin-bottom:15px;">
-    <h1 style="color:#F7B32B; margin:0; font-size:28px; font-weight:bold;">SOLIERA HOTEL</h1>
-    <p style="color:#ffffff; margin:10px 0 0 0; font-size:16px;">Savor The Stay, Dine With Elegance</p>
-</div>
-
-<!-- Booking Status -->
-<div style="padding:20px; text-align:center; background-color:#f8f9fa;">
-    <div style="display:inline-block; background-color:#F7B32B; color:#001f54; padding:8px 20px; border-radius:20px; font-weight:bold; font-size:14px; margin-bottom:10px;">
-        📋 BOOKING STATUS: PENDING
-    </div>
-</div>
-
-<!-- Main Content -->
-<div style="padding:30px 20px;">
-    <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Your Booking Details</h2>
-    
-    <!-- Booking Details -->
-    <div style="background-color:#f8f9fa; border-radius:8px; padding:20px; margin-bottom:20px; border-left:4px solid #F7B32B;">
-        <h3 style="color:#001f54; margin:0 0 15px 0; font-size:18px;">Booking Information</h3>
-        <table style="width:100%; border-collapse:collapse;">
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Booking ID:</td><td style="padding:8px 0; color:#001f54; font-weight:bold;">$bookingID</td></tr>
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Room:</td><td style="padding:8px 0; color:#001f54;">{$form['roomID']}</td></tr>
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Guest Name:</td><td style="padding:8px 0; color:#001f54;">{$form['guestname']}</td></tr>
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Check-in:</td><td style="padding:8px 0; color:#001f54;">$checkin</td></tr>
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Check-out:</td><td style="padding:8px 0; color:#001f54;">$checkout</td></tr>
-            <tr><td style="padding:8px 0; color:#666; font-weight:bold;">Nights:</td><td style="padding:8px 0; color:#001f54;">$nights</td></tr>
-             <tr>
-                <td style="padding:8px 0;color:#666;font-weight:bold;">Booked Date:</td>
-                <td style="padding:8px 0;color:#001f54;">$bookedDate</td>
-            </tr>
-              <tr>
-                <td style="padding:8px 0;color:#666;font-weight:bold;">Payment Method:</td>
-                <td style="padding:8px 0;color:#001f54;">{$form['payment_method']}</td>
-            </tr>
-        </table>
-    </div>
-
-    <!-- Payment Summary -->
-    <div style="background-color:#f8f9fa; border-radius:8px; padding:20px; margin-bottom:20px; border-left:4px solid #F7B32B;">
-        <h3 style="color:#001f54; margin:0 0 15px 0; font-size:18px;">Payment Summary</h3>
-        <table style="width:100%; border-collapse:collapse;">
-            <tr><td style="padding:8px 0; color:#666;">Subtotal:</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$subtotalFormatted</td></tr>
-            <tr><td style="padding:8px 0; color:#666;">Service Fee ($serviceFeedynamic):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$serviceFeeFormatted</td></tr>
-            <tr><td style="padding:8px 0; color:#666;">VAT ($taxRatedynamic):</td><td style="padding:8px 0; color:#001f54; text-align:right;">₱$vatFormatted</td></tr>
-            <tr style="border-top:2px solid #F7B32B;">
-                <td style="padding:12px 0 8px 0; color:#001f54; font-weight:bold; font-size:18px;">Total Amount:</td>
-                <td style="padding:12px 0 8px 0; color:#001f54; font-weight:bold; font-size:18px; text-align:right;">₱$totalFormatted</td>
-            </tr>
-        </table>
-    </div>
-
-    <!-- Thank You -->
-    <div style="text-align:center; padding:20px; background-color:#001f54; border-radius:8px; margin-bottom:20px;">
-        <h3 style="color:#F7B32B; margin:0 0 10px 0; font-size:20px;">Thank You for Your Booking!</h3>
-        <p style="color:#ffffff; margin:0; line-height:1.6;">We are delighted to welcome you to Soliera Hotel. Your booking is currently being processed and you will receive a confirmation once approved.</p>
-    </div>
-</div>
-
-<!-- Footer -->
-<div style="background-color:#001f54; padding:20px; text-align:center;">
-    <p style="color:#F7B32B; margin:0; font-size:14px;">© 2025 Soliera Hotel. All rights reserved.</p>
-</div>
-</div>
-</body>
-</html>
-HTML;
-
-        $mail->Body = $mailBody;
-        $mail->send();
-
-    } catch (Exception $e) {
-        Log::error("Booking email could not be sent: {$mail->ErrorInfo}");
-    }
+   $this->sendBookingConfirmationEmail([
+        'bookingID' => $bookingID,
+        'roomID' => $form['roomID'],
+        'guestname' => $form['guestname'],
+        'email' => $form['guestemailaddress'],
+        'checkin' => $form['reservation_checkin'],
+        'checkout' => $form['reservation_checkout'],
+        'payment_method' => $form['payment_method'],
+        'subtotal' => $reservation->subtotal,
+        'serviceFee' => $reservation->serviceFee,
+        'vat' => $reservation->vat,
+        'total' => $reservation->total,
+        'deposit_amount' => $reservation->total,
+        'balance_remaining' => 0,
+        'bookedDate' => $reservation->created_at,
+    ]);
 
      $guestname = $form['guestname'];
         $roomID = $form['roomID'];

@@ -130,6 +130,10 @@ public function markasdoneannouncement($roomID)
             'maintenancestatus' => 'Completed',
         ]);
 
+            Room::where('roomID', $roommaintenanceID->roomID)->update([
+                'roomstatus' => 'Available',
+            ]);
+
         AuditTrails::create([
             'dept_id' => Auth::user()->Dept_id,
             'dept_name' => Auth::user()->dept_name,
