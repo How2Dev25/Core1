@@ -105,176 +105,177 @@
                   <div class="container mx-auto px-4 py-8">
               <div class="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
                 @forelse ($reserverooms as $reserveroom)
-                  <div
-                    class="bg-white border border-gray-100 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                                <div
+                                  class="bg-white border border-gray-100 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
 
-                    <!-- Room Image Header - Simplified -->
-                    <div class="relative h-40 overflow-hidden">
-                      <img src="{{$reserveroom->roomphoto}}" alt="Room Photo"
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                      <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                                  <!-- Room Image Header - Simplified -->
+                                  <div class="relative h-40 overflow-hidden">
+                                    <img src="{{$reserveroom->roomphoto}}" alt="Room Photo"
+                                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
 
-                      <!-- Room Type Badge -->
-                      <div class="absolute top-3 right-3">
-                        <div class="bg-[#F7B32B] text-[#001f54] px-3 py-1 rounded-full text-xs font-bold shadow-md">
-                          {{$reserveroom->roomtype}}
-                        </div>
-                      </div>
+                                    <!-- Room Type Badge -->
+                                    <div class="absolute top-3 right-3">
+                                      <div class="bg-[#F7B32B] text-[#001f54] px-3 py-1 rounded-full text-xs font-bold shadow-md">
+                                        {{$reserveroom->roomtype}}
+                                      </div>
+                                    </div>
 
-                      <!-- Room Number Only -->
-                      <div class="absolute bottom-3 left-3">
-                        <h3 class="text-white text-xl font-bold drop-shadow-lg">Room {{$reserveroom->roomID}}</h3>
-                      </div>
+                                    <!-- Room Number Only -->
+                                    <div class="absolute bottom-3 left-3">
+                                      <h3 class="text-white text-xl font-bold drop-shadow-lg">Room {{$reserveroom->roomID}}</h3>
+                                    </div>
 
-                      <!-- Door Lock Status - Top Left -->
-                      @if($reserveroom->doorlockID)
-                        <div class="absolute top-3 left-3">
-                          <span id="door-status-{{$reserveroom->doorlockID}}" class="px-2 py-1 rounded-full text-xs font-semibold shadow-md
-                                  {{$reserveroom->doorlockfrontdesk_status == 1 ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}}">
-                            {{$reserveroom->doorlockfrontdesk_status == 1 ? 'UNLOCKED' : 'LOCKED'}}
-                          </span>
-                        </div>
-                      @endif
-                    </div>
+                                    <!-- Door Lock Status - Top Left -->
+                                    @if($reserveroom->doorlockID)
+                                      <div class="absolute top-3 left-3">
+                                        <span id="door-status-{{$reserveroom->doorlockID}}" class="px-2 py-1 rounded-full text-xs font-semibold shadow-md
+                                                {{$reserveroom->doorlockfrontdesk_status == 1 ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}}">
+                                          {{$reserveroom->doorlockfrontdesk_status == 1 ? 'UNLOCKED' : 'LOCKED'}}
+                                        </span>
+                                      </div>
+                                    @endif
+                                  </div>
 
-                    <!-- Card Body - Compact -->
-                    <div class="p-4">
+                                  <!-- Card Body - Compact -->
+                                  <div class="p-4">
 
-                      <!-- Status Badge -->
-                      <div class="flex items-center justify-between mb-4">
-                        <span class="text-sm font-medium text-gray-600">Status</span>
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold
-                            {{$reserveroom->reservation_bookingstatus == 'Confirmed' ? 'bg-green-100 text-green-700' : ''}}
-                            {{$reserveroom->reservation_bookingstatus == 'Pending' ? 'bg-yellow-100 text-yellow-700' : ''}}
-                            {{$reserveroom->reservation_bookingstatus == 'Cancelled' ? 'bg-red-100 text-red-700' : ''}}">
-                          {{$reserveroom->reservation_bookingstatus}}
-                        </span>
-                      </div>
+                                    <!-- Status Badge -->
+                                    <div class="flex items-center justify-between mb-4">
+                                      <span class="text-sm font-medium text-gray-600">Status</span>
+                                      <span class="px-3 py-1 rounded-full text-xs font-semibold
+                                          {{$reserveroom->reservation_bookingstatus == 'Confirmed' ? 'bg-green-100 text-green-700' : ''}}
+                                          {{$reserveroom->reservation_bookingstatus == 'Pending' ? 'bg-yellow-100 text-yellow-700' : ''}}
+                                          {{$reserveroom->reservation_bookingstatus == 'Cancelled' ? 'bg-red-100 text-red-700' : ''}}">
+                                        {{$reserveroom->reservation_bookingstatus}}
+                                      </span>
+                                    </div>
 
-                      <!-- Dates - Compact -->
-                      <div class="grid grid-cols-2 gap-3 mb-4">
-                        <div class="bg-gray-50 rounded-lg p-3">
-                          <div class="flex items-center mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-[#001f54]" fill="none" viewBox="0 0 24 24"
-                              stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                            </svg>
-                            <span class="text-xs text-gray-600 uppercase">Check-in</span>
-                          </div>
-                          <p class="text-[#001f54] font-bold text-sm">
-                            {{ \Carbon\Carbon::parse($reserveroom->reservation_checkin)->format('M j, Y') }}
-                          </p>
-                        </div>
+                                    <!-- Dates - Compact -->
+                                    <div class="grid grid-cols-2 gap-3 mb-4">
+                                      <div class="bg-gray-50 rounded-lg p-3">
+                                        <div class="flex items-center mb-1">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-[#001f54]" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                                          </svg>
+                                          <span class="text-xs text-gray-600 uppercase">Check-in</span>
+                                        </div>
+                                        <p class="text-[#001f54] font-bold text-sm">
+                                          {{ \Carbon\Carbon::parse($reserveroom->reservation_checkin)->format('M j, Y') }}
+                                        </p>
+                                      </div>
 
-                        <div class="bg-gray-50 rounded-lg p-3">
-                          <div class="flex items-center mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-[#001f54]" fill="none" viewBox="0 0 24 24"
-                              stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                            </svg>
-                            <span class="text-xs text-gray-600 uppercase">Check-out</span>
-                          </div>
-                          <p class="text-[#001f54] font-bold text-sm">
-                            {{ \Carbon\Carbon::parse($reserveroom->reservation_checkout)->format('M j, Y') }}
-                          </p>
-                        </div>
-                      </div>
+                                      <div class="bg-gray-50 rounded-lg p-3">
+                                        <div class="flex items-center mb-1">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-[#001f54]" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                          </svg>
+                                          <span class="text-xs text-gray-600 uppercase">Check-out</span>
+                                        </div>
+                                        <p class="text-[#001f54] font-bold text-sm">
+                                          {{ \Carbon\Carbon::parse($reserveroom->reservation_checkout)->format('M j, Y') }}
+                                        </p>
+                                      </div>
+                                    </div>
 
-                      <!-- Additional Info - Compact -->
-                      @php
-    $nights = \Carbon\Carbon::parse($reserveroom->reservation_checkin)->diffInDays(\Carbon\Carbon::parse($reserveroom->reservation_checkout));
-    $total = $reserveroom->total;
-    $bookedDate = date('M d, Y', strtotime($reserveroom->reservation_created_at));
-                      @endphp
+                                    <!-- Additional Info - Compact -->
+                                    @php
+                  $nights = \Carbon\Carbon::parse($reserveroom->reservation_checkin)->diffInDays(\Carbon\Carbon::parse($reserveroom->reservation_checkout));
+                  $total = $reserveroom->total;
+                  $bookedDate = date('M d, Y', strtotime($reserveroom->reservation_created_at));
+                                    @endphp
 
-                      <div class="space-y-2 mb-4">
-                        <!-- RFID if exists -->
-                        @if($reserveroom->rfid)
-                          <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-600">RFID:</span>
-                            <span class="font-semibold text-gray-800 bg-gray-100 px-2 py-1 rounded">{{$reserveroom->rfid}}</span>
-                          </div>
-                        @endif
+                                    <div class="space-y-2 mb-4">
+                                      <!-- RFID if exists -->
+                                      @if($reserveroom->rfid)
+                                        <div class="flex items-center justify-between text-sm">
+                                          <span class="text-gray-600">RFID:</span>
+                                          <span class="font-semibold text-gray-800 bg-gray-100 px-2 py-1 rounded">{{$reserveroom->rfid}}</span>
+                                        </div>
+                                      @endif
 
-                        <!-- Booking ID -->
-                        <div class="flex items-center justify-between text-sm">
-                          <span class="text-gray-600">Booking ID:</span>
-                          <span class="font-medium text-gray-800">#{{$reserveroom->bookingID}}</span>
-                        </div>
+                                      <!-- Booking ID -->
+                                      <div class="flex items-center justify-between text-sm">
+                                        <span class="text-gray-600">Booking ID:</span>
+                                        <span class="font-medium text-gray-800">#{{$reserveroom->bookingID}}</span>
+                                      </div>
 
-                        <!-- Booked Date -->
-                        <div class="flex items-center justify-between text-sm">
-                          <span class="text-gray-600">Date Booked:</span>
-                          <span class="font-medium text-gray-800">{{ $bookedDate }}</span>
-                        </div>
+                                      <!-- Booked Date -->
+                                      <div class="flex items-center justify-between text-sm">
+                                        <span class="text-gray-600">Date Booked:</span>
+                                        <span class="font-medium text-gray-800">{{ $bookedDate }}</span>
+                                      </div>
 
-                        <!-- Payment Status if available -->
-                        @if(isset($reserveroom->payment_status))
-                          <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-600">Payment:</span>
-                            <span
-                              class="font-semibold px-2 py-1 rounded text-xs
-                                  {{$reserveroom->payment_status == 'Paid' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}}">
-                              {{$reserveroom->payment_status}}
-                            </span>
-                          </div>
-                        @endif
-                      </div>
+                                      <!-- Payment Status if available -->
+                                    @if(isset($reserveroom->payment_status))
+                                      <div class="flex items-center justify-between text-sm">
+                                        <span class="text-gray-600">Payment:</span>
+                                        <span class="font-semibold px-2 py-1 rounded text-xs
+                                                      @if($reserveroom->payment_status === 'Paid')
+                                                        bg-green-100 text-green-700
+                                                      @elseif($reserveroom->payment_status === 'Partial')
+                                                        bg-blue-100 text-blue-700
+                                                      @elseif($reserveroom->payment_status === 'Pending')
+                                                        bg-orange-100 text-orange-700
+                                                      @else
+                                                        bg-gray-100 text-gray-700
+                                                      @endif
+                                                  ">
+                                          {{ $reserveroom->payment_status }}
+                                        </span>
+                                      </div>
+                                    @endif
 
-                      <!-- Total Price - Compact -->
-                      <div class="bg-gradient-to-r from-[#001f54] to-[#003875] rounded-lg p-3 mb-4">
-                        <div class="flex justify-between items-center">
-                          <div>
-                            <p class="text-white/80 text-xs mb-0.5">Total Amount</p>
-                            <p class="text-[#F7B32B] font-bold text-lg">₱{{ number_format($total, 2) }}</p>
-                          </div>
-                          <div class="text-right">
-                            <p class="text-white/80 text-xs mb-0.5">{{ $nights }} {{ $nights == 1 ? 'Night' : 'Nights' }}</p>
-                            <p class="text-white text-sm font-medium">{{$reserveroom->payment_method}}</p>
-                          </div>
-                        </div>
-                      </div>
+                                    </div>
 
-                      <!-- Action Buttons - Compact -->
-                      <div class="flex flex-wrap gap-2">
-                        <!-- Details Button -->
-                        <button onclick="document.getElementById('edit_reservation_{{$reserveroom->reservationID}}').showModal()"
-                          class="flex-1 bg-[#001f54] hover:bg-[#003875] text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-1.5">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                          </svg>
-                          Details
-                        </button>
+                                    <!-- Total Price - Compact -->
+                                    <div class="bg-gradient-to-r from-[#001f54] to-[#003875] rounded-lg p-3 mb-4">
+                                      <div class="flex justify-between items-center">
+                                        <div>
+                                          <p class="text-white/80 text-xs mb-0.5">Total Amount</p>
+                                          <p class="text-[#F7B32B] font-bold text-lg">₱{{ number_format($total, 2) }}</p>
+                                        </div>
+                                        <div class="text-right">
+                                          <p class="text-white/80 text-xs mb-0.5">{{ $nights }} {{ $nights == 1 ? 'Night' : 'Nights' }}</p>
+                                          <p class="text-white text-sm font-medium">{{$reserveroom->payment_method}}</p>
+                                        </div>
+                                      </div>
+                                    </div>
 
-                        <!-- Cancel Button - Only if Pending -->
-                        @if($reserveroom->reservation_bookingstatus == 'Pending')
-                          <button onclick="cancel_reservation_{{$reserveroom->reservationID}}.showModal()"
-                            class="flex-1 bg-red-50 hover:bg-red-100 text-red-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-1.5 border border-red-200">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                            Cancel
-                          </button>
-                        @endif
+                                    <!-- Action Buttons - Compact -->
+                                    <div class="flex flex-wrap gap-2">
+                                      <!-- Details Button -->
+                                      <button onclick="document.getElementById('edit_reservation_{{$reserveroom->reservationID}}').showModal()"
+                                        class="flex-1 bg-[#001f54] hover:bg-[#003875] text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-1.5">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        Details
+                                      </button>
 
-                        <!-- Confirm Button - Only if Pending -->
-                        @if($reserveroom->reservation_bookingstatus == 'Pending')
-                          <button onclick="confirm_reservation_{{$reserveroom->reservationID}}.showModal()"
-                            class="flex-1 bg-green-50 hover:bg-green-100 text-green-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-1.5 border border-green-200">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            Confirm
-                          </button>
-                        @endif
-                      </div>
-                    </div>
-                  </div>
+                                      <!-- Cancel Button - Only if Pending -->
+                                      @if($reserveroom->reservation_bookingstatus == 'Pending')
+                                        <button onclick="cancel_reservation_{{$reserveroom->reservationID}}.showModal()"
+                                          class="flex-1 bg-red-50 hover:bg-red-100 text-red-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-1.5 border border-red-200">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                          </svg>
+                                          Cancel
+                                        </button>
+                                      @endif
+
+
+
+                                    </div>
+                                  </div>
+                                </div>
                 @empty
                   <div class="col-span-full">
                     <div
