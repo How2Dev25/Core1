@@ -972,7 +972,10 @@ Route::get('/doorlockadmin', function(){
     employeeAuthCheck();
     verifydashboard();
 
-   $rooms = Room::all();
+     $rooms = Room::whereNotIn('roomID', function($query) {
+        $query->select('roomID')
+              ->from('doorlock');
+    })->get();
 
     $doorlocks = doorlock::join('core1_room', 'core1_room.roomID', '=', 'doorlock.roomID')
     ->leftJoin('doorlockfrontdesk', 'doorlockfrontdesk.doorlockID', '=', 'doorlock.doorlockID')
