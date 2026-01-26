@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use App\Traits\Syncable;
 class facility extends Model
 {
-       use HasFactory;
+       use HasFactory, Syncable;
 
     protected $table = 'core1_facility';
     protected $primaryKey = 'facilityID';

@@ -18,6 +18,7 @@ use App\Http\Controllers\orderController;
 use App\Http\Controllers\posController;
 use App\Http\Controllers\postCommentController;
 use App\Http\Controllers\postController;
+use App\Http\Controllers\SyncManagementController;
 use App\Http\Controllers\ratingController;
 use App\Http\Controllers\reservationController;
 use App\Http\Controllers\restoController;
@@ -63,6 +64,7 @@ use App\Models\stockRequest;
 use App\Models\Reservation;
 use App\Models\ReservationPOS;
 use App\Models\restoCart;
+use App\Models\SyncQueue;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -880,6 +882,7 @@ Route::put('/doneeventbooking/{eventbookingID}', [ecmController::class, 'doneRes
 Route::put('/cancelbookingevent/{eventbookingID}',[ecmController::class, 'cancelReservation']);
 Route::delete('/deletebookingevent/{eventbookingID}',[ecmController::class, 'deleteReservation']);
 Route::get('/printeventreceipt/{eventbookingID}', [ecmController::class, 'printReceipt']);
+Route::put('/approveeventbooking/{eventbookingID}', [ecmController::class, 'eventapproved']);
 
 
 Route::get('/payment/success/event', [ecmController::class, 'onlinepaymentsuccess'])->name('onlinepayment.success');
@@ -1402,6 +1405,7 @@ Route::delete('/removelarrules/{loyaltyrulesID}', [larController::class, 'rulesR
 
 // login site
 Route::post('/loginuser', [userController::class, 'login']);
+Route::post('/loginoffline', [userController::class, 'offlineLogin'])->name('loginoffline');
 
 
 // for employee
@@ -2022,3 +2026,88 @@ $missingRFIDs = missingRFID::join('doorlock', 'doorlock.doorlockID', '=', 'missi
 });
 
 Route::put('removemissingrfid/{doorlockfrontdeskID}', [missingRFIDController::class, 'removeAssignment']);
+
+
+// server integration
+Route::get('/sync-offline', function () {
+    $unsynced = SyncQueue::where('synced', false)->get();
+    $domainApi = 'https://hotel.soliera-hotel-restaurant.com/api/push-offline-data';
+    $successCount = 0;
+    $errorCount = 0;
+    
+    Log::info('Starting sync process', ['unsynced_count' => $unsynced->count()]);
+
+    foreach ($unsynced as $row) {
+        try {
+            // Decode the JSON payload before sending
+            $payload = is_string($row->payload) ? json_decode($row->payload, true) : $row->payload;
+            
+            if (!$payload) {
+                Log::error('Failed to decode payload', ['sync_queue_id' => $row->id]);
+                $errorCount++;
+                continue;
+            }
+
+            $response = Http::withToken(env('HOTEL_API_TOKEN'))
+                ->withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])
+                ->post($domainApi, [
+                    'model_name' => $row->model_name,
+                    'action'     => $row->action,
+                    'payload'    => $payload, // Send as array, not JSON string
+                ]);
+
+            if ($response->successful()) {
+                $row->update(['synced' => true]);
+                $successCount++;
+                Log::info('Sync successful', [
+                    'sync_queue_id' => $row->id,
+                    'model' => $row->model_name,
+                    'action' => $row->action,
+                    'response' => $response->json()
+                ]);
+            } else {
+                $errorCount++;
+                Log::error('Sync failed', [
+                    'sync_queue_id' => $row->id,
+                    'model' => $row->model_name,
+                    'action' => $row->action,
+                    'status' => $response->status(),
+                    'response' => $response->body()
+                ]);
+            }
+        } catch (\Exception $e) {
+            $errorCount++;
+            Log::error('Sync exception', [
+                'sync_queue_id' => $row->id,
+                'model' => $row->model_name,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    $message = "Sync completed: {$successCount} successful, {$errorCount} failed";
+    Log::info('Sync process completed', ['success' => $successCount, 'errors' => $errorCount]);
+    
+    return response()->json([
+        'status' => 'completed',
+        'success_count' => $successCount,
+        'error_count' => $errorCount,
+        'message' => $message
+    ]);
+});
+
+// Sync Management Routes
+Route::get('/sync-management', [SyncManagementController::class, 'index'])->middleware('auth');
+
+// API Routes for Sync Management
+Route::prefix('api')->middleware('auth')->group(function () {
+    Route::get('/sync-stats', [SyncManagementController::class, 'getSyncStats']);
+    Route::get('/sync-queue', [SyncManagementController::class, 'getSyncQueue']);
+    Route::get('/sync-logs', [SyncManagementController::class, 'getSyncLogs']);
+    Route::get('/test-sync-connection', [SyncManagementController::class, 'testSyncConnection']);
+    Route::delete('/sync-queue/{id}', [SyncManagementController::class, 'deleteSyncItem']);
+    Route::post('/manual-sync', [SyncManagementController::class, 'manualSync']);
+});

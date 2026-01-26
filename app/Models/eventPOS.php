@@ -3,9 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Traits\Syncable;
 class eventPOS extends Model
 {
+        use Syncable;
      protected $table = 'eventpos';
 
     protected $primaryKey = 'eventposID';

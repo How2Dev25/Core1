@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use App\Traits\Syncable;
 class DeptAccount extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, Syncable;
 
     protected $table = 'department_accounts';
     protected $primaryKey = 'Dept_no';

@@ -290,7 +290,9 @@ if ($form['roomstatus'] === 'Maintenance') {
         ->latest('core1_roomphotos.created_at')
         ->get();
 
-        return view('admin.roompage', ['room' => $room, 'roomphotos' => $roomphotos]);
+        $roomtypes = roomtypes::all();
+
+        return view('admin.roompage', compact('room', 'roomphotos', 'roomtypes'));
     }
 
     public function addphoto(Request $request){

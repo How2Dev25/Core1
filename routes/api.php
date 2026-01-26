@@ -72,3 +72,6 @@ Route::put('/resolvedEmployee/{reportID}', [ApiController::class, 'resolvedEmplo
 
 
 Route::get('/guestaccounts', [ApiController::class, 'guestaccounts']);
+
+Route::post('/push-offline-data', [ApiController::class, 'receiveData']);
+    

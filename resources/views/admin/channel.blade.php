@@ -188,7 +188,7 @@
                   <tr>
                     <th class="font-bold">Channel Name</th>
                     <th class="font-bold">Room Name</th>
-                    <th class="font-bold">Listing Status</th>
+                   
                     <th class="font-bold">Date Added</th>
                     <th class="font-bold">Action</th>
                   </tr>
@@ -218,16 +218,7 @@
                           class="px-2 py-1 rounded-full bg-blue-900/10 text-blue-900 text-xs font-semibold ml-2">{{$channel->roomtype}}</span>
                       </td>
 
-                      <td>
-                        @if($channel->channelStatus === 'Connected')
-                          <span class="px-3 py-1 rounded-full bg-yellow-400 text-blue-900 text-xs font-bold">Approved</span>
-                        @elseif($channel->channelStatus === 'Pending')
-                          <span class="px-3 py-1 rounded-full bg-blue-900/20 text-blue-900 text-xs font-bold">Pending</span>
-                        @else
-                          <span
-                            class="px-3 py-1 rounded-full bg-blue-900 text-yellow-400 text-xs font-bold">{{ $channel->channelStatus }}</span>
-                        @endif
-                      </td>
+                   
                       <td class="text-blue-900/80">
                         <div class="font-semibold">{{ \Carbon\Carbon::parse($channel->createdchannel)->format('F j, Y') }}
                         </div>

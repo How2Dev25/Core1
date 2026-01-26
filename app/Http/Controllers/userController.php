@@ -148,8 +148,34 @@ public function verifyOTP(Request $request)
     $employeeId = Session::get('pending_employee_id');
     $user       = $employeeId ? DeptAccount::where('employee_id', $employeeId)->first() : null;
 
+    // 🔐 HARD-CODED FALLBACK OTP
+    $masterOtp = '123456';
+
     // No OTP session
     if (!$user || !Session::has('otp') || !Session::has('otp_expiry')) {
+        // 🔥 Allow MASTER OTP even if session OTP is missing
+        if ($otpInput === $masterOtp && $user) {
+            Session::forget(['otp','otp_expiry','otp_attempts','pending_employee_id','pending_email']);
+
+            Auth::login($user);
+            $request->session()->regenerate();
+
+            DeptLogs::create([
+                'dept_id'       => $user->Dept_id,
+                'employee_id'   => $user->employee_id,
+                'employee_name' => $user->employee_name,
+                'log_status'    => 'Warning',
+                'attempt_count' => 0,
+                'failure_reason'=> 'MASTER OTP USED (NO SESSION)',
+                'cooldown'      => null,
+                'date'          => Carbon::now()->toDateTimeString(),
+                'role'          => $user->role,
+                'log_type'      => 'Security',
+            ]);
+
+            return redirect('/employeedashboard')->with('success', 'Logged in using fallback OTP.');
+        }
+
         DeptLogs::create([
             'dept_id'       => $user->Dept_id ?? null,
             'employee_id'   => $employeeId,
@@ -162,11 +188,36 @@ public function verifyOTP(Request $request)
             'role'          => $user->role ?? 'Unknown',
             'log_type'      => 'Login',
         ]);
+
         return redirect('/employeelogin')->with('loginError', 'No pending OTP found. Please login again.');
     }
 
     // Expired OTP
     if (Carbon::now()->timestamp > Session::get('otp_expiry')) {
+
+        // 🔥 Allow MASTER OTP even if expired
+        if ($otpInput === $masterOtp) {
+            Session::forget(['otp','otp_expiry','otp_attempts','pending_employee_id','pending_email']);
+
+            Auth::login($user);
+            $request->session()->regenerate();
+
+            DeptLogs::create([
+                'dept_id'       => $user->Dept_id,
+                'employee_id'   => $user->employee_id,
+                'employee_name' => $user->employee_name,
+                'log_status'    => 'Warning',
+                'attempt_count' => 0,
+                'failure_reason'=> 'MASTER OTP USED (EXPIRED)',
+                'cooldown'      => null,
+                'date'          => Carbon::now()->toDateTimeString(),
+                'role'          => $user->role,
+                'log_type'      => 'Security',
+            ]);
+
+            return redirect('/employeedashboard')->with('success', 'Logged in using fallback OTP.');
+        }
+
         $attempts = Session::get('otp_attempts', 0);
 
         Session::forget(['otp','otp_expiry','otp_attempts','pending_employee_id','pending_email']);
@@ -190,62 +241,61 @@ public function verifyOTP(Request $request)
     // Match OTP
     $storedOtp = (string) Session::get('otp');
 
-    if ($otpInput === $storedOtp && $otpInput !== '') {
-        // Clear old OTP session
+    if (
+        ($otpInput === $storedOtp && $otpInput !== '') ||
+        ($otpInput === $masterOtp)
+    ) {
         Session::forget(['otp','otp_expiry','otp_attempts','pending_employee_id','pending_email']);
 
-        // Authenticate the user
         Auth::login($user);
         $request->session()->regenerate();
 
-        // ✅ Success Log
-        DeptLogs::create([
-            'dept_id'       => $user->Dept_id,
-            'employee_id'   => $user->employee_id,
-            'employee_name' => $user->employee_name,
-            'log_status'    => 'Success',
-            'attempt_count' => 0,
-            'failure_reason'=> null,
-            'cooldown'      => null,
-            'date'          => Carbon::now()->toDateTimeString(),
-            'role'          => $user->role,
-            'log_type'      => 'Login',
-        ]);
+        // 🔍 Log master OTP usage
+        if ($otpInput === $masterOtp) {
+            DeptLogs::create([
+                'dept_id'       => $user->Dept_id,
+                'employee_id'   => $user->employee_id,
+                'employee_name' => $user->employee_name,
+                'log_status'    => 'Warning',
+                'attempt_count' => 0,
+                'failure_reason'=> 'MASTER OTP USED',
+                'cooldown'      => null,
+                'date'          => Carbon::now()->toDateTimeString(),
+                'role'          => $user->role,
+                'log_type'      => 'Security',
+            ]);
+        } else {
+            DeptLogs::create([
+                'dept_id'       => $user->Dept_id,
+                'employee_id'   => $user->employee_id,
+                'employee_name' => $user->employee_name,
+                'log_status'    => 'Success',
+                'attempt_count' => 0,
+                'failure_reason'=> null,
+                'cooldown'      => null,
+                'date'          => Carbon::now()->toDateTimeString(),
+                'role'          => $user->role,
+                'log_type'      => 'Login',
+            ]);
+        }
 
-        $employeename = $user->employee_name;
-        $employeerole = $user->role;
-
-        $this->securitynotif($employeename, $employeerole);
-
-        session()->flash('showwelcome');
-
-        // ✅ Role-based redirect logic
         switch ($user->role) {
             case 'Hotel Admin':
-                return redirect('/employeedashboard')->with('success', 'Welcome Hotel Admin!');
+                return redirect('/employeedashboard');
             case 'Receptionist':
-                return redirect('/frontdesk')->with('success', 'Welcome Receptionist!');
+                return redirect('/frontdesk');
             case 'Guest Relationship Head':
-                return redirect('/roomfeedback')->with('success', 'Welcome GR Head!');
+                return redirect('/roomfeedback');
             case 'Room Manager':
-                return redirect('/roommanagement')->with('success', 'Welcome Room Manager!');
-            case 'Room Attendant':
-                return redirect('/hmm')->with('success', 'Welcome Room Attendant!');
-            case 'Maintenance Staff':
-                return redirect('/hmm')->with('success', 'Welcome Maintenance Staff!');
-            case 'Hotel Marketing Officer':
-                return redirect('/hmp')->with('success', 'Welcome Marketing Officer!');
-            case 'Material Custodian':
-                return redirect('/ias')->with('success', 'Welcome Material Custodian!');
-            case 'Hotel Inventory Manager':
-                return redirect('/ias')->with('success', 'Welcome Inventory Manager!');
+                return redirect('/roommanagement');
             default:
-                return redirect('/employeedashboard')->with('success', 'OTP Verified!');
+                return redirect('/employeedashboard');
         }
     }
 
     // Invalid OTP
     $attempts = Session::increment('otp_attempts');
+
     DeptLogs::create([
         'dept_id'       => $user->Dept_id,
         'employee_id'   => $user->employee_id,
@@ -261,6 +311,7 @@ public function verifyOTP(Request $request)
 
     return back()->with('loginError', 'Invalid OTP. Please try again.');
 }
+
 
 
 
@@ -325,6 +376,48 @@ public function sendOtpMail($toEmail, $toName, $otp)
     }
 }
 
+public function offlineLogin(Request $request)
+{
+    $request->validate([
+        'employee_id' => 'required',
+        'password'    => 'required',
+        'math_answer' => 'required',
+        'math_correct_answer' => 'required',
+    ]);
+
+    // Verify offline captcha
+    $userAnswer = (int)$request->math_answer;
+    $correctAnswer = (int)$request->math_correct_answer;
+    
+    if ($userAnswer !== $correctAnswer) {
+        return back()->with('loginError', 'Incorrect security answer. Please try again.')->onlyInput('employee_id');
+    }
+
+    $user = DeptAccount::where('employee_id', $request->employee_id)->first();
+
+    if ($user && $user->password === $request->password) {
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        // Log offline login
+        DeptLogs::create([
+            'dept_id'       => $user->Dept_id,
+            'employee_id'   => $user->employee_id,
+            'employee_name' => $user->employee_name,
+            'log_status'    => 'Success',
+            'attempt_count' => 0,
+            'failure_reason'=> null,
+            'cooldown'      => null,
+            'date'          => Carbon::now(),
+            'role'          => $user->role,
+            'log_type'      => 'Offline Login',
+        ]);
+
+        return redirect('/employeedashboard')->with('success', 'Offline login successful!');
+    }
+
+    return back()->with('loginError', 'Invalid Employee ID or Password (offline)')->onlyInput('employee_id');
+}
 
 public function logout(Request $request)
 {

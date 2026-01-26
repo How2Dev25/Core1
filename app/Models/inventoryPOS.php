@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use App\Traits\Syncable;
 
 class inventoryPOS extends Model
 {
-      use HasFactory;
+      use HasFactory, Syncable;
 
     protected $table = 'inventorypos'; 
 

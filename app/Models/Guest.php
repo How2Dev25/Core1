@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use App\Traits\Syncable;
 class Guest extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, Syncable;
 
     protected $table = 'core1_guest';
     protected $primaryKey = 'guestID';

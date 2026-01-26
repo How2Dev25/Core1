@@ -129,6 +129,21 @@
                     Clients are encouraged to secure appropriate event insurance.
                 </p>
             </li>
+
+            <li>
+                <h4 class="font-semibold text-lg text-indigo-900 mb-2">
+                    Unlisted Events & Inquiries
+                </h4>
+                <p>
+                    If your desired event type is not listed, please contact
+                    <strong>Soliera Hotel & Restaurant</strong> for assistance.
+                    You may email us at
+                    <a href="mailto:solierahotel@gmail.com" class="text-indigo-600 underline">
+                        solierahotel@gmail.com
+                    </a>
+                    or call our hotel directly for further inquiries and arrangements.
+                </p>
+            </li>
     
         </ul>
     </div>

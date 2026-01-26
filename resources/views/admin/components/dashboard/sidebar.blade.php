@@ -215,13 +215,7 @@
                 Room Feedbacks
               </span>
             </a>
-            <a href="/servicefeedback"
-              class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
-              <span class="flex items-center gap-2">
-                <i class="fas fa-heart w-4 h-4 text-[#F7B32B]"></i>
-                Service Feedbacks
-              </span>
-            </a>
+           
 
             <a href="/guestcommunityadmin"
               class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
@@ -547,6 +541,17 @@
 
           </div>
         </div>
+
+        <!-- Sync Management -->
+        <a href="/sync-management" class="block">
+          <div
+            class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
+            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+              <i class="fas fa-sync text-[#F7B32B] group-hover:text-white"></i>
+            </div>
+            <span class="ml-3 sidebar-text">Local Sync Management</span>
+          </div>
+        </a>
       @endif
 
     </nav>

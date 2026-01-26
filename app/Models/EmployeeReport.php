@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use App\Traits\Syncable;
 
 class EmployeeReport extends Model
 {
-      use Notifiable;
+      use Notifiable, Syncable;
 
       protected $table = 'employee_reports';
       protected $primaryKey =  'reportID';

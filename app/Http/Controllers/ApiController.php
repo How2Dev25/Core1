@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuditTrails;
+use App\Models\Channel;
 use App\Models\DeptAccount;
 use App\Models\DeptLogs;
 use App\Models\doorlock;
@@ -20,11 +21,14 @@ use App\Models\rfidHistory;
 use App\Models\room;
 use App\Models\stockRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception as MailException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use App\Models\ecmtype;
 use App\Models\Guest;
 use Illuminate\Support\Facades\Http;
@@ -1271,5 +1275,145 @@ public function voidedKOT(Request $request, $order_id){
         }
     }
 
+
+    // for offline and online sync
+     public function receiveData(Request $request)
+    {
+        $request->validate([
+            'model_name' => 'required|string',
+            'action'     => 'required|in:insert,update,delete',
+            'payload'    => 'required|array',
+        ]);
+
+        $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            Log::error('Unauthorized sync attempt', ['token' => $token]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        $modelName = $request->model_name;
+        $action    = $request->action;
+        $payload   = $request->payload;
+
+        // Full model path - try different case variations
+        $fullModel = "App\\Models\\$modelName";
+        
+        // Try exact match first
+        if (!class_exists($fullModel)) {
+            // Try lowercase first letter
+            $lowerModel = "App\\Models\\" . lcfirst($modelName);
+            if (class_exists($lowerModel)) {
+                $fullModel = $lowerModel;
+            } else {
+                // Try all lowercase
+                $allLowerModel = "App\\Models\\" . strtolower($modelName);
+                if (class_exists($allLowerModel)) {
+                    $fullModel = $allLowerModel;
+                } else {
+                    Log::error("Model not found during sync", [
+                        'model' => $modelName,
+                        'tried' => [$fullModel, $lowerModel, $allLowerModel]
+                    ]);
+                    return response()->json([
+                        'status'  => 'error',
+                        'message' => "Model $modelName not found on domain. Tried: " . implode(', ', [$fullModel, $lowerModel, $allLowerModel])
+                    ], 400);
+                }
+            }
+        }
+
+        $modelInstance = new $fullModel;
+        $table = $modelInstance->getTable();
+        $primaryKey = $modelInstance->getKeyName();
+
+        try {
+            \Illuminate\Support\Facades\DB::beginTransaction();
+            
+            switch ($action) {
+                case 'insert':
+                    // Remove primary key if present to avoid conflicts
+                    $insertData = $payload;
+                    if (isset($insertData[$primaryKey]) && empty($insertData[$primaryKey])) {
+                        unset($insertData[$primaryKey]);
+                    }
+                    \Illuminate\Support\Facades\DB::table($table)->insert($insertData);
+                    Log::info("Data inserted successfully", ['table' => $table, 'data' => $insertData]);
+                    break;
+
+                case 'update':
+                    if (!isset($payload[$primaryKey])) {
+                        throw new \Exception("Primary key $primaryKey not found in payload for update");
+                    }
+                    \Illuminate\Support\Facades\DB::table($table)
+                        ->where($primaryKey, $payload[$primaryKey])
+                        ->update($payload);
+                    Log::info("Data updated successfully", ['table' => $table, 'id' => $payload[$primaryKey], 'data' => $payload]);
+                    break;
+
+                case 'delete':
+                    if (!isset($payload[$primaryKey])) {
+                        throw new \Exception("Primary key $primaryKey not found in payload for delete");
+                    }
+                    \Illuminate\Support\Facades\DB::table($table)
+                        ->where($primaryKey, $payload[$primaryKey])
+                        ->delete();
+                    Log::info("Data deleted successfully", ['table' => $table, 'id' => $payload[$primaryKey]]);
+                    break;
+            }
+            
+            \Illuminate\Support\Facades\DB::commit();
+            return response()->json([
+                'status' => 'success',
+                'message' => "Sync operation {$action} completed successfully"
+            ]);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            Log::error("Sync operation failed", [
+                'action' => $action,
+                'model' => $modelName,
+                'table' => $table,
+                'payload' => $payload,
+                'error' => $e->getMessage()
+            ]);
+            return response()->json([
+                'status'  => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+    // for dummy 
+
+    public function gethabistaydata(Request $request){
+        $token = $request->header('Authorization');
+
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        
+        try {
+            $data = Channel::join('core1_room', 'core1_room.roomID', '=', 'channel_table.roomID')
+            ->latest('channel_table.created_at')
+            ->get();
+        }
+        catch(\Exception $e){
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Fetched',
+                'data' => $data,
+            ], 200);
+        }
+
+
+    }
  
 }

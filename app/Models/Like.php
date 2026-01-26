@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Syncable;
 
 class Like extends Model
 {
-    use HasFactory;
+    use HasFactory, Syncable;
 
     protected $primaryKey = 'likeID';
     protected $fillable = ['postID', 'guestID'];

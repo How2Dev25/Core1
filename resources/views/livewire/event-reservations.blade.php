@@ -216,17 +216,23 @@
 
             {{-- PENDING --}}
             @if($reservation->eventstatus === 'Pending')
-                <div class="flex flex-col items-center justify-center text-center p-6 border border-dashed rounded-lg bg-gray-50">
-                    <i class="fa-solid fa-clock text-3xl text-gray-400 mb-3"></i>
-                    <p class="text-sm font-medium text-gray-600">
-                        Waiting for Administrative Action
-                    </p>
-                    <p class="text-xs text-gray-500 mt-1">
-                        Your event is currently under review.
-                    </p>
-                </div>
+                    <div class="flex flex-col items-center justify-center text-center p-6 border border-dashed rounded-lg bg-gray-50">
+                        <i class="fa-solid fa-clock text-3xl text-gray-400 mb-3"></i>
+                        <p class="text-sm font-medium text-gray-600">
+                            Waiting for Administrative Action
+                        </p>
+                        <p class="text-xs text-gray-500 mt-1">
+                            Your event is currently under review.
+                        </p>
+                    </div>
 
-            {{-- APPROVED --}}
+                        <button onclick="approve_event_{{$reservation->eventbookingID}}.showModal()"
+                            class="btn btn-sm btn-block bg-green-600 text-white gap-2 shadow-md hover:bg-green-700">
+                            <i class="fa-solid fa-check-circle"></i>
+                            Approve Event
+                        </button>
+
+                {{-- APPROVED --}}
             @elseif($reservation->eventstatus === 'Approved')
                 {{-- Show buttons --}}
                 <button onclick="confirm_event_{{$reservation->eventbookingID}}.showModal()"
@@ -306,5 +312,48 @@
         @include('admin.components.ecm.deletereservation')
         @include('admin.components.ecm.markasdone')
         @include('admin.components.ecm.printreceipt')
+
+
+        <dialog id="approve_event_{{$reservation->eventbookingID}}" class="modal">
+            <div class="modal-box max-w-md">
+                <form method="dialog">
+                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                        <i class="fa-solid fa-xmark w-4 h-4"></i>
+                    </button>
+                </form>
+
+                <h3 class="text-lg font-bold text-green-600 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-check-circle w-5 h-5"></i>
+                    Approve Event Reservation
+                </h3>
+
+                <p class="mb-6 text-sm text-gray-700">
+                    Are you sure you want to approve the event reservation for
+                    <span class="font-bold">
+                        {{$reservation->event_bookingreceiptID}} - {{$reservation->eventorganizer_name}}
+                    </span>? This will allow the organizer to proceed with confirmation.
+                </p>
+
+                <form method="POST" action="/approveeventbooking/{{$reservation->eventbookingID}}">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-action">
+                        <button type="button" onclick="approve_event_{{$reservation->eventbookingID}}.close()"
+                            class="btn btn-ghost">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-success text-white">
+                            <i class="fa-solid fa-check-circle w-4 h-4 mr-1"></i>
+                            Approve
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Click outside to close -->
+            <form method="dialog" class="modal-backdrop">
+                <button>close</button>
+            </form>
+        </dialog>
     @endforeach
 </div>
