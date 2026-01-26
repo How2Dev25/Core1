@@ -355,78 +355,108 @@
                     </div>
 
 
-       <div class="bg-white/95  rounded-3xl p-8 shadow-2xl border border-white/20">
-            <div class="flex items-center gap-4 mb-6">
-                <div class="p-3 bg-gradient-to-br from-[#001f54] to-[#1a3470] rounded-2xl shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="#F7B32B" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                        <polyline points="21 15 16 10 5 21"></polyline>
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold bg-gradient-to-r from-[#001f54] to-[#1a3470] bg-clip-text text-transparent">
-                        Valid ID Upload
-                    </h2>
-                    <p class="text-gray-600">Please upload a clear photo of your valid ID</p>
-                </div>
+    <div class="bg-white/95  rounded-3xl p-8 shadow-2xl border border-white/20">
+        <div class="flex items-center gap-4 mb-6">
+            <div class="p-3 bg-gradient-to-br from-[#001f54] to-[#1a3470] rounded-2xl shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="#F7B32B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold bg-gradient-to-r from-[#001f54] to-[#1a3470] bg-clip-text text-transparent">
+                    Valid ID Upload
+                </h2>
+                <p class="text-gray-600">Please upload a clear photo of your valid ID</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <h3 class="font-semibold text-lg text-[#001f54] mb-3">Accepted Valid IDs:</h3>
+            <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                <li>Driver's License</li>
+                <li>Passport</li>
+                <li>UMID</li>
+                <li>SSS ID</li>
+                <li>PhilHealth ID</li>
+                <li>PRC ID</li>
+                <li>Voter's ID</li>
+                <li>Postal ID</li>
+                <li>Barangay ID</li>
+                <li>TIN ID</li>
+                <li>Senior Citizen ID</li>
+                <li>School ID (for students)</li>
+            </ul>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- File Input Section -->
+            <div class="form-control">
+                <label class="label font-semibold text-[#001f54] mb-2">
+                    <span class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Upload Valid ID
+                        <span class="text-red-500">*</span>
+                    </span>
+                </label>
+                <input type="file" name="reservation_validID" id="validIdInput"
+                    class="file-input file-input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
+                    accept="image/*" required />
+                <p class="text-sm text-gray-500 mt-2">Accepted: JPG, PNG, PDF (Max 5MB)</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- File Input Section -->
-                <div class="form-control">
-                    <label class="label font-semibold text-[#001f54] mb-2">
-                        <span class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="17 8 12 3 7 8"></polyline>
-                                <line x1="12" y1="3" x2="12" y2="15"></line>
-                            </svg>
-                            Upload Valid ID
-                            <span class="text-red-500">*</span>
-                        </span>
-                    </label>
-                    <input type="file" name="reservation_validID" id="validIdInput"
-                        class="file-input file-input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
-                        accept="image/*" 
-                        required />
-                    <p class="text-sm text-gray-500 mt-2">Accepted: JPG, PNG, PDF (Max 5MB)</p>
-                </div>
-
-                <!-- Image Preview Section -->
-                <div class="form-control">
-                    <label class="label font-semibold text-[#001f54] mb-2">
-                        <span class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
-                            ID Preview
-                        </span>
-                    </label>
-                    <div id="imagePreviewContainer" class="border-2 border-dashed border-gray-300 rounded-xl p-4 h-48 flex items-center justify-center bg-gray-50">
-                        <div class="text-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
-                                fill="none" stroke="#9CA3AF" stroke-width="1" stroke-linecap="round"
-                                stroke-linejoin="round" class="mx-auto mb-2">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
-                            <p class="text-gray-500">Preview will appear here</p>
-                        </div>
+            <!-- Image Preview Section -->
+            <div class="form-control">
+                <label class="label font-semibold text-[#001f54] mb-2">
+                    <span class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        ID Preview
+                    </span>
+                </label>
+                <div id="imagePreviewContainer"
+                    class="border-2 border-dashed border-gray-300 rounded-xl p-4 h-48 flex items-center justify-center bg-gray-50">
+                    <div class="text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="#9CA3AF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                            class="mx-auto mb-2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        <p class="text-gray-500">Preview will appear here</p>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="mt-8 pt-6 border-t border-gray-200">
+            <ul class="space-y-4">
+                <li>
+                    <h4 class="font-semibold text-lg text-blue-900 mb-2">
+                        Data Privacy Act of 2012
+                    </h4>
+                    <p class="text-gray-700 leading-relaxed">
+                        In compliance with the <strong>Data Privacy Act of 2012 (Republic Act No. 10173)</strong>,
+                        Soliera Hotel & Restaurant ensures that all personal information collected is processed
+                        lawfully, securely, and only for legitimate purposes such as reservations, billing,
+                        and customer service.
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
         <!-- JavaScript for image preview -->
         <script>
         document.getElementById('validIdInput').addEventListener('change', function(e) {

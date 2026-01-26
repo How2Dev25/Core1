@@ -3,7 +3,7 @@
     <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/40 to-black/80 z-10"></div>
 
     <div class="parallax-bg absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out"
-        style="background-image: url('{{ asset('images/defaults/hotel3.jpg') }}');">
+        style="background-image: url('{{ asset('images/defaults/chinesenew.png') }}');">
     </div>
 
     <div class="absolute inset-0 z-10 pointer-events-none overflow-hidden">

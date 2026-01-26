@@ -49,7 +49,7 @@
           {{-- Subsystem Name --}}
 
           <section class="flex-1 p-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
               <!-- Total Logs -->
               <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
@@ -99,6 +99,27 @@
                 </div>
               </div>
 
+              <!-- Locked Accounts -->
+              <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-lg card-hover stat-card">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Locked Accounts</h3>
+                    <p class="text-3xl font-bold text-gray-800 mt-2">
+                      @php
+                        $lockedAccounts = \App\Models\DeptAccount::where('is_locked', true)->count();
+                        echo $lockedAccounts;
+                      @endphp
+                    </p>
+                    <div class="flex items-center mt-3">
+                      <span class="text-sm font-medium text-gray-500">Currently Locked</span>
+                    </div>
+                  </div>
+                  <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-blue-900">
+                    <i class="fa-solid fa-lock text-yellow-400 text-2xl"></i>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
             <!-- Table -->
@@ -125,6 +146,8 @@
                     <option value="">All Status</option>
                     <option value="Success" @selected(request('status') == 'Success')> Success</option>
                     <option value="Failed" @selected(request('status') == 'Failed')> Failed</option>
+                    <option value="Warning" @selected(request('status') == 'Warning')> Warning</option>
+                    <option value="Locked" @selected(request('status') == 'Locked')> Locked</option>
                   </select>
 
                   <!-- Type -->
@@ -132,6 +155,7 @@
                     <option value="">All Types</option>
                     <option value="Login" @selected(request('type') == 'Login')> Login</option>
                     <option value="Logout" @selected(request('type') == 'Logout')> Logout</option>
+                    <option value="Security" @selected(request('type') == 'Security')> Security</option>
                   </select>
 
                   <!-- Buttons -->
@@ -208,9 +232,17 @@
                             <span class="px-2 py-1 inline-flex items-center rounded-full text-white text-xs bg-red-500">
                               <i class="fa-solid fa-circle-xmark mr-1"></i> {{ $deptlog->log_status }}
                             </span>
-                          @else
+                          @elseif ($deptlog->log_status === 'Warning')
                             <span class="px-2 py-1 inline-flex items-center rounded-full text-white text-xs bg-yellow-500">
                               <i class="fa-solid fa-triangle-exclamation mr-1"></i> {{ $deptlog->log_status }}
+                            </span>
+                          @elseif ($deptlog->log_status === 'Locked')
+                            <span class="px-2 py-1 inline-flex items-center rounded-full text-white text-xs bg-purple-600">
+                              <i class="fa-solid fa-lock mr-1"></i> {{ $deptlog->log_status }}
+                            </span>
+                          @else
+                            <span class="px-2 py-1 inline-flex items-center rounded-full text-white text-xs bg-gray-500">
+                              <i class="fa-solid fa-question mr-1"></i> {{ $deptlog->log_status }}
                             </span>
                           @endif
                         </td>

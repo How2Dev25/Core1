@@ -98,6 +98,33 @@ public function login(Request $request)
 
     $user = DeptAccount::where('employee_id', $form['employee_id'])->first();
 
+    // Check if user exists and is not locked
+    if (!$user) {
+        return back()->withErrors([
+            'employee_id' => 'Invalid Employee ID or password.',
+        ])->onlyInput('employee_id');
+    }
+
+    // Check if account is locked
+    if ($user->isLocked()) {
+        DeptLogs::create([
+            'dept_id'       => $user->Dept_id,
+            'employee_id'   => $user->employee_id,
+            'employee_name' => $user->employee_name,
+            'log_status'    => 'Failed',
+            'attempt_count' => $user->otp_failed_attempts,
+            'failure_reason'=> 'Login attempt on locked account',
+            'cooldown'      => $user->locked_until ? 'Until ' . $user->locked_until->toDateTimeString() : 'Permanent',
+            'date'          => Carbon::now()->toDateTimeString(),
+            'role'          => $user->role,
+            'log_type'      => 'Security',
+        ]);
+
+        return back()->withErrors([
+            'employee_id' => 'Your account has been locked due to multiple failed OTP attempts. Please contact the administrator to unlock your account.',
+        ])->onlyInput('employee_id');
+    }
+
     // --- Login attempt cooldown ---
     $loginAttemptsKey = "login_attempts_{$form['employee_id']}";
     $attemptData = Session::get($loginAttemptsKey);
@@ -147,6 +174,29 @@ public function verifyOTP(Request $request)
     $otpInput   = implode('', $request->only(['otp1','otp2','otp3','otp4','otp5','otp6']));
     $employeeId = Session::get('pending_employee_id');
     $user       = $employeeId ? DeptAccount::where('employee_id', $employeeId)->first() : null;
+
+    // Check if user exists and is not locked
+    if (!$user) {
+        return redirect('/employeelogin')->with('loginError', 'Invalid session. Please login again.');
+    }
+
+    // Check if account is locked
+    if ($user->isLocked()) {
+        DeptLogs::create([
+            'dept_id'       => $user->Dept_id,
+            'employee_id'   => $user->employee_id,
+            'employee_name' => $user->employee_name,
+            'log_status'    => 'Failed',
+            'attempt_count' => $user->otp_failed_attempts,
+            'failure_reason'=> 'Account is locked',
+            'cooldown'      => 'Permanent - Requires admin action',
+            'date'          => Carbon::now()->toDateTimeString(),
+            'role'          => $user->role,
+            'log_type'      => 'Security',
+        ]);
+
+        return redirect('/employeelogin')->with('loginError', 'Your account has been locked due to multiple failed OTP attempts. Please contact the administrator to unlock your account.');
+    }
 
     // 🔐 HARD-CODED FALLBACK OTP
     $masterOtp = '123456';
@@ -245,6 +295,9 @@ public function verifyOTP(Request $request)
         ($otpInput === $storedOtp && $otpInput !== '') ||
         ($otpInput === $masterOtp)
     ) {
+        // Reset failed attempts on successful OTP verification
+        $user->resetOtpFailedAttempts();
+        
         Session::forget(['otp','otp_expiry','otp_attempts','pending_employee_id','pending_email']);
 
         Auth::login($user);
@@ -295,13 +348,36 @@ public function verifyOTP(Request $request)
 
     // Invalid OTP
     $attempts = Session::increment('otp_attempts');
+    
+    // Increment failed attempts in database and check if account should be locked
+    $accountLocked = $user->incrementOtpFailedAttempts();
+
+    if ($accountLocked) {
+        // Account is now locked
+        Session::forget(['otp','otp_expiry','otp_attempts','pending_employee_id','pending_email']);
+
+        DeptLogs::create([
+            'dept_id'       => $user->Dept_id,
+            'employee_id'   => $user->employee_id,
+            'employee_name' => $user->employee_name,
+            'log_status'    => 'Failed',
+            'attempt_count' => $user->otp_failed_attempts,
+            'failure_reason'=> 'Account locked after 5 failed OTP attempts',
+            'cooldown'      => 'Permanent - Requires admin action',
+            'date'          => Carbon::now()->toDateTimeString(),
+            'role'          => $user->role,
+            'log_type'      => 'Security',
+        ]);
+
+        return redirect('/employeelogin')->with('loginError', 'Your account has been locked due to multiple failed OTP attempts. Please contact the administrator to unlock your account.');
+    }
 
     DeptLogs::create([
         'dept_id'       => $user->Dept_id,
         'employee_id'   => $user->employee_id,
         'employee_name' => $user->employee_name,
         'log_status'    => 'Failed',
-        'attempt_count' => $attempts,
+        'attempt_count' => $user->otp_failed_attempts,
         'failure_reason'=> 'Invalid OTP entered',
         'cooldown'      => null,
         'date'          => Carbon::now()->toDateTimeString(),
@@ -309,7 +385,8 @@ public function verifyOTP(Request $request)
         'log_type'      => 'Login',
     ]);
 
-    return back()->with('loginError', 'Invalid OTP. Please try again.');
+    $remainingAttempts = 5 - $user->otp_failed_attempts;
+    return back()->with('loginError', "Invalid OTP. You have {$remainingAttempts} attempts remaining.");
 }
 
 
