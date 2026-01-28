@@ -1244,7 +1244,7 @@ public function generateInvoice($reservationID)
     $bookedDate    = date('M d, Y', strtotime($booking->created_at));
     $paymentstatus = $booking->payment_status;
 
-    // ✅ Fetch restaurant orders for this booking (only Delivered)
+    // ✅ Fetch restaurant orders for this booking (all orders, not just delivered)
     $orders = DB::table('orderfromresto')
         ->join('resto_integration', 'resto_integration.menuID', '=', 'orderfromresto.menuID')
         ->select(
@@ -1255,7 +1255,6 @@ public function generateInvoice($reservationID)
             'resto_integration.menu_price'
         )
         ->where('orderfromresto.bookingID', $booking->bookingID)
-        ->where('orderfromresto.order_status', 'Delivered')
         ->get();
 
     // ✅ Compute totals (Hotel + Restaurant)
@@ -1273,9 +1272,10 @@ public function generateInvoice($reservationID)
     $serviceFeedynamic = rtrim(rtrim(number_format($servicefee2, 2), '0'), '.') . '%';
     $taxRatedynamic = rtrim(rtrim(number_format($taxrate2, 2), '0'), '.') . '%';
 
-    $restaurantTotal = $orders->sum(function($order) {
-        return $order->menu_price * $order->order_quantity;
-    });
+    $restaurantTotal = 0;
+    foreach ($orders as $order) {
+        $restaurantTotal += $order->menu_price * $order->order_quantity;
+    }
 
     // Calculate grand total
     $grandTotal = $hotelTotal + $restaurantTotal;

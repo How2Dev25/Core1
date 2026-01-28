@@ -145,7 +145,26 @@
             <p><strong>Invoice Date:</strong> {{ date('Y-m-d') }}</p>
             <p><strong>Receipt:</strong> {{ $booking->reservation_receipt }}</p>
             <p><strong>Booking ID:</strong> {{ $booking->bookingID }}</p>
-            <p><strong>Payment Status:</strong> {{$paymentstatus}}</p>
+            <p><strong>Payment Status:</strong> 
+                @php
+                    // Calculate overall payment status in view
+                    $roomPaymentStatus = $booking->payment_status;
+                    $hasUnpaidRestaurantOrders = $orders->contains('payment_resto_status', '!=', 'Paid');
+                    $hasRestaurantOrders = $orders->count() > 0;
+                    
+                    // Determine overall payment status
+                    if ($roomPaymentStatus === 'Paid' && (!$hasRestaurantOrders || $orders->every(function($order) { 
+                        return $order->payment_resto_status === 'Paid'; 
+                    }))) {
+                        $overallPaymentStatus = 'Paid';
+                    } elseif ($roomPaymentStatus === 'Partial' || ($hasRestaurantOrders && $hasUnpaidRestaurantOrders)) {
+                        $overallPaymentStatus = 'Partial';
+                    } else {
+                        $overallPaymentStatus = $roomPaymentStatus;
+                    }
+                @endphp
+                {{ $overallPaymentStatus }}
+            </p>
         </div>
 
         <!-- Guest Info -->
@@ -171,11 +190,20 @@ $taxAmount = $vat;
 $serviceFee = $roomserviceFee;
 $roomTotal = $hotelTotal;
 
-// Restaurant totals
+// Restaurant totals with payment breakdown - FIXED
 $orderTotal = 0;
-if (isset($orders[$booking->bookingID])) {
-    foreach ($orders[$booking->bookingID] as $order) {
-        $orderTotal += $order->menu_price * $order->order_quantity;
+$restaurantPaidTotal = 0;
+$restaurantUnpaidTotal = 0;
+
+// FIX: Iterate directly over $orders collection (not grouped by bookingID)
+foreach ($orders as $order) {
+    $itemTotal = $order->menu_price * $order->order_quantity;
+    $orderTotal += $itemTotal;
+    
+    if ($order->payment_resto_status == 'Paid') {
+        $restaurantPaidTotal += $itemTotal;
+    } else {
+        $restaurantUnpaidTotal += $itemTotal;
     }
 }
 
@@ -267,6 +295,7 @@ $grandTotal = $roomTotal + $orderTotal;
                             <th>Quantity</th>
                             <th class="text-right">Price</th>
                             <th class="text-right">Subtotal</th>
+                            <th class="text-center">Payment Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -279,11 +308,33 @@ $grandTotal = $roomTotal + $orderTotal;
                                 <td>{{ $order->order_quantity }}</td>
                                 <td class="text-right">{{ number_format($order->menu_price, 2) }}</td>
                                 <td class="text-right">{{ number_format($lineTotal, 2) }}</td>
+                                <td class="text-center">
+                                    @if($order->payment_resto_status == 'Paid')
+                                        <span style="color: #16a34a; font-weight: bold;"> Paid</span>
+                                        @if($order->payment_date)
+                                            <br><small style="color: #6b7280;">{{ date('M d, Y', strtotime($order->payment_date)) }}</small>
+                                        @endif
+                                    @else
+                                        <span style="color: #ea580c; font-weight: bold;"> Pending</span>
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                         <tr class="total">
                             <td colspan="3" class="text-right">Restaurant Total</td>
-                            <td class="text-right">{{ number_format($restaurantTotal, 2) }}</td>
+                            <td class="text-right">{{ number_format($orderTotal, 2) }}</td>
+                            <td class="text-center">
+                                @if($restaurantPaidTotal > 0 && $restaurantUnpaidTotal > 0)
+                                    <small style="color: #6b7280;">
+                                        ₱{{ number_format($restaurantPaidTotal, 2) }} paid<br>
+                                        ₱{{ number_format($restaurantUnpaidTotal, 2) }} pending
+                                    </small>
+                                @elseif($restaurantPaidTotal > 0 && $restaurantUnpaidTotal == 0)
+                                    <small style="color: #16a34a; font-weight: bold;"> Fully Paid</small>
+                                @else
+                                    <small style="color: #ea580c; font-weight: bold;"> Pending</small>
+                                @endif
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -302,12 +353,12 @@ $grandTotal = $roomTotal + $orderTotal;
                     @if($orders->isNotEmpty())
                         <tr>
                             <td colspan="4" class="text-right">Restaurant Total</td>
-                            <td class="text-right">{{ number_format($restaurantTotal, 2) }}</td>
+                            <td class="text-right">{{ number_format($orderTotal, 2) }}</td>
                         </tr>
                     @endif
                     <tr class="total">
                         <td class="text-right" colspan="4">Grand Total</td>
-                        <td class="text-right">{{ number_format($hotelTotal + $restaurantTotal, 2) }}</td>
+                        <td class="text-right">{{ number_format($hotelTotal + $orderTotal, 2) }}</td>
                     </tr>
                 </tbody>
             </table>

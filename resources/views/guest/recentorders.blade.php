@@ -69,121 +69,175 @@
         'Nothing here yet! Time to feast 🍔🍕',
         'Oops! Your cart feels empty. Treat yourself 😋',
         'No items in your cart… maybe your stomach is waiting? 🍽️',
-        'Your cart is on a diet. Let’s fix that! 🥗'
+        'Your cart is on a diet. Let s fix that! 🥗'
     ];
     $randomMessage = $emptyMessages[array_rand($emptyMessages)];
+    
+    // Group orders by booking ID
+    $groupedOrders = [];
+    foreach ($mycart as $order) {
+        $bookingID = $order->bookingID ?? 'no-booking';
+        if (!isset($groupedOrders[$bookingID])) {
+            $groupedOrders[$bookingID] = [];
+        }
+        $groupedOrders[$bookingID][] = $order;
+    }
                                             @endphp
 
-                                            @forelse ($mycart as $carts)
-                                                @php
-        $itemTotal = $carts->menu_price * $carts->order_quantity;
-        $subtotal += $itemTotal;
-                                                @endphp
-                                                <div
-                                                    class="relative flex flex-col sm:flex-row items-start gap-6 p-5 rounded-xl bg-gray-50 border border-gray-200">
-                                                    <!-- Exit Button -->
-                                                    <button type="button"
-                                                        onclick="document.getElementById('deleteordermodal-{{$carts->orderID}}').showModal()"
-                                                        class="absolute top-3 right-3 p-1 rounded-full bg-red-100 hover:bg-red-200 text-red-600 transition">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                        </svg>
-                                                    </button>
-
-                                                    <!-- Menu Image -->
-                                                    <div
-                                                        class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
-                                                        <img src="{{ asset($carts->menu_photo) }}" alt="{{ $carts->menu_name }}"
-                                                            class="w-full h-full object-cover">
+                                            @forelse ($groupedOrders as $bookingID => $orders)
+                                                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+                                                    <!-- Booking Header -->
+                                                    <div class="bg-blue-900 text-white p-5">
+                                                        <div class="flex items-center justify-between">
+                                                            <div class="flex items-center gap-4">
+                                                                <div class="p-3 bg-blue-800 rounded-xl">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                                                                    </svg>
+                                                                </div>
+                                                                <div>
+                                                                    <h4 class="font-bold text-lg">Booking #{{ $bookingID }}</h4>
+                                                                    <p class="text-blue-100 text-sm">{{ count($orders) }} item{{ count($orders) > 1 ? 's' : '' }} ordered</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="text-right">
+                                                                @php
+                                                                    $bookingTotal = 0;
+                                                                    foreach ($orders as $order) {
+                                                                        $bookingTotal += $order->menu_price * $order->order_quantity;
+                                                                    }
+                                                                    $subtotal += $bookingTotal;
+                                                                @endphp
+                                                                <p class="text-sm text-blue-100">Booking Total</p>
+                                                                <p class="text-2xl font-bold text-yellow-300">₱{{ number_format($bookingTotal, 2) }}</p>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
-                                                    <!-- Menu Details -->
-                                                    <div class="flex-grow">
-                                                        <!-- Status and Booking ID Display -->
-                                                        <div class="flex flex-wrap items-center gap-2 mb-3">
-                                                            <!-- Order Status Badge -->
-                                                            <span
-                                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                                                                                                                                                                @if($carts->order_status == 'pending') bg-yellow-100 text-yellow-800
-                                                                                                                                                                                @elseif($carts->order_status == 'Cooking') bg-blue-100 text-blue-800
-                                                                                                                                                                                @elseif($carts->order_status == 'Ready') bg-green-100 text-green-800
-                                                                                                                                                                                @elseif($carts->order_status == 'Delivered') bg-purple-100 text-purple-800
-                                                                                                                                                                                @elseif($carts->order_status == 'Cancelled') bg-red-100 text-red-800
-                                                                                                                                                                                @else bg-gray-100 text-gray-800 @endif">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1"
-                                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                    @if($carts->order_status == 'pending')
-                                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                                            stroke-width="2"
-                                                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                                    @elseif($carts->order_status == 'preparing')
-                                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                                            stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                                                    @elseif($carts->order_status == 'ready')
-                                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                                            stroke-width="2" d="M5 13l4 4L19 7" />
-                                                                    @elseif($carts->order_status == 'delivered')
-                                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                                            stroke-width="2"
-                                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                                    @elseif($carts->order_status == 'cancelled')
-                                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                                            stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                                    @else
-                                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                                            stroke-width="2"
-                                                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                                    @endif
-                                                                </svg>
-                                                                {{ ucfirst($carts->order_status ?? 'pending') }}
-                                                            </span>
+                                                    <!-- Orders in this booking -->
+                                                    <div class="p-5 space-y-3">
+                                                        @foreach ($orders as $carts)
+                                                            @php
+                                        $itemTotal = $carts->menu_price * $carts->order_quantity;
+                                                            @endphp
+                                                            <div class="flex items-start gap-4 p-4 rounded-xl bg-gray-50 border border-gray-200 hover:border-blue-300 transition-all duration-200">
+                                                                <!-- Menu Image -->
+                                                                <div class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border-2 border-white shadow-md">
+                                                                    <img src="{{ asset($carts->menu_photo) }}" alt="{{ $carts->menu_name }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                                                                </div>
 
-                                                            <!-- Booking ID Badge -->
-                                                            <span
-                                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900 text-white">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1"
-                                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                                        stroke-width="2"
-                                                                        d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
-                                                                </svg>
-                                                                Booking ID: {{ $carts->bookingID ?? 'N/A' }}
-                                                            </span>
-                                                        </div>
+                                                                <!-- Menu Details -->
+                                                                <div class="flex-grow">
+                                                                    <!-- Status and Payment Display -->
+                                                                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                                                                        <!-- Order Status Badge -->
+                                                                        @if($carts->order_status == 'pending')
+                                                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold shadow-sm bg-yellow-400 text-white">
+                                                                                {{ ucfirst($carts->order_status ?? 'pending') }}
+                                                                            </span>
+                                                                        @elseif($carts->order_status == 'Cooking')
+                                                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold shadow-sm bg-blue-400 text-white">
+                                                                                {{ ucfirst($carts->order_status) }}
+                                                                            </span>
+                                                                        @elseif($carts->order_status == 'Ready')
+                                                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold shadow-sm bg-green-400 text-white">
+                                                                                {{ ucfirst($carts->order_status) }}
+                                                                            </span>
+                                                                        @elseif($carts->order_status == 'Delivered')
+                                                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold shadow-sm bg-purple-400 text-white">
+                                                                                {{ ucfirst($carts->order_status) }}
+                                                                            </span>
+                                                                        @elseif($carts->order_status == 'Cancelled')
+                                                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold shadow-sm bg-red-400 text-white">
+                                                                                {{ ucfirst($carts->order_status) }}
+                                                                            </span>
+                                                                        @else
+                                                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold shadow-sm bg-gray-400 text-white">
+                                                                                {{ ucfirst($carts->order_status ?? 'pending') }}
+                                                                            </span>
+                                                                        @endif
 
-                                                        <h3 class="font-semibold text-lg text-gray-800">{{ $carts->menu_name }}
-                                                        </h3>
-                                                        <p class="text-sm text-gray-600 mt-1">
-                                                            {{ $carts->menu_description ?? '' }}
-                                                        </p>
-                                                        <div
-                                                            class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-3 gap-2">
-                                                            <span class="text-sm font-medium text-gray-700">Qty:
-                                                                {{ $carts->order_quantity }}</span>
-                                                            <span
-                                                                class="text-lg font-bold text-blue-800">₱{{ number_format($itemTotal, 2) }}</span>
-                                                        </div>
+                                                                        <!-- Payment Status Badge -->
+                                                                        @if($carts->payment_resto_status == 'Paid')
+                                                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold shadow-sm bg-green-400 text-white">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                                </svg>
+                                                                                Paid
+                                                                            </span>
+                                                                        @elseif($carts->payment_resto_status == 'Pending')
+                                                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold shadow-sm bg-orange-400 text-white">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                                </svg>
+                                                                                Pending
+                                                                            </span>
+                                                                        @else
+                                                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold shadow-sm bg-gray-400 text-white">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                                </svg>
+                                                                                Pending
+                                                                            </span>
+                                                                        @endif
+                                                                    </div>
 
-                                                        <!-- Action Buttons for each item -->
-                                                        <div class="flex flex-wrap gap-2 mt-4 pt-3 border-t border-gray-200">
-                                                            @if($carts->order_status != 'Delivered' && $carts->order_status != 'Cancelled')
-                                                                <button
-                                                                    onclick="document.getElementById('deliverordermodal-{{$carts->orderID}}').showModal()"
-                                                                    class="px-3 py-1.5 bg-blue-900 hover:bg-blue-800 text-white text-sm rounded-lg flex items-center gap-1 transition shadow-sm">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
-                                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                                            stroke-width="2" d="M5 13l4 4L19 7" />
-                                                                    </svg>
-                                                                    Mark as Delivered
-                                                                </button>
-                                                            @endif
+                                                                    <h5 class="font-bold text-lg text-gray-800 mb-1">{{ $carts->menu_name }}</h5>
+                                                                    <p class="text-sm text-gray-600 mb-3">{{ $carts->menu_description ?? '' }}</p>
+                                                                    
+                                                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                                                        <div class="flex flex-col gap-2">
+                                                                            <div class="flex items-center gap-2">
+                                                                                <span class="text-sm font-semibold text-gray-700">Qty:</span>
+                                                                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-lg text-sm font-bold">{{ $carts->order_quantity }}</span>
+                                                                            </div>
+                                                                            @if($carts->payment_resto_status == 'Paid')
+                                                                                <div class="flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-lg">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                                    </svg>
+                                                                                    Paid via {{ $carts->payment_method ?? 'Online' }}
+                                                                                    @if($carts->payment_date)
+                                                                                        on {{ date('M d, Y', strtotime($carts->payment_date)) }}
+                                                                                    @endif
+                                                                                </div>
+                                                                            @else
+                                                                                <div class="flex items-center gap-1 text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded-lg">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                                    </svg>
+                                                                                    Payment Pending
+                                                                                </div>
+                                                                            @endif
+                                                                        </div>
+                                                                        <div class="text-right">
+                                                                            <p class="text-2xl font-bold text-blue-600">₱{{ number_format($itemTotal, 2) }}</p>
+                                                                        </div>
+                                                                    </div>
 
-
-
-                                                        </div>
+                                                                    <!-- Action Buttons -->
+                                                                    <div class="flex flex-wrap gap-2 mt-4 pt-3 border-t border-gray-200">
+                                                                        @if($carts->order_status != 'Delivered' && $carts->order_status != 'Cancelled')
+                                                                            <button onclick="document.getElementById('deliverordermodal-{{$carts->orderID}}').showModal()" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm rounded-xl flex items-center gap-2 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                                                </svg>
+                                                                                Mark as Delivered
+                                                                            </button>
+                                                                        @endif
+                                                                        @if($carts->order_status != 'Delivered')
+                                                                            <button type="button" onclick="document.getElementById('deleteordermodal-{{$carts->orderID}}').showModal()" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded-xl flex items-center gap-2 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                                                </svg>
+                                                                                Cancel
+                                                                            </button>
+                                                                        @endif
+                                                                       
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
                                                     </div>
                                                 </div>
 
@@ -200,29 +254,6 @@
                                             </div>
                                         @endforelse
                                         </div>
-
-                                        <!-- Order Summary -->
-                                        @if($subtotal > 0)
-                                            <div class="space-y-4 mb-8">
-                                                <div
-                                                    class="flex items-center justify-between p-4 rounded-xl bg-gray-50 border border-gray-200">
-                                                    <span class="flex items-center gap-2 text-base font-medium text-gray-700">
-                                                        Subtotal
-                                                    </span>
-                                                    <span
-                                                        class="font-bold text-blue-800 text-lg">₱{{ number_format($subtotal, 2) }}</span>
-                                                </div>
-
-                                                <div
-                                                    class="flex items-center justify-between p-5 rounded-xl bg-blue-900 text-white">
-                                                    <span class="flex items-center gap-2 text-lg font-bold">
-                                                        Total Amount
-                                                    </span>
-                                                    <span
-                                                        class="text-2xl text-yellow-300 font-bold">₱{{ number_format($subtotal, 2) }}</span>
-                                                </div>
-                                            </div>
-                                        @endif
 
                                         <p class="text-xs text-gray-500 text-center mt-4">
                                             Estimated preparation time: 25-30 minutes
@@ -251,6 +282,31 @@
                     <!-- Initialize Lucide Icons -->
                     <script>
                         lucide.createIcons();
+                        
+                        // Mark order as paid function
+                        function markOrderAsPaid(orderID) {
+                            if (confirm('Are you sure you want to mark this order as paid?')) {
+                                fetch(`/mark-order-paid/${orderID}`, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                    }
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        location.reload();
+                                    } else {
+                                        alert('Error: ' + data.message);
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    alert('An error occurred while marking the order as paid.');
+                                });
+                            }
+                        }
                     </script>
 
 

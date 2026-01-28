@@ -125,13 +125,75 @@
                 max="{{$reserveroom->roommaxguest}}" class="input input-bordered w-full focus:input-primary" required />
             </div>
 
-            <div class="form-control sm:col-span-2 lg:col-span-2">
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-semibold text-gray-700">Early Check-in Time</span>
+              </label>
+              <select name="early_checkin_time" class="select select-bordered w-full focus:ring-2 focus:ring-primary focus:border-primary">
+                <option value="">Standard (2-4 PM)</option>
+                <option value="10:00 AM" {{ $reserveroom->early_checkin_time == '10:00 AM' ? 'selected' : '' }}>10:00 AM</option>
+                <option value="11:00 AM" {{ $reserveroom->early_checkin_time == '11:00 AM' ? 'selected' : '' }}>11:00 AM</option>
+                <option value="12:00 PM" {{ $reserveroom->early_checkin_time == '12:00 PM' ? 'selected' : '' }}>12:00 PM</option>
+                <option value="1:00 PM" {{ $reserveroom->early_checkin_time == '1:00 PM' ? 'selected' : '' }}>1:00 PM</option>
+              </select>
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-semibold text-gray-700">Late Check-out Time</span>
+              </label>
+              <select name="late_checkout_time" class="select select-bordered w-full focus:ring-2 focus:ring-primary focus:border-primary">
+                <option value="">Standard (10 AM-12 PM)</option>
+                <option value="1:00 PM" {{ $reserveroom->late_checkout_time == '1:00 PM' ? 'selected' : '' }}>1:00 PM</option>
+                <option value="2:00 PM" {{ $reserveroom->late_checkout_time == '2:00 PM' ? 'selected' : '' }}>2:00 PM</option>
+                <option value="3:00 PM" {{ $reserveroom->late_checkout_time == '3:00 PM' ? 'selected' : '' }}>3:00 PM</option>
+                <option value="4:00 PM" {{ $reserveroom->late_checkout_time == '4:00 PM' ? 'selected' : '' }}>4:00 PM</option>
+              </select>
+            </div>
+
+            <div class="form-control sm:col-span-2 lg:col-span-3">
               <label class="label">
                 <span class="label-text font-semibold text-gray-700">Special Requests</span>
               </label>
-              <input type="text" value="{{$reserveroom->reservation_specialrequest}}" name="reservation_specialrequest"
-                placeholder="Early check-in, extra pillows..."
-                class="input input-bordered w-full focus:input-primary" />
+              @php
+                $specialRequests = $reserveroom->reservation_specialrequest ? explode(', ', $reserveroom->reservation_specialrequest) : [];
+              @endphp
+              <div class="space-y-2">
+                <div class="flex flex-wrap gap-2">
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="special_requests[]" value="Early check-in" 
+                      @if(in_array('Early check-in', $specialRequests)) checked @endif
+                      class="checkbox checkbox-sm">
+                    <span class="text-sm">Early check-in</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="special_requests[]" value="Late check-out"
+                      @if(in_array('Late check-out', $specialRequests)) checked @endif
+                      class="checkbox checkbox-sm">
+                    <span class="text-sm">Late check-out</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="special_requests[]" value="Extra pillows"
+                      @if(in_array('Extra pillows', $specialRequests)) checked @endif
+                      class="checkbox checkbox-sm">
+                    <span class="text-sm">Extra pillows</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="special_requests[]" value="Room with view"
+                      @if(in_array('Room with view', $specialRequests)) checked @endif
+                      class="checkbox checkbox-sm">
+                    <span class="text-sm">Room with view</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="special_requests[]" value="Away from elevator"
+                      @if(in_array('Away from elevator', $specialRequests)) checked @endif
+                      class="checkbox checkbox-sm">
+                    <span class="text-sm">Away from elevator</span>
+                  </label>
+                </div>
+                <input type="text" name="custom_special_request" placeholder="Add custom request..."
+                  class="input input-bordered w-full focus:ring-2 focus:ring-primary focus:border-primary text-sm">
+              </div>
             </div>
 
             <div class="form-control">
@@ -246,6 +308,109 @@
               <textarea name="guestaddress" class="textarea textarea-bordered focus:textarea-primary"
                 placeholder="123 Barangay St., City, Province" rows="2"
                 required>{{$reserveroom->guestaddress}}</textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing Information -->
+        <div
+          class="bg-gradient-to-br from-base-100 to-base-200 rounded-xl p-4 sm:p-6 mb-6 shadow-md border border-base-300">
+          <h2 class="text-base sm:text-lg font-semibold text-gray-700 flex items-center gap-2 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Billing Information
+          </h2>
+
+          @php
+            $nights = \Carbon\Carbon::parse($reserveroom->reservation_checkin)->diffInDays(\Carbon\Carbon::parse($reserveroom->reservation_checkout));
+          @endphp
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Room Charges -->
+            <div class="bg-white rounded-lg p-4 shadow-sm border border-base-200">
+              <h3 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-bed text-primary"></i>
+                Room Charges
+              </h3>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Room Rate ({{$nights}} nights):</span>
+                  <span class="font-medium">₱{{ number_format($reserveroom->roomprice * $nights, 2) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Subtotal:</span>
+                  <span class="font-medium">₱{{ number_format($reserveroom->subtotal, 2) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Service Fee:</span>
+                  <span class="font-medium">₱{{ number_format($reserveroom->serviceFee, 2) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">VAT:</span>
+                  <span class="font-medium">₱{{ number_format($reserveroom->vat, 2) }}</span>
+                </div>
+                <div class="flex justify-between font-bold text-lg text-primary border-t pt-2 mt-2">
+                  <span>Total:</span>
+                  <span>₱{{ number_format($reserveroom->total, 2) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Details -->
+            <div class="bg-white rounded-lg p-4 shadow-sm border border-base-200">
+              <h3 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-credit-card text-primary"></i>
+                Payment Details
+              </h3>
+              <div class="space-y-3 text-sm">
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-600">Payment Method:</span>
+                  <span class="font-medium bg-base-100 px-2 py-1 rounded">{{$reserveroom->payment_method}}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-600">Payment Status:</span>
+                  <span class="font-semibold px-2 py-1 rounded text-xs border
+                    @if($reserveroom->payment_status === 'Paid')
+                      bg-green-100 text-green-700 border-green-200
+                    @elseif($reserveroom->payment_status === 'Partial')
+                      bg-blue-100 text-blue-700 border-blue-200
+                    @elseif($reserveroom->payment_status === 'Pending')
+                      bg-orange-100 text-orange-700 border-orange-200
+                    @else
+                      bg-gray-100 text-gray-700 border-gray-200
+                    @endif">
+                    {{ $reserveroom->payment_status }}
+                  </span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-600">Booking Status:</span>
+                  <span class="font-semibold px-2 py-1 rounded text-xs border
+                    @if($reserveroom->reservation_bookingstatus == 'Confirmed')
+                      bg-green-100 text-green-700 border-green-200
+                    @elseif($reserveroom->reservation_bookingstatus == 'Pending')
+                      bg-yellow-100 text-yellow-700 border-yellow-200
+                    @elseif($reserveroom->reservation_bookingstatus == 'Cancelled')
+                      bg-red-100 text-red-700 border-red-200
+                    @else
+                      bg-gray-100 text-gray-700 border-gray-200
+                    @endif">
+                    {{ $reserveroom->reservation_bookingstatus }}
+                  </span>
+                </div>
+                @if($reserveroom->rfid)
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-600">RFID Card:</span>
+                  <span class="font-medium bg-base-100 px-2 py-1 rounded border border-base-300">{{$reserveroom->rfid}}</span>
+                </div>
+                @endif
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-600">Booked Date:</span>
+                  <span class="font-medium">{{ date('M d, Y', strtotime($reserveroom->reservation_created_at)) }}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

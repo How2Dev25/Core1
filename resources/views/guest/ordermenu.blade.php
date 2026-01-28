@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   @vite('resources/css/app.css')
@@ -322,11 +323,28 @@
           <!-- Initialize Lucide Icons -->
           <script>
             lucide.createIcons();
+            
+            // Store order data for the modal
+            window.orderData = {
+                items: [
+                    @foreach($mycart as $item)
+                    {
+                        menuID: {{ $item->menuID }},
+                        name: '{{ $item->menu_name }}',
+                        quantity: {{ $item->order_quantity }},
+                        price: {{ $item->menu_price }},
+                        total: {{ $item->order_quantity * $item->menu_price }},
+                        photo: '{{ asset($item->menu_photo) }}'
+                    },
+                    @endforeach
+                ],
+                subtotal: {{ $subtotal ?? 0 }},
+                guestID: {{ Auth::guard('guest')->user()->guestID }},
+                guestName: '{{ Auth::guard('guest')->user()->guestname }}',
+                guestEmail: '{{ Auth::guard('guest')->user()->guestemailaddress }}',
+                guestContact: '{{ Auth::guard('guest')->user()->guestcontact }}'
+            };
           </script>
-
-
-
-
 
 
 

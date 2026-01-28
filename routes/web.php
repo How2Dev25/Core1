@@ -1723,7 +1723,13 @@ Route::get('/myorder', function(){
 Route::post('/addtocart', [orderController::class, 'addtocart']);
 Route::delete('/deletecart/{cartID}', [orderController::class, 'deletefromcart']);
 
-Route::get('/ordercart', [orderController::class, 'confirmorder']);
+Route::get('/ordercart', [orderController::class, 'confirmorder'])->name('ordercart');
+Route::post('/order/submit', [orderController::class, 'confirmorder']);
+Route::put('/markaspaidResto/{BP_id}', [restoController::class, 'markOrderAsPaid']);
+
+// Restaurant payment routes
+Route::get('/restaurant/payment/success', [orderController::class, 'paymentSuccess'])->name('restaurant.payment.success');
+Route::get('/restaurant/payment/cancel', [orderController::class, 'paymentCancel'])->name('restaurant.payment.cancel');
 
 Route::get('/recentorders', function(){
      guestAuthCheck();
@@ -1738,6 +1744,7 @@ Route::get('/recentorders', function(){
 
 Route::delete('/cancelorder/{orderID}', [orderController::class, 'cancelorder']);
 Route::put('/deliverorder/{orderID}', [orderController::class, 'delivered']);
+Route::put('/mark-order-paid/{orderID}', [orderController::class, 'markAsPaid']);
 
 Route::get('/profileguest', function(){
      guestAuthCheck();

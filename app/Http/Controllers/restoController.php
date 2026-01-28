@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ordersfromresto;
 use Illuminate\Http\Request;
 use App\Models\restointegration;
 
@@ -64,4 +65,20 @@ class restoController extends Controller
         return redirect()->back()->with('success', 'Menu Has Been Removed');
 
     }
+
+   public function markOrderAsPaid($orderID)
+{
+    // Find the order
+    $order = ordersfromresto::findOrFail($orderID);
+    
+    // Update payment status
+    $order->update([
+        'payment_resto_status' => 'Paid',
+        'payment_date' => now(),
+    ]);
+    
+    // Add audit trail or notification if needed
+    
+    return back()->with('success', 'Order marked as paid successfully!');
+}
 }
