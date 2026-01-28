@@ -12,6 +12,17 @@
         </button>
       </div>
       <div class="flex items-center gap-4">
+        <!-- Session Timer -->
+        <div class="animate-fadeIn">
+          <div class="flex items-center gap-2 bg-base-100 px-3 py-2 ">
+            <i class="fa-solid fa-clock text-blue-900 text-sm"></i>
+            <div class="flex gap-2">
+              <span class="text-xs text-gray-500 font-medium">Timeout / Idle</span>
+              <span id="sessionTimer" class="text-sm font-bold text-blue-900">5:00</span>
+            </div>
+          </div>
+        </div>
+
         <!-- Time Display -->
         <div class="animate-fadeIn">
           <span id="philippineTime" class="font-medium max-md:text-sm"></span>
@@ -95,6 +106,67 @@
   </div>
 </header>
 
+<!-- Session Timer Script -->
+<script>
+const sessionTimeoutDuration = 300000; // 5 minutes in milliseconds
+let sessionTimer;
+let sessionTimeRemaining = sessionTimeoutDuration;
+let isSessionActive = true;
+
+const sessionTimerEl = document.getElementById('sessionTimer');
+
+function updateSessionDisplay() {
+    if (!sessionTimerEl) return;
+    
+    const minutes = Math.floor(sessionTimeRemaining / 60000);
+    const seconds = Math.floor((sessionTimeRemaining % 60000) / 1000);
+    
+    if (minutes > 0) {
+        sessionTimerEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        sessionTimerEl.className = 'text-sm font-bold text-blue-600';
+    } else {
+        sessionTimerEl.textContent = `${seconds}s`;
+        sessionTimerEl.className = 'text-sm font-bold text-orange-600';
+    }
+}
+
+function startSessionTimer() {
+    clearInterval(sessionTimer);
+    sessionTimeRemaining = sessionTimeoutDuration;
+    isSessionActive = true;
+    
+    sessionTimer = setInterval(() => {
+        sessionTimeRemaining -= 1000;
+        
+        if (sessionTimeRemaining <= 0) {
+            clearInterval(sessionTimer);
+            isSessionActive = false;
+            // The warning will be shown by the sessiontimeout component
+        } else {
+            updateSessionDisplay();
+        }
+    }, 1000);
+    
+    updateSessionDisplay();
+}
+
+function resetSessionTimer() {
+    startSessionTimer();
+}
+
+// Add event listeners for user activity
+['mousemove', 'keydown', 'scroll', 'click'].forEach(event => {
+    window.addEventListener(event, resetSessionTimer);
+});
+
+// Start the timer when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    startSessionTimer();
+});
+
+// Make the reset function available globally for the session timeout component
+window.resetSessionTimer = resetSessionTimer;
+</script>
 
 <style>
   @media (max-width: 767px) {

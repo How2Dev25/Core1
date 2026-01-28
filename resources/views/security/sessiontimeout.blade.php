@@ -61,7 +61,7 @@
 </div>
 
 <script>
-    const idleTime = 900000; // 15 minutes before warning (15 * 60 * 1000 ms)
+    const idleTime = 300000; // 5 minutes before warning (5 * 60 * 1000 ms)
 
     const countdownSeconds = 30; // countdown before logout
 
@@ -106,6 +106,11 @@
         clearInterval(countdownInterval);
         warningEl.classList.add('hidden');
         warningTimeout = setTimeout(showWarning, idleTime);
+        
+        // Also reset the navbar session timer
+        if (typeof window.resetSessionTimer === 'function') {
+            window.resetSessionTimer();
+        }
     }
 
     function extendSession() {
