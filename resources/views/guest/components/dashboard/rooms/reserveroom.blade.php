@@ -171,16 +171,41 @@
                                                                 <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
                                                                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                                                             </svg>
-                                                            Number of Guests (Max {{ $room->roommaxguest }})
+                                                            Adults
                                                             <span class="text-red-500">*</span>
                                                         </span>
                                                     </label>
-
-                                                    <input type="number" name="reservation_numguest" min="1"
+                                                    <input type="number" name="reservation_adults" min="1" value="1"
                                                         class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
                                                         required />
+                                                </div>
 
-                                                    <!-- Add this below for the dynamic note -->
+                                                <div class="form-control">
+                                                    <label class="label font-semibold text-[#001f54] mb-2">
+                                                        <span class="flex items-center gap-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                                                <circle cx="9" cy="7" r="4"></circle>
+                                                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                                            </svg>
+                                                            Children
+                                                            <span class="text-red-500">*</span>
+                                                        </span>
+                                                    </label>
+                                                    <input type="number" name="reservation_children" min="0" value="0"
+                                                        class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors"
+                                                        required />
+                                                </div>
+
+                                                <!-- Add this below for the dynamic note -->
+                                                <div class="form-control md:col-span-2">
+                                                    <p class="text-sm text-gray-600 mb-1">
+                                                        <i class="fas fa-info-circle"></i> 
+                        Room Capacity: <strong>Max {{ $room->roommaxguest }} guests</strong> (Adults + Children)
+                    </p>
                                                     <p id="extraGuestNote" class="text-sm text-gray-600 mt-1 hidden"></p>
                                                 </div>
 
@@ -198,9 +223,82 @@
                                                             <span class="text-red-500">*</span>
                                                         </span>
                                                     </label>
-                                                    <input type="text" name="reservation_specialrequest"
-                                                        placeholder="Early check-in, extra pillows..."
-                                                        class="input input-bordered w-full rounded-xl border-2 border-gray-200 focus:border-[#001f54] focus:outline-none transition-colors" />
+                                                    
+                                                    <!-- Special Requests Bubbles Container -->
+                                                    <div id="specialRequestsContainer" class="space-y-3">
+                                                        <!-- Default Special Requests -->
+                                                        <div class="flex flex-wrap gap-2">
+                                                            <label class="special-request-bubble cursor-pointer">
+                                                                <input type="checkbox" name="special_requests[]" value="Early check-in" class="hidden peer" onchange="toggleTimeInput('earlyCheckin', this.checked); updateEarlyCheckinFee(this.checked)">
+                                                                <span class="inline-block px-4 py-2 rounded-full border-2 border-gray-300 text-sm font-medium transition-all peer-checked:border-[#001f54] peer-checked:bg-[#001f54] peer-checked:text-white hover:border-[#001f54]/50">
+                                                                    Early check-in (+₱500.00)
+                                                                </span>
+                                                            </label>
+                                                            
+                                                            <!-- Early Check-in Time Input (Hidden by default) -->
+                                                            <div id="earlyCheckinTime" class="hidden">
+                                                                <select name="early_checkin_time" class="select select-bordered select-sm rounded-full border-2 border-gray-300 focus:border-[#001f54] focus:outline-none">
+                                                                    <option value="">Select time</option>
+                                                                    <option value="10:00 AM">10:00 AM</option>
+                                                                    <option value="11:00 AM">11:00 AM</option>
+                                                                    <option value="12:00 PM">12:00 PM</option>
+                                                                    <option value="1:00 PM">1:00 PM</option>
+                                                                </select>
+                                                            </div>
+                                                            
+                                                            <label class="special-request-bubble cursor-pointer">
+                                                                <input type="checkbox" name="special_requests[]" value="Late check-out" class="hidden peer" onchange="toggleTimeInput('lateCheckout', this.checked)">
+                                                                <span class="inline-block px-4 py-2 rounded-full border-2 border-gray-300 text-sm font-medium transition-all peer-checked:border-[#001f54] peer-checked:bg-[#001f54] peer-checked:text-white hover:border-[#001f54]/50">
+                                                                    Late check-out
+                                                                </span>
+                                                            </label>
+                                                            
+                                                            <!-- Late Check-out Time Input (Hidden by default) -->
+                                                            <div id="lateCheckoutTime" class="hidden">
+                                                                <select name="late_checkout_time" class="select select-bordered select-sm rounded-full border-2 border-gray-300 focus:border-[#001f54] focus:outline-none">
+                                                                    <option value="">Select time</option>
+                                                                    <option value="1:00 PM">1:00 PM</option>
+                                                                    <option value="2:00 PM">2:00 PM</option>
+                                                                    <option value="3:00 PM">3:00 PM</option>
+                                                                    <option value="4:00 PM">4:00 PM</option>
+                                                                </select>
+                                                            </div>
+                                                            
+                                                            <label class="special-request-bubble cursor-pointer">
+                                                                <input type="checkbox" name="special_requests[]" value="Extra pillows" class="hidden peer">
+                                                                <span class="inline-block px-4 py-2 rounded-full border-2 border-gray-300 text-sm font-medium transition-all peer-checked:border-[#001f54] peer-checked:bg-[#001f54] peer-checked:text-white hover:border-[#001f54]/50">
+                                                                    Extra pillows
+                                                                </span>
+                                                            </label>
+                                                            <label class="special-request-bubble cursor-pointer">
+                                                                <input type="checkbox" name="special_requests[]" value="Room with view" class="hidden peer">
+                                                                <span class="inline-block px-4 py-2 rounded-full border-2 border-gray-300 text-sm font-medium transition-all peer-checked:border-[#001f54] peer-checked:bg-[#001f54] peer-checked:text-white hover:border-[#001f54]/50">
+                                                                    Room with view
+                                                                </span>
+                                                            </label>
+                                                            <label class="special-request-bubble cursor-pointer">
+                                                                <input type="checkbox" name="special_requests[]" value="Away from elevator" class="hidden peer">
+                                                                <span class="inline-block px-4 py-2 rounded-full border-2 border-gray-300 text-sm font-medium transition-all peer-checked:border-[#001f54] peer-checked:bg-[#001f54] peer-checked:text-white hover:border-[#001f54]/50">
+                                                                    Away from elevator
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                        
+                                                        <!-- Standard Time Info -->
+                                                        <div class="text-xs text-gray-500 bg-gray-50 p-3 rounded-lg">
+                                                            <p><strong>Standard Check-in:</strong> 2:00 PM - 4:00 PM</p>
+                                                            <p><strong>Standard Check-out:</strong> 10:00 AM - 12:00 PM</p>
+                                                        </div>
+                                                        
+                                                        <!-- Add Custom Request Button -->
+                                                        <button type="button" id="addCustomRequestBtn" class="btn btn-outline btn-sm rounded-full">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                            </svg>
+                                                            Add Custom Request
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -794,7 +892,9 @@
                     function calculateSubtotal() {
                         const checkin = document.querySelector('[name="reservation_checkin"]').value;
                         const checkout = document.querySelector('[name="reservation_checkout"]').value;
-                        const numGuests = parseInt(document.querySelector('[name="reservation_numguest"]').value) || 1;
+                        const adults = parseInt(document.querySelector('[name="reservation_adults"]').value) || 1;
+                        const children = parseInt(document.querySelector('[name="reservation_children"]').value) || 0;
+                        const totalGuests = adults + children;
                         const noteElement = document.getElementById('extraGuestNote');
 
                         if (!checkin || !checkout || selectedRoomPrice === 0) return;
@@ -809,18 +909,21 @@
                         let subtotal = numNights * selectedRoomPrice;
 
                         // check if guest exceeds max
-                        if (numGuests > maxGuests) {
-                            const extraGuests = numGuests - maxGuests;
-                            const extraFeeTotal = extraGuests * additionalFee;
+                        if (totalGuests > maxGuests) {
+                            const extraGuests = totalGuests - maxGuests;
+                            const extraFeeTotal = extraGuests * additionalFee * numNights; // Per night fee
                             subtotal += extraFeeTotal;
 
-                            noteElement.innerText = `₱${additionalFee.toFixed(2)} additional fee per extra guest (${extraGuests} extra).`;
+                            noteElement.innerText = `⚠️ Exceeds capacity by ${extraGuests} guest${extraGuests > 1 ? 's' : ''}. ₱${additionalFee.toFixed(2)} fee per extra guest per night (${extraGuests} × ${numNights} night${numNights > 1 ? 's' : ''} = ₱${extraFeeTotal.toFixed(2)})`;
                             noteElement.classList.remove('hidden');
-                            noteElement.classList.add('text-red-500');
+                            noteElement.classList.add('text-red-600');
                         } else {
                             noteElement.classList.add('hidden');
                             noteElement.innerText = '';
                         }
+
+                        // Add early check-in fee
+                        subtotal += earlyCheckinFee;
 
                         const vat = subtotal * (taxRate / 100);
                         const serviceFee = subtotal * (serviceFeeRate / 100);
@@ -839,17 +942,99 @@
                         document.getElementById('hiddenTotal').value = total.toFixed(2);
                     }
 
+                    // Special Requests Management
+                    let customRequestCount = 0;
+
+                    function toggleTimeInput(type, show) {
+                        const timeInput = document.getElementById(type + 'Time');
+                        if (show) {
+                            timeInput.classList.remove('hidden');
+                        } else {
+                            timeInput.classList.add('hidden');
+                            // Clear the selection when unchecked
+                            const select = timeInput.querySelector('select');
+                            if (select) select.value = '';
+                        }
+                    }
+
+                    function addCustomRequest() {
+                        customRequestCount++;
+                        const container = document.getElementById('specialRequestsContainer');
+                        const buttonContainer = container.querySelector('.flex.flex-wrap.gap-2');
+                        
+                        const customRequestDiv = document.createElement('div');
+                        customRequestDiv.className = 'flex items-center gap-2';
+                        customRequestDiv.innerHTML = `
+                            <label class="special-request-bubble cursor-pointer flex items-center gap-2">
+                                <input type="checkbox" name="special_requests[]" value="" class="hidden peer" id="custom_${customRequestCount}">
+                                <span class="inline-block px-4 py-2 rounded-full border-2 border-gray-300 text-sm font-medium transition-all peer-checked:border-[#001f54] peer-checked:bg-[#001f54] peer-checked:text-white hover:border-[#001f54]/50">
+                                    <input type="text" placeholder="Enter custom request..." class="bg-transparent outline-none w-32" onclick="event.stopPropagation()">
+                                </span>
+                                <button type="button" onclick="removeCustomRequest(this)" class="w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </button>
+                            </label>
+                        `;
+                        
+                        buttonContainer.appendChild(customRequestDiv);
+                        
+                        // Focus on the new input
+                        const input = customRequestDiv.querySelector('input[type="text"]');
+                        input.focus();
+                        
+                        // Update checkbox value when text changes
+                        input.addEventListener('input', function() {
+                            const checkbox = customRequestDiv.querySelector('input[type="checkbox"]');
+                            checkbox.value = this.value;
+                            if (this.value.trim()) {
+                                checkbox.checked = true;
+                            }
+                        });
+                    }
+
+                    function removeCustomRequest(button) {
+                        button.closest('.flex.items-center.gap-2').remove();
+                    }
+
+                    // Early Check-in Pricing
+                    let earlyCheckinFee = 0;
+
+                    function updateEarlyCheckinFee(isChecked) {
+                        earlyCheckinFee = isChecked ? 500.00 : 0;
+                        calculateSubtotal();
+                    }
+
                     document.addEventListener('DOMContentLoaded', () => {
                         document.getElementById('roomPrice').innerText = selectedRoomPrice.toFixed(2);
 
                         const checkinInput = document.querySelector('[name="reservation_checkin"]');
                         const checkoutInput = document.querySelector('[name="reservation_checkout"]');
-                        const guestInput = document.querySelector('[name="reservation_numguest"]');
+                        const adultsInput = document.querySelector('[name="reservation_adults"]');
+                        const childrenInput = document.querySelector('[name="reservation_children"]');
+
+                        // Set minimum checkout date when check-in changes
+                        checkinInput.addEventListener('change', function() {
+                            const checkinDate = new Date(this.value);
+                            const minCheckout = new Date(checkinDate);
+                            minCheckout.setDate(minCheckout.getDate() + 1);
+                            checkoutInput.min = minCheckout.toISOString().split('T')[0];
+                            
+                            if (new Date(checkoutInput.value) <= checkinDate) {
+                                checkoutInput.value = minCheckout.toISOString().split('T')[0];
+                            }
+                            calculateSubtotal();
+                        });
 
                         // Recalculate when user changes inputs
-                        checkinInput.addEventListener('change', calculateSubtotal);
                         checkoutInput.addEventListener('change', calculateSubtotal);
-                        guestInput.addEventListener('input', calculateSubtotal);
+                        adultsInput.addEventListener('input', calculateSubtotal);
+                        childrenInput.addEventListener('input', calculateSubtotal);
+
+                        // Add custom request button handler
+                        document.getElementById('addCustomRequestBtn').addEventListener('click', addCustomRequest);
 
                         calculateSubtotal(); // initial run
 

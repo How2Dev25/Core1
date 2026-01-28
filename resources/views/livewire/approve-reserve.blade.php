@@ -1,56 +1,85 @@
-<div class="bg-white rounded-lg shadow-sm border border-gray-200 mt-5 p-5">
-    <!-- Header with Filters -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-        <h3 class="text-xl font-bold text-gray-800">Reservation Listings</h3>
+<div class="bg-white rounded-xl shadow-lg border border-gray-200 mt-5 p-6">
+    <!-- Enhanced Header with Filters -->
+    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+        <div class="flex items-center gap-3">
+            <div class="p-3 bg-gradient-to-br from-[#001f54] to-[#1a3470] rounded-xl shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold text-gray-800">Reservation Management</h3>
+                <p class="text-sm text-gray-600">Approve and manage guest reservations</p>
+            </div>
+        </div>
 
-        <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+        <div class="flex flex-col lg:flex-row gap-3 w-full lg:w-auto">
             <!-- Status Filter -->
-            <select wire:model.live="statusFilter" class="select select-bordered select-sm">
-                <option value="">All Statuses</option>
-                <option value="Pending">Pending</option>
-                <option value="Confirmed">Confirmed</option>
-                <option value="Checked Out">Checked Out</option>
-                <option value="Checked In">Checked In</option>
-                <option value="Cancelled">Cancelled</option>
-            </select>
+            <div class="relative">
+                <select wire:model.live="statusFilter" 
+                    class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-[#001f54] focus:border-transparent">
+                    <option value="">All Statuses</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Checked Out">Checked Out</option>
+                    <option value="Checked In">Checked In</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+            </div>
 
-            <select wire:model.live="paymentFilter" class="select select-bordered select-sm">
-                <option value="">All Payments</option>
-                <option value="Pending">Pending</option>
-                <option value="Partial">Partial</option>
-                <option value="Paid">Paid</option>
-            </select>
+            <div class="relative">
+                <select wire:model.live="paymentFilter" 
+                    class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-[#001f54] focus:border-transparent">
+                    <option value="">All Payments</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Partial">Partial</option>
+                    <option value="Paid">Paid</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+            </div>
 
             <!-- Room Type Filter -->
-            <select wire:model.live="typeFilter" class="select select-bordered select-sm">
-                <option value="">All Types</option>
-                <option value="Standard">Standard</option>
-                <option value="Deluxe">Deluxe</option>
-                <option value="Suite">Suite</option>
-                <option value="Executive">Executive</option>
-            </select>
+            <div class="relative">
+                <select wire:model.live="typeFilter" 
+                    class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-[#001f54] focus:border-transparent">
+                    <option value="">All Types</option>
+                    <option value="Standard">Standard</option>
+                    <option value="Deluxe">Deluxe</option>
+                    <option value="Suite">Suite</option>
+                    <option value="Executive">Executive</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+            </div>
 
             <!-- Search -->
             <div class="relative">
-                <input type="text" wire:model.live.debounce.300ms="searchTerm" placeholder="Search by room or guest..."
-                    class="input input-bordered input-sm pl-8">
-                <!-- search icon -->
-                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"
+                <input type="text" wire:model.live.debounce.300ms="searchTerm" 
+                    placeholder="Search by room or guest..."
+                    class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#001f54] focus:border-transparent w-64">
+                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
             </div>
 
-            <!-- Manual Reload Button -->
-            <a onclick="window.location.reload(true)" class="btn btn-sm btn-outline flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 4v6h6M20 20v-6h-6M5 19a9 9 0 1014-14l-1.5 1.5" />
-                </svg>
-                Reload
-            </a>
+            <!-- Refresh Button -->
+          
         </div>
     </div>
 
@@ -68,93 +97,119 @@
             </thead>
             <tbody>
                 @forelse($reserverooms as $reserveroom)
-                    <tr class="border-t border-gray-100 hover:bg-gray-50">
+                    <tr class="border-t border-gray-100 hover:bg-gray-50 transition-colors">
                         <td class="py-4 px-4">
                             <div class="flex items-center gap-3">
-                                <div class="bg-primary/10 p-2 rounded-lg">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                                    </svg>
+                                <div class="w-16 h-16 rounded-xl overflow-hidden border-2 border-[#001f54]/20">
+                                    <img src="{{ asset($reserveroom->roomphoto) }}" 
+                                         alt="Room #{{ $reserveroom->roomID }}" 
+                                         class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                                 </div>
                                 <div>
-                                    <div class="font-semibold">Room #{{ $reserveroom->roomID }}</div>
+                                    <div class="font-semibold text-gray-800">Room #{{ $reserveroom->roomID }}</div>
                                     <div class="text-sm text-gray-600">{{ $reserveroom->guestname }}</div>
+                                    @if($reserveroom->early_checkin_time || $reserveroom->late_checkout_time)
+                                        <div class="flex gap-2 mt-1">
+                                            @if($reserveroom->early_checkin_time)
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                                                    🕐 {{ $reserveroom->early_checkin_time }}
+                                                </span>
+                                            @endif
+                                            @if($reserveroom->late_checkout_time)
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
+                                                    🕕 {{ $reserveroom->late_checkout_time }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </td>
                         <td class="py-4 px-4">
                             <div class="text-sm">
-                                <div class="flex items-center gap-1 mb-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none"
+                                <div class="flex items-center gap-2 mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#001f54]" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7H3v12a2 2 0 002 2z" />
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7H3v12a2 2 0 002 2z" />
                                     </svg>
-                                    <span>{{ \Carbon\Carbon::parse($reserveroom->reservation_checkin)->format('M d, Y') }}</span>
-                                    <span class="mx-1">-</span>
-                                    <span>{{ \Carbon\Carbon::parse($reserveroom->reservation_checkout)->format('M d, Y') }}</span>
+                                    <span class="font-medium">{{ \Carbon\Carbon::parse($reserveroom->reservation_checkin)->format('M d, Y') }}</span>
+                                    <span class="mx-1 text-gray-400">→</span>
+                                    <span class="font-medium">{{ \Carbon\Carbon::parse($reserveroom->reservation_checkout)->format('M d, Y') }}</span>
                                 </div>
-                                <div class="text-xs text-gray-500">
-                                    ID: {{ $reserveroom->bookingID }} • {{ $reserveroom->roomtype }}
+                                <div class="flex items-center gap-3 text-xs text-gray-500">
+                                    <span class="flex items-center gap-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                        {{ $reserveroom->reservation_adults ?? 1 }}A {{ $reserveroom->reservation_children ?? 0 }}C
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                        </svg>
+                                        {{ $reserveroom->roomtype }}
+                                    </span>
                                 </div>
+                                @if($reserveroom->reservation_specialrequest)
+                                    <div class="mt-2">
+                                        <div class="flex flex-wrap gap-1">
+                                            @php
+                                                $specialRequests = explode(', ', $reserveroom->reservation_specialrequest);
+                                            @endphp
+                                            @foreach($specialRequests as $request)
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
+                                                    {{ $request }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </td>
                         <td class="py-4 px-4">
-                            <span class="badge py-1.5 px-3
-                                                    @if(strtolower($reserveroom->reservation_bookingstatus) == 'pending') badge-accent
-                                                    @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'confirmed') badge-success
-                                                    @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'checked in') badge-primary
-                                                    @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'checked out') badge-warning
-                                                    @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'cancelled') badge-error
-                                                    @endif
-                                                ">
+                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium
+                                @if(strtolower($reserveroom->reservation_bookingstatus) == 'pending') bg-yellow-100 text-yellow-800 border border-yellow-200
+                                @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'confirmed') bg-green-100 text-green-800 border border-green-200
+                                @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'checked in') bg-blue-100 text-blue-800 border border-blue-200
+                                @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'checked out') bg-orange-100 text-orange-800 border border-orange-200
+                                @elseif(strtolower($reserveroom->reservation_bookingstatus) == 'cancelled') bg-red-100 text-red-800 border border-red-200
+                                @endif
+                            ">
                                 {{ ucfirst($reserveroom->reservation_bookingstatus) }}
                             </span>
                         </td>
                         <td class="py-4 px-4">
-                        <span class="
-                            @if(strtolower($reserveroom->payment_status) == 'pending') text-yellow-600 font-semibold
-                            @elseif(strtolower($reserveroom->payment_status) == 'partial') text-orange-500 font-semibold
-                            @elseif(strtolower($reserveroom->payment_status) == 'paid') text-green-600 font-semibold
-                            @elseif(strtolower($reserveroom->payment_status) == 'failed') text-red-600 font-semibold
-                            @else text-gray-600
-                            @endif
-                        ">
-                            {{ ucfirst($reserveroom->payment_status) }}
-                        </span>
+                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium
+                                @if(strtolower($reserveroom->payment_status) == 'pending') bg-yellow-100 text-yellow-800 border border-yellow-200
+                                @elseif(strtolower($reserveroom->payment_status) == 'partial') bg-orange-100 text-orange-800 border border-orange-200
+                                @elseif(strtolower($reserveroom->payment_status) == 'paid') bg-green-100 text-green-800 border border-green-200
+                                @elseif(strtolower($reserveroom->payment_status) == 'failed') bg-red-100 text-red-800 border border-red-200
+                                @else bg-gray-100 text-gray-800 border border-gray-200
+                                @endif
+                            ">
+                                {{ ucfirst($reserveroom->payment_status) }}
+                            </span>
                         </td>
                         <td class="py-4 px-4">
                             <div class="flex justify-end items-center gap-2">
                                 <!-- View Details Button -->
                                 <button onclick="details_modal_{{$reserveroom->reservationID}}.showModal()"
-                                    class="btn btn-sm btn-ghost" title="View Details">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                    class="p-2 text-gray-600 hover:text-[#001f54] hover:bg-[#001f54]/10 rounded-lg transition-colors"
+                                    title="View Details">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
                                         stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 </button>
 
-                                <!-- Edit button -->
-                                {{-- <button 
-                                    onclick="document.getElementById('edit_reservation_{{$reserveroom->reservationID}}').showModal()"
-                                    class="btn btn-sm btn-ghost" title="View Room Details">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 
-                                                     9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                    </svg>
-                                </button>
-                                --}}
                                 <!-- More Actions Button -->
                                 <button
                                     onclick="document.getElementById('actions-drawer-{{$reserveroom->reservationID}}').classList.toggle('translate-x-full')"
-                                    class="btn btn-sm btn-ghost" title="More Actions">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                    class="p-2 text-gray-600 hover:text-[#001f54] hover:bg-[#001f54]/10 rounded-lg transition-colors"
+                                    title="More Actions">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
                                         stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 12h.01M12 12h.01M19 12h.01" />
@@ -162,81 +217,28 @@
                                 </button>
 
                                 @if(strtolower($reserveroom->reservation_bookingstatus) === 'checked in')
-
                                 <button onclick="document.getElementById('assign_keycard_{{$reserveroom->reservationID}}').showModal()"
-                                    class="btn btn-sm" title="Assign Keycard" style="background-color: #001f54; color: white;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    class="p-2 bg-[#001f54] text-white rounded-lg hover:bg-[#1a3470] transition-colors"
+                                    title="Assign Keycard">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                                     </svg>
                                 </button>
-
-                                <dialog id="assign_keycard_{{$reserveroom->reservationID}}" class="modal">
-                                    <div class="modal-box">
-                                        <h3 class="text-lg font-bold">Assign Keycard</h3>
-                                        <p class="py-4">Assign a keycard to this reservation?</p>
-
-                                        <div class="modal-action">
-                                            <!-- No button - just a regular button that closes modal -->
-                                            <button type="button"
-                                                onclick="document.getElementById('assign_keycard_{{$reserveroom->reservationID}}').close()" class="btn">
-                                                No
-                                            </button>
-
-                                            <!-- Yes button - form POST -->
-
-
-                                                <a href="/assignkeycard/{{$reserveroom->reservationID}}"  class="btn" style="background-color: #001f54; color: white;">
-                                                    Yes, Assign
-                                                </a>
-
-                                        </div>
-                                    </div>
-
-                                    <!-- Click outside to close -->
-                                    <form method="dialog" class="modal-backdrop">
-                                        <button>close</button>
-                                    </form>
-                                </dialog>
-
                                 @endif
 
                                 @if($reserveroom->payment_status === 'Paid' || $reserveroom->payment_status === 'Partial')
-
-                                    <!-- Trigger button -->
-                                    <button
-                                        onclick="document.getElementById('confirm_receipt_{{$reserveroom->reservationID}}').showModal()"
-                                        class="btn btn-sm" title="Generate Receipt"
-                                        style="background-color: #001f54; color: white;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m4 
-                                                                   4h4a2 2 0 002-2v-4a2 2 0 00-2-2h-4a2 2 0 00-2 2v4a2 2 0 002 2z" />
+                                <button
+                                    onclick="document.getElementById('confirm_receipt_{{$reserveroom->reservationID}}').showModal()"
+                                    class="p-2 bg-[#001f54] text-white rounded-lg hover:bg-[#1a3470] transition-colors"
+                                    title="Generate Receipt">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m4 
+                                            4h4a2 2 0 002-2v-4a2 2 0 00-2-2h-4a2 2 0 00-2 2v4a2 2 0 002 2z" />
                                         </svg>
-                                    </button>
-
-                                    <!-- Modal -->
-                                    <dialog id="confirm_receipt_{{$reserveroom->reservationID}}" class="modal">
-                                        <div class="modal-box">
-                                            <h3 class="text-lg font-bold">Generate Receipt</h3>
-                                            <p class="py-4">Are you sure you want to generate a receipt for this reservation?
-                                            </p>
-                                            <div class="modal-action">
-                                                <!-- Cancel button -->
-                                                <form method="dialog">
-                                                    <button class="btn">Cancel</button>
-                                                </form>
-                                                <!-- Confirm button -->
-                                                <a href="/printreceipt/{{$reserveroom->reservationID}}" target="_blank"
-                                                    class="btn btn-primary" style="background-color: #001f54; color: white;">
-                                                    Yes, Generate
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </dialog>
-
-
+                                </button>
                                 @endif
                             </div>
                         </td>
@@ -296,7 +298,7 @@
                                             <!-- Stay Information -->
                                             <div>
                                                 <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none"
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#001f54]" fill="none"
                                                         viewBox="0 0 24 24" stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -308,14 +310,73 @@
     $nights = \Carbon\Carbon::parse($reserveroom->reservation_checkin)
         ->diffInDays(\Carbon\Carbon::parse($reserveroom->reservation_checkout));
                                                     @endphp
-                                                    <p><span class="font-medium">Check-in:</span>
-                                                        {{ \Carbon\Carbon::parse($reserveroom->reservation_checkin)->format('M d, Y') }}</p>
-                                                    <p><span class="font-medium">Check-out:</span>
-                                                        {{ \Carbon\Carbon::parse($reserveroom->reservation_checkout)->format('M d, Y') }}</p>
-                                                    <p><span class="font-medium">Nights:</span> {{ $nights }}</p>
-                                                    <p><span class="font-medium">Room Type:</span> {{ $reserveroom->roomtype }}</p>
+                                                    <div class="flex justify-between">
+                                                        <span class="font-medium">Check-in:</span>
+                                                        <span>{{ \Carbon\Carbon::parse($reserveroom->reservation_checkin)->format('M d, Y') }}</span>
+                                                    </div>
+                                                    @if($reserveroom->early_checkin_time)
+                                                        <div class="flex justify-between">
+                                                            <span class="font-medium text-blue-600">Early Check-in:</span>
+                                                            <span class="text-blue-600">{{ $reserveroom->early_checkin_time }}</span>
+                                                        </div>
+                                                    @endif
+                                                    <div class="flex justify-between">
+                                                        <span class="font-medium">Check-out:</span>
+                                                        <span>{{ \Carbon\Carbon::parse($reserveroom->reservation_checkout)->format('M d, Y') }}</span>
+                                                    </div>
+                                                    @if($reserveroom->late_checkout_time)
+                                                        <div class="flex justify-between">
+                                                            <span class="font-medium text-orange-600">Late Check-out:</span>
+                                                            <span class="text-orange-600">{{ $reserveroom->late_checkout_time }}</span>
+                                                        </div>
+                                                    @endif
+                                                    <div class="flex justify-between">
+                                                        <span class="font-medium">Nights:</span>
+                                                        <span>{{ $nights }}</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="font-medium">Guests:</span>
+                                                        <span>{{ $reserveroom->reservation_adults ?? 1 }} Adults, {{ $reserveroom->reservation_children ?? 0 }} Children</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="font-medium">Room Type:</span>
+                                                        <span>{{ $reserveroom->roomtype }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
+
+                                            <!-- Special Requests -->
+                                            @if($reserveroom->reservation_specialrequest)
+                                            <div>
+                                                <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#001f54]" fill="none" viewBox="0 0 24 24"
+                                                        stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                                    </svg>
+                                                    Special Requests
+                                                </h4>
+                                                <div class="space-y-2">
+                                                    @php
+                                                        $specialRequests = explode(', ', $reserveroom->reservation_specialrequest);
+                                                    @endphp
+                                                    @foreach($specialRequests as $request)
+                                                        <div class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                                                            @if(strtolower($request) == 'early check-in')
+                                                                <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                                            @elseif(strtolower($request) == 'late check-out')
+                                                                <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+                                                            @else
+                                                                <span class="w-2 h-2 bg-gray-500 rounded-full"></span>
+                                                            @endif
+                                                            <span class="text-sm">{{ ucfirst($request) }}</span>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                            @endif
                                         </div>
 
                                         <!-- Pricing Breakdown -->
@@ -536,7 +597,7 @@
                                             <div
                                                 class="bg-gradient-to-br from-base-100 to-base-200 rounded-xl p-4 sm:p-6 mb-6 shadow-md border border-base-300">
                                                 <h2 class="text-base sm:text-lg font-semibold text-gray-700 flex items-center gap-2 mb-4">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24"
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#001f54]" fill="none" viewBox="0 0 24 24"
                                                         stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -550,7 +611,7 @@
                                                             <span class="label-text font-semibold text-gray-700">Check-In Date</span>
                                                         </label>
                                                         <input value="{{$reserveroom->reservation_checkin}}" type="date" name="reservation_checkin"
-                                                            class="input input-bordered w-full focus:input-primary" required />
+                                                            class="input input-bordered w-full focus:ring-2 focus:ring-[#001f54] focus:border-[#001f54]" required />
                                                     </div>
 
                                                     <div class="form-control">
@@ -558,25 +619,96 @@
                                                             <span class="label-text font-semibold text-gray-700">Check-Out Date</span>
                                                         </label>
                                                         <input type="date" value="{{$reserveroom->reservation_checkout}}" name="reservation_checkout"
-                                                            class="input input-bordered w-full focus:input-primary" required />
+                                                            class="input input-bordered w-full focus:ring-2 focus:ring-[#001f54] focus:border-[#001f54]" required />
                                                     </div>
 
                                                     <div class="form-control">
                                                         <label class="label">
-                                                            <span class="label-text font-semibold text-gray-700">Number of Guests</span>
+                                                            <span class="label-text font-semibold text-gray-700">Adults</span>
                                                         </label>
-                                                        <input value="{{$reserveroom->reservation_numguest}}" type="number" name="reservation_numguest" min="1"
-                                                            max="{{$reserveroom->roommaxguest}}" class="input input-bordered w-full focus:input-primary"
+                                                        <input value="{{$reserveroom->reservation_adults ?? 1}}" type="number" name="reservation_adults" min="1"
+                                                            max="{{$reserveroom->roommaxguest}}" class="input input-bordered w-full focus:ring-2 focus:ring-[#001f54] focus:border-[#001f54]"
                                                             required />
                                                     </div>
 
-                                                    <div class="form-control sm:col-span-2 lg:col-span-2">
+                                                    <div class="form-control">
+                                                        <label class="label">
+                                                            <span class="label-text font-semibold text-gray-700">Children</span>
+                                                        </label>
+                                                        <input value="{{$reserveroom->reservation_children ?? 0}}" type="number" name="reservation_children" min="0"
+                                                            max="{{$reserveroom->roommaxguest}}" class="input input-bordered w-full focus:ring-2 focus:ring-[#001f54] focus:border-[#001f54]"
+                                                            required />
+                                                    </div>
+
+                                                    <div class="form-control">
+                                                        <label class="label">
+                                                            <span class="label-text font-semibold text-gray-700">Early Check-in Time</span>
+                                                        </label>
+                                                        <select name="early_checkin_time" class="select select-bordered w-full focus:ring-2 focus:ring-[#001f54] focus:border-[#001f54]">
+                                                            <option value="">Standard (2-4 PM)</option>
+                                                            <option value="10:00 AM" {{ $reserveroom->early_checkin_time == '10:00 AM' ? 'selected' : '' }}>10:00 AM</option>
+                                                            <option value="11:00 AM" {{ $reserveroom->early_checkin_time == '11:00 AM' ? 'selected' : '' }}>11:00 AM</option>
+                                                            <option value="12:00 PM" {{ $reserveroom->early_checkin_time == '12:00 PM' ? 'selected' : '' }}>12:00 PM</option>
+                                                            <option value="1:00 PM" {{ $reserveroom->early_checkin_time == '1:00 PM' ? 'selected' : '' }}>1:00 PM</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-control">
+                                                        <label class="label">
+                                                            <span class="label-text font-semibold text-gray-700">Late Check-out Time</span>
+                                                        </label>
+                                                        <select name="late_checkout_time" class="select select-bordered w-full focus:ring-2 focus:ring-[#001f54] focus:border-[#001f54]">
+                                                            <option value="">Standard (10 AM-12 PM)</option>
+                                                            <option value="1:00 PM" {{ $reserveroom->late_checkout_time == '1:00 PM' ? 'selected' : '' }}>1:00 PM</option>
+                                                            <option value="2:00 PM" {{ $reserveroom->late_checkout_time == '2:00 PM' ? 'selected' : '' }}>2:00 PM</option>
+                                                            <option value="3:00 PM" {{ $reserveroom->late_checkout_time == '3:00 PM' ? 'selected' : '' }}>3:00 PM</option>
+                                                            <option value="4:00 PM" {{ $reserveroom->late_checkout_time == '4:00 PM' ? 'selected' : '' }}>4:00 PM</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-control sm:col-span-2 lg:col-span-3">
                                                         <label class="label">
                                                             <span class="label-text font-semibold text-gray-700">Special Requests</span>
                                                         </label>
-                                                        <input type="text" value="{{$reserveroom->reservation_specialrequest}}"
-                                                            name="reservation_specialrequest" placeholder="Early check-in, extra pillows..."
-                                                            class="input input-bordered w-full focus:input-primary" />
+                                                        @php
+                                                            $specialRequests = $reserveroom->reservation_specialrequest ? explode(', ', $reserveroom->reservation_specialrequest) : [];
+                                                        @endphp
+                                                        <div class="space-y-2">
+                                                            <div class="flex flex-wrap gap-2">
+                                                                <label class="flex items-center gap-2 cursor-pointer">
+                                                                    <input type="checkbox" name="special_requests[]" value="Early check-in" 
+                                                                        @if(in_array('Early check-in', $specialRequests)) checked @endif
+                                                                        class="checkbox checkbox-sm">
+                                                                    <span class="text-sm">Early check-in</span>
+                                                                </label>
+                                                                <label class="flex items-center gap-2 cursor-pointer">
+                                                                    <input type="checkbox" name="special_requests[]" value="Late check-out"
+                                                                        @if(in_array('Late check-out', $specialRequests)) checked @endif
+                                                                        class="checkbox checkbox-sm">
+                                                                    <span class="text-sm">Late check-out</span>
+                                                                </label>
+                                                                <label class="flex items-center gap-2 cursor-pointer">
+                                                                    <input type="checkbox" name="special_requests[]" value="Extra pillows"
+                                                                        @if(in_array('Extra pillows', $specialRequests)) checked @endif
+                                                                        class="checkbox checkbox-sm">
+                                                                    <span class="text-sm">Extra pillows</span>
+                                                                </label>
+                                                                <label class="flex items-center gap-2 cursor-pointer">
+                                                                    <input type="checkbox" name="special_requests[]" value="Room with view"
+                                                                        @if(in_array('Room with view', $specialRequests)) checked @endif
+                                                                        class="checkbox checkbox-sm">
+                                                                    <span class="text-sm">Room with view</span>
+                                                                </label>
+                                                                <label class="flex items-center gap-2 cursor-pointer">
+                                                                    <input type="checkbox" name="special_requests[]" value="Away from elevator"
+                                                                        @if(in_array('Away from elevator', $specialRequests)) checked @endif
+                                                                        class="checkbox checkbox-sm">
+                                                                    <span class="text-sm">Away from elevator</span>
+                                                                </label>
+                                                            </div>
+                                                            <input type="text" name="custom_special_request" placeholder="Add custom request..."
+                                                                class="input input-bordered w-full focus:ring-2 focus:ring-[#001f54] focus:border-[#001f54] text-sm">
+                                                        </div>
                                                     </div>
 
                                                     <div class="form-control">
@@ -585,9 +717,9 @@
                                                         </label>
                                                         <div class="relative">
                                                             <input readonly type="text" value="{{$reserveroom->reservation_bookingstatus}}"
-                                                                class="input input-bordered w-full bg-base-200 font-semibold text-primary cursor-not-allowed" />
+                                                                class="input input-bordered w-full bg-base-200 font-semibold text-[#001f54] cursor-not-allowed" />
                                                             <div class="absolute right-3 top-1/2 -translate-y-1/2">
-                                                                <div class="badge badge-primary badge-sm">Active</div>
+                                                                <div class="badge badge-[#001f54] badge-sm">Active</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -597,7 +729,7 @@
                                                             <span class="label-text font-semibold text-gray-700">Booked Via</span>
                                                         </label>
                                                         <input type="text" value="{{$reserveroom->bookedvia}}" name="bookedvia"
-                                                            class="input input-bordered w-full focus:input-primary" />
+                                                            class="input input-bordered w-full focus:ring-2 focus:ring-[#001f54] focus:border-[#001f54]" />
                                                     </div>
                                                 </div>
                                             </div>

@@ -38,9 +38,7 @@ class RoomLanding extends Component
 
         $rooms = room::query()
             // Filter by status if set
-            ->when($this->statusFilter, function ($query) {
-                return $query->where('roomstatus', $this->statusFilter);
-            })
+           ->where('roomstatus', 'Available')
             // Filter by type if set and valid
             ->when($this->typeFilter && in_array($this->typeFilter, $allowedRoomTypes), function ($query) {
                 return $query->where('roomtype', $this->typeFilter);

@@ -164,16 +164,35 @@
                               class="w-full px-4 py-3 border-2 border-orange-200 rounded-xl text-base focus:border-blue-900 focus:ring-4 focus:ring-orange-100 transition-all duration-200 resize-none"
                               rows="6"
                               placeholder="e.g., 'I need a luxury suite for our honeymoon with ocean view and private pool for 5 nights starting next Friday'"></textarea>
-                            <div class="absolute bottom-3 right-3 text-xs text-gray-400">
+                            <!-- Typing Suggestions Dropdown -->
+                            <div id="suggestionsDropdown" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-10">
+                              <div class="max-h-48 overflow-y-auto">
+                                <div id="suggestionsList" class="p-2 space-y-1"></div>
+                              </div>
+                            </div>
+                            <!-- Smart Date Suggestions -->
+                            <div id="dateSuggestions" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-10">
+                              <div class="p-3">
+                                <p class="text-sm font-semibold text-gray-700 mb-2">📅 Quick Date Options:</p>
+                                <div id="dateOptions" class="space-y-1"></div>
+                              </div>
+                            </div>
+                            <div class="absolute bottom-3 right-3 text-xs text-gray-400 flex items-center gap-2">
                               <span id="charCount">0</span> characters
+                              <span id="typingIndicator" class="hidden text-blue-500">
+                                <svg class="animate-spin h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                              </span>
                             </div>
                           </div>
                         </div>
 
-                        <!-- Submit Button -->
-                        <button type="submit"
-                          class="w-full group relative overflow-hidden bg-gradient-to-r bg-blue-900 text-white font-semibold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
-                          <span class="relative z-10 flex items-center justify-center gap-3">
+                        <!-- Submit Button with Loading State -->
+                        <button type="submit" id="submitBtn"
+                          class="w-full group relative overflow-hidden bg-gradient-to-r bg-blue-900 text-white font-semibold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
+                          <span class="relative z-10 flex items-center justify-center gap-3" id="submitBtnText">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                               class="transition-transform group-hover:scale-110">
@@ -187,6 +206,14 @@
                               <path d="m12 5 7 7-7 7" />
                             </svg>
                           </span>
+                          <!-- Loading State -->
+                          <span class="relative z-10 flex items-center justify-center gap-3 hidden" id="submitBtnLoading">
+                            <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            AI is searching for perfect rooms...
+                          </span>
                           <div
                             class="absolute inset-0 bg-gradient-to-r from-blue-900 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                           </div>
@@ -194,8 +221,31 @@
                       </div>
                     </form>
 
-                    <!-- Result Container -->
-                    <div id="result" class="mt-8 space-y-4"></div>
+                    <!-- Enhanced Result Container with Loading -->
+                    <div id="result" class="mt-8 space-y-4">
+                      <!-- Loading State -->
+                      <div id="loadingState" class="hidden">
+                        <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+                          <div class="flex items-center space-x-4">
+                            <div class="flex-shrink-0">
+                              <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                              </div>
+                            </div>
+                            <div class="flex-1">
+                              <p class="text-sm font-medium text-gray-900">AI is analyzing your request...</p>
+                              <p class="text-sm text-gray-500">Finding the perfect rooms for your stay</p>
+                              <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full animate-pulse" style="width: 60%"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -220,19 +270,19 @@
                   <div class="space-y-3 overflow-y-auto max-h-48 pr-2">
                     <button type="button" onclick="document.getElementById('prompt').value = this.innerText"
                       class="w-full text-left p-3 bg-white rounded-lg border border-orange-200 hover:border-orange-500 hover:shadow-md transition-all duration-200 text-sm text-gray-700 hover:text-gray-900 cursor-pointer">
-                      Standard room with WiFi for 2 nights from October 10 2025 to October 12 2025
+                      Standard room with WiFi for 2 adults, 1 child from October 10 2025 to October 12 2025
                     </button>
                     <button type="button" onclick="document.getElementById('prompt').value = this.innerText"
                       class="w-full text-left p-3 bg-white rounded-lg border border-orange-200 hover:border-orange-500 hover:shadow-md transition-all duration-200 text-sm text-gray-700 hover:text-gray-900 cursor-pointer">
-                      Suite for 4 people from August 5 2025 to August 12 2025 with extra towels
+                      Suite for 2 adults, 2 children from August 5 2025 to August 12 2025 with extra towels
                     </button>
                     <button type="button" onclick="document.getElementById('prompt').value = this.innerText"
                       class="w-full text-left p-3 bg-white rounded-lg border border-orange-200 hover:border-orange-500 hover:shadow-md transition-all duration-200 text-sm text-gray-700 hover:text-gray-900 cursor-pointer">
-                      Deluxe room with balcony from September 5 2025 to September 7 2025
+                      Deluxe room for 3 adults from September 5 2025 to September 7 2025
                     </button>
                     <button type="button" onclick="document.getElementById('prompt').value = this.innerText"
                       class="w-full text-left p-3 bg-white rounded-lg border border-orange-200 hover:border-orange-500 hover:shadow-md transition-all duration-200 text-sm text-gray-700 hover:text-gray-900 cursor-pointer">
-                      Executive room for honeymoon from November 15 2025 to November 22 2025
+                      Executive room for 2 adults honeymoon from November 15 2025 to November 22 2025
                     </button>
                   </div>
                 </div>
@@ -300,14 +350,247 @@
         </main>
 
         <script>
-          // Character counter
+          // Enhanced AI Booking JavaScript
           const textarea = document.getElementById('prompt');
           const charCount = document.getElementById('charCount');
+          const typingIndicator = document.getElementById('typingIndicator');
+          const suggestionsDropdown = document.getElementById('suggestionsDropdown');
+          const suggestionsList = document.getElementById('suggestionsList');
+          const dateSuggestions = document.getElementById('dateSuggestions');
+          const dateOptions = document.getElementById('dateOptions');
+          const submitBtn = document.getElementById('submitBtn');
+          const submitBtnText = document.getElementById('submitBtnText');
+          const submitBtnLoading = document.getElementById('submitBtnLoading');
+          const loadingState = document.getElementById('loadingState');
+          const aiForm = document.getElementById('aiForm');
 
-          if (textarea && charCount) {
-            textarea.addEventListener('input', function () {
-              charCount.textContent = this.value.length;
+          // Smart suggestions data
+          const suggestions = [
+            'luxury suite with ocean view',
+            'deluxe room with city view',
+            'standard room with garden view',
+            'honeymoon package',
+            'family room for kids',
+            'business suite with workspace',
+            'early check-in at 10 AM',
+            'late check-out at 3 PM',
+            'extra pillows and blankets',
+            'room with balcony',
+            'connecting rooms',
+            'pet-friendly accommodation',
+            'accessible room',
+            'spa access included',
+            'breakfast included',
+            'airport transfer',
+            'high-speed WiFi',
+            'kitchen facilities',
+            'jacuzzi bathtub',
+            'king size bed',
+            'twin beds',
+            'rollaway bed',
+            '2 adults 1 child',
+            '1 adult 2 children',
+            '3 adults',
+            '2 adults',
+            'family of 4',
+            'couple getaway',
+            'solo traveler',
+            'business trip',
+            'vacation with kids'
+          ];
+
+          // Date suggestions
+          function generateDateSuggestions() {
+            const today = new Date();
+            const options = [];
+            
+            // Weekend suggestions
+            const nextWeekend = new Date(today);
+            nextWeekend.setDate(today.getDate() + (7 - today.getDay()));
+            options.push({
+              text: `This weekend (${nextWeekend.toLocaleDateString()})`,
+              value: `${nextWeekend.toLocaleDateString()} to ${new Date(nextWeekend.getTime() + 86400000 * 2).toLocaleDateString()}`
             });
+            
+            // Next week
+            const nextWeek = new Date(today);
+            nextWeek.setDate(today.getDate() + 7);
+            options.push({
+              text: `Next week (${nextWeek.toLocaleDateString()})`,
+              value: `${nextWeek.toLocaleDateString()} to ${new Date(nextWeek.getTime() + 86400000 * 7).toLocaleDateString()}`
+            });
+            
+            // Month end
+            const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            if (monthEnd > today) {
+              options.push({
+                text: `End of month (${monthEnd.toLocaleDateString()})`,
+                value: `${monthEnd.toLocaleDateString()} to ${new Date(monthEnd.getTime() + 86400000 * 3).toLocaleDateString()}`
+              });
+            }
+            
+            // Special dates (holidays, etc.)
+            options.push({
+              text: 'Christmas holiday (December 24-26)',
+              value: 'December 24, 2025 to December 26, 2025'
+            });
+            
+            options.push({
+              text: 'New Year celebration (December 31 - January 2)',
+              value: 'December 31, 2025 to January 2, 2026'
+            });
+            
+            return options;
+          }
+
+          // Typing indicator
+          let typingTimer;
+          textarea.addEventListener('input', function () {
+            charCount.textContent = this.value.length;
+            
+            // Show typing indicator
+            typingIndicator.classList.remove('hidden');
+            
+            // Clear existing timer
+            clearTimeout(typingTimer);
+            
+            // Hide typing indicator after 1 second of inactivity
+            typingTimer = setTimeout(() => {
+              typingIndicator.classList.add('hidden');
+            }, 1000);
+            
+            // Show suggestions based on current input
+            const currentText = this.value.toLowerCase();
+            if (currentText.length > 0) {
+              showSuggestions(currentText);
+            } else {
+              hideSuggestions();
+            }
+            
+            // Check for date-related keywords
+            if (currentText.includes('date') || currentText.includes('from') || currentText.includes('starting')) {
+              showDateSuggestions();
+            } else {
+              hideDateSuggestions();
+            }
+          });
+
+          // Show typing suggestions
+          function showSuggestions(currentText) {
+            const filteredSuggestions = suggestions.filter(s => 
+              s.toLowerCase().includes(currentText)
+            ).slice(0, 5);
+            
+            if (filteredSuggestions.length > 0) {
+              suggestionsList.innerHTML = filteredSuggestions.map(suggestion => `
+                <button type="button" onclick="applySuggestion('${suggestion}')" 
+                  class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm text-gray-700 hover:text-gray-900 transition-colors">
+                  ${suggestion}
+                </button>
+              `).join('');
+              suggestionsDropdown.classList.remove('hidden');
+            } else {
+              hideSuggestions();
+            }
+          }
+
+          // Show date suggestions
+          function showDateSuggestions() {
+            const dateOptionsList = generateDateSuggestions();
+            dateOptions.innerHTML = dateOptionsList.map(option => `
+              <button type="button" onclick="applyDateSuggestion('${option.value}')" 
+                class="w-full text-left px-3 py-2 hover:bg-blue-50 rounded text-sm text-gray-700 hover:text-blue-700 transition-colors border border-gray-200 hover:border-blue-300">
+                ${option.text}
+              </button>
+            `).join('');
+            dateSuggestions.classList.remove('hidden');
+          }
+
+          // Hide suggestions
+          function hideSuggestions() {
+            suggestionsDropdown.classList.add('hidden');
+          }
+
+          function hideDateSuggestions() {
+            dateSuggestions.classList.add('hidden');
+          }
+
+          // Apply suggestion
+          function applySuggestion(suggestion) {
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+            textarea.value = textBefore + suggestion + ' ' + textAfter;
+            textarea.focus();
+            textarea.setSelectionRange(cursorPos + suggestion.length + 1, cursorPos + suggestion.length + 1);
+            hideSuggestions();
+            
+            // Trigger input event to update character count
+            textarea.dispatchEvent(new Event('input'));
+          }
+
+          // Apply date suggestion
+          function applyDateSuggestion(dateValue) {
+            textarea.value += ' ' + dateValue;
+            hideDateSuggestions();
+            textarea.focus();
+            
+            // Trigger input event to update character count
+            textarea.dispatchEvent(new Event('input'));
+          }
+
+          // Hide suggestions when clicking outside
+          document.addEventListener('click', function(e) {
+            if (!textarea.contains(e.target) && !suggestionsDropdown.contains(e.target) && !dateSuggestions.contains(e.target)) {
+              hideSuggestions();
+              hideDateSuggestions();
+            }
+          });
+
+          // Form submission with loading states
+          aiForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading states
+            submitBtn.disabled = true;
+            submitBtnText.classList.add('hidden');
+            submitBtnLoading.classList.remove('hidden');
+            loadingState.classList.remove('hidden');
+            
+            // Simulate AI processing (in real implementation, this would be an AJAX call)
+            setTimeout(() => {
+              // Hide loading states
+              submitBtn.disabled = false;
+              submitBtnText.classList.remove('hidden');
+              submitBtnLoading.classList.add('hidden');
+              loadingState.classList.add('hidden');
+              
+              // Submit the form normally for now (in real implementation, handle AJAX response)
+              aiForm.submit();
+            }, 2000);
+          });
+
+          // Keyboard shortcuts
+          textarea.addEventListener('keydown', function(e) {
+            // Escape to hide suggestions
+            if (e.key === 'Escape') {
+              hideSuggestions();
+              hideDateSuggestions();
+            }
+            
+            // Arrow keys to navigate suggestions
+            if (e.key === 'ArrowDown' && !suggestionsDropdown.classList.contains('hidden')) {
+              e.preventDefault();
+              const buttons = suggestionsList.querySelectorAll('button');
+              if (buttons.length > 0) {
+                buttons[0].focus();
+              }
+            }
+          });
+
+          // Initialize
+          if (textarea && charCount) {
+            charCount.textContent = textarea.value.length;
           }
         </script>
 
@@ -333,74 +616,6 @@
           }
         </style>
 
-        <script>
-          // Character counter
-          const textarea = document.getElementById('prompt');
-          const charCount = document.getElementById('charCount');
-
-          if (textarea && charCount) {
-            textarea.addEventListener('input', function () {
-              charCount.textContent = this.value.length;
-            });
-          }
-        </script>
-
-        <style>
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(-10px);
-            }
-
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-
-          .animate-fadeIn {
-            animation: fadeIn 0.5s ease-out;
-          }
-
-          .transition-slow {
-            transition: all 0.3s ease;
-          }
-        </style>
-
-
-        <script>
-          // Character counter
-          const textarea = document.getElementById('prompt');
-          const charCount = document.getElementById('charCount');
-
-          if (textarea && charCount) {
-            textarea.addEventListener('input', function () {
-              charCount.textContent = this.value.length;
-            });
-          }
-        </script>
-
-        <style>
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(-10px);
-            }
-
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-
-          .animate-fadeIn {
-            animation: fadeIn 0.5s ease-out;
-          }
-
-          .transition-slow {
-            transition: all 0.3s ease;
-          }
-        </style>
       </div>
 
     </div>

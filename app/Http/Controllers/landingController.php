@@ -86,8 +86,9 @@ public function storereservation(Request $request)
         'roomID' => 'required',
         'reservation_checkin' => 'required',
         'reservation_checkout' => 'required',
-        'reservation_specialrequest' => 'required',
         'reservation_numguest' => 'required',
+        'reservation_adults' => 'required|integer|min:1',
+        'reservation_children' => 'required|integer|min:0',
         'guestname' => 'required',
         'guestphonenumber' => 'required',
         'guestemailaddress' => 'required',
@@ -101,12 +102,20 @@ public function storereservation(Request $request)
         'total' => 'required',
         'payment_method' => 'required',
         'reservation_validID' => 'required',
+        'special_requests' => 'required|array|min:1',
+        'special_requests.*' => 'string',
+        'early_checkin_time' => 'nullable|string',
+        'late_checkout_time' => 'nullable|string',
     ],[
         'roomID.required' => 'Please select a room.',
     'reservation_checkin.required' => 'Check-in date is missing.',
     'reservation_checkout.required' => 'Check-out date is missing.',
-    'reservation_specialrequest.required' => 'Special request cannot be empty.',
+    'special_requests.required' => 'Special request cannot be empty.',
+    'special_requests.min' => 'Special request cannot be empty.',
     'reservation_numguest.required' => 'Please specify the number of guests.',
+    'reservation_adults.required' => 'Please specify the number of adults.',
+    'reservation_adults.min' => 'At least 1 adult is required.',
+    'reservation_children.min' => 'Children count cannot be negative.',
     'guestname.required' => 'We need your full name.',
     'guestphonenumber.required' => 'A phone number is required.',
     'guestemailaddress.required' => 'An email address is required.',
@@ -118,6 +127,20 @@ public function storereservation(Request $request)
     'reservation_validID.required' => 'Valid ID is required',
     ]
 );
+
+    // Process special requests from checkboxes
+    $specialRequests = [];
+    if ($request->has('special_requests')) {
+        $specialRequests = $request->special_requests;
+    }
+    $form['reservation_specialrequest'] = implode(', ', $specialRequests);
+    
+    // Handle time preferences
+    $form['early_checkin_time'] = $request->input('early_checkin_time');
+    $form['late_checkout_time'] = $request->input('late_checkout_time');
+    
+    // Remove special_requests array from form to prevent mass assignment issues
+    unset($form['special_requests']);
 
     $filename =  time() . '_' .$request->file('reservation_validID')->getClientOriginalName();
     $filepath = 'images/reservations/'.$filename;
@@ -201,6 +224,13 @@ if ($form['payment_method'] === 'online') {
         $form['payment_status'] = "Pending";
         $form['reservation_bookingstatus'] = "Pending";
     }
+
+    // Process special requests from checkboxes
+    $specialRequests = [];
+    if ($request->has('special_requests')) {
+        $specialRequests = $request->special_requests;
+    }
+    $form['reservation_specialrequest'] = implode(', ', $specialRequests);
 
     // Create reservation
     $reservation = Reservation::create($form);

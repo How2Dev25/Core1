@@ -143,6 +143,9 @@ $additionalpersonfee = dynamicBilling::where('dynamic_name', 'Additional Person 
         'checkin' => $parsed['checkin_date'] ?? now()->toDateString(),
         'checkout' => $parsed['checkout_date'] ?? now()->addDays(1)->toDateString(),
         'specialRequest' => $parsed['special_request'] ?? '',
+        'parsedAdults' => $parsed['adults'] ?? 1,
+        'parsedChildren' => $parsed['children'] ?? 0,
+        'parsedSpecialRequests' => $parsed['special_requests'] ?? [],
         'aiRaw' => $aiRaw,
         'servicefee' => $servicefee,
         'taxrate' => $taxrate,
@@ -1583,8 +1586,8 @@ public function gueststore(Request $request)
         'roomID' => 'required',
         'reservation_checkin' => 'required',
         'reservation_checkout' => 'required',
-        'reservation_specialrequest' => 'required',
-        'reservation_numguest' => 'required',
+        'reservation_adults' => 'required|integer|min:1',
+        'reservation_children' => 'required|integer|min:0',
         'guestname' => 'required',
         'guestphonenumber' => 'required',
         'guestemailaddress' => 'required',
@@ -1600,12 +1603,19 @@ public function gueststore(Request $request)
             'loyalty_points_used' => 'required',
             'loyalty_discount' => 'required',
             'reservation_validID' => 'required',
+            'special_requests' => 'required|array|min:1',
+            'special_requests.*' => 'string',
+            'early_checkin_time' => 'nullable|string',
+            'late_checkout_time' => 'nullable|string',
     ],[
         'roomID.required' => 'Please select a room.',
         'reservation_checkin.required' => 'Check-in date is missing.',
         'reservation_checkout.required' => 'Check-out date is missing.',
-        'reservation_specialrequest.required' => 'Special request cannot be empty.',
-        'reservation_numguest.required' => 'Please specify the number of guests.',
+        'reservation_adults.required' => 'Please specify the number of adults.',
+        'reservation_adults.min' => 'At least 1 adult is required.',
+        'reservation_children.min' => 'Children count cannot be negative.',
+        'special_requests.required' => 'Special request cannot be empty.',
+        'special_requests.min' => 'Special request cannot be empty.',
         'guestname.required' => 'We need your full name.',
         'guestphonenumber.required' => 'A phone number is required.',
         'guestemailaddress.required' => 'An email address is required.',
@@ -1616,6 +1626,23 @@ public function gueststore(Request $request)
         'payment_method' => 'Payment Method is required',
         'reservation_validID.required' => 'Valid ID is required',
     ]);
+
+    // Process special requests from checkboxes
+    $specialRequests = [];
+    if ($request->has('special_requests')) {
+        $specialRequests = $request->special_requests;
+    }
+    $form['reservation_specialrequest'] = implode(', ', $specialRequests);
+    
+    // Handle time preferences
+    $form['early_checkin_time'] = $request->input('early_checkin_time');
+    $form['late_checkout_time'] = $request->input('late_checkout_time');
+    
+    // Calculate total guests
+    $form['reservation_numguest'] = $form['reservation_adults'] + $form['reservation_children'];
+    
+    // Remove special_requests array from form to prevent mass assignment issues
+    unset($form['special_requests']);
 
     $form['guestID'] = Auth::guard('guest')->user()->guestID;
     $form['reservation_bookingstatus'] = 'Pending';
@@ -1881,8 +1908,8 @@ public function aisubmit(Request $request)
         'roomID' => 'required',
         'reservation_checkin' => 'required',
         'reservation_checkout' => 'required',
-        'reservation_specialrequest' => 'required',
-        'reservation_numguest' => 'required',
+        'reservation_adults' => 'required|integer|min:1',
+        'reservation_children' => 'required|integer|min:0',
         'guestname' => 'required',
         'guestphonenumber' => 'required',
         'guestemailaddress' => 'required',
@@ -1898,7 +1925,28 @@ public function aisubmit(Request $request)
               'loyalty_points_used' => 'required',
             'loyalty_discount' => 'required',
             'reservation_validID' => 'required',
+            'special_requests' => 'required|array|min:1',
+            'special_requests.*' => 'string',
+            'early_checkin_time' => 'nullable|string',
+            'late_checkout_time' => 'nullable|string',
     ]);
+
+    // Process special requests from checkboxes
+    $specialRequests = [];
+    if ($request->has('special_requests')) {
+        $specialRequests = $request->special_requests;
+    }
+    $form['reservation_specialrequest'] = implode(', ', $specialRequests);
+    
+    // Handle time preferences
+    $form['early_checkin_time'] = $request->input('early_checkin_time');
+    $form['late_checkout_time'] = $request->input('late_checkout_time');
+    
+    // Calculate total guests
+    $form['reservation_numguest'] = $form['reservation_adults'] + $form['reservation_children'];
+    
+    // Remove special_requests array from form to prevent mass assignment issues
+    unset($form['special_requests']);
 
 
     $filename =  time() . '_' .$request->file('reservation_validID')->getClientOriginalName();
@@ -2312,19 +2360,9 @@ public function paymentSuccessLanding(Request $request)
     Stripe::setApiKey(env('STRIPE_SECRET'));
     $form = session('reservation_form');
     
-    // Get payment session to retrieve card details
-    $sessionId = $request->get('session_id');
-    $session = \Stripe\Checkout\Session::retrieve($sessionId);
-    $paymentIntent = \Stripe\PaymentIntent::retrieve($session->payment_intent);
-    
-    // Get card brand (Visa, Mastercard, etc.)
-    $cardBrand = $paymentIntent->charges->data[0]->payment_method_details->card->brand ?? 'Unknown';
-    $cardBrand = ucfirst($cardBrand); // Capitalize first letter
-
     // Set to Confirmed instead of Pending
     $form['payment_status'] = 'Paid';
     $form['reservation_bookingstatus'] = 'Confirmed';
-    
     
     $reservation = Reservation::create($form);
 
