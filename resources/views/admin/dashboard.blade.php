@@ -61,10 +61,12 @@
 
                         <div class="grid grid-cols-2 gap-5 max-md:grid-cols-1">
                             @include('admin.components.dashboard.recentactivities')
-                            @include('admin.components.dashboard.showmarketing')
+                            @include('admin.components.dashboard.community')
+
                         </div>
 
-                        <div>
+                        <div class="grid grid-cols-2">
+                            @include('admin.components.dashboard.showmarketing')
                             @include('admin.components.dashboard.showevents')
                         </div>
 

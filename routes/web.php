@@ -687,6 +687,17 @@ Route::get('/employeedashboard', function() {
     $promos = Hmp::all();
     $facility = facility::all();
 
+     $myRecentPosts =Posts::leftJoin('core1_guest', 'core1_guest.guestID', '=', 'posts.guestID')
+    ->select(
+        'posts.*',
+        'core1_guest.guest_name',
+        'core1_guest.guest_photo'
+    )
+    ->withCount('likes', 'comments')
+    ->latest('posts.created_at')
+    ->take(5)
+    ->get();
+
     return view('admin.dashboard', compact(
         'totalreservation',
         'reservationThisWeek',
@@ -724,6 +735,7 @@ Route::get('/employeedashboard', function() {
         'events',
         'facility',
         'promos',
+        'myRecentPosts'
     ));
 });
 
@@ -1542,6 +1554,17 @@ for ($m = 1; $m <= 12; $m++) {
 
     $totaleventreservation = Ecm::where('guestID', Auth::guard('guest')->user()->guestID)->count();
 
+    $myRecentPosts =Posts::leftJoin('core1_guest', 'core1_guest.guestID', '=', 'posts.guestID')
+    ->select(
+        'posts.*',
+        'core1_guest.guest_name',
+        'core1_guest.guest_photo'
+    )
+    ->withCount('likes', 'comments')
+    ->latest('posts.created_at')
+    ->take(5)
+    ->get();
+
     return view('guest.dashboard', compact(
         'guesttotalreservation',
         'previousReservations',
@@ -1555,6 +1578,7 @@ for ($m = 1; $m <= 12; $m++) {
         'monthlyReservations',
         'myloyaltypoints',
         'totaleventreservation',
+        'myRecentPosts'
     ));
 });
 

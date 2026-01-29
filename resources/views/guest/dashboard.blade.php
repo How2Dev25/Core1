@@ -94,22 +94,24 @@
 
                             <!-- Right Column: Events, Rooms & Promos -->
                             <div class="lg:col-span-4 space-y-6">
+
+
                                  <!-- Current Promotion -->
                                  @include('guest.components.dashboard.promotionsection')
                                 <!-- Upcoming Events -->
                                 @include('guest.components.dashboard.eventsection')
 
+                                @include('guest.components.dashboard.community')
+
                                 <!-- Points Breakdown -->
-                                @include('guest.components.dashboard.pointschart')
+                               
                                 <!-- Featured Room -->
 
 
                             </div>
                         </div>
 
-                        <div class="w-full">
-                            @include('guest.components.dashboard.reservationtrend')
-                        </div>
+                       
 
                     </main>
                 </div>

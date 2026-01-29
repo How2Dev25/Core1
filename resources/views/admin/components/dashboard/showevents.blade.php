@@ -43,11 +43,7 @@
                                            
 
                                             <!-- CTA Button -->
-                                            <button
-                                                class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-105">
-                                                <i class="fas fa-calendar-check"></i>
-                                                <span>View Details</span>
-                                            </button>
+                                           
                                         </div>
                                     </div>
                                 </a>
