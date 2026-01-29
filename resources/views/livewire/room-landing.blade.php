@@ -1,161 +1,126 @@
 <div wire:poll.5s class="mb-6">
   <!-- Header Section -->
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+  <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-xl p-8 mb-8 text-white">
     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
       <!-- Title -->
       <div class="flex items-center gap-4">
         <div
-          class="w-14 h-14 bg-gradient-to-br from-blue-900 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
-          <i class="fas fa-bed text-yellow-400 text-2xl"></i>
+          class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
+          <i class="fas fa-bed text-yellow-400 text-3xl"></i>
         </div>
         <div>
-          <h3 class="text-3xl font-bold text-gray-900">Book A Room</h3>
-          <p class="text-gray-600 text-sm">Find your perfect accommodation</p>
+          <h1 class="text-4xl font-bold mb-2">Book A Room</h1>
+          <p class="text-blue-100 text-lg">Choose your perfect accommodation from our available room types</p>
         </div>
       </div>
 
-      <!-- Filters -->
-      <div class="flex flex-col md:flex-row gap-4 w-full lg:w-auto">
-        <!-- Status Filter -->
-       
-
-        <!-- Room Type Filter -->
-        <div class="relative">
-          <select wire:model="typeFilter"
-            class="select select-bordered select-md w-full md:w-48 bg-white shadow-sm hover:shadow-md transition-shadow">
-            <option value="">All Types</option>
-            @foreach($allowedRoomTypes as $type)
-              <option value="{{ $type }}">{{ $type }}</option>
-            @endforeach
-          </select>
+      <!-- Flash Messages -->
+      @if(session()->has('error'))
+        <div class="alert alert-error bg-red-500/20 border-red-400 text-white">
+          <i class="fas fa-exclamation-triangle mr-2"></i>
+          <span>{{ session('error') }}</span>
         </div>
+      @endif
+    </div>
+  </div>
 
-        <!-- Search Input -->
-        <div class="relative w-full md:w-72">
-          <input type="text" wire:model.debounce.300ms="searchTerm"
-            placeholder="Search rooms by number, type, or feature..."
-            class="input input-bordered input-md w-full pl-12 pr-4 bg-white shadow-sm hover:shadow-md focus:shadow-lg transition-shadow">
-          <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-          <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
-            <div wire:loading wire:target="searchTerm" class="loading loading-spinner loading-sm text-blue-500"></div>
+  <!-- Room Types Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    @forelse ($roomTypesWithCounts as $roomType)
+      <div wire:click="selectRoomType('{{ $roomType->roomtype }}')" 
+           class="group cursor-pointer transform transition-all duration-300 hover:scale-105">
+        <div
+          class="card bg-white rounded-2xl shadow-lg hover:shadow-2xl border-0 overflow-hidden h-full">
+          <!-- Room Image -->
+          <div class="relative h-48 overflow-hidden">
+            @if($roomType->sample_photo)
+              <img src="{{ asset($roomType->sample_photo) }}"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+                alt="{{ $roomType->roomtype }} Room">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity">
+              </div>
+            @else
+              <div class="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+                <i class="fas fa-door-open text-white text-4xl"></i>
+              </div>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
+              </div>
+            @endif
+            
+            <!-- Overlay Content -->
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="text-white font-bold text-xl drop-shadow-lg">{{ $roomType->roomtype }}</h3>
+                <div class="bg-blue-900 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                  {{ $roomType->available_count }} Available
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Body -->
+          <div class="card-body p-5 space-y-4">
+            <!-- Price -->
+            @if($roomType->sample_price)
+              <div class="text-center">
+                <div class="text-2xl font-bold text-gray-900">
+                  ₱{{ number_format($roomType->sample_price, 2) }}
+                  <span class="text-sm font-normal text-gray-500">/night</span>
+                </div>
+              </div>
+            @endif
+
+            <!-- Room Details -->
+            @if($roomType->sample_size && $roomType->sample_maxguest)
+              <div class="grid grid-cols-2 gap-3">
+                <div class="flex items-center gap-2 text-gray-600 bg-gray-50 rounded-lg p-2">
+                  <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-expand-arrows-alt text-blue-500 text-sm"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-500 leading-none">Size</p>
+                    <p class="font-semibold text-sm">{{ $roomType->sample_size }} sq.ft</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 text-gray-600 bg-gray-50 rounded-lg p-2">
+                  <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-users text-green-500 text-sm"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-500 leading-none">Capacity</p>
+                    <p class="font-semibold text-sm">{{ $roomType->sample_maxguest }} Guests</p>
+                  </div>
+                </div>
+              </div>
+            @endif
+
+            <!-- Select Button -->
+            <div class="pt-2">
+              <button
+                class="w-full btn btn-primary">
+                <i class="fas fa-arrow-right mr-2"></i>
+                Select {{ $roomType->roomtype }}
+                <i class="fas fa-bed ml-2"></i>
+              </button>
+            </div>
           </div>
         </div>
-
-        <!-- Clear Filters -->
-        <div class="flex items-center">
-          <button wire:click="clearFilters" class="btn btn-outline btn-sm ml-2">
-            <i class="fas fa-refresh mr-2"></i> Clear Filters
+      </div>
+    @empty
+      <div class="col-span-full">
+        <div class="text-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-200">
+          <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-bed text-4xl text-gray-400"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-3">No Rooms Available</h3>
+          <p class="text-gray-600 text-lg mb-6">There are currently no available rooms. Please check back later.</p>
+          <button class="btn btn-primary" onclick="window.location.reload()">
+            <i class="fas fa-refresh mr-2"></i>
+            Refresh
           </button>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Room Grid -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-    @forelse ($rooms as $room)
-      <a href="/selectedroom/{{$room->roomID}}" class="group">
-        <div
-          class="card bg-white shadow-lg hover:shadow-2xl border border-gray-100 hover:border-blue-200 transition-all duration-300 cursor-pointer overflow-hidden">
-          <!-- Image -->
-          <figure class="relative h-64 overflow-hidden">
-            <img src="{{ asset($room->roomphoto) }}"
-              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
-              alt="Room {{$room->roomID}}">
-            <div
-              class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity">
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 p-6">
-              <h3 class="text-white font-bold text-xl mb-1 drop-shadow-lg">Room #{{$room->roomID}}</h3>
-              <p class="text-yellow-400 font-semibold text-lg drop-shadow-lg">{{$room->roomtype}}</p>
-            </div>
-          </figure>
-
-          <!-- Card Body -->
-          <div class="card-body p-6 space-y-4">
-            <div class="text-gray-900 px-4 py-2 rounded-full font-bold text-lg">
-              ₱{{ number_format($room->roomprice, 2) }} <span class="text-xs opacity-80">/night</span>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div class="flex items-center gap-2 text-gray-600">
-                <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                  <i class="fas fa-expand-arrows-alt text-blue-500 text-sm"></i>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 leading-none">Size</p>
-                  <p class="font-semibold text-sm">{{$room->roomsize}} sq.ft</p>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-2 text-gray-600">
-                <div class="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
-                  <i class="fas fa-users text-green-500 text-sm"></i>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 leading-none">Capacity</p>
-                  <p class="font-semibold text-sm">{{$room->roommaxguest}} Guests</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Features -->
-            <div class="border-t pt-4">
-              <div class="flex items-center gap-2 mb-2">
-                <i class="fas fa-star text-yellow-400"></i>
-                <span class="text-sm font-medium text-gray-700">Features</span>
-              </div>
-              <div class="flex flex-wrap gap-2">
-                @foreach(explode(',', $room->roomfeatures) as $feature)
-                  <span class="badge badge-outline badge-sm">
-                    <i class="fas fa-wifi text-xs mr-1"></i>
-                    {{ trim($feature) }}
-                  </span>
-                @endforeach
-              </div>
-            </div>
-
-            <!-- Book Button -->
-            <div class="pt-2">
-              <div
-                class="w-full btn btn-primary text-white py-3 px-4 rounded-xl font-semibold text-center transition-all duration-300 group-hover:shadow-lg">
-                <i class="fas fa-calendar-check mr-2"></i>
-                Book Now
-                <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </a>
-    @empty
-      <div class="col-span-full">
-        <div class="text-center py-16 bg-white rounded-2xl border-2 border-dashed border-gray-200">
-          <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <i class="fas fa-bed text-3xl text-gray-400"></i>
-          </div>
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">No rooms available</h3>
-          <p class="text-gray-600 mb-6">No rooms match your current filters. Try adjusting your search criteria.</p>
-        </div>
-      </div>
     @endforelse
-  </div>
-
-  <!-- Pagination -->
-  <div class="mt-6">
-    {{ $rooms->links() }}
-  </div>
-
-  <!-- Loading Overlay -->
-  <div wire:loading.flex wire:target="statusFilter,typeFilter,searchTerm"
-    class="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 items-center justify-center">
-    <div class="bg-white rounded-2xl p-8 shadow-2xl">
-      <div class="flex items-center gap-4">
-        <div class="loading loading-spinner loading-lg text-blue-500"></div>
-        <div>
-          <p class="font-semibold text-gray-900">Updating rooms...</p>
-          <p class="text-sm text-gray-600">Please wait a moment</p>
-        </div>
-      </div>
-    </div>
   </div>
 </div>

@@ -3,63 +3,58 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\room;
 use App\Models\roomtypes;
+use Illuminate\Support\Facades\DB;
 
 class RoomLanding extends Component
 {
-    use WithPagination;
-
-    public $statusFilter = ''; // Default to show all
-    public $typeFilter = '';
-    public $searchTerm = '';
-
-    protected $paginationTheme = 'tailwind'; // Optional, for Tailwind pagination
-
-    public function clearFilters()
-    {
-        $this->statusFilter = '';
-        $this->typeFilter = '';
-        $this->searchTerm = '';
-    }
-
-    public function updating($property)
-    {
-        // Reset pagination when filters or search change
-        if (in_array($property, ['statusFilter', 'typeFilter', 'searchTerm'])) {
-            $this->resetPage();
-        }
-    }
-
     public function render()
     {
         $allowedRoomTypes = roomtypes::pluck('roomtype_name')->toArray();
 
-        $rooms = room::query()
-            // Filter by status if set
-           ->where('roomstatus', 'Available')
-            // Filter by type if set and valid
-            ->when($this->typeFilter && in_array($this->typeFilter, $allowedRoomTypes), function ($query) {
-                return $query->where('roomtype', $this->typeFilter);
-            })
-            // Search by roomID, type, or features
-            ->when($this->searchTerm, function ($query) {
-                $search = $this->searchTerm;
-                $query->where(function ($q) use ($search) {
-                    $q->where('roomID', 'like', "%{$search}%")
-                      ->orWhere('roomtype', 'like', "%{$search}%")
-                      ->orWhere('roomfeatures', 'like', "%{$search}%");
-                });
-            })
-            // Only include rooms that are allowed types
+        // Get room types with available room counts and sample photos
+        $roomTypesWithCounts = room::query()
+            ->select('roomtype', \DB::raw('count(*) as available_count'))
+            ->where('roomstatus', 'Available')
             ->whereIn('roomtype', $allowedRoomTypes)
-            ->latest()
-            ->paginate(9);
+            ->groupBy('roomtype')
+            ->orderBy('roomtype')
+            ->get();
+
+        // Get a random room photo for each type
+        foreach ($roomTypesWithCounts as $roomType) {
+            $sampleRoom = room::where('roomtype', $roomType->roomtype)
+                ->where('roomstatus', 'Available')
+                ->inRandomOrder()
+                ->first();
+            
+            $roomType->sample_photo = $sampleRoom ? $sampleRoom->roomphoto : null;
+            $roomType->sample_price = $sampleRoom ? $sampleRoom->roomprice : null;
+            $roomType->sample_size = $sampleRoom ? $sampleRoom->roomsize : null;
+            $roomType->sample_maxguest = $sampleRoom ? $sampleRoom->roommaxguest : null;
+        }
 
         return view('livewire.room-landing', [
-            'rooms' => $rooms,
-            'allowedRoomTypes' => $allowedRoomTypes,
+            'roomTypesWithCounts' => $roomTypesWithCounts,
         ]);
+    }
+
+    /**
+     * Get a random available room of the specified type
+     */
+    public function selectRoomType($roomType)
+    {
+        $availableRoom = room::where('roomtype', $roomType)
+            ->where('roomstatus', 'Available')
+            ->inRandomOrder()
+            ->first();
+
+        if ($availableRoom) {
+            return redirect()->to('/selectedroom/' . $availableRoom->roomID);
+        }
+
+        session()->flash('error', 'No available rooms found for ' . $roomType);
+        return redirect()->back();
     }
 }

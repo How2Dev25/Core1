@@ -3,132 +3,59 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\room;
 use App\Models\roomtypes;
 use Illuminate\Support\Facades\DB;
 
 class RoomDisplay extends Component
 {
-    use WithPagination;
-
-    public $category = '';
-    public $search = '';
-    public $sortBy = 'roomID';
-    public $sortDirection = 'asc';
-    public $priceRange = '';
-    public $maxGuests = '';
-    public $showSuggested = false;
-
-    protected $paginationTheme = 'tailwind';
-
-    // Reset pagination when filters change
-    public function updatingCategory() { $this->resetPage(); }
-    public function updatingSearch() { $this->resetPage(); }
-    public function updatingSortBy() { $this->resetPage(); }
-    public function updatingPriceRange() { $this->resetPage(); }
-    public function updatingMaxGuests() { $this->resetPage(); }
-
-    public function toggleSort($field)
-    {
-        if ($this->sortBy === $field) {
-            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-        } else {
-            $this->sortBy = $field;
-            $this->sortDirection = 'asc';
-        }
-        $this->resetPage();
-    }
-
-    public function clearFilters()
-    {
-        $this->category = '';
-        $this->search = '';
-        $this->priceRange = '';
-        $this->maxGuests = '';
-        $this->sortBy = 'roomID';
-        $this->sortDirection = 'asc';
-        $this->resetPage();
-    }
-
-    public function toggleSuggested()
-    {
-        $this->showSuggested = !$this->showSuggested;
-    }
-
     public function render()
     {
-            $allowedRoomTypes = roomtypes::pluck('roomtype_name')->toArray();
-      $query = room::leftJoin('core1_loyaltyandrewards', 'core1_loyaltyandrewards.roomID', '=', 'core1_room.roomID')
-    ->where('core1_room.roomstatus', 'Available')
-     ->select(
-        'core1_room.*',
-        DB::raw('COALESCE(core1_loyaltyandrewards.loyalty_value, 0) as loyalty_value'),
-        'core1_loyaltyandrewards.roomID as loyaltyroomID'
-    );
+        $allowedRoomTypes = roomtypes::pluck('roomtype_name')->toArray();
 
-        // Category filter
-     if ($this->category && in_array($this->category, $allowedRoomTypes)) {
-        $query->where('roomtype', $this->category);
-    }
-
-
-        // Search filter
-        if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('roomID', 'like', "%{$this->search}%")
-                  ->orWhere('roomfeatures', 'like', "%{$this->search}%")
-                  ->orWhere('roomtype', 'like', "%{$this->search}%");
-            });
-        }
-
-        // Price range filter
-        if ($this->priceRange) {
-            switch ($this->priceRange) {
-                case 'under-2000':
-                    $query->where('roomprice', '<', 2000);
-                    break;
-                case '2000-5000':
-                    $query->whereBetween('roomprice', [2000, 5000]);
-                    break;
-                case '5000-10000':
-                    $query->whereBetween('roomprice', [5000, 10000]);
-                    break;
-                case 'over-10000':
-                    $query->where('roomprice', '>', 10000);
-                    break;
-            }
-        }
-
-        // Max guests filter
-        if ($this->maxGuests) {
-            $query->where('roommaxguest', '>=', $this->maxGuests);
-        }
-
-        // Sorting
-       $query->orderBy('core1_room.' . $this->sortBy, $this->sortDirection);
-
-        $rooms = $query->paginate(6);
-
-        // Get suggested rooms (random selection)
-        $suggestedRooms = room::where('roomstatus', 'Available')
-            ->inRandomOrder()
-            ->take(3)
+        // Get room types with available room counts and sample photos
+        $roomTypesWithCounts = room::query()
+            ->select('roomtype', DB::raw('count(*) as available_count'))
+            ->where('roomstatus', 'Available')
+            ->whereIn('roomtype', $allowedRoomTypes)
+            ->groupBy('roomtype')
+            ->orderBy('roomtype')
             ->get();
 
-        // Get filter stats
-        $stats = [
-            'total_available' => room::where('roomstatus', 'Available')->count(),
-            'categories' => room::where('roomstatus', 'Available')
-                ->select('roomtype', DB::raw('count(*) as count'))
-                ->groupBy('roomtype')
-                ->get(),
-            'price_range' => [
-                'min' => room::where('roomstatus', 'Available')->min('roomprice'),
-                'max' => room::where('roomstatus', 'Available')->max('roomprice')
-            ]
-        ];
+        // Get a random room photo for each type
+        foreach ($roomTypesWithCounts as $roomType) {
+            $sampleRoom = room::where('roomtype', $roomType->roomtype)
+                ->where('roomstatus', 'Available')
+                ->inRandomOrder()
+                ->first();
+            
+            $roomType->sample_photo = $sampleRoom ? $sampleRoom->roomphoto : null;
+            $roomType->sample_price = $sampleRoom ? $sampleRoom->roomprice : null;
+            $roomType->sample_size = $sampleRoom ? $sampleRoom->roomsize : null;
+            $roomType->sample_maxguest = $sampleRoom ? $sampleRoom->roommaxguest : null;
+            $roomType->sample_features = $sampleRoom ? $sampleRoom->roomfeatures : null;
+        }
 
-        return view('livewire.room-display', compact('rooms', 'suggestedRooms', 'stats', 'allowedRoomTypes'));
+        return view('livewire.room-display', [
+            'roomTypesWithCounts' => $roomTypesWithCounts,
+        ]);
+    }
+
+    /**
+     * Get a random available room of the specified type
+     */
+    public function selectRoomType($roomType)
+    {
+        $availableRoom = room::where('roomtype', $roomType)
+            ->where('roomstatus', 'Available')
+            ->inRandomOrder()
+            ->first();
+
+        if ($availableRoom) {
+            return redirect()->to('/roomdetails/' . $availableRoom->roomID);
+        }
+
+        session()->flash('error', 'No available rooms found for ' . $roomType);
+        return redirect()->back();
     }
 }

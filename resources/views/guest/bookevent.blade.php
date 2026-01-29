@@ -39,7 +39,7 @@
 
                     <section class="container mx-auto px-4 py-8 ">
 
-                        <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                             @forelse($eventtypes as $eventtype)
                                 <div
                                     class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-indigo-300 group">
@@ -122,7 +122,7 @@
 
                                         <!-- Action Button -->
                                         <a href="/eventbookingguest/{{ $eventtype->eventtype_ID }}"
-                                            class="flex items-center justify-center gap-2 w-full px-4 py-3.5 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white rounded-xl transition-all duration-300 font-semibold text-sm shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40 hover:-translate-y-0.5 group/btn">
+                                            class="flex items-center justify-center gap-2 w-full px-4 py-3.5 btn btn-primary">
                                             <svg class="w-5 h-5 transition-transform group-hover/btn:scale-110" fill="none"
                                                 stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

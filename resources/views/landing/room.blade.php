@@ -10,81 +10,91 @@
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Room Cards -->
-      @forelse($rooms as $index => $room)
-        <div
-          class="group relative rounded-2xl overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
-          data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
-
-          <!-- Image Container -->
-          <div class="relative h-72 overflow-hidden">
-            <img src="{{ asset($room->roomphoto) }}" alt="{{ $room->roomtype }}"
-              class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
-
-            <!-- Overlay Gradient -->
-            <div
-              class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500">
-            </div>
-
-            <!-- Floating Badge -->
-            <div class="absolute top-4 left-4">
-              <span
-                class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F7B32B] text-blue-900 text-xs font-bold rounded-full shadow-lg">
-                <i class="fas fa-crown"></i>
-                Premium
-              </span>
-            </div>
-
-            <!-- Favorite Icon -->
-
-          </div>
-
-          <!-- Content Section -->
-          <div class="p-6">
-            <!-- Room Type -->
-            <h3 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-900 transition-colors duration-300">
-              {{ $room->roomtype }}
-            </h3>
-
-            <!-- Features -->
-            <p class="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed">
-              {{ $room->roomfeatures }}
-            </p>
-
-            <!-- Amenities Icons (Optional - if you have amenity data) -->
-            <div class="flex items-center gap-3 mb-5 text-gray-500 text-xs">
-              <span class="flex items-center gap-1">
-                <i class="fas fa-bed"></i>
-                <span>King Bed</span>
-              </span>
-              <span class="flex items-center gap-1">
-                <i class="fas fa-user"></i>
-                <span>2 Guests</span>
-              </span>
-              <span class="flex items-center gap-1">
-                <i class="fas fa-wifi"></i>
-                <span>Free WiFi</span>
-              </span>
-            </div>
-
-            <!-- Price & CTA -->
-            <div class="flex items-center justify-between pt-5 border-t border-gray-100">
-              <div>
-                <p class="text-xs text-gray-500 mb-1">Starting from</p>
-                <p class="text-2xl font-bold text-[#F7B32B]">
-                  ₱{{ number_format($room->roomprice, 2) }}
-                  <span class="text-sm text-gray-500 font-normal">/night</span>
-                </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <!-- Room Type Cards -->
+      @forelse($rooms as $index => $roomType)
+        <div wire:click="window.location.href='/roomselectionlanding'" 
+             class="group cursor-pointer transform transition-all duration-300 hover:scale-105"
+             data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
+          <div class="card bg-white rounded-2xl shadow-lg hover:shadow-2xl border-0 overflow-hidden h-full">
+            <!-- Room Image -->
+            <div class="relative h-48 overflow-hidden">
+              @if($roomType->sample_photo)
+                <img src="{{ asset($roomType->sample_photo) }}"
+                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+                  alt="{{ $roomType->roomtype }} Room">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity">
+                </div>
+              @else
+                <div class="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+                  <i class="fas fa-door-open text-white text-4xl"></i>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
+                </div>
+              @endif
+              
+              <!-- Overlay Content -->
+              <div class="absolute bottom-0 left-0 right-0 p-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-white font-bold text-xl drop-shadow-lg">{{ $roomType->roomtype }}</h3>
+                  <div class="bg-blue-900 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    {{ $roomType->available_count }} Available
+                  </div>
+                </div>
               </div>
-              <a href="/selectedroom/{{ $room->roomID }}"
-                class="px-6 py-3 btn btn-primary text-white font-semibold rounded-xl transition-all duration-300 transform group-hover:scale-105 shadow-md hover:shadow-lg">
-                Book Now
-              </a>
+
+              <!-- Floating Badge -->
+              
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body p-5 space-y-4">
+              <!-- Price -->
+              @if($roomType->sample_price)
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-[#F7B32B]">
+                    ₱{{ number_format($roomType->sample_price, 2) }}
+                    <span class="text-sm font-normal text-gray-500">/night</span>
+                  </div>
+                </div>
+              @endif
+
+              <!-- Features -->
+              @if($roomType->sample_features)
+                <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed">
+                  {{ $roomType->sample_features }}
+                </p>
+              @endif
+
+              <!-- Room Details -->
+              @if($roomType->sample_size && $roomType->sample_maxguest)
+                <div class="flex items-center gap-3 text-gray-500 text-xs">
+                  <span class="flex items-center gap-1">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                    <span>{{ $roomType->sample_size }} sq.ft</span>
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <i class="fas fa-user"></i>
+                    <span>{{ $roomType->sample_maxguest }} Guests</span>
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <i class="fas fa-wifi"></i>
+                    <span>Free WiFi</span>
+                  </span>
+                </div>
+              @endif
+
+              <!-- Select Button -->
+              <div class="pt-2">
+                <a href="/roomselectionlanding"
+                  class="w-full btn btn-primary">
+                  <i class="fas fa-arrow-right mr-2"></i>
+                  Explore {{ $roomType->roomtype }}
+                  <i class="fas fa-bed ml-2"></i>
+                </a>
+              </div>
             </div>
           </div>
-
-
 
           <!-- Decorative Corner Element -->
           <div
@@ -109,16 +119,14 @@
       @endforelse
     </div>
 
-    <!-- Optional: View All Rooms Button -->
-    @if($rooms->count() > 6)
-      <div class="text-center mt-12" data-aos="fade-up">
-        <a href="/roomselectionlanding"
-          class="px-10 py-4 bg-[#F7B32B] hover:bg-[#e5a526] text-blue-900 font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-          View All Rooms
-          <i class="fas fa-arrow-right ml-2"></i>
-        </a>
-      </div>
-    @endif
+    <!-- View All Rooms Button -->
+    <div class="text-center mt-12" data-aos="fade-up">
+      <a href="/roomselectionlanding"
+        class="px-10 py-4 bg-[#F7B32B] hover:bg-[#e5a526] text-blue-900 font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+        View All Rooms
+        <i class="fas fa-arrow-right ml-2"></i>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -153,24 +161,5 @@
         easing: 'ease-out'
       });
     }
-
-    // Optional: Add favorite functionality
-    const favoriteButtons = document.querySelectorAll('.fa-heart');
-    favoriteButtons.forEach(button => {
-      button.parentElement.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        const icon = this.querySelector('i');
-        if (icon.classList.contains('far')) {
-          icon.classList.remove('far');
-          icon.classList.add('fas');
-          icon.style.color = '#F7B32B';
-        } else {
-          icon.classList.remove('fas');
-          icon.classList.add('far');
-          icon.style.color = '';
-        }
-      });
-    });
   });
 </script>

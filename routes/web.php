@@ -188,7 +188,30 @@ function verifyintegrationresto(){
 }
 // 
 Route::get('/', function () {
-    $rooms = Room::all();
+    $allowedRoomTypes = roomtypes::pluck('roomtype_name')->toArray();
+
+    // Get room types with available room counts and sample photos
+    $rooms = room::query()
+        ->select('roomtype', DB::raw('count(*) as available_count'))
+        ->where('roomstatus', 'Available')
+        ->whereIn('roomtype', $allowedRoomTypes)
+        ->groupBy('roomtype')
+        ->orderBy('roomtype')
+        ->get();
+
+    // Get a random room photo for each type
+    foreach ($rooms as $roomType) {
+        $sampleRoom = room::where('roomtype', $roomType->roomtype)
+            ->where('roomstatus', 'Available')
+            ->inRandomOrder()
+            ->first();
+        
+        $roomType->sample_photo = $sampleRoom ? $sampleRoom->roomphoto : null;
+        $roomType->sample_price = $sampleRoom ? $sampleRoom->roomprice : null;
+        $roomType->sample_size = $sampleRoom ? $sampleRoom->roomsize : null;
+        $roomType->sample_maxguest = $sampleRoom ? $sampleRoom->roommaxguest : null;
+        $roomType->sample_features = $sampleRoom ? $sampleRoom->roomfeatures : null;
+    }
  
 
 
