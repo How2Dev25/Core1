@@ -17,7 +17,7 @@
             </span>
         </div>
         <h3 class="text-gray-600 text-sm font-medium mb-1">Total Reservations</h3>
-        <p class="text-3xl font-bold text-gray-900">{{ $guesttotalreservation }}</p>
+        <p class="text-3xl font-bold text-gray-900 counter" data-target="{{ $guesttotalreservation }}">{{ $guesttotalreservation }}</p>
         <p class="text-xs text-gray-500 mt-2">vs last month</p>
     </div>
 
@@ -33,7 +33,7 @@
             </span>
         </div>
         <h3 class="text-gray-600 text-sm font-medium mb-1">Events</h3>
-        <p class="text-3xl font-bold text-gray-900">{{ $totaleventreservation }}</p>
+        <p class="text-3xl font-bold text-gray-900 counter" data-target="{{ $totaleventreservation }}">{{ $totaleventreservation }}</p>
         <p class="text-xs text-gray-500 mt-2">Events Booked</p>
     </div>
 
@@ -75,7 +75,7 @@
             </span>
         </div>
         <h3 class="text-gray-600 text-sm font-medium mb-1">Loyalty Points</h3>
-        <p class="text-3xl font-bold text-gray-900">
+        <p class="text-3xl font-bold text-gray-900 counter" data-target="{{ $myloyaltypoints ?? 0 }}">
             {{ $myloyaltypoints ?? 0 }}
         </p>
         <p class="text-xs text-gray-500 mt-2">Ready to redeem</p>

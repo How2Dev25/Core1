@@ -96,7 +96,7 @@
                         class="inline-flex items-center gap-1 px-2 py-1 bg-black/50 backdrop-blur-sm rounded-full shadow-xs border border-white/20">
                         <span id="currentSlide" class="font-bold text-yellow-400 text-xs">1</span>
                         <span class="text-white/70 text-xs">/</span>
-                        <span class="font-bold text-white text-xs">{{ $events->count() }}</span>
+                        <span class="font-bold text-white text-xs counter" data-target="{{ $events->count() }}">{{ $events->count() }}</span>
                     </div>
                 </div>
             </div>

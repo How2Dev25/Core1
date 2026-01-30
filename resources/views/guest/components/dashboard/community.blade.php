@@ -42,7 +42,7 @@
 
                     <p class="text-xs text-gray-500 mt-1">
                         {{ $recentPost->created_at->diffForHumans() }}
-                        • {{ $recentPost->likes_count }} likes
+                        • <span class="counter" data-target="{{ $recentPost->likes_count }}">{{ $recentPost->likes_count }}</span> likes
                     </p>
                 </a>
             </div>

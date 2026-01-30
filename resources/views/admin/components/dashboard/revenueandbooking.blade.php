@@ -26,43 +26,9 @@
             </div>
         </div>
 
-        <!-- Bar Chart Placeholder -->
-        <div class="h-64 flex items-end justify-between space-x-2">
-            <div class="flex-1 flex flex-col items-center">
-                <div class="w-full bg-green-500 rounded-t-lg hover:bg-green-600 transition-colors cursor-pointer"
-                    style="height: 55%"></div>
-                <div class="text-xs text-gray-500 mt-2">Sat</div>
-            </div>
-            <div class="flex-1 flex flex-col items-center">
-                <div class="w-full bg-green-500 rounded-t-lg hover:bg-green-600 transition-colors cursor-pointer"
-                    style="height: 70%"></div>
-                <div class="text-xs text-gray-500 mt-2">Sun</div>
-            </div>
-            <div class="flex-1 flex flex-col items-center">
-                <div class="w-full bg-green-500 rounded-t-lg hover:bg-green-600 transition-colors cursor-pointer"
-                    style="height: 65%"></div>
-                <div class="text-xs text-gray-500 mt-2">Mon</div>
-            </div>
-            <div class="flex-1 flex flex-col items-center">
-                <div class="w-full bg-green-500 rounded-t-lg hover:bg-green-600 transition-colors cursor-pointer"
-                    style="height: 85%"></div>
-                <div class="text-xs text-gray-500 mt-2">Tue</div>
-            </div>
-            <div class="flex-1 flex flex-col items-center">
-                <div class="w-full bg-green-500 rounded-t-lg hover:bg-green-600 transition-colors cursor-pointer"
-                    style="height: 75%"></div>
-                <div class="text-xs text-gray-500 mt-2">Wed</div>
-            </div>
-            <div class="flex-1 flex flex-col items-center">
-                <div class="w-full bg-green-500 rounded-t-lg hover:bg-green-600 transition-colors cursor-pointer"
-                    style="height: 90%"></div>
-                <div class="text-xs text-gray-500 mt-2">Thu</div>
-            </div>
-            <div class="flex-1 flex flex-col items-center">
-                <div class="w-full bg-green-500 rounded-t-lg hover:bg-green-600 transition-colors cursor-pointer"
-                    style="height: 80%"></div>
-                <div class="text-xs text-gray-500 mt-2">Fri</div>
-            </div>
+        <!-- Revenue Chart -->
+        <div class="h-64">
+            <canvas id="revenueChart"></canvas>
         </div>
     </div>
 
@@ -112,3 +78,86 @@
 
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($last30DaysLabels) !!},
+            datasets: [{
+                label: 'Revenue',
+                data: {!! json_encode($revenueLast30Days) !!},
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#10b981',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: '#10b981',
+                    borderWidth: 1,
+                    padding: 12,
+                    displayColors: false,
+                    callbacks: {
+                        label: function(context) {
+                            return 'Revenue: ₱' + Number(context.parsed.y).toLocaleString();
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: '#6b7280',
+                        font: {
+                            size: 11
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: '#e5e7eb',
+                        borderDash: [2, 2]
+                    },
+                    ticks: {
+                        color: '#6b7280',
+                        font: {
+                            size: 11
+                        },
+                        callback: function(value) {
+                            return '₱' + Number(value).toLocaleString();
+                        }
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            }
+        }
+    });
+});
+</script>

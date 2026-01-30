@@ -9,7 +9,7 @@
                                             <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Current
                                                 Revenue</h3>
                                             <p class="text-2xl font-bold text-gray-800 mt-2">
-                                                ₱{{ number_format($revenueCurrent, 2) }}</p>
+                                                ₱<span class="counter" data-target="{{ number_format($revenueCurrent, 2, '.', '') }}">{{ number_format($revenueCurrent, 2) }}</span></p>
                                             <div class="flex items-center mt-3">
                                                 @php
 $revenueArrowClass = $revenueChange >= 0 ? 'fa-arrow-up text-green-500' : 'fa-arrow-down text-red-500';
@@ -37,7 +37,7 @@ $revenueArrowClass = $revenueChange >= 0 ? 'fa-arrow-up text-green-500' : 'fa-ar
                                             <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Avg Daily
                                                 Rate</h3>
                                             <p class="text-2xl font-bold text-gray-800 mt-2">
-                                                ₱{{ number_format($avgDailyRateCurrent, 2) }}</p>
+                                                ₱<span class="counter" data-target="{{ number_format($avgDailyRateCurrent, 2, '.', '') }}">{{ number_format($avgDailyRateCurrent, 2) }}</span></p>
                                             <div class="flex items-center mt-3">
                                                 @php
 $adrArrowClass = $avgDailyRateChange >= 0 ? 'fa-arrow-up text-green-500' : 'fa-arrow-down text-red-500';
@@ -65,7 +65,7 @@ $adrArrowClass = $avgDailyRateChange >= 0 ? 'fa-arrow-up text-green-500' : 'fa-a
                                             <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">RevPAR
                                             </h3>
                                             <p class="text-2xl font-bold text-gray-800 mt-2">
-                                                ₱{{ number_format($revPARCurrent, 2) }}</p>
+                                                ₱<span class="counter" data-target="{{ number_format($revPARCurrent, 2, '.', '') }}">{{ number_format($revPARCurrent, 2) }}</span></p>
                                             <div class="flex items-center mt-3">
                                                 @php
 $revPARArrowClass = $revPARChange >= 0 ? 'fa-arrow-up text-green-500' : 'fa-arrow-down text-red-500';

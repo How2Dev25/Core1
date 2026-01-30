@@ -15,6 +15,59 @@
     <title>{{$title}} - Dashboard</title>
     @livewireStyles
 </head>
+
+<style>
+    /* Scroll Animation Classes */
+    .scroll-animate {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.6s ease-out;
+    }
+
+    .scroll-animate.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .scroll-animate-left {
+        opacity: 0;
+        transform: translateX(-30px);
+        transition: all 0.6s ease-out;
+    }
+
+    .scroll-animate-left.visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .scroll-animate-right {
+        opacity: 0;
+        transform: translateX(30px);
+        transition: all 0.6s ease-out;
+    }
+
+    .scroll-animate-right.visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .scroll-animate-scale {
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all 0.6s ease-out;
+    }
+
+    .scroll-animate-scale.visible {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    /* Counter Animation */
+    .counter {
+        font-variant-numeric: tabular-nums;
+    }
+</style>
+
 @auth
 
 
@@ -38,63 +91,86 @@
 
 
 
-
-
                 <!-- Dashboard Content -->
                 <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 transition-slow ">
                     {{-- Subsystem Name --}}
-                    <div class="pb-5 border-b border-base-300 animate-fadeIn">
+                    <div class="pb-5 border-b border-base-300 scroll-animate">
                         <h1 class="text-2xl font-bold bg-white bg-clip-text text-[#191970]">Hotel Admin Dashboard</h1>
                     </div>
                     {{-- Subsystem Name --}}
 
                     <section class="flex-1 p-6 ">
                         <!-- Header with Greeting -->
-                        @include('admin.components.dashboard.welcome')
+                        <div class="scroll-animate">
+                            @include('admin.components.dashboard.welcome')
+                        </div>
 
                         <!-- Rooms & Events Showcase -->
-                        @include('admin.components.dashboard.roomsandevents')
+                        <div class="scroll-animate-left">
+                            @include('admin.components.dashboard.roomsandevents')
+                        </div>
 
                         {{-- facilities and events and promotioes --}}
-                        @include('admin.components.dashboard.showfacility')
+                        <div class="scroll-animate-right">
+                            @include('admin.components.dashboard.showfacility')
+                        </div>
 
 
                         <div class="grid grid-cols-2 gap-5 max-md:grid-cols-1">
-                            @include('admin.components.dashboard.recentactivities')
-                            @include('admin.components.dashboard.community')
+                            <div class="scroll-animate-left">
+                                @include('admin.components.dashboard.showmarketing')
+                            </div>
+                            <div class="scroll-animate-right">
+                                @include('admin.components.dashboard.showevents')
+                            </div>
 
                         </div>
 
-                        <div class="grid grid-cols-2">
-                            @include('admin.components.dashboard.showmarketing')
-                            @include('admin.components.dashboard.showevents')
+                        <div class="grid grid-cols-2 max-md:grid-cols-1">
+                                <div class="scroll-animate-left">
+                                    @include('admin.components.dashboard.recentactivities')
+                                </div>
+                                <div class="scroll-animate-right">
+                                    @include('admin.components.dashboard.community')
+                                </div>
+
                         </div>
 
                         <!-- Revenue Metrics Section -->
                         <div class="flex gap-5 max-md:flex-col">
-                            <div class="w-full">
+                            <div class="w-full scroll-animate-scale">
                                 @include('admin.components.dashboard.cards')
                             </div>
                             <!-- Recent Activities -->
 
                         </div>
 
-                        @include('admin.components.dashboard.operationalmetrics')
+                        <div class="scroll-animate-left">
+                            @include('admin.components.dashboard.operationalmetrics')
+                        </div>
 
 
                         <!-- Revenue Chart & Bookings Overview -->
-                        @include('admin.components.dashboard.revenueandbooking')
+                        <div class="scroll-animate-right">
+                            @include('admin.components.dashboard.revenueandbooking')
+                        </div>
 
                         <!-- Additional Metrics Section -->
-                        @include('admin.components.dashboard.additionalmetrics')
+                        <div class="scroll-animate-scale">
+                            @include('admin.components.dashboard.additionalmetrics')
+                        </div>
 
                         <!-- Marketing & Events and loyalty Section -->
-                        @include('admin.components.dashboard.marketingeventsandloyalty')
+                        <div class="scroll-animate-left">
+                            @include('admin.components.dashboard.marketingeventsandloyalty')
+                        </div>
 
 
 
                         <!-- Analytics And Graphs Section -->
-                        @include('admin.components.dashboard.analyticsandgraphcs')
+                        <div class="scroll-animate-right">
+                            @include('admin.components.dashboard.analyticsandgraphcs')
+                        </div>
                         <!-- Chart Modal -->
                         <div id="chartModal"
                             class="hidden fixed inset-0 backdrop-blur-xs  bg-opacity-40 flex items-center justify-center z-50">
@@ -368,6 +444,73 @@
             <!-- Initialize Lucide Icons -->
             <script>
                 lucide.createIcons();
+            </script>
+
+            <!-- Scroll Animation and Counter -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const observerOptions = {
+                        threshold: 0.1,
+                        rootMargin: '0px 0px -50px 0px'
+                    };
+
+                    // Track which counters have been animated
+                    const animatedCounters = new Set();
+
+                    const observer = new IntersectionObserver(function(entries) {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('visible');
+
+                                // Start counter animation for elements with counter class
+                                const counters = entry.target.querySelectorAll('.counter');
+                                counters.forEach(counter => {
+                                    const counterId = counter.getAttribute('data-target') + '-' + counter.textContent;
+                                    if (!animatedCounters.has(counterId)) {
+                                        animatedCounters.add(counterId);
+                                        animateCounter(counter);
+                                    }
+                                });
+                            }
+                        });
+                    }, observerOptions);
+
+                    // Observe all scroll-animate elements
+                    document.querySelectorAll('.scroll-animate, .scroll-animate-left, .scroll-animate-right, .scroll-animate-scale').forEach(el => {
+                        observer.observe(el);
+                    });
+
+                    // Also check for counters that are already visible on page load
+                    const initialCounters = document.querySelectorAll('.counter');
+                    initialCounters.forEach(counter => {
+                        const rect = counter.getBoundingClientRect();
+                        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                        if (isVisible) {
+                            const counterId = counter.getAttribute('data-target') + '-' + counter.textContent;
+                            if (!animatedCounters.has(counterId)) {
+                                animatedCounters.add(counterId);
+                                animateCounter(counter);
+                            }
+                        }
+                    });
+                });
+
+                // Counter Animation Function
+                function animateCounter(element) {
+                    const target = parseInt(element.getAttribute('data-target'));
+                    const duration = 2000; // 2 seconds
+                    const step = target / (duration / 16); // 60fps
+                    let current = 0;
+
+                    const timer = setInterval(() => {
+                        current += step;
+                        if (current >= target) {
+                            current = target;
+                            clearInterval(timer);
+                        }
+                        element.textContent = Math.floor(current).toLocaleString();
+                    }, 16);
+                }
             </script>
 
 

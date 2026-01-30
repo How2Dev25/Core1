@@ -10,7 +10,7 @@
                                             <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total
                                                 Reservations</h3>
                                             <p class="text-3xl font-bold text-gray-800 mt-2">
-                                                {{ number_format($totalreservation) }}
+                                                <span class="counter" data-target="{{ $totalreservation }}">{{ number_format($totalreservation) }}</span>
                                             </p>
                                             <div class="flex items-center mt-3">
                                                 <span class="text-green-500 text-sm font-medium flex items-center">
@@ -35,7 +35,7 @@
                                             <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">This Week
                                             </h3>
                                             <p class="text-3xl font-bold text-gray-800 mt-2">
-                                                {{ number_format($reservationThisWeek) }}
+                                                <span class="counter" data-target="{{ $reservationThisWeek }}">{{ number_format($reservationThisWeek) }}</span>
                                             </p>
                                             <div class="flex items-center mt-3">
                                                 <span class="text-green-500 text-sm font-medium flex items-center">
@@ -60,7 +60,7 @@
                                             <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total
                                                 Rooms</h3>
                                             <p class="text-3xl font-bold text-gray-800 mt-2">
-                                                {{ number_format($totalrooms) }}
+                                                <span class="counter" data-target="{{ $totalrooms }}">{{ number_format($totalrooms) }}</span>
                                             </p>
                                             <div class="flex items-center mt-3">
                                                 <span
@@ -83,7 +83,7 @@
                                             <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Need
                                                 Maintenance</h3>
                                             <p class="text-3xl font-bold text-gray-800 mt-2">
-                                                {{ number_format($needmaintenance) }}
+                                                <span class="counter" data-target="{{ $needmaintenance }}">{{ number_format($needmaintenance) }}</span>
                                             </p>
                                             <div class="flex items-center mt-3">
                                                 <span
