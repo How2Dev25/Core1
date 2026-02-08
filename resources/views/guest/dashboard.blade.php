@@ -146,13 +146,18 @@
                                 <div class="scroll-animate-scale">
                                     @include('guest.components.dashboard.facilitysection')
                                 </div>
+
+                               
                                 <!-- Reservation Trends Chart -->
 
                             </div>
 
                             <!-- Right Column: Events, Rooms & Promos -->
                             <div class="lg:col-span-4 space-y-6">
-
+                                <!-- Loyalty Status -->
+                                <div class="scroll-animate">
+                                    <livewire:loyalty-status />
+                                </div>
 
                                  <!-- Current Promotion -->
                                  <div class="scroll-animate-left">
@@ -163,19 +168,19 @@
                                     @include('guest.components.dashboard.eventsection')
                                 </div>
 
-                                <div class="scroll-animate-scale">
-                                    @include('guest.components.dashboard.community')
-                                </div>
+
 
                                 <!-- Points Breakdown -->
-                               
+
                                 <!-- Featured Room -->
 
 
                             </div>
+
+
                         </div>
 
-                       
+
 
                     </main>
                 </div>
@@ -200,7 +205,7 @@
                         entries.forEach(entry => {
                             if (entry.isIntersecting) {
                                 entry.target.classList.add('visible');
-                                
+
                                 // Start counter animation for elements with counter class
                                 const counters = entry.target.querySelectorAll('.counter');
                                 counters.forEach(counter => {

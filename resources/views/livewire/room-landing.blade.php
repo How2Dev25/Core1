@@ -1,31 +1,8 @@
 <div wire:poll.5s class="mb-6">
   <!-- Header Section -->
-  <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-xl p-8 mb-8 text-white">
-    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-      <!-- Title -->
-      <div class="flex items-center gap-4">
-        <div
-          class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
-          <i class="fas fa-bed text-yellow-400 text-3xl"></i>
-        </div>
-        <div>
-          <h1 class="text-4xl font-bold mb-2">Book A Room</h1>
-          <p class="text-blue-100 text-lg">Choose your perfect accommodation from our available room types</p>
-        </div>
-      </div>
-
-      <!-- Flash Messages -->
-      @if(session()->has('error'))
-        <div class="alert alert-error bg-red-500/20 border-red-400 text-white">
-          <i class="fas fa-exclamation-triangle mr-2"></i>
-          <span>{{ session('error') }}</span>
-        </div>
-      @endif
-    </div>
-  </div>
-
+ 
   <!-- Room Types Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-10">
     @forelse ($roomTypesWithCounts as $roomType)
       <div wire:click="selectRoomType('{{ $roomType->roomtype }}')" 
            class="group cursor-pointer transform transition-all duration-300 hover:scale-105">

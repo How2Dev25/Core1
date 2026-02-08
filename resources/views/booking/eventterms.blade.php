@@ -175,14 +175,7 @@
 </dialog>
 
 <!-- Button to show modal for demo purposes -->
-<div class="text-center mt-8">
-    <button
-        class="btn bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white shadow-lg"
-        onclick="showTermsModal()">
-        <i class="fas fa-file-contract mr-2"></i>
-        View Event Terms & Conditions
-    </button>
-</div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

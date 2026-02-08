@@ -61,7 +61,7 @@
     @include('landing.promos')
 
     <!-- Rooms Section -->
-    @include('landing.room')
+    
 
     @include('landing.facilities')
 
@@ -90,8 +90,8 @@
     @include('landing.footer')
 
     {{-- modals --}}
-
     @include('booking.bookingmodal')
+    @include('landing.small_popup_modal')
 </body>
 
 

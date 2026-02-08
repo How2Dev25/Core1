@@ -1,4 +1,4 @@
-@include('security.sessiontimeout')
+ @include('security.sessiontimeout') 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <header class="bg-base-100 shadow-sm z-10 border-b border-base-300 dark:border-gray-700" data-theme="light">
   <div class="px-4 sm:px-6 lg:px-8">
@@ -36,9 +36,9 @@
         <!-- User Dropdown -->
         <div class="dropdown dropdown-end">
           @php
-            $user = Auth::user();
-            $photo = $user->additionalInfo->adminphoto ?? null;
-            $initials = strtoupper(substr($user->employee_name ?? 'AA', 0, 2));
+$user = Auth::user();
+$photo = $user->additionalInfo->adminphoto ?? null;
+$initials = strtoupper(substr($user->employee_name ?? 'AA', 0, 2));
           @endphp
 
           <label tabindex="0"
@@ -107,6 +107,7 @@
 </header>
 
 <!-- Session Timer Script -->
+
 <script>
 const sessionTimeoutDuration = 300000; // 5 minutes in milliseconds
 let sessionTimer;

@@ -145,13 +145,7 @@
 
 </dialog>
 
-<!-- Button to show modal for demo purposes -->
-<div class="text-center mt-8">
-    <button class="btn bg-blue-900 hover:bg-blue-800 text-white" onclick="showTermsModal()">
-        <i class="fas fa-file-contract mr-2"></i>
-        Show Terms & Conditions
-    </button>
-</div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

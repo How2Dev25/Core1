@@ -21,7 +21,7 @@
     <div class="z-20 relative w-full max-w-7xl mx-auto lg:mt-20 px-4 sm:px-6 lg:px-8 py-12 lg:py-0">
         <div class="flex flex-col items-center min-h-[calc(100vh-6rem)]">
 
-            <div class="w-full mt-20 max-md:mt-45 flex flex-col justify-center items-center text-center px-4">
+            <div class="w-full mt-20  flex flex-col justify-center items-center text-center px-4">
 
                 <div class="opacity-0 animate-reveal-down w-full flex justify-center" style="animation-delay: 0.2s;">
                     <div>
@@ -77,7 +77,7 @@
                     </h1>
                     <h2
                         class="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-light text-white/90 tracking-[0.2em] uppercase">
-                        Hotel & <span class="font-bold text-white">Restaurant</span>
+                        Hotel & <span class=" text-white">Restaurant</span>
                     </h2>
                     <div
                         class="h-px w-full max-w-lg mx-auto bg-gradient-to-r from-transparent via-amber-400/50 to-transparent animate-expand-full">
@@ -333,18 +333,8 @@
         typeWriter();
     }, 1500);
 
-    // Enhanced Parallax Effect
-    let lastScrollY = window.scrollY;
-    let ticking = false;
 
-    function updateParallax() {
-        const parallaxBg = document.querySelector('.parallax-bg');
-        if (parallaxBg) {
-            const scrolled = window.scrollY;
-            parallaxBg.style.transform = `translateY(${scrolled * 0.5}px) scale(1.1)`;
-        }
-        ticking = false;
-    }
+  
 
     window.addEventListener('scroll', () => {
         lastScrollY = window.scrollY;

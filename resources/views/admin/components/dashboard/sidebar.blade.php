@@ -230,15 +230,78 @@
       @endif
 
       @if(Auth::user()->role === 'Hotel Admin' || Auth::user()->role === 'Receptionist')
-        <a href="/lar" class="block">
+        <!-- Loyalty Management -->
+        <div class="collapse group">
+          <input type="checkbox" class="peer" />
           <div
-            class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all hover:bg-blue-600/50 text-white group">
-            <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
-              <i class="fas fa-award text-[#F7B32B] group-hover:text-white"></i>
+            class="collapse-title flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all peer-checked:bg-blue-600/50 text-white group">
+            <div class="flex items-center">
+              <div class="p-1.5 rounded-lg bg-blue-800/30 group-hover:bg-blue-700/50 transition-colors flex items-center justify-center w-9 h-9">
+                <i class="fas fa-crown text-[#F7B32B] group-hover:text-white"></i>
+              </div>
+              <span class="ml-3 sidebar-text">Loyalty And Rewards</span>
             </div>
-            <span class="ml-3 sidebar-text">Loyalty And Rewards</span>
+            <i
+              class="fas fa-chevron-down w-4 h-4 text-blue-200 transform transition-transform duration-200 peer-checked:rotate-90 dropdown-icon"></i>
           </div>
-        </a>
+          <div class="collapse-content pl-14 pr-4 py-1 space-y-1">
+            <!-- Original Loyalty And Rewards -->
+            <a href="/lar"
+              class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+              <span class="flex items-center gap-2">
+                <i class="fas fa-award w-4 h-4 text-[#F7B32B]"></i>
+                Rules And Points
+              </span>
+            </a>
+
+            <!-- Loyalty Dashboard -->
+            @if(Auth::user()->role === 'Hotel Admin')
+            <a href="/admin/loyalty/dashboard"
+              class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+              <span class="flex items-center gap-2">
+                <i class="fas fa-chart-line w-4 h-4 text-[#F7B32B]"></i>
+                Loyalty Dashboard
+              </span>
+            </a>
+
+            <!-- Manage Rewards -->
+            <a href="/admin/loyalty/rewards"
+              class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+              <span class="flex items-center gap-2">
+                <i class="fas fa-gift w-4 h-4 text-[#F7B32B]"></i>
+                Manage Rewards
+              </span>
+            </a>
+
+            <!-- Membership Tiers -->
+            <a href="/admin/loyalty/tiers"
+              class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+              <span class="flex items-center gap-2">
+                <i class="fas fa-layer-group w-4 h-4 text-[#F7B32B]"></i>
+                Membership Tiers
+              </span>
+            </a>
+
+            <!-- Transactions -->
+            <a href="/admin/loyalty/transactions"
+              class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+              <span class="flex items-center gap-2">
+                <i class="fas fa-exchange-alt w-4 h-4 text-[#F7B32B]"></i>
+                Transactions
+              </span>
+            </a>
+
+            <!-- Members -->
+            <a href="/admin/loyalty/members"
+              class="block px-3 py-2 text-sm rounded-lg transition-all hover:bg-blue-600/30 text-blue-100 hover:text-white">
+              <span class="flex items-center gap-2">
+                <i class="fas fa-users w-4 h-4 text-[#F7B32B]"></i>
+                Members
+              </span>
+            </a>
+            @endif
+          </div>
+        </div>
       @endif
 
       <!-- Section Label -->

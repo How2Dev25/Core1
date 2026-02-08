@@ -1516,7 +1516,7 @@ Route::get('/guestdashboard', function() {
     $favoriteroom = $favoriteroomID ? Room::find($favoriteroomID) : null;
 
     $myloyaltypoints = guestloyaltypoints::where('guestID', Auth::guard('guest')->user()->guestID)
-    ->value('points_balance');
+    ->value('points_balance') ?? 0;
 
     $events = ecmtype::all();
 
@@ -1580,6 +1580,39 @@ for ($m = 1; $m <= 12; $m++) {
         'totaleventreservation',
         'myRecentPosts'
     ));
+});
+
+// Loyalty Program Routes
+Route::middleware('auth:guest')->prefix('loyalty')->name('loyalty.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\LoyaltyController::class, 'dashboard'])->name('dashboard');
+    Route::get('/transactions', [App\Http\Controllers\LoyaltyController::class, 'transactions'])->name('transactions');
+    Route::get('/rewards', [App\Http\Controllers\LoyaltyController::class, 'rewards'])->name('rewards');
+    Route::post('/redeem', [App\Http\Controllers\LoyaltyController::class, 'redeem'])->name('redeem');
+    Route::get('/tiers', [App\Http\Controllers\LoyaltyController::class, 'getTiers'])->name('tiers');
+    Route::post('/apply-food-discount', [App\Http\Controllers\LoyaltyController::class, 'applyFoodDiscount'])->name('apply-food-discount');
+    Route::post('/apply-room-discount', [App\Http\Controllers\LoyaltyController::class, 'applyRoomDiscount'])->name('apply-room-discount');
+    Route::post('/process-food-order', [App\Http\Controllers\LoyaltyController::class, 'processFoodOrder'])->name('process-food-order');
+    Route::post('/process-room-booking', [App\Http\Controllers\LoyaltyController::class, 'processRoomBooking'])->name('process-room-booking');
+});
+
+// Admin Loyalty Management Routes
+Route::prefix('admin/loyalty')->name('admin.loyalty.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Admin\LoyaltyManagementController::class, 'dashboard'])->name('dashboard');
+    Route::get('/rewards', [App\Http\Controllers\Admin\LoyaltyManagementController::class, 'rewards'])->name('rewards');
+    Route::get('/rewards/create', [App\Http\Controllers\Admin\LoyaltyManagementController::class, 'createReward'])->name('rewards.create');
+    Route::post('/rewards', [App\Http\Controllers\Admin\LoyaltyManagementController::class, 'storeReward'])->name('rewards.store');
+    Route::get('/rewards/{reward}/edit', [App\Http\Controllers\Admin\LoyaltyManagementController::class, 'editReward'])->name('rewards.edit');
+    Route::put('/rewards/{reward}', [App\Http\Controllers\Admin\LoyaltyManagementController::class, 'updateReward'])->name('rewards.update');
+    Route::post('/rewards/{reward}/toggle', [App\Http\Controllers\Admin\LoyaltyManagementController::class, 'toggleRewardStatus'])->name('rewards.toggle');
+    Route::delete('/rewards/{reward}', [App\Http\Controllers\Admin\LoyaltyManagementController::class, 'deleteReward'])->name('rewards.delete');
+    
+    Route::get('/tiers', [App\Http\Controllers\Admin\LoyaltyManagementController::class, 'tiers'])->name('tiers');
+    Route::get('/tiers/{tier}/edit', [App\Http\Controllers\Admin\LoyaltyManagementController::class, 'editTier'])->name('tiers.edit');
+    Route::put('/tiers/{tier}', [App\Http\Controllers\Admin\LoyaltyManagementController::class, 'updateTier'])->name('tiers.update');
+    
+    Route::get('/transactions', [App\Http\Controllers\Admin\LoyaltyManagementController::class, 'transactions'])->name('transactions');
+    Route::get('/members', [App\Http\Controllers\Admin\LoyaltyManagementController::class, 'members'])->name('members');
+    Route::post('/members/{guestID}/add-points', [App\Http\Controllers\Admin\LoyaltyManagementController::class, 'addPointsToMember'])->name('members.add-points');
 });
 
 Route::get('/managefees', function(){
