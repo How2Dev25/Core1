@@ -307,6 +307,7 @@
 
             <div class="flex flex-col gap-5 w-full">
               <div class="w-full mt-5">
+                @if(Auth::user()->role === 'Hotel Admin')
                   <button onclick="openReportModal()"
                     class="inline-flex items-center px-5 py-3 bg-[#001f54] text-white font-medium rounded-lg hover:bg-[#002d75] transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -315,9 +316,11 @@
                     </svg>
                     <span>Room Booking Report</span>
                   </button>
+                  @endif
                 <livewire:approve-reserve />
               </div>
               <div class="w-full">
+                 @if(Auth::user()->role === 'Hotel Admin')
                 <button onclick="openEventReportModal()"
                   class="inline-flex items-center px-5 py-3 bg-[#001f54] text-white font-medium rounded-lg hover:bg-[#002d75] transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -325,12 +328,14 @@
                       d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                   <span>Event Report</span>
+                  @endif
                 </button>
 
                   <livewire:event-reservations />
               </div>
 
               <div class="w-full">
+                 @if(Auth::user()->role === 'Hotel Admin')
                 <button onclick="openAdditionalReportModal()"
                   class="inline-flex items-center px-5 py-3 bg-[#001f54] text-white font-medium rounded-lg hover:bg-[#002d75] transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -339,6 +344,7 @@
                   </svg>
                   <span>Additional Report</span>
                 </button>
+                @endif
                 @include('admin.components.frontdesk.additionalstable')
               </div>
 

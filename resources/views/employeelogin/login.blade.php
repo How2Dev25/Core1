@@ -23,24 +23,23 @@
     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/70 z-10"></div>
 
     <!-- Content container -->
-    <div class="relative z-10 w-full h-full flex justify-center items-center  p-4">
-   
+    <div class="relative z-10 w-full h-full flex justify-center items-center p-2 sm:p-4">
 
-     <div class="w-full flex justify-center items-center max-md:w-full">
+     <div class="w-full flex justify-center items-center">
   <div
     class="max-w-4xl w-full bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl border border-white/20 overflow-hidden">
 
-    <div class="grid md:grid-cols-2 gap-0">
+    <div class="grid md:grid-cols-2 gap-0 min-h-[500px] md:min-h-[600px]">
       <!-- Left Side - Form Section -->
-      <div class="p-6">
+      <div class="p-4 sm:p-6 order-2 md:order-1 flex flex-col justify-center">
         <!-- Card Header -->
         <div class="mb-4 text-center">
-          <h2 class="text-xl font-bold text-white">Employee Login</h2>
-          <p class="text-white/80 text-sm mt-1">Enter your credentials to continue</p>
+          <h2 class="text-lg sm:text-xl font-bold text-white">Employee Login</h2>
+          <p class="text-white/80 text-xs sm:text-sm mt-1">Enter your credentials to continue</p>
         </div>
 
         <!-- Card Body -->
-        <div>
+        <div class="w-full max-w-sm mx-auto sm:max-w-none">
           <form id="login-form" action="/loginuser" method="POST">
             @csrf
             <input type="hidden" name="login_mode" id="login_mode" value="online">
@@ -56,7 +55,7 @@
                   </svg>
                 </div>
                 <input id="email" type="text" name="employee_id" required
-                  class="w-full pl-9 pr-3 py-2 text-sm bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50"
+                  class="w-full pl-9 pr-3 py-2.5 text-sm bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50"
                   placeholder="Your Employee ID">
               </div>
             </div>
@@ -72,8 +71,8 @@
                   </svg>
                 </div>
                 <input id="password" type="password" name="password" required
-                  class="w-full pl-9 pr-9 py-2 text-sm bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50"
-                  placeholder="••••••••">
+                  class="w-full pl-9 pr-9 py-2.5 text-sm bg-white/5 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-white/50"
+                  placeholder="•••••••">
                 <button type="button"
                   class="absolute inset-y-0 right-0 flex items-center pr-2.5 text-white/50 hover:text-white focus:outline-none"
                   onclick="togglePasswordVisibility()">
@@ -139,7 +138,7 @@
             @endif
 
             <!-- Sign In Button -->
-            <button id="login-btn" type="submit" class="w-full btn-primary btn py-2 text-sm">Sign in</button>
+            <button id="login-btn" type="submit" class="w-full btn-primary btn py-2.5 text-sm font-medium">Sign in</button>
           </form>
 
           <script>
@@ -242,24 +241,24 @@
       </div>
 
       <!-- Right Side - Logo and Info -->
-      <div class="bg-white/5 p-6 flex flex-col justify-center border-l border-white/10">
+      <div class="bg-white/5 p-4 sm:p-6 flex flex-col justify-center border-l border-white/10 order-1 md:order-2">
         <!-- Logo and Hotel Name -->
-        <div class="mb-6 text-center">
-          <div class="flex justify-center mb-3">
+        <div class="mb-4 sm:mb-6 text-center">
+          <div class="flex justify-center mb-2 sm:mb-3">
             <!-- Circular white background wrapper for logo -->
             <a href="/">
-            <div class="bg-white rounded-full p-4 shadow-lg hover:scale-105 transition-all">
+            <div class="bg-white rounded-full p-3 sm:p-4 shadow-lg hover:scale-105 transition-all">
               <img src="{{ asset('images/logo/sonly.png') }}" alt="Soliera Hotel Logo"
-                class="h-24 w-24 object-contain">
+                class="h-16 w-16 sm:h-24 sm:w-24 object-contain">
             </div>
             </a>
           </div>
-          <h3 class="text-xl font-bold text-white mb-1">Soliera Hotel And Restaurant</h3>
+          <h3 class="text-lg sm:text-xl font-bold text-white mb-1">Soliera Hotel And Restaurant</h3>
           <p class="text-white/70 text-xs">Employee Portal</p>
         </div>
 
         <!-- Divider -->
-        <div class="relative mb-4">
+        <div class="relative mb-3 sm:mb-4">
           <div class="absolute inset-0 flex items-center">
             <div class="w-full border-t border-white/20"></div>
           </div>
@@ -271,34 +270,34 @@
         </div>
 
         <!-- Employee Info -->
-        <div class="space-y-4">
-          <div class="bg-white/10 rounded-lg p-4 border border-white/20">
-            <div class="flex items-start space-x-3">
-              <svg class="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <div class="space-y-3 sm:space-y-4">
+          <div class="bg-white/10 rounded-lg p-3 sm:p-4 border border-white/20">
+            <div class="flex items-start space-x-2 sm:space-x-3">
+              <svg class="h-4 w-4 sm:h-5 sm:w-5 text-blue-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd"
                   d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
                   clip-rule="evenodd" />
               </svg>
               <div>
-                <h4 class="text-white font-semibold text-sm mb-1">Employee Access</h4>
+                <h4 class="text-white font-semibold text-xs sm:text-sm mb-1">Employee Access</h4>
                 <p class="text-white/70 text-xs leading-relaxed">
-                  Use your employee ID and password to access the staff portal and management systems.
+                  Use your employee ID and password to access the staff portal.
                 </p>
               </div>
             </div>
           </div>
 
-          <div class="bg-white/10 rounded-lg p-4 border border-white/20">
-            <div class="flex items-start space-x-3">
-              <svg class="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <div class="bg-white/10 rounded-lg p-3 sm:p-4 border border-white/20">
+            <div class="flex items-start space-x-2 sm:space-x-3">
+              <svg class="h-4 w-4 sm:h-5 sm:w-5 text-green-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd"
                   d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                   clip-rule="evenodd" />
               </svg>
               <div>
-                <h4 class="text-white font-semibold text-sm mb-1">Secure Login</h4>
+                <h4 class="text-white font-semibold text-xs sm:text-sm mb-1">Secure Login</h4>
                 <p class="text-white/70 text-xs leading-relaxed">
-                  Your credentials are encrypted and protected with advanced security measures.
+                  Your credentials are encrypted and protected with advanced security.
                 </p>
               </div>
             </div>
@@ -306,7 +305,7 @@
         </div>
 
         <!-- Additional Info -->
-        <div class="text-center text-white/50 text-xs mt-4">
+        <div class="text-center text-white/50 text-xs mt-3 sm:mt-4">
           <p>Need help? Contact IT Support</p>
         </div>
       </div>
