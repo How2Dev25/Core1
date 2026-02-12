@@ -20,6 +20,7 @@ use App\Http\Controllers\postCommentController;
 use App\Http\Controllers\postController;
 use App\Http\Controllers\SyncManagementController;
 use App\Http\Controllers\ratingController;
+use App\Http\Controllers\reportsController;
 use App\Http\Controllers\reservationController;
 use App\Http\Controllers\restoController;
 use App\Http\Controllers\roomController;
@@ -2197,4 +2198,23 @@ Route::prefix('api')->middleware('auth')->group(function () {
     Route::get('/test-sync-connection', [SyncManagementController::class, 'testSyncConnection']);
     Route::delete('/sync-queue/{id}', [SyncManagementController::class, 'deleteSyncItem']);
     Route::post('/manual-sync', [SyncManagementController::class, 'manualSync']);
+});
+
+Route::prefix('booking-report')->group(function () {
+    Route::post('/send-otp', [reportsController::class, 'sendBookingReportOTP'])->name('booking.report.send.otp');
+    Route::post('/verify-otp', [reportsController::class, 'verifyBookingReportOTP'])->name('booking.report.verify.otp');
+    Route::post('/resend-otp', [reportsController::class, 'resendBookingReportOTP'])->name('booking.report.resend.otp');
+});
+
+Route::prefix('event-report')->group(function () {
+    Route::post('/send-otp', [reportsController::class, 'sendEventReportOTP'])->name('event.report.send.otp');
+    Route::post('/verify-otp', [reportsController::class, 'verifyEventReportOTP'])->name('event.report.verify.otp');
+    Route::post('/resend-otp', [reportsController::class, 'resendEventReportOTP'])->name('event.report.resend.otp');
+});
+
+
+Route::prefix('additional-report')->group(function () {
+    Route::post('/send-otp', [reportsController::class, 'sendAdditionalReportOTP'])->name('additional.report.send.otp');
+    Route::post('/verify-otp', [reportsController::class, 'verifyAdditionalReportOTP'])->name('additional.report.verify.otp');
+    Route::post('/resend-otp', [reportsController::class, 'resendAdditionalReportOTP'])->name('additional.report.resend.otp');
 });
