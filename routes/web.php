@@ -503,8 +503,18 @@ Route::post('/posDone', [posController::class, 'POSButton']);
 
 
 Route::get('/adminprofile', function(){
-     employeeAuthCheck();
-    return view('admin.profile');
+    employeeAuthCheck();
+    
+    // Fetch audit trails and login logs with pagination
+    $auditTrails = AuditTrails::where('employee_id', Auth::user()->employee_id)
+        ->orderBy('date', 'desc')
+        ->paginate(10, ['*'], 'audit_page');
+    
+    $loginLogs = DeptLogs::where('employee_id', Auth::user()->employee_id)
+        ->orderBy('date', 'desc')
+        ->paginate(10, ['*'], 'logs_page');
+    
+    return view('admin.profile', compact('auditTrails', 'loginLogs'));
 });
 Route::middleware(['auth'])->group(function () {
     Route::put('/department/profile/update', [userController::class, 'updateadmin'])->name('department.profile.update');

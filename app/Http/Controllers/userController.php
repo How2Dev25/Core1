@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Models\employeenotification;
 use App\Models\additionalinfoadmin;
+use App\Models\AuditTrails;
 use App\Models\guestnotification;
 use App\Models\guestloyaltypoints;
 use App\Models\Lar;
@@ -1015,18 +1016,25 @@ public function employeeProfile(DeptAccount $Dept_no)
 {
     $deptAccount = $Dept_no;
 
-     if (!Auth::check()) {
-        return redirect('/restrictedemployee')->send(); // stop execution and redirect
-    }
-
-       if(Auth::user()->role !== 'Hotel Admin'){
+    if (!Auth::check()) {
         return redirect('/restrictedemployee')->send();
     }
 
+    if(Auth::user()->role !== 'Hotel Admin'){
+        return redirect('/restrictedemployee')->send();
+    }
 
-    return view('admin.deptprofiles', compact('deptAccount'));
+    // Fetch audit trails and login logs with pagination
+    $auditTrails = AuditTrails::where('employee_id', $deptAccount->employee_id)
+        ->orderBy('date', 'desc')
+        ->paginate(10, ['*'], 'audit_page');
+
+    $loginLogs = DeptLogs::where('employee_id', $deptAccount->employee_id)
+        ->orderBy('date', 'desc')
+        ->paginate(10, ['*'], 'logs_page');
+
+    return view('admin.deptprofiles', compact('deptAccount', 'auditTrails', 'loginLogs'));
 }
-
 
 public function suspendGuest(Guest $guestID){
     $guestID->update([
