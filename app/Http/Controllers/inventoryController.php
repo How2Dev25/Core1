@@ -12,21 +12,21 @@ class inventoryController extends Controller
 {
      public function store(Request $request)
     {
-        $form = $request->validate([
-            'core1_inventory_name' => 'required|string|max:255',
-            'core1_inventory_description' => 'nullable|string',
-            'core1_inventory_category' => 'required|string|max:255',
-            'core1_inventory_subcategory' => 'nullable|string|max:255',
-            'core1_inventory_stocks' => 'required|integer|min:0',
-            'core1_inventory_threshold' => 'required|integer|min:1',
-            'core1_inventory_unit' => 'required|string|max:50',
-            'core1_inventory_location' => 'required|string|max:255',
-            'core1_inventory_shelf' => 'nullable|string|max:255',
-            'core1_inventory_supplier' => 'nullable|string|max:255',
-            'core1_inventory_supplier_contact' => 'nullable|string|max:255',
-            'core1_inventory_cost' => 'nullable|numeric|min:0',
-            'core1_inventory_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+         $form = $request->validate([
+    'core1_inventory_name' => 'required',
+    'core1_inventory_description' => 'nullable',
+    'core1_inventory_category' => 'required',
+    'core1_inventory_subcategory' => 'nullable',
+    'core1_inventory_stocks' => 'required',
+    'core1_inventory_threshold' => 'required',
+    'core1_inventory_unit' => 'required',
+    'core1_inventory_location' => 'required',
+    'core1_inventory_shelf' => 'nullable',
+    'core1_inventory_supplier' => 'nullable',
+    'core1_inventory_supplier_contact' => 'nullable',
+    'core1_inventory_cost' => 'nullable',
+    'core1_inventory_image' => 'nullable',
+]);
 
         // Handle file upload
         $filename = time() . '_' . $request->file('core1_inventory_image')->getClientOriginalName();

@@ -72,7 +72,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Http; // ✅ Make sure this is the Http facade
 use Illuminate\Support\Facades\Log;
 
