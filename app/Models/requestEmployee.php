@@ -10,7 +10,7 @@ use App\Traits\Syncable;
 
 class requestEmployee extends Model
 {
-       use HasFactory, Syncable;
+       use HasFactory, Syncable, Notifiable;
 
         protected $table = 'requestemployee';
 
