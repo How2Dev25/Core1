@@ -123,8 +123,8 @@
                         </div>  
 
                     <div class="mt-5">
-                        <button onclick="openBillingReportModal()"
-                            class="inline-flex items-center px-5 py-3 bg-[#001f54] text-white font-medium rounded-lg hover:bg-[#002d75] transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                        <button onclick="openBillingReportWithOTP()"
+                            class="btn btn-primary ">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

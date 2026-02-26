@@ -2227,3 +2227,13 @@ Route::prefix('additional-report')->group(function () {
     Route::post('/verify-otp', [reportsController::class, 'verifyAdditionalReportOTP'])->name('additional.report.verify.otp');
     Route::post('/resend-otp', [reportsController::class, 'resendAdditionalReportOTP'])->name('additional.report.resend.otp');
 });
+
+Route::prefix('billing-report')->group(function () {
+    Route::post('/send-otp', [reportsController::class, 'sendBillingReportOTP'])->name('billing.report.send.otp');
+    Route::post('/verify-otp', [reportsController::class, 'verifyBillingReportOTP'])->name('billing.report.verify.otp');
+    Route::post('/resend-otp', [reportsController::class, 'resendBillingReportOTP'])->name('billing.report.resend.otp');
+});
+
+// MasterRFID
+
+

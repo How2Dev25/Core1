@@ -181,19 +181,20 @@
         <button>close</button>
     </form>
 </dialog>
-<!-- Booking Report Modal -->
+
+<!-- Booking Report Modal - Now with Excel Export -->
 <dialog id="bookingReportModal" class="modal">
     <div class="modal-box" style="max-width: 95%; width: 1400px; max-height: 90vh;">
         <div class="flex justify-between items-center mb-4 no-print">
             <h3 class="font-bold text-lg" style="color: #001f54;">Booking Report Preview</h3>
             <div class="flex gap-2">
-                <button onclick="printReport()" class="btn btn-sm" style="background-color: #001f54; color: white;">
+                <button onclick="exportToExcel()" class="btn btn-sm" style="background-color: #001f54; color: white;">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    Print
+                    Export to Excel
                 </button>
                 <button onclick="document.getElementById('bookingReportModal').close()" class="btn btn-sm btn-ghost">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -245,7 +246,7 @@
                     </div>
 
                     <!-- Bookings Table -->
-                    <table class="report-table">
+                    <table id="bookingsTable" class="report-table">
                         <thead>
                             <tr>
                                 <th>Booking ID</th>
@@ -272,21 +273,21 @@
                                     </td>
                                     <td>
                                         <span class="badge 
-                                                @if(strtolower($reservation->reservation_bookingstatus) == 'pending') badge-pending
-                                                @elseif(strtolower($reservation->reservation_bookingstatus) == 'confirmed') badge-confirmed
-                                                @elseif(strtolower($reservation->reservation_bookingstatus) == 'checked in') badge-checkedin
-                                                @elseif(strtolower($reservation->reservation_bookingstatus) == 'checked out') badge-checkedout
-                                                @elseif(strtolower($reservation->reservation_bookingstatus) == 'cancelled') badge-cancelled
-                                                @endif">
+                                                    @if(strtolower($reservation->reservation_bookingstatus) == 'pending') badge-pending
+                                                    @elseif(strtolower($reservation->reservation_bookingstatus) == 'confirmed') badge-confirmed
+                                                    @elseif(strtolower($reservation->reservation_bookingstatus) == 'checked in') badge-checkedin
+                                                    @elseif(strtolower($reservation->reservation_bookingstatus) == 'checked out') badge-checkedout
+                                                    @elseif(strtolower($reservation->reservation_bookingstatus) == 'cancelled') badge-cancelled
+                                                    @endif">
                                             {{ ucfirst($reservation->reservation_bookingstatus) }}
                                         </span>
                                     </td>
                                     <td>
                                         <span class="payment-badge
-                                                @if(strtolower($reservation->payment_status) == 'pending') payment-pending
-                                                @elseif(strtolower($reservation->payment_status) == 'paid') payment-paid
-                                                @elseif(strtolower($reservation->payment_status) == 'failed') payment-failed
-                                                @endif">
+                                                    @if(strtolower($reservation->payment_status) == 'pending') payment-pending
+                                                    @elseif(strtolower($reservation->payment_status) == 'paid') payment-paid
+                                                    @elseif(strtolower($reservation->payment_status) == 'failed') payment-failed
+                                                    @endif">
                                             {{ ucfirst($reservation->payment_status) }}
                                         </span>
                                     </td>
@@ -534,47 +535,6 @@
     .report-footer strong {
         color: #1e3a8a;
     }
-
-    @media print {
-        @page {
-            size: landscape;
-            margin: 15mm;
-        }
-
-        body * {
-            visibility: hidden !important;
-        }
-
-        .no-print {
-            display: none !important;
-        }
-
-        .preview-wrapper {
-            max-height: none !important;
-            overflow: visible !important;
-            background-color: white !important;
-            padding: 0 !important;
-            visibility: visible !important;
-        }
-
-        #reportContent {
-            visibility: visible !important;
-            position: fixed !important;
-            left: 0 !important;
-            top: 0 !important;
-            width: 100% !important;
-            box-shadow: none !important;
-        }
-
-        .report-header,
-        .report-table th,
-        .summary-card,
-        .badge,
-        .report-footer {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
-    }
 </style>
 
 <script>
@@ -778,8 +738,8 @@
             const banner = document.getElementById('messageBanner');
             banner.innerHTML = msg;
             banner.className = `mt-3 p-3 rounded-lg text-sm ${type === 'success' ? 'bg-green-100 text-green-700 border border-green-200' :
-                    type === 'error' ? 'bg-red-100 text-red-700 border border-red-200' :
-                        'bg-blue-100 text-blue-700 border border-blue-200'
+                type === 'error' ? 'bg-red-100 text-red-700 border border-red-200' :
+                    'bg-blue-100 text-blue-700 border border-blue-200'
                 }`;
             banner.classList.remove('hidden');
             if (type === 'success') setTimeout(() => banner.classList.add('hidden'), 3000);
@@ -819,20 +779,81 @@
         }
     }
 
+    // Excel Export Function
+    function exportToExcel() {
+        // Get the table data
+        const table = document.getElementById('bookingsTable');
+        const rows = table.querySelectorAll('tr');
+
+        // Create CSV content
+        let csvContent = [];
+
+        // Add header row (th)
+        const headerRow = [];
+        const headers = rows[0].querySelectorAll('th');
+        headers.forEach(header => {
+            headerRow.push('"' + header.innerText.replace(/"/g, '""') + '"');
+        });
+        csvContent.push(headerRow.join(','));
+
+        // Add data rows (td)
+        for (let i = 1; i < rows.length; i++) {
+            const row = [];
+            const cols = rows[i].querySelectorAll('td');
+
+            // Skip the "No reservations found" row if present
+            if (cols.length === 1 && cols[0].colSpan === 9) {
+                continue;
+            }
+
+            cols.forEach(col => {
+                // Clean the data (remove badges, spans, etc.)
+                let cellText = col.innerText.trim();
+                // Remove currency symbol and format numbers properly
+                cellText = cellText.replace('₱', '').trim();
+                row.push('"' + cellText.replace(/"/g, '""') + '"');
+            });
+
+            csvContent.push(row.join(','));
+        }
+
+        // Add summary section
+        csvContent.push('');
+        csvContent.push('"SUMMARY"');
+
+        // Get summary data from cards
+        const summaryCards = document.querySelectorAll('.summary-card');
+        summaryCards.forEach(card => {
+            const title = card.querySelector('h3').innerText;
+            const value = card.querySelector('p').innerText;
+            csvContent.push(`"${title}","${value}"`);
+        });
+
+        // Add generation info
+        csvContent.push('');
+        const generatedDate = document.getElementById('reportDate').innerText;
+        csvContent.push(`"Generated on:","${generatedDate}"`);
+        csvContent.push('"Soliera Hotel And Restaurant Management System"');
+
+        // Create blob and download
+        const blob = new Blob([csvContent.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+
+        // Format filename with date
+        const now = new Date();
+        const dateStr = now.toISOString().slice(0, 10);
+        const filename = `booking_report_${dateStr}.csv`;
+
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     // Initialize and expose globally
     const bookingReportOTP = new BookingReportOTP();
     window.openBookingReportWithOTP = () => bookingReportOTP.open();
-
-    function printReport() {
-        const content = document.getElementById('reportContent').cloneNode(true);
-        const win = window.open('', '_blank');
-        win.document.write(`
-            <html><head><title>Booking Report</title>
-            <style>body { margin:20px; font-family:Arial; }</style>
-            </head><body>${content.innerHTML}
-            <script>window.onload = () => { window.print(); setTimeout(() => window.close(), 100); }<\/script>
-            </body></html>
-        `);
-        win.document.close();
-    }
 </script>

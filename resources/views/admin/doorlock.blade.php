@@ -283,6 +283,179 @@
               @endforelse
             </div>
           </div>
+
+            <div class="divider my-8"></div>
+
+
+            <div class="container mx-auto px-4 py-6">
+              <!-- Master OTP Section -->
+              <div class="mb-8">
+                <div class="flex items-center gap-2 mb-4">
+                  <div class="bg-purple-100 p-2 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-bold text-gray-800">Master OTP Codes</h3>
+                  <span class="badge badge-lg bg-purple-100 text-purple-700 border-purple-200">3 Active</span>
+                </div>
+
+                <!-- Master OTP Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <!-- Master OTP Card 1 -->
+                  <div
+                    class="card bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="card-body p-5">
+                      <div class="flex justify-between items-start mb-3">
+                        <div class="bg-purple-600 p-2 rounded-lg">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                          </svg>
+                        </div>
+                        <div class="badge badge-success badge-sm">Active</div>
+                      </div>
+
+                      <h4 class="text-lg font-bold text-gray-800 mb-1">General Master</h4>
+                      <p class="text-xs text-gray-500 mb-3">Valid for all doors • One-time use</p>
+
+                      <div class="bg-white/80 backdrop-blur rounded-lg p-3 mb-3 border border-purple-100">
+                        <p class="text-xs font-semibold text-purple-700 uppercase tracking-wide mb-1">OTP Code</p>
+                        <div class="flex items-center justify-between">
+                          <p class="font-mono text-2xl font-bold text-gray-800 tracking-wider">4826 3917</p>
+                          <button class="btn btn-ghost btn-xs btn-circle text-purple-600 hover:bg-purple-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                              stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span>Expires: Dec 31, 2024</span>
+                        <span>Used: 0/1</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Master OTP Card 2 -->
+                  <div
+                    class="card bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="card-body p-5">
+                      <div class="flex justify-between items-start mb-3">
+                        <div class="bg-blue-600 p-2 rounded-lg">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                          </svg>
+                        </div>
+                        <div class="badge badge-warning badge-sm">Limited</div>
+                      </div>
+
+                      <h4 class="text-lg font-bold text-gray-800 mb-1">Staff Access</h4>
+                      <p class="text-xs text-gray-500 mb-3">Valid 6AM - 10PM • 5 uses</p>
+
+                      <div class="bg-white/80 backdrop-blur rounded-lg p-3 mb-3 border border-blue-100">
+                        <p class="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-1">OTP Code</p>
+                        <div class="flex items-center justify-between">
+                          <p class="font-mono text-2xl font-bold text-gray-800 tracking-wider">7352 8406</p>
+                          <button class="btn btn-ghost btn-xs btn-circle text-blue-600 hover:bg-blue-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                              stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span>Expires: Dec 24, 2024</span>
+                        <span>Used: 2/5</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Master OTP Card 3 -->
+                  <div
+                    class="card bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="card-body p-5">
+                      <div class="flex justify-between items-start mb-3">
+                        <div class="bg-emerald-600 p-2 rounded-lg">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                          </svg>
+                        </div>
+                        <div class="badge badge-success badge-sm">Active</div>
+                      </div>
+
+                      <h4 class="text-lg font-bold text-gray-800 mb-1">Emergency Access</h4>
+                      <p class="text-xs text-gray-500 mb-3">24/7 access • Unlimited</p>
+
+                      <div class="bg-white/80 backdrop-blur rounded-lg p-3 mb-3 border border-emerald-100">
+                        <p class="text-xs font-semibold text-emerald-700 uppercase tracking-wide mb-1">OTP Code</p>
+                        <div class="flex items-center justify-between">
+                          <p class="font-mono text-2xl font-bold text-gray-800 tracking-wider">9134 6285</p>
+                          <button class="btn btn-ghost btn-xs btn-circle text-emerald-600 hover:bg-emerald-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                              stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span>Never expires</span>
+                        <span>Used: 0</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Add New Master OTP Card -->
+                  <div
+                    class="card border-2 border-dashed border-purple-200 bg-purple-50/30 hover:bg-purple-50 transition-all duration-300 cursor-pointer">
+                    <div class="card-body items-center justify-center p-5 min-h-[200px]">
+                      <div class="bg-purple-100 p-3 rounded-full mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24"
+                          stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                      </div>
+                      <p class="text-sm font-medium text-purple-700">Generate New Master OTP</p>
+                      <p class="text-xs text-gray-500 text-center mt-1">Create temporary or permanent access codes</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Master OTP Stats Bar -->
+                <div class="flex flex-wrap items-center gap-4 mt-4 p-4 bg-white rounded-lg border border-gray-200">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                    <span class="text-sm text-gray-600">Active: <span class="font-bold text-gray-800">2</span></span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
+                    <span class="text-sm text-gray-600">Limited: <span class="font-bold text-gray-800">1</span></span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
+                    <span class="text-sm text-gray-600">Total Uses Today: <span class="font-bold text-gray-800">2</span></span>
+                  </div>
+                  <div class="flex-1 text-right">
+                    <span class="text-xs text-gray-500">Last generated: 5 minutes ago</span>
+                  </div>
+                </div>
+              </div>
           </div>
 
           </section>

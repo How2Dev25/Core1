@@ -1,15 +1,198 @@
+<!-- Billing Report OTP Verification Modal -->
+<dialog id="billingReportOTPModal" class="modal">
+    <div class="modal-box max-w-4xl w-11/12 bg-base-100 p-0 overflow-hidden rounded-xl flex flex-col max-h-[90vh]">
+        <!-- Header with Exit Button - FIXED -->
+        <div class="bg-blue-900 px-6 py-4 flex justify-between items-center flex-shrink-0">
+            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Billing Report Access
+            </h3>
+            <button onclick="document.getElementById('billingReportOTPModal').close()"
+                class="text-white/80 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Scrollable Content Area -->
+        <div class="overflow-y-auto flex-1 px-6">
+            <div class="py-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Left Column - User Info -->
+                    <div class="space-y-4">
+                        <div class="bg-blue-50 p-5 rounded-lg border border-blue-100">
+                            <h4 class="text-sm font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                                Account Information
+                            </h4>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 text-sm">Name:</span>
+                                    <span
+                                        class="font-semibold text-gray-900">{{ Auth::user()->employee_name ?? Auth::user()->name ?? 'N/A' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 text-sm">Email:</span>
+                                    <span
+                                        class="font-mono text-sm bg-white px-3 py-1 rounded-full border border-blue-200">
+                                        {{ Auth::user()->email ?? 'N/A' }}
+                                    </span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 text-sm">Department:</span>
+                                    <span
+                                        class="font-medium">{{ Auth::user()->dept_name ?? Auth::user()->department ?? 'N/A' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 text-sm">Role:</span>
+                                    <span
+                                        class="badge badge-primary badge-outline">{{ Auth::user()->role ?? 'Staff' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 text-sm">Employee ID:</span>
+                                    <span
+                                        class="font-mono">{{ Auth::user()->employee_id ?? Auth::user()->Dept_id ?? 'N/A' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 text-sm">Account Status:</span>
+                                    @php
+                                        $deptAccount = App\Models\DeptAccount::where('email', Auth::user()->email ?? '')->first();
+                                    @endphp
+                                    @if($deptAccount && $deptAccount->is_locked)
+                                        <span class="badge badge-error">Locked</span>
+                                    @else
+                                        <span class="badge badge-success">Active</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-amber-50 p-5 rounded-lg border border-amber-200">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-amber-200 p-2 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-700" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h5 class="font-semibold text-amber-800 text-sm">Security Notice</h5>
+                                    <p class="text-xs text-amber-700 mt-1">Verification required to access billing
+                                        reports.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column - OTP Verification -->
+                    <div class="space-y-4">
+                        <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                            <h4 class="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                                Verification Code
+                            </h4>
+
+                            <!-- OTP Input Boxes -->
+                            <div class="flex justify-center gap-2 mb-4">
+                                @for ($i = 0; $i < 6; $i++)
+                                    <input type="text" maxlength="1"
+                                        class="billing-otp-box w-10 h-12 md:w-12 md:h-14 text-center text-xl md:text-2xl font-bold border-2 rounded-lg focus:border-blue-600 outline-none"
+                                        data-index="{{ $i }}">
+                                @endfor
+                            </div>
+                            <input type="hidden" id="billingFullOtp" value="">
+
+                            <!-- Timer & Resend -->
+                            <div
+                                class="flex justify-between items-center bg-white p-3 rounded-lg border border-gray-200">
+                                <div class="flex items-center gap-2 text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-900" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span class="text-gray-600">Expires in:</span>
+                                    <span id="billingTimer" class="font-mono font-bold text-blue-900">10:00</span>
+                                </div>
+                                <button id="billingResendBtn"
+                                    class="text-xs font-semibold text-blue-900 bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 disabled:opacity-50"
+                                    disabled>
+                                    Resend Code
+                                </button>
+                            </div>
+
+                            <!-- Message Banner -->
+                            <div id="billingMessageBanner" class="hidden mt-3 p-3 rounded-lg text-sm"></div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex gap-3">
+                            <button onclick="document.getElementById('billingReportOTPModal').close()"
+                                class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50">
+                                Cancel
+                            </button>
+                            <button id="billingVerifyBtn"
+                                class="flex-1 px-4 py-3 bg-blue-900 text-white font-medium rounded-lg hover:bg-blue-800 disabled:opacity-50 flex items-center justify-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-5m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Verify & Continue
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer - FIXED -->
+        <div
+            class="bg-gray-50 px-6 py-3 border-t border-gray-200 text-xs text-gray-500 flex justify-between items-center flex-shrink-0">
+            <span>© 2026 Soliera Hotel Management System</span>
+            <span class="flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                Secure Verification
+            </span>
+        </div>
+    </div>
+
+    <!-- Backdrop close -->
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+
+<!-- Billing Report Modal -->
 <dialog id="billingReportModal" class="modal">
     <div class="modal-box" style="max-width: 95%; width: 1400px; max-height: 90vh;">
         <div class="flex justify-between items-center mb-4 no-print">
             <h3 class="font-bold text-lg" style="color: #001f54;">Billing Report Preview</h3>
             <div class="flex gap-2">
-                <button onclick="printBillingReport()" class="btn btn-sm" style="background-color: #001f54; color: white;">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                <button onclick="exportBillingToExcel()" class="btn btn-sm" style="background-color: #001f54; color: white;">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    Print
+                    Export to Excel
                 </button>
                 <button onclick="document.getElementById('billingReportModal').close()" class="btn btn-sm btn-ghost">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -58,7 +241,7 @@
                     </div>
 
                     <!-- Billing History Table -->
-                    <table class="report-table">
+                    <table id="billingTable" class="report-table">
                         <thead>
                             <tr>
                                 <th>Transaction ID</th>
@@ -252,379 +435,360 @@
         color: #1e3a8a;
     }
 
-    /* Print Styles - EXACTLY THE SAME */
-    @media print {
-        @page {
-            size: landscape;
-            margin: 15mm;
-        }
-
-        body * {
-            visibility: hidden !important;
-        }
-
-        .no-print {
-            display: none !important;
-        }
-
-        .preview-wrapper {
-            max-height: none !important;
-            overflow: visible !important;
-            background-color: white !important;
-            padding: 0 !important;
-            visibility: visible !important;
-        }
-
-        #billingReportContent {
-            visibility: visible !important;
-            position: fixed !important;
-            left: 0 !important;
-            top: 0 !important;
-            width: 100% !important;
-            box-shadow: none !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        #billingReportContent * {
-            visibility: visible !important;
-        }
-
-        .modal-box {
-            visibility: visible !important;
-            max-width: 100% !important;
-            width: 100% !important;
-        }
-
-        .report-container {
-            box-shadow: none;
-            page-break-inside: avoid;
-            max-width: 100%;
-        }
-
-        /* Force colors to print */
-        .report-header {
-            background-color: #1e3a8a !important;
-            color: #ffffff !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .report-header h1 {
-            color: #ffffff !important;
-        }
-
-        .report-header p {
-            color: #fbbf24 !important;
-        }
-
-        .report-table th {
-            background-color: #1e3a8a !important;
-            color: #ffffff !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .report-table tbody tr:nth-child(even) {
-            background-color: #f9fafb !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .summary-card {
-            background-color: #f9fafb !important;
-            border-left: 4px solid #1e3a8a !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .badge-confirmed {
-            background-color: #d1fae5 !important;
-            color: #065f46 !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .badge-cancelled {
-            background-color: #fee2e2 !important;
-            color: #991b1b !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .report-footer {
-            background-color: #f9fafb !important;
-            border-top: 2px solid #fbbf24 !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
+    /* OTP Box Styles */
+    .billing-otp-box {
+        background: white;
+        transition: all 0.2s ease;
+        font-family: 'Courier New', monospace;
+        border-color: #d1d5db;
+        color: #001f54;
     }
+    
+    .billing-otp-box:focus {
+        border-color: #001f54 !important;
+        box-shadow: 0 0 0 3px rgba(0,31,84,0.1);
+        transform: scale(1.02);
+    }
+    
+    .billing-otp-box.filled {
+        border-color: #001f54;
+        background: rgba(0,31,84,0.02);
+    }
+    
+    @keyframes shake {
+        0%,100% { transform: translateX(0); }
+        10%,30%,50%,70%,90% { transform: translateX(-3px); }
+        20%,40%,60%,80% { transform: translateX(3px); }
+    }
+    
+    .shake { animation: shake 0.5s ease-in-out; }
+    .timer-warning { color: #dc2626 !important; }
 </style>
 
-<!-- EXACT SAME JavaScript pattern -->
 <script>
-    function openBillingReportModal() {
-        // Update dates
-        const now = new Date();
-        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-        const formattedDate = now.toLocaleDateString('en-US', options);
+    class BillingReportOTP {
+        constructor() {
+            this.email = '{{ Auth::user()->email ?? "" }}';
+            this.timeLeft = 600;
+            this.timer = null;
+            this.init();
+        }
 
-        document.getElementById('billingReportDate').textContent = formattedDate;
-        document.getElementById('billingReportFooterDate').textContent = formattedDate;
+        init() {
+            this.setupOTPInputs();
+            this.attachEvents();
+        }
 
-        // Calculate totals from table data
-        calculateBillingTotals();
-
-        // Open modal
-        document.getElementById('billingReportModal').showModal();
-    }
-
-    function calculateBillingTotals() {
-        // Get all table rows
-        const rows = document.querySelectorAll('#billingReportContent tbody tr');
-        let totalAmount = 0;
-        let paidCount = 0;
-        let totalTransactions = rows.length;
-
-        // If there's data in the table
-        if (totalTransactions > 0) {
-            rows.forEach(row => {
-                // Get amount from 5th column (index 4)
-                const amountCell = row.cells[4];
-                if (amountCell) {
-                    const amountText = amountCell.textContent.trim();
-                    // Extract number from "₱X,XXX.XX"
-                    const amount = parseFloat(amountText.replace('₱', '').replace(',', ''));
-                    if (!isNaN(amount)) {
-                        totalAmount += amount;
+        setupOTPInputs() {
+            const inputs = document.querySelectorAll('.billing-otp-box');
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    input.value = input.value.replace(/[^0-9]/g, '');
+                    if (input.value.length === 1) {
+                        input.classList.add('filled');
+                        if (index < 5) inputs[index + 1]?.focus();
                     }
-                }
-
-                // Get status from 7th column (index 6)
-                const statusCell = row.cells[6];
-                if (statusCell) {
-                    const statusText = statusCell.textContent.trim();
-                    if (statusText === 'Paid') {
-                        paidCount++;
+                    this.updateFullOTP();
+                });
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !input.value && index > 0) {
+                        inputs[index - 1].focus();
+                        inputs[index - 1].classList.remove('filled');
                     }
+                });
+                input.addEventListener('paste', (e) => this.handlePaste(e));
+            });
+        }
+
+        handlePaste(e) {
+            e.preventDefault();
+            const paste = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
+            const inputs = document.querySelectorAll('.billing-otp-box');
+            paste.split('').forEach((char, i) => {
+                if (i < 6) {
+                    inputs[i].value = char;
+                    inputs[i].classList.add('filled');
                 }
             });
+            this.updateFullOTP();
+        }
 
-            const avgAmount = totalTransactions > 0 ? totalAmount / totalTransactions : 0;
+        attachEvents() {
+            document.getElementById('billingVerifyBtn')?.addEventListener('click', () => this.verifyOTP());
+            document.getElementById('billingResendBtn')?.addEventListener('click', () => this.resendOTP());
+        }
 
-            // Update summary cards
-            document.querySelector('#billingReportContent .summary-card:nth-child(1) p').textContent = totalTransactions;
-            document.querySelector('#billingReportContent .summary-card:nth-child(2) p').textContent = paidCount;
-            document.querySelector('#billingReportContent .summary-card:nth-child(3) p').textContent = '₱' + totalAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            document.querySelector('#billingReportContent .summary-card:nth-child(4) p').textContent = '₱' + avgAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-        } else {
-            // No data found
-            document.querySelector('#billingReportContent .summary-card:nth-child(1) p').textContent = '0';
-            document.querySelector('#billingReportContent .summary-card:nth-child(2) p').textContent = '0';
-            document.querySelector('#billingReportContent .summary-card:nth-child(3) p').textContent = '₱0.00';
-            document.querySelector('#billingReportContent .summary-card:nth-child(4) p').textContent = '₱0.00';
+        updateFullOTP() {
+            const inputs = document.querySelectorAll('.billing-otp-box');
+            let otp = '';
+            inputs.forEach(i => otp += i.value);
+            document.getElementById('billingFullOtp').value = otp;
+        }
+
+        async sendOTP() {
+            this.showMessage('Sending verification code...', 'info');
+            try {
+                const res = await fetch('{{ route("billing.report.send.otp") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ email: this.email })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    this.showMessage('✓ Code sent to your email', 'success');
+                    this.startTimer(data.expires_in || 600);
+                    this.enableResendAfter(30);
+                } else {
+                    this.showMessage(data.message, 'error');
+                }
+            } catch (error) {
+                this.showMessage('Failed to send code', 'error');
+            }
+        }
+
+        async verifyOTP() {
+            const otp = document.getElementById('billingFullOtp').value;
+            if (otp.length !== 6) {
+                this.shakeInputs();
+                this.showMessage('Enter complete 6-digit code', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('billingVerifyBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading loading-spinner loading-sm"></span> Verifying...';
+
+            try {
+                const res = await fetch('{{ route("billing.report.verify.otp") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ 
+                        otp: otp, 
+                        email: this.email 
+                    })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    this.showMessage('✓ Verification successful!', 'success');
+                    setTimeout(() => {
+                        document.getElementById('billingReportOTPModal').close();
+                        this.openReportModal();
+                    }, 1000);
+                } else {
+                    this.shakeInputs();
+                    this.showMessage(data.message, 'error');
+                    this.clearOTPInputs();
+                    btn.disabled = false;
+                    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-5m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Verify & Continue';
+                }
+            } catch (error) {
+                this.showMessage('Verification failed', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-5m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Verify & Continue';
+            }
+        }
+
+        async resendOTP() {
+            const btn = document.getElementById('billingResendBtn');
+            btn.disabled = true;
+            btn.innerHTML = 'Sending...';
+
+            try {
+                const res = await fetch('{{ route("billing.report.resend.otp") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ email: this.email })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    this.showMessage('✓ New code sent!', 'success');
+                    this.resetTimer();
+                    this.startTimer(data.expires_in || 600);
+                    this.enableResendAfter(30);
+                    this.clearOTPInputs();
+                } else {
+                    this.showMessage(data.message, 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = 'Resend Code';
+                }
+            } catch (error) {
+                this.showMessage('Failed to resend', 'error');
+                btn.disabled = false;
+                btn.innerHTML = 'Resend Code';
+            }
+        }
+
+        startTimer(seconds) {
+            this.timeLeft = seconds;
+            this.updateTimerDisplay();
+            this.timer = setInterval(() => {
+                this.timeLeft--;
+                this.updateTimerDisplay();
+                if (this.timeLeft <= 0) {
+                    clearInterval(this.timer);
+                    document.getElementById('billingTimer').innerHTML = 'Expired';
+                    document.getElementById('billingTimer').classList.add('timer-warning');
+                    document.getElementById('billingResendBtn').disabled = false;
+                    this.showMessage('Code expired. Request new one.', 'error');
+                }
+            }, 1000);
+        }
+
+        updateTimerDisplay() {
+            const mins = Math.floor(this.timeLeft / 60);
+            const secs = this.timeLeft % 60;
+            document.getElementById('billingTimer').innerHTML = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+        }
+
+        resetTimer() {
+            clearInterval(this.timer);
+            document.getElementById('billingTimer').classList.remove('timer-warning');
+        }
+
+        enableResendAfter(seconds) {
+            const btn = document.getElementById('billingResendBtn');
+            btn.disabled = true;
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = 'Resend Code';
+            }, seconds * 1000);
+        }
+
+        showMessage(msg, type) {
+            const banner = document.getElementById('billingMessageBanner');
+            banner.innerHTML = msg;
+            banner.className = `mt-3 p-3 rounded-lg text-sm ${
+                type === 'success' ? 'bg-green-100 text-green-700 border border-green-200' :
+                type === 'error' ? 'bg-red-100 text-red-700 border border-red-200' :
+                'bg-blue-100 text-blue-700 border border-blue-200'
+            }`;
+            banner.classList.remove('hidden');
+            if (type === 'success') setTimeout(() => banner.classList.add('hidden'), 3000);
+        }
+
+        shakeInputs() {
+            document.querySelectorAll('.billing-otp-box').forEach(i => {
+                i.classList.add('shake');
+                setTimeout(() => i.classList.remove('shake'), 500);
+            });
+        }
+
+        clearOTPInputs() {
+            document.querySelectorAll('.billing-otp-box').forEach(i => {
+                i.value = '';
+                i.classList.remove('filled');
+            });
+            document.getElementById('billingFullOtp').value = '';
+        }
+
+        openReportModal() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            const formattedDate = now.toLocaleDateString('en-US', options);
+
+            document.getElementById('billingReportDate').textContent = formattedDate;
+            document.getElementById('billingReportFooterDate').textContent = formattedDate;
+            
+            // Open modal
+            document.getElementById('billingReportModal').showModal();
+        }
+
+        open() {
+            const modal = document.getElementById('billingReportOTPModal');
+            this.clearOTPInputs();
+            this.sendOTP();
+            modal.showModal();
         }
     }
 
-    function printBillingReport() {
-        // Recalculate totals before printing
-        calculateBillingTotals();
+    // Initialize and expose globally
+    const billingReportOTP = new BillingReportOTP();
+    window.openBillingReportWithOTP = () => billingReportOTP.open();
 
-        // Clone the report content
-        const reportContent = document.getElementById('billingReportContent').cloneNode(true);
-
-        // Create a new window for printing
-        const printWindow = window.open('', '_blank');
-        printWindow.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Billing History Report</title>
-                <style>
-                    /* Billing History Report CSS Styles */
-                    body {
-                        margin: 0;
-                        padding: 20px;
-                        font-family: Arial, sans-serif;
-                        color: #333;
-                    }
-                    
-                    .report-container {
-                        background-color: #ffffff;
-                        border-radius: 0;
-                        overflow: hidden;
-                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                        max-width: 1000px;
-                        margin: 0 auto;
-                    }
-
-                    .report-header {
-                        background-color: #1e3a8a !important;
-                        color: #ffffff !important;
-                        padding: 25px 30px;
-                        text-align: center;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .report-header h1 {
-                        margin: 0 0 8px 0;
-                        font-size: 24px;
-                        font-weight: bold;
-                        color: #ffffff !important;
-                    }
-
-                    .report-header p {
-                        margin: 4px 0;
-                        color: #fbbf24 !important;
-                        font-size: 13px;
-                        font-style: italic;
-                    }
-
-                    .report-meta {
-                        display: flex;
-                        justify-content: space-between;
-                        margin-top: 12px;
-                        font-size: 12px;
-                        color: #e5e7eb;
-                    }
-
-                    .report-body {
-                        padding: 25px 30px;
-                        background-color: #ffffff;
-                    }
-
-                    .summary-section {
-                        display: grid;
-                        grid-template-columns: repeat(4, 1fr);
-                        gap: 15px;
-                        margin-bottom: 25px;
-                    }
-
-                    .summary-card {
-                        background-color: #f9fafb !important;
-                        padding: 15px;
-                        border-radius: 6px;
-                        border-left: 4px solid #1e3a8a !important;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .summary-card h3 {
-                        color: #6b7280;
-                        font-size: 11px;
-                        margin: 0 0 8px 0;
-                        text-transform: uppercase;
-                        font-weight: 600;
-                    }
-
-                    .summary-card p {
-                        color: #1e3a8a;
-                        font-size: 22px;
-                        font-weight: bold;
-                        margin: 0;
-                    }
-
-                    .report-table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        margin-top: 15px;
-                        font-size: 11px;
-                    }
-
-                    .report-table th,
-                    .report-table td {
-                        padding: 10px 8px;
-                        border: 1px solid #d1d5db;
-                        text-align: left;
-                    }
-
-                    .report-table th {
-                        background-color: #1e3a8a !important;
-                        color: #ffffff !important;
-                        font-weight: bold;
-                        font-size: 10px;
-                        text-transform: uppercase;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .report-table tbody tr:nth-child(even) {
-                        background-color: #f9fafb !important;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .badge {
-                        display: inline-block;
-                        padding: 3px 10px;
-                        border-radius: 10px;
-                        font-size: 9px;
-                        font-weight: bold;
-                        white-space: nowrap;
-                    }
-
-                    .badge-confirmed {
-                        background-color: #d1fae5 !important;
-                        color: #065f46 !important;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .badge-cancelled {
-                        background-color: #fee2e2 !important;
-                        color: #991b1b !important;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .report-footer {
-                        text-align: center;
-                        padding: 18px 30px;
-                        background-color: #f9fafb !important;
-                        border-top: 2px solid #fbbf24 !important;
-                        font-size: 10px;
-                        color: #6b7280;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .report-footer p {
-                        margin: 3px 0;
-                    }
-
-                    .report-footer strong {
-                        color: #1e3a8a;
-                    }
-
-                    @media print {
-                        @page {
-                            size: landscape;
-                            margin: 15mm;
-                        }
-                        
-                        body {
-                            margin: 0;
-                            padding: 0;
-                        }
-                    }
-                </style>
-            </head>
-            <body>
-                ${reportContent.innerHTML}
-                <script>
-                    // Auto print and close
-                    window.onload = function() {
-                        window.print();
-                        setTimeout(function() {
-                            window.close();
-                        }, 100);
-                    };
-                <\/script>
-            </body>
-            </html>
-        `);
-
-        printWindow.document.close();
+    // Excel Export Function for Billing
+    function exportBillingToExcel() {
+        // Get the table data
+        const table = document.getElementById('billingTable');
+        const rows = table.querySelectorAll('tr');
+        
+        // Create CSV content
+        let csvContent = [];
+        
+        // Add header row (th)
+        const headerRow = [];
+        const headers = rows[0].querySelectorAll('th');
+        headers.forEach(header => {
+            headerRow.push('"' + header.innerText.replace(/"/g, '""') + '"');
+        });
+        csvContent.push(headerRow.join(','));
+        
+        // Add data rows (td)
+        for (let i = 1; i < rows.length; i++) {
+            const row = [];
+            const cols = rows[i].querySelectorAll('td');
+            
+            // Skip the "No transactions found" row if present
+            if (cols.length === 1 && cols[0].colSpan === 8) {
+                continue;
+            }
+            
+            cols.forEach(col => {
+                // Clean the data (remove badges, spans, etc.)
+                let cellText = col.innerText.trim();
+                // Remove currency symbol and format numbers properly
+                cellText = cellText.replace('₱', '').trim();
+                row.push('"' + cellText.replace(/"/g, '""') + '"');
+            });
+            
+            csvContent.push(row.join(','));
+        }
+        
+        // Add summary section
+        csvContent.push('');
+        csvContent.push('"BILLING SUMMARY"');
+        
+        // Get summary data from cards
+        const summaryCards = document.querySelectorAll('.summary-card');
+        summaryCards.forEach(card => {
+            const title = card.querySelector('h3').innerText;
+            const value = card.querySelector('p').innerText;
+            // Remove ₱ from amounts for Excel
+            const cleanValue = value.replace('₱', '').trim();
+            csvContent.push(`"${title}","${cleanValue}"`);
+        });
+        
+        // Add generation info
+        csvContent.push('');
+        const generatedDate = document.getElementById('billingReportDate').innerText;
+        csvContent.push(`"Generated on:","${generatedDate}"`);
+        csvContent.push('"Soliera Hotel And Restaurant Management System"');
+        
+        // Create blob and download
+        const blob = new Blob([csvContent.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        
+        // Format filename with date
+        const now = new Date();
+        const dateStr = now.toISOString().slice(0,10);
+        const filename = `billing_report_${dateStr}.csv`;
+        
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 </script>

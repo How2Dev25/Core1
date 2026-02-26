@@ -3,14 +3,11 @@
         <div class="flex justify-between items-center mb-4 no-print">
             <h3 class="font-bold text-lg" style="color: #001f54;">Additional Report Preview</h3>
             <div class="flex gap-2">
-                <button onclick="printAdditionalReport()" class="btn btn-sm"
-                    style="background-color: #001f54; color: white;">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                <button onclick="exportAdditionalToExcel()" class="btn btn-sm" style="background-color: #001f54; color: white;">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    Print
+                    Export to Excel
                 </button>
                 <button onclick="document.getElementById('additionalReportModal').close()" class="btn btn-sm btn-ghost">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -62,7 +59,7 @@
                     </div>
 
                     <!-- Additional Bookings Table -->
-                    <table class="report-table">
+                    <table id="additionalBookingsTable" class="report-table">
                         <thead>
                             <tr>
                                 <th>Item</th>
@@ -255,124 +252,9 @@
     .report-footer strong {
         color: #1e3a8a;
     }
-
-    /* Print Styles - EXACTLY THE SAME */
-    @media print {
-        @page {
-            size: landscape;
-            margin: 15mm;
-        }
-
-        body * {
-            visibility: hidden !important;
-        }
-
-        .no-print {
-            display: none !important;
-        }
-
-        .preview-wrapper {
-            max-height: none !important;
-            overflow: visible !important;
-            background-color: white !important;
-            padding: 0 !important;
-            visibility: visible !important;
-        }
-
-        #additionalReportContent {
-            visibility: visible !important;
-            position: fixed !important;
-            left: 0 !important;
-            top: 0 !important;
-            width: 100% !important;
-            box-shadow: none !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        #additionalReportContent * {
-            visibility: visible !important;
-        }
-
-        .modal-box {
-            visibility: visible !important;
-            max-width: 100% !important;
-            width: 100% !important;
-        }
-
-        .report-container {
-            box-shadow: none;
-            page-break-inside: avoid;
-            max-width: 100%;
-        }
-
-        /* Force colors to print */
-        .report-header {
-            background-color: #1e3a8a !important;
-            color: #ffffff !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .report-header h1 {
-            color: #ffffff !important;
-        }
-
-        .report-header p {
-            color: #fbbf24 !important;
-        }
-
-        .report-table th {
-            background-color: #1e3a8a !important;
-            color: #ffffff !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .report-table tbody tr:nth-child(even) {
-            background-color: #f9fafb !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .summary-card {
-            background-color: #f9fafb !important;
-            border-left: 4px solid #1e3a8a !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .badge-pending {
-            background-color: #fef3c7 !important;
-            color: #92400e !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .badge-confirmed {
-            background-color: #d1fae5 !important;
-            color: #065f46 !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .badge-cancelled {
-            background-color: #fee2e2 !important;
-            color: #991b1b !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .report-footer {
-            background-color: #f9fafb !important;
-            border-top: 2px solid #fbbf24 !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-    }
 </style>
 
-<!-- EXACT SAME JavaScript pattern -->
+<!-- EXACT SAME JavaScript pattern with Excel export -->
 <script>
     function openAdditionalReportModal() {
         // Update dates
@@ -387,209 +269,82 @@
         document.getElementById('additionalReportModal').showModal();
     }
 
-    function printAdditionalReport() {
-        // Clone the report content
-        const reportContent = document.getElementById('additionalReportContent').cloneNode(true);
-
-        // Create a new window for printing
-        const printWindow = window.open('', '_blank');
-        printWindow.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Additional Bookings Report</title>
-                <style>
-                    /* Additional Bookings Report CSS Styles */
-                    body {
-                        margin: 0;
-                        padding: 20px;
-                        font-family: Arial, sans-serif;
-                        color: #333;
-                    }
-                    
-                    .report-container {
-                        background-color: #ffffff;
-                        border-radius: 0;
-                        overflow: hidden;
-                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                        max-width: 1000px;
-                        margin: 0 auto;
-                    }
-
-                    .report-header {
-                        background-color: #1e3a8a !important;
-                        color: #ffffff !important;
-                        padding: 25px 30px;
-                        text-align: center;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .report-header h1 {
-                        margin: 0 0 8px 0;
-                        font-size: 24px;
-                        font-weight: bold;
-                        color: #ffffff !important;
-                    }
-
-                    .report-header p {
-                        margin: 4px 0;
-                        color: #fbbf24 !important;
-                        font-size: 13px;
-                        font-style: italic;
-                    }
-
-                    .report-meta {
-                        display: flex;
-                        justify-content: space-between;
-                        margin-top: 12px;
-                        font-size: 12px;
-                        color: #e5e7eb;
-                    }
-
-                    .report-body {
-                        padding: 25px 30px;
-                        background-color: #ffffff;
-                    }
-
-                    .summary-section {
-                        display: grid;
-                        grid-template-columns: repeat(4, 1fr);
-                        gap: 15px;
-                        margin-bottom: 25px;
-                    }
-
-                    .summary-card {
-                        background-color: #f9fafb !important;
-                        padding: 15px;
-                        border-radius: 6px;
-                        border-left: 4px solid #1e3a8a !important;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .summary-card h3 {
-                        color: #6b7280;
-                        font-size: 11px;
-                        margin: 0 0 8px 0;
-                        text-transform: uppercase;
-                        font-weight: 600;
-                    }
-
-                    .summary-card p {
-                        color: #1e3a8a;
-                        font-size: 22px;
-                        font-weight: bold;
-                        margin: 0;
-                    }
-
-                    .report-table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        margin-top: 15px;
-                        font-size: 11px;
-                    }
-
-                    .report-table th,
-                    .report-table td {
-                        padding: 10px 8px;
-                        border: 1px solid #d1d5db;
-                        text-align: left;
-                    }
-
-                    .report-table th {
-                        background-color: #1e3a8a !important;
-                        color: #ffffff !important;
-                        font-weight: bold;
-                        font-size: 10px;
-                        text-transform: uppercase;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .report-table tbody tr:nth-child(even) {
-                        background-color: #f9fafb !important;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .badge {
-                        display: inline-block;
-                        padding: 3px 10px;
-                        border-radius: 10px;
-                        font-size: 9px;
-                        font-weight: bold;
-                        white-space: nowrap;
-                    }
-
-                    .badge-pending {
-                        background-color: #fef3c7 !important;
-                        color: #92400e !important;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .badge-confirmed {
-                        background-color: #d1fae5 !important;
-                        color: #065f46 !important;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .badge-cancelled {
-                        background-color: #fee2e2 !important;
-                        color: #991b1b !important;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .report-footer {
-                        text-align: center;
-                        padding: 18px 30px;
-                        background-color: #f9fafb !important;
-                        border-top: 2px solid #fbbf24 !important;
-                        font-size: 10px;
-                        color: #6b7280;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
-
-                    .report-footer p {
-                        margin: 3px 0;
-                    }
-
-                    .report-footer strong {
-                        color: #1e3a8a;
-                    }
-
-                    @media print {
-                        @page {
-                            size: landscape;
-                            margin: 15mm;
-                        }
-                        
-                        body {
-                            margin: 0;
-                            padding: 0;
-                        }
-                    }
-                </style>
-            </head>
-            <body>
-                ${reportContent.innerHTML}
-                <script>
-                    // Auto print and close
-                    window.onload = function() {
-                        window.print();
-                        setTimeout(function() {
-                            window.close();
-                        }, 100);
-                    };
-                <\/script>
-            </body>
-            </html>
-        `);
-
-        printWindow.document.close();
+    // Excel Export Function for Additional Bookings
+    function exportAdditionalToExcel() {
+        // Get the table data
+        const table = document.getElementById('additionalBookingsTable');
+        const rows = table.querySelectorAll('tr');
+        
+        // Create CSV content
+        let csvContent = [];
+        
+        // Add header row (th)
+        const headerRow = [];
+        const headers = rows[0].querySelectorAll('th');
+        headers.forEach(header => {
+            headerRow.push('"' + header.innerText.replace(/"/g, '""') + '"');
+        });
+        csvContent.push(headerRow.join(','));
+        
+        // Add data rows (td)
+        for (let i = 1; i < rows.length; i++) {
+            const row = [];
+            const cols = rows[i].querySelectorAll('td');
+            
+            // Skip the "No additional bookings found" row if present
+            if (cols.length === 1 && cols[0].colSpan === 5) {
+                continue;
+            }
+            
+            cols.forEach(col => {
+                // Clean the data (remove badges, spans, etc.)
+                let cellText = col.innerText.trim();
+                // Remove currency symbol and format numbers properly
+                cellText = cellText.replace('₱', '').trim();
+                row.push('"' + cellText.replace(/"/g, '""') + '"');
+            });
+            
+            csvContent.push(row.join(','));
+        }
+        
+        // Add summary section
+        csvContent.push('');
+        csvContent.push('"ADDITIONAL SERVICES SUMMARY"');
+        
+        // Get summary data from cards
+        const summaryCards = document.querySelectorAll('.summary-card');
+        summaryCards.forEach(card => {
+            const title = card.querySelector('h3').innerText;
+            const value = card.querySelector('p').innerText;
+            // Remove ₱ from total revenue for Excel
+            const cleanValue = value.replace('₱', '').trim();
+            csvContent.push(`"${title}","${cleanValue}"`);
+        });
+        
+        // Add generation info
+        csvContent.push('');
+        const generatedDate = document.getElementById('additionalReportDate').innerText;
+        csvContent.push(`"Generated on:","${generatedDate}"`);
+        csvContent.push('"Additional Services Management System"');
+        
+        // Create blob and download
+        const blob = new Blob([csvContent.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        
+        // Format filename with date
+        const now = new Date();
+        const dateStr = now.toISOString().slice(0,10);
+        const filename = `additional_services_report_${dateStr}.csv`;
+        
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
+
+    // Optional: Keep print function if needed elsewhere, otherwise remove
+    // function printAdditionalReport() { ... }
 </script>

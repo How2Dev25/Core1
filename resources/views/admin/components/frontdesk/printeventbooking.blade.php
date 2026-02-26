@@ -188,14 +188,14 @@
         <div class="flex justify-between items-center mb-4 no-print">
             <h3 class="font-bold text-lg" style="color: #001f54;">Event Report Preview</h3>
             <div class="flex gap-2">
-                <button onclick="printEventReport()" class="btn btn-sm"
+                <button onclick="exportEventToExcel()" class="btn btn-sm"
                     style="background-color: #001f54; color: white;">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    Print
+                    Export to Excel
                 </button>
                 <button onclick="document.getElementById('eventReportModal').close()" class="btn btn-sm btn-ghost">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -247,7 +247,7 @@
                     </div>
 
                     <!-- Events Table -->
-                    <table class="report-table">
+                    <table id="eventBookingsTable" class="report-table">
                         <thead>
                             <tr>
                                 <th>Booking ID</th>
@@ -272,19 +272,19 @@
                                     <td>{{ \Carbon\Carbon::parse($reservation->event_checkout)->format('M d, Y') }}</td>
                                     <td>
                                         <span class="badge 
-                                                @if(strtolower($reservation->eventstatus) == 'approved' || strtolower($reservation->eventstatus) == 'done') badge-confirmed
-                                                @elseif(strtolower($reservation->eventstatus) == 'pending') badge-pending
-                                                @elseif(strtolower($reservation->eventstatus) == 'cancelled') badge-cancelled
-                                                @endif">
+                                                    @if(strtolower($reservation->eventstatus) == 'approved' || strtolower($reservation->eventstatus) == 'done') badge-confirmed
+                                                    @elseif(strtolower($reservation->eventstatus) == 'pending') badge-pending
+                                                    @elseif(strtolower($reservation->eventstatus) == 'cancelled') badge-cancelled
+                                                    @endif">
                                             {{ ucfirst($reservation->eventstatus) }}
                                         </span>
                                     </td>
                                     <td>
                                         <span class="payment-badge
-                                                @if(strtolower($reservation->event_paymentstatus) == 'paid') payment-paid
-                                                @elseif(strtolower($reservation->event_paymentstatus) == 'pending') payment-pending
-                                                @elseif(strtolower($reservation->event_paymentstatus) == 'failed') payment-failed
-                                                @endif">
+                                                    @if(strtolower($reservation->event_paymentstatus) == 'paid') payment-paid
+                                                    @elseif(strtolower($reservation->event_paymentstatus) == 'pending') payment-pending
+                                                    @elseif(strtolower($reservation->event_paymentstatus) == 'failed') payment-failed
+                                                    @endif">
                                             {{ ucfirst($reservation->event_paymentstatus) }}
                                         </span>
                                     </td>
@@ -324,26 +324,48 @@
         border-color: #d1d5db;
         color: #001f54;
     }
-    
+
     .event-otp-box:focus {
         border-color: #001f54 !important;
-        box-shadow: 0 0 0 3px rgba(0,31,84,0.1);
+        box-shadow: 0 0 0 3px rgba(0, 31, 84, 0.1);
         transform: scale(1.02);
     }
-    
+
     .event-otp-box.filled {
         border-color: #001f54;
-        background: rgba(0,31,84,0.02);
+        background: rgba(0, 31, 84, 0.02);
     }
-    
+
     @keyframes shake {
-        0%,100% { transform: translateX(0); }
-        10%,30%,50%,70%,90% { transform: translateX(-3px); }
-        20%,40%,60%,80% { transform: translateX(3px); }
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        10%,
+        30%,
+        50%,
+        70%,
+        90% {
+            transform: translateX(-3px);
+        }
+
+        20%,
+        40%,
+        60%,
+        80% {
+            transform: translateX(3px);
+        }
     }
-    
-    .shake { animation: shake 0.5s ease-in-out; }
-    .timer-warning { color: #dc2626 !important; }
+
+    .shake {
+        animation: shake 0.5s ease-in-out;
+    }
+
+    .timer-warning {
+        color: #dc2626 !important;
+    }
 </style>
 
 <script>
@@ -449,13 +471,13 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    body: JSON.stringify({ 
-                        otp: otp, 
-                        email: this.email 
+                    body: JSON.stringify({
+                        otp: otp,
+                        email: this.email
                     })
                 });
                 const data = await res.json();
-                
+
                 if (data.success) {
                     this.showMessage('✓ Verification successful!', 'success');
                     setTimeout(() => {
@@ -491,7 +513,7 @@
                     body: JSON.stringify({ email: this.email })
                 });
                 const data = await res.json();
-                
+
                 if (data.success) {
                     this.showMessage('✓ New code sent!', 'success');
                     this.resetTimer();
@@ -529,7 +551,7 @@
         updateTimerDisplay() {
             const mins = Math.floor(this.timeLeft / 60);
             const secs = this.timeLeft % 60;
-            document.getElementById('eventTimer').innerHTML = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+            document.getElementById('eventTimer').innerHTML = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
         resetTimer() {
@@ -549,11 +571,10 @@
         showMessage(msg, type) {
             const banner = document.getElementById('eventMessageBanner');
             banner.innerHTML = msg;
-            banner.className = `mt-3 p-3 rounded-lg text-sm ${
-                type === 'success' ? 'bg-green-100 text-green-700 border border-green-200' :
-                type === 'error' ? 'bg-red-100 text-red-700 border border-red-200' :
-                'bg-blue-100 text-blue-700 border border-blue-200'
-            }`;
+            banner.className = `mt-3 p-3 rounded-lg text-sm ${type === 'success' ? 'bg-green-100 text-green-700 border border-green-200' :
+                    type === 'error' ? 'bg-red-100 text-red-700 border border-red-200' :
+                        'bg-blue-100 text-blue-700 border border-blue-200'
+                }`;
             banner.classList.remove('hidden');
             if (type === 'success') setTimeout(() => banner.classList.add('hidden'), 3000);
         }
@@ -575,12 +596,12 @@
 
         openReportModal() {
             const now = new Date();
-            const formatted = now.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric', 
-                hour: '2-digit', 
-                minute: '2-digit' 
+            const formatted = now.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
             });
             document.getElementById('eventReportDate').textContent = formatted;
             document.getElementById('eventReportFooterDate').textContent = formatted;
@@ -595,47 +616,81 @@
         }
     }
 
+    // Excel Export Function for Events
+    function exportEventToExcel() {
+        // Get the table data
+        const table = document.getElementById('eventBookingsTable');
+        const rows = table.querySelectorAll('tr');
+
+        // Create CSV content
+        let csvContent = [];
+
+        // Add header row (th)
+        const headerRow = [];
+        const headers = rows[0].querySelectorAll('th');
+        headers.forEach(header => {
+            headerRow.push('"' + header.innerText.replace(/"/g, '""') + '"');
+        });
+        csvContent.push(headerRow.join(','));
+
+        // Add data rows (td)
+        for (let i = 1; i < rows.length; i++) {
+            const row = [];
+            const cols = rows[i].querySelectorAll('td');
+
+            // Skip the "No event reservations found" row if present
+            if (cols.length === 1 && cols[0].colSpan === 9) {
+                continue;
+            }
+
+            cols.forEach(col => {
+                // Clean the data (remove badges, spans, etc.)
+                let cellText = col.innerText.trim();
+                // Remove currency symbol and format numbers properly
+                cellText = cellText.replace('₱', '').trim();
+                row.push('"' + cellText.replace(/"/g, '""') + '"');
+            });
+
+            csvContent.push(row.join(','));
+        }
+
+        // Add summary section
+        csvContent.push('');
+        csvContent.push('"EVENT SUMMARY"');
+
+        // Get summary data from cards
+        const summaryCards = document.querySelectorAll('.summary-card');
+        summaryCards.forEach(card => {
+            const title = card.querySelector('h3').innerText;
+            const value = card.querySelector('p').innerText;
+            csvContent.push(`"${title}","${value}"`);
+        });
+
+        // Add generation info
+        csvContent.push('');
+        const generatedDate = document.getElementById('eventReportDate').innerText;
+        csvContent.push(`"Generated on:","${generatedDate}"`);
+        csvContent.push('"Soliera Hotel And Restaurant Management System"');
+
+        // Create blob and download
+        const blob = new Blob([csvContent.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+
+        // Format filename with date
+        const now = new Date();
+        const dateStr = now.toISOString().slice(0, 10);
+        const filename = `event_report_${dateStr}.csv`;
+
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     // Initialize and expose globally
     const eventReportOTP = new EventReportOTP();
     window.openEventReportWithOTP = () => eventReportOTP.open();
-
-    // Keep your existing print function
-    function printEventReport() {
-        const content = document.getElementById('eventReportContent').cloneNode(true);
-        const win = window.open('', '_blank');
-        win.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Event Booking Report - Soliera Hotel</title>
-                <style>
-                    /* Copy your existing print styles here */
-                    body { margin: 20px; font-family: Arial, sans-serif; }
-                    .report-container { max-width: 1000px; margin: 0 auto; }
-                    .report-header { background: #001f54; color: white; padding: 20px; text-align: center; }
-                    .report-header h1 { color: #F7B32B; margin: 0; }
-                    .report-table { width: 100%; border-collapse: collapse; }
-                    .report-table th { background: #001f54; color: white; padding: 8px; }
-                    .report-table td { border: 1px solid #ddd; padding: 8px; }
-                    .badge { padding: 2px 8px; border-radius: 10px; font-size: 11px; }
-                    .badge-pending { background: #fef3c7; color: #92400e; }
-                    .badge-confirmed { background: #d1fae5; color: #065f46; }
-                    .badge-cancelled { background: #fee2e2; color: #991b1b; }
-                </style>
-            </head>
-            <body>
-                ${content.innerHTML}
-                <script>
-                    window.onload = () => {
-                        window.print();
-                        setTimeout(() => window.close(), 100);
-                    }
-                <\/script>
-            </body>
-            </html>
-        `);
-        win.document.close();
-    }
 </script>
-
-<!-- Button to trigger Event Report OTP verification -->
