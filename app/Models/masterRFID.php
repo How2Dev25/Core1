@@ -12,7 +12,7 @@ class masterRFID extends Model
 
      protected $table = 'masterRFID';
 
-     protected $primaryKey = 'masterotp_ID';
+     protected $primaryKey = 'masterRFID_ID';
 
      protected $fillable = [
         'masterRFID_ID',

@@ -28,6 +28,7 @@ use App\Http\Controllers\roomfeedbackController;
 use App\Http\Controllers\roommantenanceController;
 use App\Http\Controllers\stockController;
 use App\Http\Controllers\userController;
+use App\Http\Controllers\masterRFIDController;
 use App\Models\additionalBooking;
 use App\Models\additionalBookingCart;
 use App\Models\aiPrompt;
@@ -56,6 +57,7 @@ use App\Models\Posts;
 use App\Models\restointegration;
 use App\Models\room;
 use App\Models\Lar;
+use App\Models\masterRFID;
 use App\Models\missingRFID;
 use App\Models\requestEmployee;
 use App\Models\room_maintenance;
@@ -74,6 +76,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http; // ✅ Make sure this is the Http facade
 use Illuminate\Support\Facades\Log;
+
 
 // security for guest
 function guestAuthCheck() {
@@ -1042,8 +1045,10 @@ Route::get('/doorlockadmin', function(){
     $totalassigned = doorlockFrontdesk::count();
     $totalActive = doorlock::where('doorlock_status', 'Active')->count();
     $totalinnactive = doorlock::where('doorlock_status', 'Innactive')->count();
+
+    $masterRFID = masterRFID::latest()->get();
     return view('admin.doorlock', compact('rooms', 'doorlocks', 
-    'totalActive', 'totalinnactive', 'totalassigned', 'totaldoorlock'));
+    'totalActive', 'totalinnactive', 'totalassigned', 'totaldoorlock', 'masterRFID'));
 });
 
 Route::get('/monitordoorlock/{doorlockID}', [doorlockController::class, 'monitor']);
@@ -2235,5 +2240,11 @@ Route::prefix('billing-report')->group(function () {
 });
 
 // MasterRFID
+
+Route::prefix('masterRFID')->group(function(){
+    Route::post('/createmasterRFID', [masterRFIDController::class, 'store']);
+    Route::put('/updatemasterRFID/{masterRFID_ID}', [masterRFIDController::class, 'modify']);
+    Route::delete('/deletemasterRFID/{masterRFID_ID}', [masterRFIDController::class, 'remove']);
+});
 
 
