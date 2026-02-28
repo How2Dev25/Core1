@@ -18,5 +18,9 @@ class rfidHistory extends Model
         'rfidhistoryID',
         'doorlockID',
         'door_state',
+        'rfid_used',
+        'access_type',
+        'access_result',
+        'denial_reason',
     ];
 }

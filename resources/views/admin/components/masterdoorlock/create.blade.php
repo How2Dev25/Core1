@@ -3,8 +3,7 @@
         <!-- Modal header with colorful background -->
         <div class="bg-blue-900 px-6 py-5">
             <h3 class="font-bold text-2xl text-white flex items-center gap-2">
-              
-                Master RFID 
+                Master RFID
             </h3>
             <p class="text-purple-100 text-sm mt-1 flex items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
@@ -58,7 +57,7 @@
                         </div>
                     </div>
 
-                    <!-- Right column - RFID Name (not card holder) -->
+                    <!-- Right column - RFID Name -->
                     <div
                         class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
                         <label class="label">
@@ -87,9 +86,41 @@
                     </div>
                 </div>
 
-                <!-- Status Selection Section -->
-            
-                <!-- Preview Card Section (Visual representation) -->
+                <!-- Room Selection Section - Simplified -->
+                <div
+                    class="bg-white p-5 rounded-xl shadow-md border-2 border-blue-100 hover:border-blue-300 transition-colors">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-blue-100 p-1.5 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                        </span>
+                        <h4 class="font-semibold text-gray-700">Select Door Lock</h4>
+                        <span class="badge badge-primary badge-sm">Required</span>
+                    </div>
+
+                    <select name="doorlockID" id="doorlockSelect" class="select select-bordered w-full" required>
+                        <option disabled selected>Choose a door lock</option>
+                        @foreach ($availableDoorlocks as $doorlock)
+                            <option value="{{ $doorlock->doorlockID }}">
+                                Room {{ $doorlock->roomID }} (Doorlock ID: {{ $doorlock->doorlockID }})
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <div class="flex items-center gap-1 mt-2 text-xs text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Select the door lock this master RFID will control
+                    </div>
+                </div>
+
+                <!-- Preview Card Section - Removed assigned door -->
                 <div
                     class="bg-white p-5 rounded-xl shadow-md border-2 border-purple-100 hover:border-purple-300 transition-colors">
                     <div class="flex items-center justify-between mb-3">
@@ -136,59 +167,9 @@
                                     <p id="previewRFID" class="font-mono text-sm font-semibold text-gray-800 break-all">
                                         ---</p>
                                 </div>
-                                <div class="pt-1 text-xs text-purple-600 italic">
-                                    <span id="previewExample" class="hidden">e.g., Housekeeping Access</span>
-                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Example Chips for Quick Selection -->
-                    <div class="mt-3 flex flex-wrap gap-2">
-              
-
-                    <!-- Live Preview Script -->
-                    <script>
-                        (function () {
-                            const rfidInput = document.querySelector('input[name="masterRFID_rfid"]');
-                            const nameInput = document.querySelector('input[name="masterRFID_name"]');
-                            const statusRadios = document.querySelectorAll('input[name="masterRFID_status"]');
-                            const previewName = document.getElementById('previewName');
-                            const previewRFID = document.getElementById('previewRFID');
-                            const previewStatusBadge = document.getElementById('previewStatusBadge');
-
-                            function updatePreview() {
-                                // Update name
-                                previewName.textContent = nameInput.value.trim() || '---';
-
-                                // Update RFID
-                                previewRFID.textContent = rfidInput.value.trim() || '---';
-
-                                // Update status
-                                statusRadios.forEach(radio => {
-                                    if (radio.checked) {
-                                        previewStatusBadge.textContent = radio.value;
-                                        previewStatusBadge.className = `badge ${radio.value === 'Active' ? 'badge-success' : 'badge-warning'} badge-sm`;
-                                    }
-                                });
-                            }
-
-                            if (rfidInput && nameInput) {
-                                rfidInput.addEventListener('input', updatePreview);
-                                nameInput.addEventListener('input', updatePreview);
-                                statusRadios.forEach(radio => {
-                                    radio.addEventListener('change', updatePreview);
-                                });
-
-                                // Update preview when example chips are clicked
-                                document.querySelectorAll('.example-chip').forEach(chip => {
-                                    chip.addEventListener('click', function () {
-                                        setTimeout(updatePreview, 50);
-                                    });
-                                });
-                            }
-                        })();
-                    </script>
                 </div>
 
                 <!-- Action Buttons -->
@@ -202,8 +183,7 @@
                         </svg>
                         Cancel
                     </button>
-                    <button class="btn btn-primary "
-                        type="submit">
+                    <button class="btn btn-primary" type="submit">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -221,9 +201,40 @@
     </form>
 </dialog>
 
-<style>
- 
+<!-- Simplified JavaScript -->
+<script>
+    (function () {
+        // RFID and Name inputs for preview
+        const rfidInput = document.querySelector('input[name="masterRFID_rfid"]');
+        const nameInput = document.querySelector('input[name="masterRFID_name"]');
+        const previewName = document.getElementById('previewName');
+        const previewRFID = document.getElementById('previewRFID');
 
+        // Update card preview
+        function updatePreview() {
+            if (previewName) {
+                previewName.textContent = nameInput?.value.trim() || '---';
+            }
+            if (previewRFID) {
+                previewRFID.textContent = rfidInput?.value.trim() || '---';
+            }
+        }
+
+        // Add event listeners
+        if (rfidInput) {
+            rfidInput.addEventListener('input', updatePreview);
+        }
+
+        if (nameInput) {
+            nameInput.addEventListener('input', updatePreview);
+        }
+
+        // Initial update
+        updatePreview();
+    })();
+</script>
+
+<style>
     /* For cursor-flex class if not in DaisyUI */
     .label.cursor-flex {
         cursor: pointer;

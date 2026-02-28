@@ -154,7 +154,7 @@ public function login(Request $request)
         Session::put('otp_attempts', 0);
 
         // Send OTP
-        $this->sendOtpMail($user->email, $user->name ?? $user->employee_id, $otp);
+        $this->sendOtpMail($user->email, $user->employee_name ?? $user->employee_id, $otp);
 
         return redirect('/employeeloginotp')->with('status', 'We sent a 6-digit OTP to your email.');
     }
@@ -404,158 +404,114 @@ public function sendOtpMail($toEmail, $toName, $otp)
         $mail->SMTPAuth   = true;
         $mail->Username   = env('MAIL_USERNAME');
         $mail->Password   = env('MAIL_PASSWORD');
-        $mail->SMTPSecure = env('MAIL_ENCRYPTION'); // tls or ssl
+        $mail->SMTPSecure = env('MAIL_ENCRYPTION');
         $mail->Port       = env('MAIL_PORT');
 
         $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
         $mail->addAddress($toEmail, $toName);
-
+        $mail->addEmbeddedImage(public_path('images/logo/sonly.png'), 'hotelLogo');
         $mail->isHTML(true);
-        $mail->Subject = 'Your Verification Code';
+        $mail->Subject = 'Your Verification Code - Soliera Hotel';
 
-        // Email HTML Template
-        $htmlBody = "
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset='UTF-8'>
-            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-            <title>Soliera Verification Code</title>
-        </head>
-        <body style='margin:0; padding:0; background-color:#f4f4f4; font-family: Arial, sans-serif;'>
-            <table width='100%' cellpadding='0' cellspacing='0' border='0' style='background-color:#f4f4f4; padding:40px 20px;'>
-                <tr>
-                    <td align='center'>
-                        <!-- Main Container -->
-                        <table width='600' cellpadding='0' cellspacing='0' border='0' style='background-color:#ffffff; border-radius:12px; overflow:hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);'>
-                            
-                            <!-- Header with Gradient -->
-                            <tr>
-                                <td style='background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); padding:40px 30px; text-align:center;'>
-                                    <h1 style='color:#ffffff; font-size:28px; font-weight:bold; margin:0 0 8px 0; letter-spacing:-0.5px;'>
-                                        Hotel Verification
-                                    </h1>
-                                    <p style='color:#ffffff; opacity:0.95; font-size:14px; margin:0;'>
-                                        Secure Access Authentication
-                                    </p>
-                                </td>
-                            </tr>
-                            
-                            <!-- Content Section -->
-                            <tr>
-                                <td style='padding:40px 40px 30px 40px;'>
-                                    <h2 style='color:#333333; font-size:22px; font-weight:600; margin:0 0 20px 0; text-align:center;'>
-                                        Verification Code
-                                    </h2>
-                                    
-                                    <p style='color:#555555; font-size:15px; line-height:24px; margin:0 0 25px 0; text-align:center;'>
-                                        Hello <strong>" . htmlspecialchars($toName) . "</strong>,<br>
-                                        We received a request to verify your login to your account.
-                                    </p>
-                                    
-                                    <!-- OTP Box -->
-                                    <table width='100%' cellpadding='0' cellspacing='0' border='0' style='margin:30px 0;'>
-                                        <tr>
-                                            <td align='center'>
-                                                <div style='background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border:2px dashed #facc15; border-radius:12px; padding:25px 40px; display:inline-block;'>
-                                                    <p style='color:#713f12; font-size:13px; font-weight:600; margin:0 0 10px 0; text-transform:uppercase; letter-spacing:1px;'>
-                                                        Your Verification Code
-                                                    </p>
-                                                    <p style='color:#1F2937; font-size:36px; font-weight:bold; margin:0; letter-spacing:8px; font-family: \"Courier New\", monospace;'>
-                                                        " . $otp . "
-                                                    </p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    
-                                    <!-- Timer Info -->
-                                    <table width='100%' cellpadding='0' cellspacing='0' border='0' style='margin:25px 0;'>
-                                        <tr>
-                                            <td align='center' style='background-color:#fef3c7; border-left:4px solid #facc15; padding:15px 20px; border-radius:6px;'>
-                                                <p style='color:#713f12; font-size:14px; margin:0; line-height:22px;'>
-                                                    <strong>This code expires in 5 minutes</strong> for your security.
-                                                </p>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    
-                                    <p style='color:#6B7280; font-size:14px; line-height:22px; margin:25px 0 0 0; text-align:center;'>
-                                        If you did not request this code, please ignore this email or contact our support team immediately.
-                                    </p>
-                                </td>
-                            </tr>
-                            
-                            <!-- Security Notice -->
-                            <tr>
-                                <td style='background-color:#F9FAFB; padding:25px 40px; border-top:1px solid #E5E7EB;'>
-                                    <table width='100%' cellpadding='0' cellspacing='0' border='0'>
-                                        <tr>
-                                            <td width='40' valign='top'>
-                                                <svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='#facc15' stroke-width='2'>
-                                                    <path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/>
-                                                </svg>
-                                            </td>
-                                            <td style='padding-left:15px;'>
-                                                <p style='color:#374151; font-size:13px; font-weight:600; margin:0 0 5px 0;'>
-                                                    Security Reminder
-                                                </p>
-                                                <p style='color:#6B7280; font-size:13px; line-height:20px; margin:0;'>
-                                                    We will never ask you to share your verification code. Keep it confidential.
-                                                </p>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            
-                            <!-- Footer -->
-                            <tr>
-                                <td style='background-color:#1e3a8a; padding:30px 40px; text-align:center;'>
-                                    <p style='color:#facc15; font-size:16px; font-weight:600; margin:0 0 15px 0;'>
-                                        Hotel Verification System
-                                    </p>
-                                    
-                                    <table width='100%' cellpadding='0' cellspacing='0' border='0' style='margin-bottom:15px;'>
-                                        <tr>
-                                            <td align='center'>
-                                                <table cellpadding='0' cellspacing='0' border='0'>
-                                                    <tr>
-                                                        <td style='padding:5px 15px;'>
-                                                            <p style='color:#9CA3AF; font-size:13px; margin:0;'>
-                                                                Phone: +63-900-123-4567
-                                                            </p>
-                                                        </td>
-                                                        <td style='padding:5px 15px; border-left:1px solid #4B5563;'>
-                                                            <p style='color:#9CA3AF; font-size:13px; margin:0;'>
-                                                                Email: support@soliera.com
-                                                            </p>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    
-                                    <p style='color:#6B7280; font-size:12px; margin:15px 0 0 0; line-height:18px;'>
-                                        This is an automated message. Please do not reply directly to this email.<br>
-                                        © " . date('Y') . " All rights reserved.
-                                    </p>
-                                </td>
-                            </tr>
-                            
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </body>
-        </html>
-        ";
+        // Email HTML Template - Clean design with blue-900 and yellow-400 only
+        $htmlBody = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Code - Soliera Hotel</title>
+</head>
+<body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4;">
+    <div style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+
+        <!-- Header -->
+        <div style="background-color:#001f54; padding:30px 20px; text-align:center;">
+            <img src="cid:hotelLogo" alt="Soliera Hotel Logo" style="width:80px; height:80px; border-radius:50%; margin-bottom:15px;">
+            <h1 style="color:#F7B32B; margin:0; font-size:28px; font-weight:bold;">SOLIERA HOTEL</h1>
+            <p style="color:#ffffff; margin:10px 0 0 0; font-size:16px;">Savor The Stay, Dine With Elegance</p>
+        </div>
+
+        <!-- Status Badge -->
+        <div style="padding:20px; text-align:center; background-color:#fef3c7;">
+            <div style="display:inline-block; background-color:#F7B32B; color:#001f54; padding:10px 24px; border-radius:20px; font-weight:bold; font-size:14px; margin-bottom:10px;">
+                VERIFICATION REQUIRED
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div style="padding:30px 20px;">
+            <h2 style="color:#001f54; margin:0 0 20px 0; font-size:24px; text-align:center;">Email Verification</h2>
+            
+            <!-- User Info -->
+            <div style="text-align:center; margin-bottom:25px;">
+                <p style="color:#666; font-size:16px; margin:0 0 5px 0;">
+                    Hello <span style="color:#001f54; font-weight:bold;">$toName</span>,
+                </p>
+                <p style="color:#666; font-size:14px; margin:0;">
+                    We received a request to verify your login to your account.
+                </p>
+            </div>
+
+            <!-- OTP Box - Now with blue-900 background -->
+            <div style="padding:25px; background-color:#001f54; border-left:4px solid #F7B32B; border-radius:8px; margin-bottom:25px; text-align:center;">
+                <p style="color:#F7B32B; margin:0 0 15px 0; line-height:1.6; font-size:15px; font-weight:bold;">
+                    Your Verification Code
+                </p>
+                <div style="background-color:#ffffff; border:2px solid #F7B32B; border-radius:8px; padding:20px; display:inline-block; min-width:200px;">
+                    <p style="color:#001f54; font-size:42px; font-weight:bold; margin:0; letter-spacing:8px; font-family: 'Courier New', monospace;">
+                        $otp
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timer Info -->
+            <div style="text-align:center; padding:20px; background-color:#fef3c7; border-radius:8px; margin-bottom:25px;">
+                <p style="color:#001f54; margin:0 0 10px 0; line-height:1.6; font-size:14px;">
+                    <strong>This code expires in 5 minutes</strong> for your security.
+                </p>
+                <p style="color:#001f54; margin:0; line-height:1.6; font-size:14px;">
+                    Never share this code with anyone.
+                </p>
+            </div>
+
+            <!-- Security Notice -->
+            <div style="text-align:center; padding:25px; background-color:#001f54; border-radius:8px;">
+                <h3 style="color:#F7B32B; margin:0 0 15px 0; font-size:18px;">Security Reminder</h3>
+                <p style="color:#ffffff; margin:0 0 20px 0; line-height:1.6; font-size:14px;">
+                    We will never ask you to share your verification code.<br>
+                    Keep it confidential and do not share it with anyone.
+                </p>
+                <div style="background-color:#F7B32B; color:#001f54; padding:10px 20px; border-radius:25px; display:inline-block;">
+                    <span style="font-weight:bold;">Secure Access Authentication</span>
+                </div>
+            </div>
+
+            <!-- Support -->
+            <div style="text-align:center; margin-top:25px; padding:20px; background-color:#f8f9fa; border-radius:8px;">
+                <p style="color:#666; margin:0 0 10px 0; font-size:14px;">
+                    If you did not request this code, please contact our support team immediately.
+                </p>
+                <p style="color:#001f54; margin:0; font-size:14px; font-weight:bold;">
+                    support@solierahotel.com | +63 XXX XXX XXXX
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="background-color:#001f54; padding:20px; text-align:center;">
+            <p style="color:#F7B32B; margin:0 0 5px 0; font-size:14px;">© 2025 Soliera Hotel. All rights reserved.</p>
+            <p style="color:#ffffff; margin:0; font-size:12px; opacity:0.8;">This is an automated message. Please do not reply to this email.</p>
+        </div>
+    </div>
+</body>
+</html>
+HTML;
 
         $mail->Body = $htmlBody;
         
         // Plain text alternative for non-HTML email clients
-        $mail->AltBody = "Your verification code is: $otp\n\nThis code will expire in 5 minutes.\n\nIf you did not request this code, please ignore this email.\n\nPhone: +63-900-123-4567\nEmail: support@soliera.com";
+        $mail->AltBody = "Your verification code is: $otp\n\nThis code will expire in 5 minutes.\n\nIf you did not request this code, please ignore this email or contact our support team immediately.\n\nPhone: +63 XXX XXX XXXX\nEmail: support@solierahotel.com";
 
         return $mail->send();
         

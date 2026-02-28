@@ -19,6 +19,7 @@ class masterRFID extends Model
         'masterRFID_rfid',
         'masterRFID_name',
         'masterRFID_status',
+        'doorlockID',
      ];
 
 }

@@ -4,7 +4,6 @@
         <!-- Modal header with colorful background -->
         <div class="bg-blue-900 px-6 py-5">
             <h3 class="font-bold text-2xl text-white flex items-center gap-2">
-                
                 Edit Master RFID
             </h3>
             <p class="text-purple-100 text-sm mt-1 flex items-center gap-1">
@@ -24,13 +23,14 @@
 
         <!-- Scrollable content area -->
         <div class="max-h-[70vh] overflow-y-auto p-6 bg-gray-50">
-            <form method="POST" action="/masterRFID/updatemasterRFID/{{ $rfidmaster->masterRFID_ID }}" class="space-y-6">
+            <form method="POST" action="/masterRFID/updatemasterRFID/{{ $rfidmaster->masterRFID_ID }}"
+                class="space-y-6">
                 @csrf
                 @method('PUT')
 
                 <!-- Two-column grid layout for inputs -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Left column - RFID Name (read-only) -->
+                    <!-- Left column - RFID Name -->
                     <div
                         class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
                         <label class="label">
@@ -86,6 +86,53 @@
                             </svg>
                             Unique identifier for the master RFID card
                         </div>
+                    </div>
+                </div>
+
+                <!-- Door Lock Selection Section -->
+                <div
+                    class="bg-white p-5 rounded-xl shadow-md border-2 border-blue-100 hover:border-blue-300 transition-colors">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-blue-100 p-1.5 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                        </span>
+                        <h4 class="font-semibold text-gray-700">Assigned Door Lock</h4>
+                        <span class="badge badge-primary badge-sm">Required</span>
+                    </div>
+
+                    <select name="doorlockID" id="editDoorlockSelect_{{ $rfidmaster->masterRFID_ID }}"
+                        class="select select-bordered w-full" required>
+                        <option value="" disabled>Choose a door lock</option>
+                        @foreach ($availableDoorlocks as $doorlock)
+                            <option value="{{ $doorlock->doorlockID }}" {{ $rfidmaster->doorlockID == $doorlock->doorlockID ? 'selected' : '' }}>
+                                Room {{ $doorlock->roomID }} (Doorlock ID: {{ $doorlock->doorlockID }})
+                            </option>
+                        @endforeach
+                        <!-- Include current doorlock even if not in available list -->
+                        @if($rfidmaster->doorlockID && !$availableDoorlocks->contains('doorlockID', $rfidmaster->doorlockID))
+                            @php
+                                $currentDoorlock = \App\Models\doorlock::find($rfidmaster->doorlockID);
+                            @endphp
+                            @if($currentDoorlock)
+                                <option value="{{ $currentDoorlock->doorlockID }}" selected>
+                                    Room {{ $currentDoorlock->roomID }} (Doorlock ID: {{ $currentDoorlock->doorlockID }}) -
+                                    Current
+                                </option>
+                            @endif
+                        @endif
+                    </select>
+
+                    <div class="flex items-center gap-1 mt-2 text-xs text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Select the door lock this master RFID will control
                     </div>
                 </div>
 
@@ -208,13 +255,25 @@
                                 <div>
                                     <p class="text-xs text-gray-500">RFID Name</p>
                                     <p id="editPreviewName" class="font-mono text-sm font-semibold text-gray-800">
-                                        {{ $rfidmaster->masterRFID_name }}</p>
+                                        {{ $rfidmaster->masterRFID_name }}
+                                    </p>
                                 </div>
                                 <div>
                                     <p class="text-xs text-gray-500">RFID Tag</p>
                                     <p id="editPreviewRFID"
                                         class="font-mono text-sm font-semibold text-gray-800 break-all">
-                                        {{ $rfidmaster->masterRFID_rfid }}</p>
+                                        {{ $rfidmaster->masterRFID_rfid }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500">Door Lock ID</p>
+                                    <p id="editPreviewDoorlock" class="font-mono text-sm font-semibold text-gray-800">
+                                        {{ $rfidmaster->doorlockID ?? 'Not assigned' }}
+                                        @if($rfidmaster->doorlockID)
+                                            (Room
+                                            {{ \App\Models\doorlock::find($rfidmaster->doorlockID)?->roomID ?? 'Unknown' }})
+                                        @endif
+                                    </p>
                                 </div>
                                 <div class="pt-1 text-xs text-purple-600 italic">
                                     <span>Last updated:
@@ -241,9 +300,11 @@
                             function updateEditPreview() {
                                 const nameInput = document.querySelector('#editMasterRFID_{{ $rfidmaster->masterRFID_ID }} input[name="masterRFID_name"]');
                                 const rfidInput = document.querySelector('#editMasterRFID_{{ $rfidmaster->masterRFID_ID }} input[name="masterRFID_rfid"]');
+                                const doorlockSelect = document.querySelector('#editDoorlockSelect_{{ $rfidmaster->masterRFID_ID }}');
                                 const statusRadios = document.querySelectorAll('#editMasterRFID_{{ $rfidmaster->masterRFID_ID }} input[name="masterRFID_status"]');
                                 const previewName = document.getElementById('editPreviewName');
                                 const previewRFID = document.getElementById('editPreviewRFID');
+                                const previewDoorlock = document.getElementById('editPreviewDoorlock');
                                 const previewStatusBadge = document.getElementById('editPreviewStatusBadge');
 
                                 if (nameInput && rfidInput && previewName && previewRFID && previewStatusBadge) {
@@ -252,6 +313,18 @@
 
                                     // Update RFID
                                     previewRFID.textContent = rfidInput.value.trim() || '---';
+
+                                    // Update doorlock
+                                    if (doorlockSelect && previewDoorlock) {
+                                        const selectedOption = doorlockSelect.options[doorlockSelect.selectedIndex];
+                                        if (selectedOption && selectedOption.value) {
+                                            const roomMatch = selectedOption.text.match(/Room (\d+)/);
+                                            const roomId = roomMatch ? roomMatch[1] : 'Unknown';
+                                            previewDoorlock.textContent = `${selectedOption.value} (Room ${roomId})`;
+                                        } else {
+                                            previewDoorlock.textContent = 'Not assigned';
+                                        }
+                                    }
 
                                     // Update status
                                     statusRadios.forEach(radio => {
@@ -270,11 +343,15 @@
                                         if (document.getElementById('editMasterRFID_{{ $rfidmaster->masterRFID_ID }}').open) {
                                             const nameInput = document.querySelector('#editMasterRFID_{{ $rfidmaster->masterRFID_ID }} input[name="masterRFID_name"]');
                                             const rfidInput = document.querySelector('#editMasterRFID_{{ $rfidmaster->masterRFID_ID }} input[name="masterRFID_rfid"]');
+                                            const doorlockSelect = document.querySelector('#editDoorlockSelect_{{ $rfidmaster->masterRFID_ID }}');
                                             const statusRadios = document.querySelectorAll('#editMasterRFID_{{ $rfidmaster->masterRFID_ID }} input[name="masterRFID_status"]');
 
                                             if (nameInput && rfidInput) {
                                                 nameInput.addEventListener('input', updateEditPreview);
                                                 rfidInput.addEventListener('input', updateEditPreview);
+                                                if (doorlockSelect) {
+                                                    doorlockSelect.addEventListener('change', updateEditPreview);
+                                                }
                                                 statusRadios.forEach(radio => {
                                                     radio.addEventListener('change', updateEditPreview);
                                                 });
@@ -300,8 +377,7 @@
                         </svg>
                         Cancel
                     </button>
-                    <button type="submit"
-                        class="btn btn-primary ">
+                    <button type="submit" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -345,7 +421,4 @@
             transform: scale(1);
         }
     }
-
-   
-
 </style>

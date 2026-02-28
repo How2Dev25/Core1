@@ -1,7 +1,7 @@
 <dialog id="view_doorlock" class="modal">
     <div class="modal-box max-w-7xl w-11/12 bg-base-100 p-6">
         <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-900" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -39,10 +39,11 @@
                     <div class="card-body p-4">
                         <!-- Guest Info Section - Fixed Avatar Centering -->
                         <div class="flex items-center gap-3 mb-3 pb-2 border-b border-base-300">
-                            <div class="avatar">
+                            <div class="flex items-center justify-center">
                                 <div
-                                    class="bg-blue-100 text-blue-800 rounded-full w-10 h-10 flex items-center justify-center">
-                                    <span class="text-lg font-medium">{{ substr($assignment->guestname, 0, 1) }}</span>
+                                    class="bg-blue-100 text-blue-800 rounded-full w-10 h-10 flex items-center justify-center overflow-hidden">
+                                    <span
+                                        class="text-lg font-medium leading-none">{{ substr($assignment->guestname, 0, 1) }}</span>
                                 </div>
                             </div>
                             <div class="flex-1">
@@ -55,8 +56,8 @@
                         <div class="space-y-2 text-sm">
                             <div class="flex justify-between items-center">
                                 <span class="opacity-70 flex items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-900" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
                                     </svg>
@@ -68,8 +69,8 @@
 
                             <div class="flex justify-between items-center">
                                 <span class="opacity-70 flex items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-900" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
@@ -80,8 +81,8 @@
 
                             <div class="flex justify-between items-center">
                                 <span class="opacity-70 flex items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-900" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                     </svg>
@@ -92,8 +93,8 @@
 
                             <div class="flex justify-between items-center pt-1">
                                 <span class="opacity-70 flex items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-900" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
@@ -129,7 +130,7 @@
                 </div>
             @empty
                 <div class="col-span-full flex flex-col items-center justify-center py-16">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 opacity-30 mb-4" fill="none"
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 opacity-30 mb-4 text-blue-900" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
@@ -165,9 +166,10 @@
 
             <div class="bg-base-200 p-4 rounded-lg mb-6 space-y-3">
                 <div class="flex items-center gap-3 pb-2 border-b border-base-300">
-                    <div class="avatar">
-                        <div class="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center">
-                            <span class="text-md font-medium">{{ substr($assignment->guestname, 0, 1) }}</span>
+                    <div class="flex items-center justify-center">
+                        <div
+                            class="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center overflow-hidden">
+                            <span class="text-md font-medium leading-none">{{ substr($assignment->guestname, 0, 1) }}</span>
                         </div>
                     </div>
                     <div>

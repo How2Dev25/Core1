@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use App\Models\ecmtype;
 use App\Models\Guest;
+use App\Models\masterRFID;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -985,65 +986,240 @@ public function voidedKOT(Request $request, $order_id){
 
     // door lock 
 
-   public function scanRfid(Request $request)
+public function scanRfid(Request $request)
 {
-    // Check API token
-    $token = $request->header('Authorization');
-    if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+    try {
+        // Check API token
+        $token = $request->header('Authorization');
+        if ($token !== 'Bearer ' . env('HOTEL_API_TOKEN')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Invalid API token.'
+            ], 401);
+        }
+
+        // Validate input
+        $request->validate([
+            'rfid' => 'required|string',
+        ]);
+
+        $rfid = $request->rfid;
+
+        // FIRST: Check if this is a Master RFID
+        $masterRFID = masterRFID::where('masterRFID_rfid', $rfid)->first();
+
+        if ($masterRFID) {
+            // Master RFID found - check if active
+            if ($masterRFID->masterRFID_status !== 'Active') {
+                // Inactive master RFID - deny access
+                rfidHistory::create([
+                    'rfid_used' => $rfid,
+                    'access_type' => $masterRFID->masterRFID_name,
+                    'access_result' => 'denied',
+                    'denial_reason' => 'Master RFID is inactive',
+                    'door_state' => 'Access Denied',
+                    'doorlockID' => $masterRFID->doorlockID // Use master's assigned doorlock
+                ]);
+
+                return response()->json([
+                    'success' => false,
+                    'is_master' => true,
+                    'message' => 'Master RFID is inactive.',
+                    'master_name' => $masterRFID->masterRFID_name,
+                    'status' => 0
+                ], 403);
+            }
+
+            // Check if master has an assigned doorlock
+            if ($masterRFID->doorlockID) {
+                // Find the assigned doorlock
+                $doorlock = doorlock::find($masterRFID->doorlockID);
+                
+                if (!$doorlock) {
+                    return response()->json([
+                        'success' => false,
+                        'is_master' => true,
+                        'message' => 'Assigned doorlock not found.',
+                        'master_name' => $masterRFID->masterRFID_name
+                    ], 404);
+                }
+
+                // Find or create frontdesk record for this door
+                $doorlockFrontdesk = doorlockFrontdesk::firstOrCreate(
+                    ['doorlockID' => $doorlock->doorlockID],
+                    [
+                        'guestname' => 'Master Access',
+                        'doorlockfrontdesk_status' => 0
+                    ]
+                );
+
+                // Toggle the door status
+                $doorlockFrontdesk->doorlockfrontdesk_status =
+                    $doorlockFrontdesk->doorlockfrontdesk_status ? 0 : 1;
+                $doorlockFrontdesk->save();
+
+                $doorStateText = $doorlockFrontdesk->doorlockfrontdesk_status
+                    ? 'Unlocked'
+                    : 'Locked';
+
+                // Log the master toggle action
+                rfidHistory::create([
+                    'doorlockID' => $doorlock->doorlockID,
+                    'rfid_used' => $rfid,
+                    'access_type' => $masterRFID->masterRFID_name,
+                    'access_result' => 'granted',
+                    'door_state' => $doorStateText . ' (Master Access)',
+                    'denial_reason' => null
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'is_master' => true,
+                    'message' => 'Master RFID toggled assigned door successfully.',
+                    'master_name' => $masterRFID->masterRFID_name,
+                    'master_id' => $masterRFID->masterRFID_ID,
+                    'status' => $doorlockFrontdesk->doorlockfrontdesk_status,
+                    'door_state' => $doorStateText,
+                    'doorlock_id' => $doorlock->doorlockID,
+                    'room_id' => $doorlock->roomID
+                ]);
+            }
+
+            // Master has no assigned doorlock - bypass mode
+            rfidHistory::create([
+                'rfid_used' => $rfid,
+                'access_type' => $masterRFID->masterRFID_name,
+                'access_result' => 'granted',
+                'door_state' => 'Unlocked (Master Bypass)',
+                'doorlockID' => null,
+                'denial_reason' => null
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'is_master' => true,
+                'action' => 'bypass',
+                'message' => 'Master RFID detected. Master bypass access granted.',
+                'master_name' => $masterRFID->masterRFID_name,
+                'master_id' => $masterRFID->masterRFID_ID,
+                'status' => 1,
+                'door_state' => 'Unlocked (Master Bypass)'
+            ]);
+        }
+
+        // If not a Master RFID, check regular doorlock (guest access)
+        $doorlock = doorlock::where('rfid', $rfid)->first();
+        
+        if (!$doorlock) {
+            // RFID not found in system
+            rfidHistory::create([
+                'rfid_used' => $rfid,
+                'access_type' => 'guest',
+                'access_result' => 'denied',
+                'denial_reason' => 'RFID not found in system',
+                'door_state' => 'Access Denied',
+                'doorlockID' => null
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'RFID not found.'
+            ], 404);
+        }
+
+        // Check if doorlock is active
+        if ($doorlock->doorlock_status !== 'Active') {
+            rfidHistory::create([
+                'doorlockID' => $doorlock->doorlockID,
+                'rfid_used' => $rfid,
+                'access_type' => 'guest',
+                'access_result' => 'denied',
+                'denial_reason' => 'Doorlock is inactive',
+                'door_state' => 'Access Denied'
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Doorlock is inactive.',
+                'status' => 0
+            ], 403);
+        }
+
+        // Find corresponding doorlockFrontdesk record
+        $doorlockFrontdesk = doorlockFrontdesk::where('doorlockID', $doorlock->doorlockID)->first();
+        
+        if (!$doorlockFrontdesk) {
+            rfidHistory::create([
+                'doorlockID' => $doorlock->doorlockID,
+                'rfid_used' => $rfid,
+                'access_type' => 'guest',
+                'access_result' => 'denied',
+                'denial_reason' => 'No frontdesk record found',
+                'door_state' => 'Access Denied'
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'No frontdesk record found for this doorlock.'
+            ], 404);
+        }
+
+        // Check if the guest RFID matches the assigned guest
+        if ($doorlockFrontdesk->rfid && $doorlockFrontdesk->rfid !== $rfid) {
+            rfidHistory::create([
+                'doorlockID' => $doorlock->doorlockID,
+                'rfid_used' => $rfid,
+                'access_type' => 'guest',
+                'access_result' => 'denied',
+                'denial_reason' => 'RFID does not match assigned guest',
+                'door_state' => 'Access Denied'
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'RFID does not match assigned guest.'
+            ], 403);
+        }
+
+        // Toggle status: if 1 → 0, if 0 → 1
+        $doorlockFrontdesk->doorlockfrontdesk_status =
+            $doorlockFrontdesk->doorlockfrontdesk_status ? 0 : 1;
+
+        $doorlockFrontdesk->save();
+
+        $doorStateText = $doorlockFrontdesk->doorlockfrontdesk_status
+            ? 'Unlocked'
+            : 'Locked';
+
+        // Save successful guest access to history
+        rfidHistory::create([
+            'doorlockID' => $doorlock->doorlockID,
+            'rfid_used' => $rfid,
+            'access_type' => 'guest',
+            'access_result' => 'granted',
+            'door_state' => $doorStateText,
+            'denial_reason' => null
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'is_master' => false,
+            'message' => 'Doorlock frontdesk status toggled successfully.',
+            'status' => $doorlockFrontdesk->doorlockfrontdesk_status,
+            'door_state' => $doorStateText,
+            'doorlock_id' => $doorlock->doorlockID,
+            'room_id' => $doorlock->roomID,
+            'data' => $doorlockFrontdesk
+        ]);
+
+    } catch (\Exception $e) {
+        Log::error('Scan RFID error: ' . $e->getMessage());
         return response()->json([
             'success' => false,
-            'message' => 'Unauthorized. Invalid API token.'
-        ], 401);
+            'message' => 'Internal server error'
+        ], 500);
     }
-
-    // Validate input
-    $request->validate([
-        'rfid' => 'required|string',
-    ]);
-
-    // Find the doorlock with the given RFID
-    $doorlock = doorlock::where('rfid', $request->rfid)->first();
-    if (!$doorlock) {
-        return response()->json([
-            'success' => false,
-            'message' => 'RFID not found.'
-        ], 404);
-    }
-
-    // Find corresponding doorlockFrontdesk record
-    $doorlockFrontdesk = doorlockFrontdesk::where('doorlockID', $doorlock->doorlockID)->first();
-    if (!$doorlockFrontdesk) {
-        return response()->json([
-            'success' => false,
-            'message' => 'No frontdesk record found for this doorlock.'
-        ], 404);
-    }
-
-    // Toggle status: if 1 → 0, if 0 → 1
-    $doorlockFrontdesk->doorlockfrontdesk_status =
-        $doorlockFrontdesk->doorlockfrontdesk_status ? 0 : 1;
-
-    $doorlockFrontdesk->save();
-
-
-       $doorStateText = $doorlockFrontdesk->doorlockfrontdesk_status
-        ? 'Unlocked'
-        : 'Locked';
-
-    // 📝 Save to history_logs
-    rfidHistory::create([
-        'doorlockID' => $doorlock->doorlockID,
-        'door_state' => $doorStateText,
-    ]);
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Doorlock frontdesk status toggled successfully.',
-        'status' => $doorlockFrontdesk->doorlockfrontdesk_status, // <-- ESP32 reads this
-        'data' => $doorlockFrontdesk
-    ]);
 }
-
     public function checkDoorlockStatus($doorlockID)
 {
     $doorlockFrontdesk = doorlockFrontdesk::where('doorlockID', $doorlockID)->first();

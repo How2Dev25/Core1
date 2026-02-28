@@ -11,6 +11,7 @@ class masterRFIDController extends Controller
           $form = $request->validate([
             'masterRFID_rfid' => 'required',
             'masterRFID_name' => 'required',
+            'doorlockID' => 'required',
         ]);
 
         masterRFID::create($form);
@@ -22,7 +23,8 @@ class masterRFIDController extends Controller
         $form = $request->validate([
             'masterRFID_rfid' => 'required',
             'masterRFID_name' => 'required',
-            'masterRFID_status' => 'required'
+            'masterRFID_status' => 'required',
+             'doorlockID' => 'required',
         ]);
 
         $masterRFID_ID->update($form);

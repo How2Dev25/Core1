@@ -1040,15 +1040,39 @@ Route::get('/doorlockadmin', function(){
     )
     ->latest('doorlock.created_at')
     ->get();
-    
+
+
+     $masterRFID = masterRFID::latest()->get();
+
+   $availableDoorlocks = doorlock::join('core1_room', 'core1_room.roomID', '=', 'doorlock.roomID')
+        ->leftJoin('masterrfid', 'masterrfid.doorlockID', '=', 'doorlock.doorlockID')
+        ->whereNull('masterrfid.doorlockID')
+        ->select(
+            'doorlock.doorlockID',
+            'core1_room.roomID'
+        )
+        ->get();
+
+
+
     $totaldoorlock = doorlock::count();
     $totalassigned = doorlockFrontdesk::count();
     $totalActive = doorlock::where('doorlock_status', 'Active')->count();
     $totalinnactive = doorlock::where('doorlock_status', 'Innactive')->count();
 
-    $masterRFID = masterRFID::latest()->get();
+  $masterRFID = masterRFID::leftJoin('doorlock', 'doorlock.doorlockID', '=', 'masterrfid.doorlockID')
+    ->leftJoin('core1_room', 'core1_room.roomID', '=', 'doorlock.roomID')
+    ->select(
+        'masterrfid.*',
+        'doorlock.doorlockID',
+        'core1_room.roomID as room_number',
+        'core1_room.roomtype'
+    )
+    ->latest('masterrfid.created_at')
+    ->get();
+
     return view('admin.doorlock', compact('rooms', 'doorlocks', 
-    'totalActive', 'totalinnactive', 'totalassigned', 'totaldoorlock', 'masterRFID'));
+    'totalActive', 'totalinnactive', 'totalassigned', 'totaldoorlock', 'masterRFID', 'availableDoorlocks'));
 });
 
 Route::get('/monitordoorlock/{doorlockID}', [doorlockController::class, 'monitor']);
