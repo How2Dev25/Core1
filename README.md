@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://hotel.soliera-hotel-restaurant.com/images/logo/sonly.png" alt="Soliera Hotel and Restaurant Logo" width="200">
   
-  # Soliera Hotel and Restaurant
+  # Soliera Hotel and Restaurant Management System
   
   <p align="center">
     Savor The Stay, Dine With Elegance
@@ -26,13 +26,41 @@ Soliera Hotel and Restaurant is a premier hospitality establishment dedicated to
 
 | Feature | Description |
 |---------|-------------|
-| **Room Booking System** | Browse and reserve our luxurious rooms with real-time availability |
+| **RFID Door Lock Integration** | Secure keyless entry system with RFID technology for enhanced guest convenience and security |
+| **Gemini Room Reservation** | AI-powered room booking system with intelligent recommendations and personalized experiences |
+| **Hotel Operations Management** | Comprehensive dashboard for managing housekeeping, maintenance, staff scheduling, and inventory |
+| **Billing and Payments** | Integrated payment gateway with automated invoicing, multiple payment options, and digital receipts |
 | **Restaurant Menu** | Explore our culinary offerings with detailed descriptions and pricing |
 | **Online Reservations** | Secure your table or room with our easy-to-use booking interface |
 | **Gallery** | Virtual tour of our facilities and accommodations |
 | **Special Offers** | Discover exclusive packages and seasonal promotions |
 | **Contact Management** | Direct communication with our hospitality team |
 
+### Detailed Feature Breakdown
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px;">
+
+<div style="border: 1px solid #e5e7eb; padding: 15px; border-radius: 8px;">
+<h4 style="color: #0a1929;">RFID Door Lock Integration</h4>
+<p>Contactless room access using RFID keycards or mobile devices. Real-time access logs, temporary access permissions for staff, and integration with check-in/check-out workflows.</p>
+</div>
+
+<div style="border: 1px solid #e5e7eb; padding: 15px; border-radius: 8px;">
+<h4 style="color: #0a1929;">Gemini Room Reservation</h4>
+<p>Intelligent booking engine that learns guest preferences, suggests room upgrades, and optimizes room assignments based on guest history and special requests.</p>
+</div>
+
+<div style="border: 1px solid #e5e7eb; padding: 15px; border-radius: 8px;">
+<h4 style="color: #0a1929;">Hotel Operations Management</h4>
+<p>Streamlined operations including housekeeping task assignment, maintenance request tracking, staff shift scheduling, and inventory management for supplies and amenities.</p>
+</div>
+
+<div style="border: 1px solid #e5e7eb; padding: 15px; border-radius: 8px;">
+<h4 style="color: #0a1929;">Billing and Payments</h4>
+<p>Secure payment processing supporting credit cards, digital wallets, and bank transfers. Automated invoice generation, split billing options, and digital receipt delivery via email or SMS.</p>
+</div>
+
+</div>
 </div>
 
 ## Technology Stack
@@ -45,6 +73,9 @@ Soliera Hotel and Restaurant is a premier hospitality establishment dedicated to
 **Additional Technologies**
 - PHP for robust backend development
 - MySQL for reliable database management
+- RFID integration for door lock systems
+- Google Gemini AI for intelligent room recommendations
+- Payment gateway integration for secure billing
 - Responsive design for all devices
 - Modern frontend technologies for enhanced user experience
 
