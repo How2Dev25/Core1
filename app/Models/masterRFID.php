@@ -10,7 +10,7 @@ class masterRFID extends Model
 {
      use HasFactory, Notifiable;
 
-     protected $table = 'masterRFID';
+     protected $table = 'masterrfid';
 
      protected $primaryKey = 'masterRFID_ID';
 
